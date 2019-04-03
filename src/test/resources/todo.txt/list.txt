@@ -1,0 +1,16 @@
+2018-12-04 24h00 time format +HassleEUC @work
+2018-12-04 Allow closing lid and remain powered +HassleEUC @work
+2018-12-04 Allow multi-desktop support for taskbar on Windows10 +HassleEUC @work
+2018-12-14 get +todo.txt summary out of github onto phone @play
+2018-12-28 put together a statement categorisor for bank statements @play
+2019-01-02 rewrite android application which spits out random interview questions @play
+2019-01-04 get new sandles @home
+2019-01-04 extract experiments and data from own hosted site @home @work
+(B) 2019-01-07 upgrade bamboo @work
+2019-02-20 complete advent of code @play
+2019-02-20 compete in a coding game @play
+2019-02-20 add testing framework for interview take home @work
+2019-02-20 flesh out job-system @play
+2019-02-20 flesh out economy @play
+2019-02-20 work on typing game @play
+2019-02-20 work on realtime sub-game @play
