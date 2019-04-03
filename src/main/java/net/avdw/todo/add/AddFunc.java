@@ -26,7 +26,7 @@ public class AddFunc {
             return;
         }
 
-        String add = String.format("%s %s", sdf.format(new Date()), todoItem);
+        String add = String.format("%s %s%n", sdf.format(new Date()), todoItem);
         try {
             Files.copy(file.toPath(), Paths.get(file.toString()+".bak"));
             Files.write(file.toPath(), add.getBytes(), StandardOpenOption.APPEND);
@@ -44,6 +44,6 @@ public class AddFunc {
         } catch (FileNotFoundException e) {
             Logger.error(e);
         }
-        System.out.println(String.format("Added: %s %s", count, todoItem));
+        System.out.print(String.format("Added: %s %s", count, todoItem));
     }
 }
