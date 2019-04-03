@@ -1,4 +1,4 @@
-package net.avdw.todo.cli;
+package net.avdw.todo.add;
 
 import net.avdw.todo.Config;
 import picocli.CommandLine;

@@ -1,12 +1,12 @@
-package net.avdw.todo.cli;
+package net.avdw.todo.add;
 
-import net.avdw.todo.list.ListFunc;
 import org.pmw.tinylog.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -21,8 +21,14 @@ public class AddFunc {
     }
 
     public void add(String todoItem) {
+        if (todoItem.isEmpty()) {
+            Logger.warn("There is no todo item to add");
+            return;
+        }
+
         String add = String.format("%s %s", sdf.format(new Date()), todoItem);
         try {
+            Files.copy(file.toPath(), Paths.get(file.toString()+".bak"));
             Files.write(file.toPath(), add.getBytes(), StandardOpenOption.APPEND);
         } catch (IOException e) {
             Logger.error(e);
