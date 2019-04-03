@@ -1,13 +1,12 @@
 package net.avdw.todo.list;
 
+import com.sun.istack.internal.NotNull;
+import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class ListFunc {
     private File file;
@@ -16,27 +15,24 @@ public class ListFunc {
         this.file = file;
     }
 
-    public Set<String> list() {
-        Set<String> list = new HashSet<>();
-        try (Scanner scanner = new Scanner(file)) {
-           while (scanner.hasNext()) {
-               String lineItem = scanner.nextLine();
-               if (!lineItem.isEmpty()) {
-                   list.add(lineItem);
-               }
-           }
-        } catch (FileNotFoundException e) {
-            Logger.error(e);
-        }
-        return list;
+    public List<String> list() {
+        return list(new ArrayList<>());
     }
 
-    public Set<String> list(List<String> arguments) {
-        Set<String> list = new HashSet<>();
+    public List<String> list(@NotNull List<String> filters) {
+        List<String> list = new ArrayList<>();
         try (Scanner scanner = new Scanner(file)) {
+            int count = 0;
             while (scanner.hasNext()) {
                 String lineItem = scanner.nextLine();
-                if (!lineItem.isEmpty() && arguments.stream().allMatch(lineItem::contains)) {
+                if (lineItem.isEmpty()) {
+                    continue;
+                }
+                count++;
+                lineItem = String.format("[%s] %s", StringUtils.leftPad(Integer.toString(count), 2, "0"), lineItem);
+                if (filters.isEmpty()) {
+                    list.add(lineItem);
+                } else if (filters.stream().allMatch(lineItem::contains)) {
                     list.add(lineItem);
                 }
             }
@@ -47,7 +43,7 @@ public class ListFunc {
         return list;
     }
 
-    private void print(Set<String> list) {
-        System.out.println(list);
+    private void print(List<String> list) {
+        list.forEach(System.out::println);
     }
 }
