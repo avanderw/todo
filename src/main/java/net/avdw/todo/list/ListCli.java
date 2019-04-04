@@ -1,6 +1,7 @@
 package net.avdw.todo.list;
 
 import net.avdw.todo.Config;
+import net.avdw.todo.Main;
 import picocli.CommandLine;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class ListCli implements Runnable {
 
     @Override
     public void run() {
-        ListFunc listFunc = new ListFunc(Config.TODO_FILE);
+        ListFunc listFunc = new ListFunc(Config.TODO_FILE, Main.EVENT_BUS);
 
         if (listProjects) {
             listFunc.listProjects();

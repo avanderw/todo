@@ -1,5 +1,6 @@
 package net.avdw.todo.list;
 
+import com.google.common.eventbus.EventBus;
 import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.Logger;
 
@@ -12,10 +13,12 @@ import java.util.regex.Pattern;
 public class ListFunc {
     private File todoFile;
     private final File doneFile;
+    private EventBus eventBus;
 
-    public ListFunc(File todoFile) {
+    public ListFunc(File todoFile, EventBus eventBus) {
         this.todoFile = todoFile;
         this.doneFile = new File(todoFile.toString().substring(0, todoFile.toString().lastIndexOf("\\")+1) + "done.txt");
+        this.eventBus = eventBus;
     }
 
     public List<String> list() {
@@ -93,6 +96,7 @@ public class ListFunc {
             Logger.error(e);
         }
         print(list);
+        eventBus.post(new ListEvent());
         return list;
     }
 

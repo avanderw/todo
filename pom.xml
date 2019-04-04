@@ -58,6 +58,11 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.8.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>25.0-jre</version>
+        </dependency>
         <dependency> <!-- needs to be higher than junit dependencies -->
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>

@@ -1,5 +1,6 @@
 package net.avdw.todo.remove;
 
+import com.google.common.eventbus.EventBus;
 import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.Logger;
 
@@ -15,9 +16,11 @@ import java.util.stream.Collectors;
 
 public class RemoveFunc {
     private File file;
+    private EventBus eventBus;
 
-    public RemoveFunc(File file) {
+    public RemoveFunc(File file, EventBus eventBus) {
         this.file = file;
+        this.eventBus = eventBus;
     }
 
     public void remove(Integer idx) {
@@ -61,5 +64,6 @@ public class RemoveFunc {
         for (int idx = 0; idx < removedLines.size(); idx++) {
             System.out.print(String.format("Removed: %s %s%n", todoIdxs.get(idx), removedLines.get(idx)));
         }
+        eventBus.post(new RemoveEvent());
     }
 }

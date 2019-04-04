@@ -1,5 +1,6 @@
 package net.avdw.todo.priority;
 
+import com.google.common.eventbus.EventBus;
 import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.Logger;
 
@@ -15,10 +16,11 @@ import java.util.stream.Collectors;
 
 public class PriorityFunc {
     private final File todoFile;
+    private EventBus eventBus;
 
-    public PriorityFunc(File todoFile) {
-
+    public PriorityFunc(File todoFile, EventBus eventBus) {
         this.todoFile = todoFile;
+        this.eventBus = eventBus;
     }
 
     public void add(Integer idx, String priority) {
@@ -79,5 +81,6 @@ public class PriorityFunc {
                 System.out.print(String.format("Added Priority: %s %s%n", todoIdxs.get(idx), changedLines.get(idx)));
             }
         }
+        eventBus.post(new PriorityEvent());
     }
 }

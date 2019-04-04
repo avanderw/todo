@@ -1,5 +1,6 @@
 package net.avdw.todo.done;
 
+import com.google.common.eventbus.EventBus;
 import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.Logger;
 
@@ -17,11 +18,13 @@ import java.util.stream.Collectors;
 public class DoneFunc {
     private final File todoFile;
     private final File doneFile;
+    private EventBus eventBus;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    public DoneFunc(File todoFile) {
+    public DoneFunc(File todoFile, EventBus eventBus) {
         this.todoFile = todoFile;
         this.doneFile = new File(todoFile.toString().substring(0, todoFile.toString().lastIndexOf("\\")+1) + "done.txt");
+        this.eventBus = eventBus;
     }
 
     public void done(Integer idx) {
@@ -66,5 +69,6 @@ public class DoneFunc {
         for (int idx = 0; idx < removedLines.size(); idx++) {
             System.out.print(String.format("Done: %s %s", todoIdxs.get(idx), removedLines.get(idx)));
         }
+        eventBus.post(new DoneEvent());
     }
 }
