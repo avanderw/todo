@@ -11,7 +11,7 @@ import java.nio.file.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class AddEventDispatcher {
+public class AddEventDispatcher implements AddApi {
 
     private File file;
     private EventBus eventBus;
