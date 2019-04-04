@@ -24,7 +24,7 @@ public class ListFunc {
     }
 
     public List<String> list(List<String> filters) {
-        return list(todoFile, filters);
+        return list(todoFile, filters, 0);
     }
 
     public List<String> listContexts() {
@@ -60,15 +60,15 @@ public class ListFunc {
     public List<String> listAll() {
         List<String> list = new ArrayList<>();
         list.addAll(list(todoFile));
-        list.addAll(list(doneFile));
+        list.addAll(list(doneFile, list.size()));
         print(list);
         return list;
     }
 
-    private List<String> list(File file, List<String> filters) {
+    private List<String> list(File file, List<String> filters, int initialCount) {
         List<String> list = new ArrayList<>();
         try (Scanner scanner = new Scanner(file)) {
-            int count = 0;
+            int count = initialCount;
             while (scanner.hasNext()) {
                 String lineItem = scanner.nextLine();
                 if (lineItem.isEmpty()) {
@@ -105,10 +105,15 @@ public class ListFunc {
     }
 
     private void print(List<String> list) {
+        list.sort(Comparator.comparing(s->s.substring(5)));
         list.forEach(System.out::println);
     }
 
     private List<String> list(File file) {
-        return list(file, new ArrayList<>());
+        return list(file, new ArrayList<>(), 0);
+    }
+
+    private List<String> list(File file, int initialCount) {
+        return list(file, new ArrayList<>(), initialCount);
     }
 }

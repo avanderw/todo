@@ -20,7 +20,7 @@ Feature: todo-txt
     When I complete todo item 3
     And I list the todo items with no arguments
     Then I will get a list with 15 items
-    And item 3 will be "[03] 2018-12-14 get +todo.txt summary out of github onto phone @play"
+    And item 4 will be "[03] 2018-12-14 get +todo.txt summary out of github onto phone @play"
     And the file "./target/list.txt.bak" exists
     And the contents of file "./target/done.txt" starts with "x " together with today's date
 
@@ -30,7 +30,7 @@ Feature: todo-txt
     When I complete todo item 3 4 5 6
     And I list the todo items with no arguments
     Then I will get a list with 12 items
-    And item 3 will be "[03] 2019-01-04 get new sandles @home"
+    And item 5 will be "[03] 2019-01-04 get new sandles @home"
     And the file "./target/list.txt.bak" exists
     And the contents of file "./target/done.txt" starts with "x " together with today's date
     And the contents of file "./target/done.txt" contains 4 lines
@@ -73,7 +73,7 @@ Feature: todo-txt
     When I remove item 2
     And I list the todo items with no arguments
     Then I will get a list with 15 items
-    And item 2 will be "[02] 2018-12-04 Allow multi-desktop support for taskbar on Windows10 +HassleEUC @work"
+    And item 3 will be "[02] 2018-12-04 Allow multi-desktop support for taskbar on Windows10 +HassleEUC @work"
     And the file "./target/list.txt.bak" exists
 
   Scenario: Multi-remove
@@ -82,7 +82,7 @@ Feature: todo-txt
     When I remove item 3 4 5 6
     And I list the todo items with no arguments
     Then I will get a list with 12 items
-    And item 3 will be "[03] 2019-01-04 get new sandles @home"
+    And item 5 will be "[03] 2019-01-04 get new sandles @home"
     And the file "./target/list.txt.bak" exists
 
   Scenario: Replace

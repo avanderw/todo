@@ -44,6 +44,6 @@ public class AddFunc {
         } catch (FileNotFoundException e) {
             Logger.error(e);
         }
-        System.out.print(String.format("Added: %s %s", count, todoItem));
+        System.out.print(String.format("Added: %s %s%n", count, todoItem));
     }
 }

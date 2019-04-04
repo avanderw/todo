@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class RemoveFunc {
     private File file;
@@ -23,7 +24,7 @@ public class RemoveFunc {
     }
 
     public void remove(List<Integer> idxs) {
-        String todoIdx = String.format("[%s]", StringUtils.leftPad(idxs.toString(), 2, "0"));
+        List<String> todoIdxs = idxs.stream().map(idx->String.format("[%s]", StringUtils.leftPad(idx.toString(), 2, "0"))).collect(Collectors.toList());
         List<String> removedLines = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         int count = 0;
@@ -51,6 +52,8 @@ public class RemoveFunc {
             Logger.error(e);
         }
 
-        System.out.println(String.format("Removed: %s %s", todoIdx, removedLines));
+        for (int idx = 0; idx < todoIdxs.size(); idx++) {
+            System.out.print(String.format("Removed: %s %s%n", todoIdxs.get(idx), removedLines.get(idx)));
+        }
     }
 }
