@@ -1,7 +1,7 @@
 package net.avdw.todo.replace;
 
 import com.google.common.eventbus.EventBus;
-import net.avdw.todo.add.AddFunc;
+import net.avdw.todo.add.AddEventDispatcher;
 import net.avdw.todo.remove.RemoveFunc;
 
 import java.io.File;
@@ -17,7 +17,7 @@ public class ReplaceFunc {
 
     public void replace(Integer idx, String todoItem) {
         new RemoveFunc(todoFile, eventBus).remove(idx);
-        new AddFunc(todoFile, eventBus).add(todoItem);
+        new AddEventDispatcher(todoFile, eventBus).add(todoItem);
         eventBus.post(new ReplaceEvent());
     }
 }

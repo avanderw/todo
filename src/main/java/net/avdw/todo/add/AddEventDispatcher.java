@@ -11,13 +11,13 @@ import java.nio.file.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class AddFunc {
+public class AddEventDispatcher {
 
     private File file;
     private EventBus eventBus;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    public AddFunc(File file, EventBus eventBus) {
+    public AddEventDispatcher(File file, EventBus eventBus) {
         this.file = file;
         this.eventBus = eventBus;
     }

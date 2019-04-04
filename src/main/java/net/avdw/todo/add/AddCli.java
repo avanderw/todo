@@ -11,6 +11,6 @@ public class AddCli implements Runnable {
 
     @Override
     public void run() {
-        new AddFunc(Config.TODO_FILE, Main.EVENT_BUS).add(todo);
+        new AddEventDispatcher(Config.TODO_FILE, Main.EVENT_BUS).add(todo);
     }
 }
