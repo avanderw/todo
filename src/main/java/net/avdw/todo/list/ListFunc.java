@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class ListFunc {
     private File todoFile;
@@ -29,13 +28,21 @@ public class ListFunc {
 
     public List<String> listContexts() {
         List<String> contexts = extractToken("@");
-        System.out.println(contexts);
+        if (contexts.isEmpty()) {
+            System.out.println("No context tags.");
+        } else {
+            contexts.forEach(System.out::println);
+        }
         return contexts;
     }
 
     public List<String> listProjects() {
         List<String> projects = extractToken("+");
-        System.out.println(projects);
+        if (projects.isEmpty()) {
+            System.out.println("No project tags.");
+        } else {
+            projects.forEach(System.out::println);
+        }
         return projects;
     }
 
@@ -105,6 +112,10 @@ public class ListFunc {
     }
 
     private void print(List<String> list) {
+        if (list.isEmpty()) {
+            System.out.println("No todo items.");
+            return;
+        }
         list.sort(Comparator.comparing(s->s.substring(5)));
         list.forEach(System.out::println);
     }
