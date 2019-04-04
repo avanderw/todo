@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Scanner;
+import java.util.*;
 
 public class RemoveFunc {
     private File file;
@@ -19,8 +19,12 @@ public class RemoveFunc {
     }
 
     public void remove(Integer idx) {
-        String todoIdx = String.format("[%s]", StringUtils.leftPad(idx.toString(), 2, "0"));
-        String removedLine = null;
+        remove(Collections.singletonList(idx));
+    }
+
+    public void remove(List<Integer> idxs) {
+        String todoIdx = String.format("[%s]", StringUtils.leftPad(idxs.toString(), 2, "0"));
+        List<String> removedLines = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         int count = 0;
         try (Scanner scanner = new Scanner(file)) {
@@ -28,8 +32,9 @@ public class RemoveFunc {
                 String line =scanner.nextLine();
                 if (!line.isEmpty()) {
                     count++;
-                    if (idx == count) {
-                        removedLine = line;
+                    int finalCount = count;
+                    if (idxs.stream().anyMatch(idx->idx == finalCount)) {
+                        removedLines.add(line);
                     } else {
                         sb.append(line).append("\n");
                     }
@@ -46,6 +51,6 @@ public class RemoveFunc {
             Logger.error(e);
         }
 
-        System.out.println(String.format("Removed: %s %s", todoIdx, removedLine));
+        System.out.println(String.format("Removed: %s %s", todoIdx, removedLines));
     }
 }

@@ -2,6 +2,7 @@ package net.avdw.todo;
 
 import cucumber.api.java8.En;
 import net.avdw.todo.add.AddFunc;
+import net.avdw.todo.done.DoneCli;
 import net.avdw.todo.done.DoneFunc;
 import net.avdw.todo.list.ListFunc;
 import net.avdw.todo.remove.RemoveFunc;
@@ -36,13 +37,35 @@ public class TodoTxtStepDefs implements En {
         When("^I add a todo item$", () -> new AddFunc(file).add(UUID.randomUUID().toString()));
         And("^the last item will have a created date of now$", () -> assertThat("Must start with today's date", items.get(items.size() - 1).startsWith(sdf.format(new Date()), 5)));
         When("^I remove item (\\d+)$", (Integer idx) -> new RemoveFunc(file).remove(idx));
-        And("^item (\\d+) will be \"([^\"]*)\"$", (Integer idx, String item) -> assertThat(items.get(idx-1), is(equalTo(item))));
+        And("^item (\\d+) will be \"([^\"]*)\"$", (Integer idx, String item) -> assertThat(items.get(idx - 1), is(equalTo(item))));
         And("^the file \"([^\"]*)\" exists$", (String path) -> assertThat(String.format("File %s must exist", path), new File(path).exists()));
         When("^I complete todo item (\\d+)$", (Integer idx) -> new DoneFunc(file).done(idx));
         And("^the contents of file \"([^\"]*)\" starts with \"([^\"]*)\" together with today's date$", (String path, String startsWith) -> {
             String content = new String(Files.readAllBytes(Paths.get(path)));
             startsWith += sdf.format(new Date());
             assertThat(content, startsWithIgnoringCase(startsWith));
+        });
+        When("^I complete todo item (\\d+) (\\d+) (\\d+) (\\d+)$", (Integer arg0, Integer arg1, Integer arg2, Integer arg3) -> {
+            List<Integer> args = Arrays.asList(arg0, arg1, arg2, arg3);
+            new DoneFunc(file).done(args);
+        });
+        And("^the contents of file \"([^\"]*)\" contains (\\d+) lines$", (String path, Integer num) -> {
+            int count = 0;
+            Scanner scanner = new Scanner(new File(path));
+            while (scanner.hasNext()) {
+                if (!scanner.nextLine().isEmpty()) {
+                    count++;
+                }
+            }
+            assertThat(count, equalTo(num));
+        });
+        When("^I list the priority tasks$", () -> items = new ListFunc(file).listPriority());
+        When("^I list the contexts$", () -> items = new ListFunc(file).listContexts());
+        When("^I list the projects$", () -> items = new ListFunc(file).listProjects());
+        When("^I list everything$", () -> items = new ListFunc(file).listAll());
+        When("^I remove item (\\d+) (\\d+) (\\d+) (\\d+)$", (Integer arg0, Integer arg1, Integer arg2, Integer arg3) -> {
+            List<Integer> args = Arrays.asList(arg0, arg1, arg2, arg3);
+            new RemoveFunc(file).remove(args);
         });
     }
 }
