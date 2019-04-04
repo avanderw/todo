@@ -100,7 +100,7 @@ Feature: todo-txt
     When I add priority "A" to item 5
     And I list the todo items with no arguments
     Then I will get a list with 16 items
-    And item 1 will be "(A) 2018-12-28 put together a statement categorisor for bank statements @play"
+    And item 1 will be "[05] (A) 2018-12-28 put together a statement categorisor for bank statements @play"
 
   Scenario: Remove priority
     Given I copy the file "./src/test/resources/todo.txt/list.txt" to "./target/list.txt"
