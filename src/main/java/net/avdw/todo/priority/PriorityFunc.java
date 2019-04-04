@@ -72,7 +72,7 @@ public class PriorityFunc {
             Logger.error(e);
         }
 
-        for (int idx = 0; idx < todoIdxs.size(); idx++) {
+        for (int idx = 0; idx < changedLines.size(); idx++) {
             if (priority == null) {
                 System.out.print(String.format("Removed Priority: %s %s%n", todoIdxs.get(idx), changedLines.get(idx)));
             } else {

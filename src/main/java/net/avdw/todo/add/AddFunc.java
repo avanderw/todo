@@ -1,5 +1,6 @@
 package net.avdw.todo.add;
 
+import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.Logger;
 
 import java.io.File;
@@ -42,6 +43,6 @@ public class AddFunc {
         } catch (FileNotFoundException e) {
             Logger.error(e);
         }
-        System.out.print(String.format("Added: [%s] %s%n", count, todoItem));
+        System.out.print(String.format("Added: [%s] %s%n", StringUtils.leftPad(Integer.toString(count), 2, "0"), todoItem));
     }
 }

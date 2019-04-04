@@ -46,6 +46,11 @@ public class RemoveFunc {
             Logger.error(e);
         }
 
+        if (removedLines.isEmpty()) {
+            System.out.println("There are no todo items.");
+            return;
+        }
+
         try {
             Files.copy(file.toPath(), Paths.get(file.toString()+".bak"), StandardCopyOption.REPLACE_EXISTING);
             Files.write(file.toPath(), sb.toString().getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
@@ -53,7 +58,7 @@ public class RemoveFunc {
             Logger.error(e);
         }
 
-        for (int idx = 0; idx < todoIdxs.size(); idx++) {
+        for (int idx = 0; idx < removedLines.size(); idx++) {
             System.out.print(String.format("Removed: %s %s%n", todoIdxs.get(idx), removedLines.get(idx)));
         }
     }

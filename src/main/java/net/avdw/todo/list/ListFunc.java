@@ -15,7 +15,7 @@ public class ListFunc {
 
     public ListFunc(File todoFile) {
         this.todoFile = todoFile;
-        this.doneFile = todoFile.toPath().subpath(0, todoFile.toPath().getNameCount() - 1).resolve("done.txt").toFile();
+        this.doneFile = new File(todoFile.toString().substring(0, todoFile.toString().lastIndexOf("\\")+1) + "done.txt");
     }
 
     public List<String> list() {

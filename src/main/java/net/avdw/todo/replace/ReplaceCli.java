@@ -6,11 +6,14 @@ import picocli.CommandLine;
 
 @CommandLine.Command(name = "replace", description = "Replace a todo item.")
 public class ReplaceCli implements Runnable {
-    @CommandLine.Parameters(description = "The index of the todo item.")
+    @CommandLine.Parameters(description = "The index of the todo item to replace.", index = "0", arity = "1")
     Integer idx;
+
+    @CommandLine.Parameters(description = "New todo item.", index = "1", arity = "1")
+    String todo;
 
     @Override
     public void run() {
-        new RemoveFunc(Config.TODO_FILE).remove(idx);
+        new ReplaceFunc(Config.TODO_FILE).replace(idx, todo);
     }
 }

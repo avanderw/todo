@@ -21,7 +21,7 @@ public class DoneFunc {
 
     public DoneFunc(File todoFile) {
         this.todoFile = todoFile;
-        this.doneFile = todoFile.toPath().subpath(0, todoFile.toPath().getNameCount() - 1).resolve("done.txt").toFile();
+        this.doneFile = new File(todoFile.toString().substring(0, todoFile.toString().lastIndexOf("\\")+1) + "done.txt");
     }
 
     public void done(Integer idx) {
@@ -49,6 +49,11 @@ public class DoneFunc {
             Logger.error(e);
         }
 
+        if (removedLines.isEmpty()) {
+            System.out.println("There are no todo items.");
+            return;
+        }
+
         removedLines = removedLines.stream().map(removedLine -> String.format("x %s %s%n", sdf.format(new Date()), removedLine)).collect(Collectors.toList());
         try {
             Files.copy(todoFile.toPath(), Paths.get(todoFile.toString() + ".bak"), StandardCopyOption.REPLACE_EXISTING);
@@ -58,7 +63,7 @@ public class DoneFunc {
             Logger.error(e);
         }
 
-        for (int idx = 0; idx < todoIdxs.size(); idx++) {
+        for (int idx = 0; idx < removedLines.size(); idx++) {
             System.out.print(String.format("Done: %s %s", todoIdxs.get(idx), removedLines.get(idx)));
         }
     }

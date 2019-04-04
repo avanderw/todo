@@ -9,7 +9,7 @@ import net.avdw.todo.replace.ReplaceCli;
 import picocli.CommandLine;
 
 @CommandLine.Command(name = "todo", description = "A tool to manage todo lists.",
-        subcommands = {AddCli.class, DoneCli.class, ListCli.class, PriorityCli.class, RemoveCli.class, ReplaceCli.class})
+        subcommands = {CommandLine.HelpCommand.class, AddCli.class, DoneCli.class, ListCli.class, PriorityCli.class, RemoveCli.class, ReplaceCli.class})
 public class Todo implements Runnable {
     public void run() {
         CommandLine.usage(Todo.class, System.out);
