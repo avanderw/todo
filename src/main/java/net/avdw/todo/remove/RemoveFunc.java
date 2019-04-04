@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,7 +47,7 @@ public class RemoveFunc {
         }
 
         try {
-            Files.copy(file.toPath(), Paths.get(file.toString()+".bak"));
+            Files.copy(file.toPath(), Paths.get(file.toString()+".bak"), StandardCopyOption.REPLACE_EXISTING);
             Files.write(file.toPath(), sb.toString().getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
             Logger.error(e);

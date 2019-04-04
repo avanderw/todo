@@ -86,7 +86,26 @@ Feature: todo-txt
     And the file "./target/list.txt.bak" exists
 
   Scenario: Replace
+    Given I copy the file "./src/test/resources/todo.txt/list.txt" to "./target/list.txt"
+    And I track the file "./target/list.txt"
+    When I replace item 3 with "Cucumber replace test"
+    And I list the todo items with no arguments
+    Then I will get a list with 16 items
+    And item 4 will be "[03] 2018-12-14 get +todo.txt summary out of github onto phone @play"
+    And item 16 will contain "Cucumber replace test"
 
   Scenario: Add priority
+    Given I copy the file "./src/test/resources/todo.txt/list.txt" to "./target/list.txt"
+    And I track the file "./target/list.txt"
+    When I add priority "A" to item 5
+    And I list the todo items with no arguments
+    Then I will get a list with 16 items
+    And item 1 will be "(A) 2018-12-28 put together a statement categorisor for bank statements @play"
 
   Scenario: Remove priority
+    Given I copy the file "./src/test/resources/todo.txt/list.txt" to "./target/list.txt"
+    And I track the file "./target/list.txt"
+    When I remove priority from item 9
+    And I list the todo items with no arguments
+    Then I will get a list with 16 items
+    And item 1 will be "[01] 2018-12-04 24h00 time format +HassleEUC @work"

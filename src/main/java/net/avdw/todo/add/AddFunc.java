@@ -5,9 +5,7 @@ import org.pmw.tinylog.Logger;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -28,7 +26,7 @@ public class AddFunc {
 
         String add = String.format("%s %s%n", sdf.format(new Date()), todoItem);
         try {
-            Files.copy(file.toPath(), Paths.get(file.toString()+".bak"));
+            Files.copy(file.toPath(), Paths.get(file.toString()+".bak"), StandardCopyOption.REPLACE_EXISTING);
             Files.write(file.toPath(), add.getBytes(), StandardOpenOption.APPEND);
         } catch (IOException e) {
             Logger.error(e);

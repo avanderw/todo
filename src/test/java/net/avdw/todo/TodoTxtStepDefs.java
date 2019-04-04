@@ -5,7 +5,9 @@ import net.avdw.todo.add.AddFunc;
 import net.avdw.todo.done.DoneCli;
 import net.avdw.todo.done.DoneFunc;
 import net.avdw.todo.list.ListFunc;
+import net.avdw.todo.priority.PriorityFunc;
 import net.avdw.todo.remove.RemoveFunc;
+import net.avdw.todo.replace.ReplaceFunc;
 import org.pmw.tinylog.Logger;
 
 import java.io.File;
@@ -67,5 +69,9 @@ public class TodoTxtStepDefs implements En {
             List<Integer> args = Arrays.asList(arg0, arg1, arg2, arg3);
             new RemoveFunc(file).remove(args);
         });
+        When("^I replace item (\\d+) with \"([^\"]*)\"$", (Integer idx, String todoItem) -> new ReplaceFunc(file).replace(idx, todoItem));
+        And("^item (\\d+) will contain \"([^\"]*)\"$", (Integer idx, String todoItem) -> assertThat(items.get(idx -1), containsString(todoItem)));
+        When("^I add priority \"([^\"]*)\" to item (\\d+)$", (String priority, Integer idx) -> new PriorityFunc(file).add(idx, priority));
+        When("^I remove priority from item (\\d+)$", (Integer idx) -> new PriorityFunc(file).remove(idx));
     }
 }

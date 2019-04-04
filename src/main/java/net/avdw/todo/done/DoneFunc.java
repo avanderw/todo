@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -50,7 +51,7 @@ public class DoneFunc {
 
         removedLines = removedLines.stream().map(removedLine -> String.format("x %s %s%n", sdf.format(new Date()), removedLine)).collect(Collectors.toList());
         try {
-            Files.copy(todoFile.toPath(), Paths.get(todoFile.toString() + ".bak"));
+            Files.copy(todoFile.toPath(), Paths.get(todoFile.toString() + ".bak"), StandardCopyOption.REPLACE_EXISTING);
             Files.write(todoFile.toPath(), sb.toString().getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
             Files.write(doneFile.toPath(), removedLines.stream().reduce("", (id, line) -> id + line).getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (IOException e) {
