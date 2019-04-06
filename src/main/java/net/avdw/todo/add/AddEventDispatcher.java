@@ -14,7 +14,6 @@ public class AddEventDispatcher implements AddApi {
 
     @Override
     public void add(String todo) {
-        Logger.trace(todo); // research aspects
         eventBus.post(new AddEvent(todo));
     }
 }

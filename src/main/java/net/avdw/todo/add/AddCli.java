@@ -1,8 +1,6 @@
 package net.avdw.todo.add;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Config;
-import net.avdw.todo.Main;
 import picocli.CommandLine;
 
 @CommandLine.Command(name = "add", description = "Add a todo item.")

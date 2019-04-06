@@ -11,8 +11,9 @@ public class Main {
     public static final EventBus EVENT_BUS = new EventBus();
 
     public static void main(String[] args){
-        EVENT_BUS.register(new Main());
-        Logger.getConfiguration().level(Level.TRACE).activate();
+        Logger.getConfiguration()
+                .formatPattern("{date:yyyy-MM-dd HH:mm:ss} [{thread}] {class}.{method}() {level}: {message}")
+                .level(Level.TRACE).activate();
         CommandLine.run(Todo.class, new GuiceFactory(), args);
     }
 
