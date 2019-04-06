@@ -1,6 +1,9 @@
 package net.avdw.todo.add;
 
+import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 public class AddTodoTxt {
 
