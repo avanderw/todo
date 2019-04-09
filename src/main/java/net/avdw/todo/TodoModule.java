@@ -13,6 +13,7 @@ import org.pmw.tinylog.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 public class TodoModule extends AbstractModule {
     @Override
@@ -26,6 +27,7 @@ public class TodoModule extends AbstractModule {
         });
         bindInterceptor(Matchers.inSubpackage("net.avdw.todo"), Matchers.any(), new LoggingInterceptor());
 
+        bind(SimpleDateFormat.class).toInstance(new SimpleDateFormat("yyyy-MM-dd"));
         install(new AddModule());
     }
 

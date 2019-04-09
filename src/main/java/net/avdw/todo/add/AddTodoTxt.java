@@ -1,9 +1,7 @@
 package net.avdw.todo.add;
 
-import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.Logger;
 
@@ -18,18 +16,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-public class AddTodoTxt {
+public class AddTodoTxt implements AddApi {
     private File file;
     private SimpleDateFormat sdf;
 
     @Inject
-    AddTodoTxt(File file, SimpleDateFormat sdf) {
+    public AddTodoTxt(File file, SimpleDateFormat sdf) {
         this.file = file;
         this.sdf = sdf;
     }
 
     @Subscribe
-    public void test(AddEvent event) {
+    public void add(AddEvent event) {
         if (event.todo.isEmpty()) {
             Logger.warn("There is no todo item to add.");
             return;
@@ -56,5 +54,10 @@ public class AddTodoTxt {
             Logger.error(e);
         }
         System.out.print(String.format("Added: [%s] %s%n", StringUtils.leftPad(Integer.toString(count), 2, "0"), event.todo));
+    }
+
+    @Override
+    public void add(String todo) {
+        add(new AddEvent(todo));
     }
 }

@@ -1,7 +1,9 @@
 package net.avdw.todo.replace;
 
+import com.google.inject.Inject;
 import net.avdw.todo.Config;
 import net.avdw.todo.Main;
+import net.avdw.todo.add.AddApi;
 import net.avdw.todo.remove.RemoveFunc;
 import picocli.CommandLine;
 
@@ -13,8 +15,11 @@ public class ReplaceCli implements Runnable {
     @CommandLine.Parameters(description = "New todo item.", index = "1", arity = "1")
     String todo;
 
+    @Inject
+    private ReplaceApi replaceApi;
+
     @Override
     public void run() {
-        new ReplaceFunc(Config.TODO_FILE, Main.EVENT_BUS).replace(idx, todo);
+        replaceApi.replace(idx, todo);
     }
 }

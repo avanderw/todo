@@ -14,7 +14,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class RemoveFunc {
+public class RemoveFunc implements RemoveApi{
     private File file;
     private EventBus eventBus;
 

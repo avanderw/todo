@@ -19,14 +19,14 @@ public class ListCli implements Runnable {
 
     @Override
     public void run() {
-        ListFunc listFunc = new ListFunc(Config.TODO_FILE, Main.EVENT_BUS);
+        ListTodoTxt listTodoTxt = new ListTodoTxt(Config.TODO_FILE, Main.EVENT_BUS);
 
         if (listProjects) {
-            listFunc.listProjects();
+            listTodoTxt.listProjects();
         }
 
         if (listContexts) {
-            listFunc.listContexts();
+            listTodoTxt.listContexts();
         }
 
         if (listProjects || listContexts) {
@@ -34,9 +34,9 @@ public class ListCli implements Runnable {
         }
 
         if (filters == null || filters.isEmpty()) {
-            listFunc.list();
+            listTodoTxt.list();
         } else {
-            listFunc.list(filters);
+            listTodoTxt.list(filters);
         }
     }
 

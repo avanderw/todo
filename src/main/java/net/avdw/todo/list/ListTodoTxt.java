@@ -1,6 +1,7 @@
 package net.avdw.todo.list;
 
 import com.google.common.eventbus.EventBus;
+import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.Logger;
 
@@ -10,12 +11,13 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ListFunc {
+public class ListTodoTxt implements ListApi {
     private File todoFile;
     private final File doneFile;
     private EventBus eventBus;
 
-    public ListFunc(File todoFile, EventBus eventBus) {
+    @Inject
+    public ListTodoTxt(File todoFile, EventBus eventBus) {
         this.todoFile = todoFile;
         this.doneFile = new File(todoFile.toString().substring(0, todoFile.toString().lastIndexOf("\\")+1) + "done.txt");
         this.eventBus = eventBus;

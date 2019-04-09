@@ -11,6 +11,6 @@ public class DoneCli implements Runnable {
 
     @Override
     public void run() {
-        new DoneFunc(Config.TODO_FILE, Main.EVENT_BUS).done(idx);
+        new DoneTodoTxt(Config.TODO_FILE, Main.EVENT_BUS).done(idx);
     }
 }

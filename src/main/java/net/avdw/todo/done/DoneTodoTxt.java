@@ -1,6 +1,7 @@
 package net.avdw.todo.done;
 
 import com.google.common.eventbus.EventBus;
+import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.Logger;
 
@@ -15,13 +16,14 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class DoneFunc {
+public class DoneTodoTxt implements DoneApi {
     private final File todoFile;
     private final File doneFile;
     private EventBus eventBus;
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    public DoneFunc(File todoFile, EventBus eventBus) {
+    @Inject
+    public DoneTodoTxt(File todoFile, EventBus eventBus) {
         this.todoFile = todoFile;
         this.doneFile = new File(todoFile.toString().substring(0, todoFile.toString().lastIndexOf("\\")+1) + "done.txt");
         this.eventBus = eventBus;
