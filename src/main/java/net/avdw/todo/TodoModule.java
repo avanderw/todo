@@ -9,6 +9,10 @@ import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 import net.avdw.todo.add.AddModule;
+import net.avdw.todo.done.DoneModule;
+import net.avdw.todo.priority.PriorityModule;
+import net.avdw.todo.remove.RemoveModule;
+import net.avdw.todo.replace.ReplaceModule;
 import org.pmw.tinylog.Logger;
 
 import java.io.File;
@@ -29,6 +33,10 @@ public class TodoModule extends AbstractModule {
 
         bind(SimpleDateFormat.class).toInstance(new SimpleDateFormat("yyyy-MM-dd"));
         install(new AddModule());
+        install(new DoneModule());
+        install(new PriorityModule());
+        install(new RemoveModule());
+        install(new ReplaceModule());
     }
 
     @Provides

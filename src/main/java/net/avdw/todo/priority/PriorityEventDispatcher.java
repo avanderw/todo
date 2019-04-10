@@ -1,12 +1,14 @@
 package net.avdw.todo.priority;
 
 import com.google.common.eventbus.EventBus;
+import com.google.inject.Inject;
 
 import java.util.Collections;
 
 public class PriorityEventDispatcher implements PriorityApi {
     private EventBus eventBus;
 
+    @Inject
     PriorityEventDispatcher(EventBus eventBus) {
         this.eventBus = eventBus;
     }
