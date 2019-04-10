@@ -1,11 +1,7 @@
 package net.avdw.todo.priority;
 
-public class PriorityApi {
-    public void add(Integer idx, String priority) {
+public interface PriorityApi {
+    void add(Integer idx, PriorityInput priority);
 
-    }
-
-    public void remove(Integer idx) {
-
-    }
+    void remove(Integer idx);
 }

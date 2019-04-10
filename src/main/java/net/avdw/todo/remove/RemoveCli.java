@@ -1,5 +1,6 @@
 package net.avdw.todo.remove;
 
+import com.google.inject.Inject;
 import net.avdw.todo.Config;
 import net.avdw.todo.Main;
 import picocli.CommandLine;
@@ -9,8 +10,11 @@ public class RemoveCli implements Runnable {
     @CommandLine.Parameters(description = "The index of the todo item.")
     Integer idx;
 
+    @Inject
+    private RemoveApi removeApi;
+
     @Override
     public void run() {
-        new RemoveFunc(Config.TODO_FILE, Main.EVENT_BUS).remove(idx);
+        removeApi.remove(idx);
     }
 }

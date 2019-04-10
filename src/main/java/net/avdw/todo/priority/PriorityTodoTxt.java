@@ -1,6 +1,7 @@
 package net.avdw.todo.priority;
 
-import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.Logger;
 
@@ -11,24 +12,26 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
-public class PriorityFunc {
+public class PriorityTodoTxt implements PriorityApi {
     private final File todoFile;
-    private EventBus eventBus;
 
-    public PriorityFunc(File todoFile, EventBus eventBus) {
+    @Inject
+    PriorityTodoTxt(File todoFile) {
         this.todoFile = todoFile;
-        this.eventBus = eventBus;
     }
 
-    public void add(Integer idx, String priority) {
-        changeTodo(Collections.singletonList(idx), priority);
+    public void add(Integer idx, PriorityInput priority) {
+        changeTodo(new PriorityEvent(Collections.singletonList(idx), priority));
     }
 
-    public void add(List<Integer> idxs, String priority) {
-        changeTodo(idxs, priority);
+    public void add(List<Integer> idxs, PriorityInput priority) {
+        changeTodo(new PriorityEvent(idxs, priority));
     }
 
     public void remove(Integer idx) {
@@ -36,11 +39,12 @@ public class PriorityFunc {
     }
 
     public void remove(List<Integer> idxs) {
-        changeTodo(idxs, null);
+        changeTodo(new PriorityEvent(idxs, null));
     }
 
-    private void changeTodo(List<Integer> idxs, String priority) {
-        List<String> todoIdxs = idxs.stream().map(idx->String.format("[%s]", StringUtils.leftPad(idx.toString(), 2, "0"))).collect(Collectors.toList());
+    @Subscribe
+    private void changeTodo(PriorityEvent priorityEvent) {
+        List<String> todoIdxs = priorityEvent.idxs.stream().map(idx -> String.format("[%s]", StringUtils.leftPad(idx.toString(), 2, "0"))).collect(Collectors.toList());
         List<String> changedLines = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         int count = 0;
@@ -50,11 +54,11 @@ public class PriorityFunc {
                 if (!line.isEmpty()) {
                     count++;
                     int finalCount = count;
-                    if (idxs.stream().anyMatch(idx -> idx == finalCount)) {
-                        if (priority == null) {
+                    if (priorityEvent.idxs.stream().anyMatch(idx -> idx == finalCount)) {
+                        if (priorityEvent.priority == null) {
                             line = line.replaceFirst("^\\([A-Z]\\) ", "");
                         } else {
-                            line = String.format("(%s) %s", priority, line);
+                            line = String.format("(%s) %s", priorityEvent.priority, line);
                         }
                         changedLines.add(line);
                         sb.append(line).append("\n");
@@ -75,12 +79,11 @@ public class PriorityFunc {
         }
 
         for (int idx = 0; idx < changedLines.size(); idx++) {
-            if (priority == null) {
+            if (priorityEvent.priority == null) {
                 System.out.print(String.format("Removed Priority: %s %s%n", todoIdxs.get(idx), changedLines.get(idx)));
             } else {
                 System.out.print(String.format("Added Priority: %s %s%n", todoIdxs.get(idx), changedLines.get(idx)));
             }
         }
-        eventBus.post(new PriorityEvent());
     }
 }

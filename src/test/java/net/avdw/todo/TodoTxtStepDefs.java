@@ -12,6 +12,8 @@ import net.avdw.todo.done.DoneTodoTxt;
 import net.avdw.todo.list.ListApi;
 import net.avdw.todo.list.ListTodoTxt;
 import net.avdw.todo.priority.PriorityApi;
+import net.avdw.todo.priority.PriorityInput;
+import net.avdw.todo.priority.PriorityTodoTxt;
 import net.avdw.todo.remove.RemoveApi;
 import net.avdw.todo.remove.RemoveTodoTxt;
 import net.avdw.todo.replace.ReplaceApi;
@@ -79,7 +81,7 @@ public class TodoTxtStepDefs implements En {
         });
         When("^I replace item (\\d+) with \"([^\"]*)\"$", (Integer idx, String todoItem) -> getInjector().getInstance(ReplaceApi.class).replace(idx, todoItem));
         And("^item (\\d+) will contain \"([^\"]*)\"$", (Integer idx, String todoItem) -> assertThat(items.get(idx - 1), containsString(todoItem)));
-        When("^I add priority \"([^\"]*)\" to item (\\d+)$", (String priority, Integer idx) -> getInjector().getInstance(PriorityApi.class).add(idx, priority));
+        When("^I add priority \"([^\"]*)\" to item (\\d+)$", (String priority, Integer idx) -> getInjector().getInstance(PriorityApi.class).add(idx, PriorityInput.valueOf(priority)));
         When("^I remove priority from item (\\d+)$", (Integer idx) -> getInjector().getInstance(PriorityApi.class).remove(idx));
     }
 
@@ -111,6 +113,7 @@ public class TodoTxtStepDefs implements En {
             bind(ListApi.class).to(ListTodoTxt.class);
             bind(DoneApi.class).to(DoneTodoTxt.class);
             bind(RemoveApi.class).to(RemoveTodoTxt.class);
+            bind(PriorityApi.class).to(PriorityTodoTxt.class);
             bind(SimpleDateFormat.class).toInstance(new SimpleDateFormat("yyyy-MM-dd"));
         }
 
