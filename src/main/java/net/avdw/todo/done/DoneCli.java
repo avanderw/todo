@@ -1,5 +1,6 @@
 package net.avdw.todo.done;
 
+import com.google.inject.Inject;
 import net.avdw.todo.Config;
 import net.avdw.todo.Main;
 import picocli.CommandLine;
@@ -9,8 +10,11 @@ public class DoneCli implements Runnable {
     @CommandLine.Parameters(description = "The index of the todo item.")
     Integer idx;
 
+    @Inject
+    DoneApi doneApi;
+
     @Override
     public void run() {
-        new DoneTodoTxt(Config.TODO_FILE, Main.EVENT_BUS).done(idx);
+        doneApi.done(idx);
     }
 }

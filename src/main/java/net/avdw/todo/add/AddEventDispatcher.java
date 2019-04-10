@@ -2,7 +2,6 @@ package net.avdw.todo.add;
 
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
-import org.pmw.tinylog.Logger;
 
 public class AddEventDispatcher implements AddApi {
     private EventBus eventBus;

@@ -10,7 +10,7 @@ import net.avdw.todo.add.AddTodoTxt;
 import net.avdw.todo.done.DoneApi;
 import net.avdw.todo.done.DoneTodoTxt;
 import net.avdw.todo.list.ListApi;
-import net.avdw.todo.list.ListTodoTxt;
+import net.avdw.todo.list.ListTodo;
 import net.avdw.todo.priority.PriorityApi;
 import net.avdw.todo.priority.PriorityInput;
 import net.avdw.todo.priority.PriorityTodoTxt;
@@ -110,7 +110,7 @@ public class TodoTxtStepDefs implements En {
         protected void configure() {
             bind(AddApi.class).to(AddTodoTxt.class);
             bind(ReplaceApi.class).to(ReplaceTodoTxt.class);
-            bind(ListApi.class).to(ListTodoTxt.class);
+            bind(ListApi.class).to(ListTodo.class);
             bind(DoneApi.class).to(DoneTodoTxt.class);
             bind(RemoveApi.class).to(RemoveTodoTxt.class);
             bind(PriorityApi.class).to(PriorityTodoTxt.class);

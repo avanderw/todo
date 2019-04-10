@@ -11,15 +11,15 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ListTodoTxt implements ListApi {
+public class ListTodo implements ListApi {
     private File todoFile;
     private final File doneFile;
     private EventBus eventBus;
 
     @Inject
-    public ListTodoTxt(File todoFile, EventBus eventBus) {
+    public ListTodo(File todoFile, EventBus eventBus) {
         this.todoFile = todoFile;
-        this.doneFile = new File(todoFile.toString().substring(0, todoFile.toString().lastIndexOf("\\")+1) + "done.txt");
+        this.doneFile = new File(todoFile.toString().substring(0, todoFile.toString().lastIndexOf("\\") + 1) + "done.txt");
         this.eventBus = eventBus;
     }
 
@@ -98,7 +98,6 @@ public class ListTodoTxt implements ListApi {
             Logger.error(e);
         }
         print(list);
-        eventBus.post(new ListEvent());
         return list;
     }
 
@@ -122,7 +121,7 @@ public class ListTodoTxt implements ListApi {
             System.out.println("No todo items.");
             return;
         }
-        list.sort(Comparator.comparing(s->s.substring(5)));
+        list.sort(Comparator.comparing(s -> s.substring(5)));
         list.forEach(System.out::println);
     }
 
