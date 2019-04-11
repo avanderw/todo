@@ -2,16 +2,17 @@ package net.avdw.todo.playground;
 
 
 import com.github.scribejava.apis.WunderlistAPI;
-import com.github.scribejava.apis.wunderlist.WunderlistOAuthService;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
-import com.github.scribejava.core.oauth.OAuthService;
+import net.avdw.todo.wunderlist.IgnoreSsl;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
@@ -21,7 +22,8 @@ public class RestClientExample {
     private static final String NETWORK_NAME = "Wunderlist";
     private static final String PROTECTED_RESOURCE_URL = "https://a.wunderlist.com/api/v1/user";
 
-    public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
+    public static void main(String[] args) throws IOException, InterruptedException, ExecutionException, NoSuchAlgorithmException, KeyManagementException {
+        new IgnoreSsl();
 
         // Replace these with your own values
         final String apiKey = "34be69e3313a17355d82";

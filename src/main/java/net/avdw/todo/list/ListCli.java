@@ -1,7 +1,6 @@
 package net.avdw.todo.list;
 
-import net.avdw.todo.Config;
-import net.avdw.todo.Main;
+import com.google.inject.Inject;
 import picocli.CommandLine;
 
 import java.util.List;
@@ -17,16 +16,17 @@ public class ListCli implements Runnable {
     @CommandLine.Option(names = "-c", description = "List all context tags.")
     boolean listContexts;
 
+    @Inject
+    ListApi listApi;
+
     @Override
     public void run() {
-        ListTodo listTodo = new ListTodo(Config.TODO_FILE, Main.EVENT_BUS);
-
         if (listProjects) {
-            listTodo.listProjects();
+            listApi.listProjects();
         }
 
         if (listContexts) {
-            listTodo.listContexts();
+            listApi.listContexts();
         }
 
         if (listProjects || listContexts) {
@@ -34,13 +34,9 @@ public class ListCli implements Runnable {
         }
 
         if (filters == null || filters.isEmpty()) {
-            listTodo.list();
+            listApi.list();
         } else {
-            listTodo.list(filters);
+            listApi.list(filters);
         }
-    }
-
-    public static void main(String[] args) {
-        new ListCli().run();
     }
 }

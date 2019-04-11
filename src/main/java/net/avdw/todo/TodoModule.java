@@ -5,6 +5,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
+import com.google.inject.name.Names;
 import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
@@ -32,6 +33,7 @@ public class TodoModule extends AbstractModule {
         bindInterceptor(Matchers.inSubpackage("net.avdw.todo"), Matchers.any(), new LoggingInterceptor());
 
         bind(SimpleDateFormat.class).toInstance(new SimpleDateFormat("yyyy-MM-dd"));
+        bind(String.class).annotatedWith(Names.named("WUNDERLIST_NAME")).toInstance("todo.txt-sync");
         install(new AddModule());
         install(new DoneModule());
         install(new PriorityModule());

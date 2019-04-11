@@ -1,8 +1,6 @@
 package net.avdw.todo.done;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Config;
-import net.avdw.todo.Main;
 import picocli.CommandLine;
 
 @CommandLine.Command(name = "do", description = "Completes a todo item.")
