@@ -16,6 +16,7 @@ public class AddWunderlist implements AddApi {
     @Subscribe
     public void add(AddEvent event) {
         client.createDatabase();
+        client.addTask(event.todo);
     }
 
     @Override

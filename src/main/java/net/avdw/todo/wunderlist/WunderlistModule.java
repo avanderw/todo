@@ -6,6 +6,7 @@ import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import org.pmw.tinylog.Logger;
@@ -19,9 +20,11 @@ public class WunderlistModule extends AbstractModule {
         bind(String.class).annotatedWith(Names.named("API_KEY")).toInstance("34be69e3313a17355d82");
         bind(String.class).annotatedWith(Names.named("API_SECRET")).toInstance("869630c64d9bf7b065e48d8a059978a64e6ab12b4e13800764f3fa9b4c7e");
         bind(String.class).annotatedWith(Names.named("CLIENT_AUTH")).toInstance("bcf5a937726fc583e183");
+        bind(WunderlistClient.class).in(Singleton.class);
     }
 
     @Provides
+    @Singleton
     OAuth20Service getService(@Named("API_KEY") String apiKey, @Named("API_SECRET") String apiSecret) {
         return new ServiceBuilder(apiKey)
                 .apiSecret(apiSecret)
@@ -29,6 +32,7 @@ public class WunderlistModule extends AbstractModule {
     }
 
     @Provides
+    @Singleton
     OAuth2AccessToken getAccessToken(OAuth20Service service, @Named("CLIENT_AUTH") String code) {
         try {
             return service.getAccessToken(code);
