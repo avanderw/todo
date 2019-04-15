@@ -11,9 +11,13 @@ import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 import net.avdw.todo.add.AddModule;
 import net.avdw.todo.done.DoneModule;
+import net.avdw.todo.list.ListApi;
+import net.avdw.todo.list.ListTodo;
 import net.avdw.todo.priority.PriorityModule;
 import net.avdw.todo.remove.RemoveModule;
 import net.avdw.todo.replace.ReplaceModule;
+import net.avdw.todo.wunderlist.IgnoreSsl;
+import net.avdw.todo.wunderlist.WunderlistModule;
 import org.pmw.tinylog.Logger;
 
 import java.io.File;
@@ -34,11 +38,14 @@ public class TodoModule extends AbstractModule {
 
         bind(SimpleDateFormat.class).toInstance(new SimpleDateFormat("yyyy-MM-dd"));
         bind(String.class).annotatedWith(Names.named("WUNDERLIST_NAME")).toInstance("todo.txt-sync");
+        bind(ListApi.class).to(ListTodo.class);
+        bind(IgnoreSsl.class).asEagerSingleton();
         install(new AddModule());
         install(new DoneModule());
         install(new PriorityModule());
         install(new RemoveModule());
         install(new ReplaceModule());
+        install(new WunderlistModule());
     }
 
     @Provides

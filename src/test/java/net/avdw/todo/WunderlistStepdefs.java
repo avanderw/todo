@@ -26,7 +26,7 @@ public class WunderlistStepdefs implements En {
         Logger.getConfiguration()
                 .formatPattern("{date:yyyy-MM-dd HH:mm:ss} [{thread}] {class}.{method}() {level}: {message}")
                 .level(Level.TRACE).activate();
-        Given("^there is no Wunderlist DB$", () -> {
+        Given("^there is no Wunderlist$", () -> {
             if (getInjector().getInstance(WunderlistClient.class).databaseExists()) {
                 getInjector().getInstance(WunderlistClient.class).deleteDatabase();
             }
