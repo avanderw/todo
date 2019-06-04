@@ -10,8 +10,8 @@ import java.io.PrintStream;
 
 import static junit.framework.TestCase.fail;
 
-public class CommandLine implements En {
-    public CommandLine() {
+public class CommandLineSteps implements En {
+    public CommandLineSteps() {
         PrintStream orig = System.err;
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         PrintStream test = new PrintStream(output);
