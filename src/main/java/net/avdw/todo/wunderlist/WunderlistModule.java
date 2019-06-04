@@ -24,7 +24,7 @@ public class WunderlistModule extends AbstractModule {
         bind(String.class).annotatedWith(Names.named("API_KEY")).toInstance("34be69e3313a17355d82");
         bind(String.class).annotatedWith(Names.named("API_SECRET")).toInstance("869630c64d9bf7b065e48d8a059978a64e6ab12b4e13800764f3fa9b4c7e");
         bind(String.class).annotatedWith(Names.named("CLIENT_AUTH")).toInstance("bcf5a937726fc583e183");
-        bind(WunderlistClient.class).in(Singleton.class);
+        bind(WunderlistClientOld.class).in(Singleton.class);
     }
 
     @Provides

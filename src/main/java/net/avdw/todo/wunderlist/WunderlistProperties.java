@@ -17,6 +17,11 @@ public class WunderlistProperties {
 
     Properties load() {
         Properties properties = new Properties();
+        if (!file.exists()) {
+            Logger.info("Create property file");
+            save(properties);
+        }
+
         try (FileReader fileReader = new FileReader(file)) {
             properties.load(fileReader);
         } catch (IOException e) {
@@ -26,7 +31,7 @@ public class WunderlistProperties {
         return properties;
     }
 
-    void save(Properties properties) {
+    private void save(Properties properties) {
         try (FileWriter fileWriter = new FileWriter(file)) {
             properties.store(fileWriter, "Wunderlist properties");
         } catch (IOException e) {
