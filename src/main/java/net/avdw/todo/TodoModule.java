@@ -27,19 +27,14 @@ import java.text.SimpleDateFormat;
 public class TodoModule extends AbstractModule {
     @Override
     protected void configure() {
-        EventBus eventBus = new EventBus("Todo EventBus");
-        bind(EventBus.class).toInstance(eventBus);
-        bindListener(Matchers.any(), new TypeListener() {
-            public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-                typeEncounter.register((InjectionListener<I>) eventBus::register);
-            }
-        });
-        bindInterceptor(Matchers.inSubpackage("net.avdw.todo"), Matchers.any(), new LoggingInterceptor());
+        install(new EventBusModule());
+        install(new LoggingModule());
 
         bind(SimpleDateFormat.class).toInstance(new SimpleDateFormat("yyyy-MM-dd"));
         bind(String.class).annotatedWith(Names.named("WUNDERLIST_NAME")).toInstance("todo.txt-sync");
         bind(ListApi.class).to(ListTodo.class);
         bind(IgnoreSsl.class).asEagerSingleton();
+
         install(new AddModule());
         install(new DoneModule());
         install(new PriorityModule());
