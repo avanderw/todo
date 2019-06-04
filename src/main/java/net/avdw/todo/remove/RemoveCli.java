@@ -3,7 +3,7 @@ package net.avdw.todo.remove;
 import com.google.inject.Inject;
 import picocli.CommandLine;
 
-@CommandLine.Command(name = "rm", description = "Remove a todo item.")
+@CommandLine.Command(name = "remove", aliases = {"del", "rm"}, description = "Remove a todo item.")
 public class RemoveCli implements Runnable {
     @CommandLine.Parameters(description = "The index of the todo item.")
     Integer idx;

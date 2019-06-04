@@ -19,7 +19,7 @@ public class ListTodo implements ListApi {
     @Inject
     public ListTodo(File todoFile, EventBus eventBus) {
         this.todoFile = todoFile;
-        this.doneFile = new File(todoFile.toString().substring(0, todoFile.toString().lastIndexOf("\\") + 1) + "done.txt");
+        this.doneFile = new File(todoFile.toString().substring(0, todoFile.toString().lastIndexOf("\\") + 1) + "complete.txt");
         this.eventBus = eventBus;
     }
 

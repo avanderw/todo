@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import net.avdw.todo.add.AddModule;
-import net.avdw.todo.done.DoneModule;
+import net.avdw.todo.complete.DoneModule;
 import net.avdw.todo.list.ListApi;
 import net.avdw.todo.list.ListTodo;
 import net.avdw.todo.priority.PriorityModule;

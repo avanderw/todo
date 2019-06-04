@@ -1,7 +1,7 @@
 package net.avdw.todo;
 
 import net.avdw.todo.add.AddCli;
-import net.avdw.todo.done.DoneCli;
+import net.avdw.todo.complete.DoneCli;
 import net.avdw.todo.list.ListCli;
 import net.avdw.todo.priority.PriorityCli;
 import net.avdw.todo.remove.RemoveCli;

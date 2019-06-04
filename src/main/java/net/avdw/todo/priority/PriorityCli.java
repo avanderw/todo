@@ -3,7 +3,7 @@ package net.avdw.todo.priority;
 import com.google.inject.Inject;
 import picocli.CommandLine;
 
-@CommandLine.Command(name = "pri", description = "Prioritise todo items.")
+@CommandLine.Command(name = "priority", aliases = "pri", description = "Prioritise todo items.")
 public class PriorityCli implements Runnable {
     @CommandLine.Option(names = "-r", description = "Remove priority from the todo item.")
     private

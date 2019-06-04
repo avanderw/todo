@@ -1,4 +1,4 @@
-package net.avdw.todo.done;
+package net.avdw.todo.complete;
 
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
@@ -24,7 +24,7 @@ public class DoneTodoTxt implements DoneApi {
     @Inject
     public DoneTodoTxt(File todoFile, SimpleDateFormat sdf) {
         this.todoFile = todoFile;
-        this.doneFile = new File(todoFile.toString().substring(0, todoFile.toString().lastIndexOf("\\")+1) + "done.txt");
+        this.doneFile = new File(todoFile.toString().substring(0, todoFile.toString().lastIndexOf("\\")+1) + "complete.txt");
         this.sdf = sdf;
     }
 

@@ -5,7 +5,7 @@ import picocli.CommandLine;
 
 import java.util.List;
 
-@CommandLine.Command(name = "ls", description = "List the todo.txt items.")
+@CommandLine.Command(name = "list", aliases = "ls", description = "List the todo.txt items.")
 public class ListCli implements Runnable {
     @CommandLine.Parameters
     List<String> filters;

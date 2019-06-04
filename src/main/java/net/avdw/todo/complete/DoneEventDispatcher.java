@@ -1,4 +1,4 @@
-package net.avdw.todo.done;
+package net.avdw.todo.complete;
 
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;

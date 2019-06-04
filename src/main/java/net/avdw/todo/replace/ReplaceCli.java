@@ -3,7 +3,7 @@ package net.avdw.todo.replace;
 import com.google.inject.Inject;
 import picocli.CommandLine;
 
-@CommandLine.Command(name = "replace", description = "Replace a todo item.")
+@CommandLine.Command(name = "replace", aliases = "mv", description = "Replace a todo item.")
 public class ReplaceCli implements Runnable {
     @CommandLine.Parameters(description = "The index of the todo item to replace.", index = "0", arity = "1")
     Integer idx;

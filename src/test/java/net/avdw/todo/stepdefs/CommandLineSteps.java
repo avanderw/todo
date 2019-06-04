@@ -7,6 +7,7 @@ import org.pmw.tinylog.Logger;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.sql.SQLOutput;
 
 import static junit.framework.TestCase.fail;
 
@@ -15,7 +16,7 @@ public class CommandLineSteps implements En {
         PrintStream orig = System.err;
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         PrintStream test = new PrintStream(output);
-        When("^I type the following arguments \"([^\"]*)\"$", (String command) -> {
+        When("^I type the arguments \"([^\"]*)\"$", (String command) -> {
             output.reset();
             System.setErr(test);
             Main.main(command.split("\\s"));
@@ -28,7 +29,7 @@ public class CommandLineSteps implements En {
         });
         Then("^I should not get an error$", () -> {
             if (output.size() > 0) {
-                Logger.error(output);
+                System.err.println(output);
                 fail();
             }
         });

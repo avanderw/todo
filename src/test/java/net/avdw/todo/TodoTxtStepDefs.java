@@ -7,8 +7,8 @@ import com.google.inject.Provides;
 import cucumber.api.java8.En;
 import net.avdw.todo.add.AddApi;
 import net.avdw.todo.add.AddTodoTxt;
-import net.avdw.todo.done.DoneApi;
-import net.avdw.todo.done.DoneTodoTxt;
+import net.avdw.todo.complete.DoneApi;
+import net.avdw.todo.complete.DoneTodoTxt;
 import net.avdw.todo.list.ListApi;
 import net.avdw.todo.list.ListTodo;
 import net.avdw.todo.priority.PriorityApi;
@@ -18,7 +18,6 @@ import net.avdw.todo.remove.RemoveApi;
 import net.avdw.todo.remove.RemoveTodoTxt;
 import net.avdw.todo.replace.ReplaceApi;
 import net.avdw.todo.replace.ReplaceTodoTxt;
-import org.pmw.tinylog.Logger;
 
 import java.io.File;
 import java.nio.file.Files;
