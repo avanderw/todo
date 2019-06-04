@@ -8,16 +8,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
 
-public class PropertyFile {
+class PropertyFile {
 
     private final String name;
+    private final File file;
 
     PropertyFile(String name) {
         this.name = name;
+        this.file = new File(String.format("%s.properties", name));
     }
 
     Properties load() {
-        File file = new File(name);
         Properties properties = new Properties();
         if (!file.exists()) {
             Logger.debug("Create property file");
@@ -34,7 +35,6 @@ public class PropertyFile {
     }
 
     private void save(Properties properties) {
-        File file = new File(name);
         try (FileWriter fileWriter = new FileWriter(file)) {
             properties.store(fileWriter, name);
         } catch (IOException e) {

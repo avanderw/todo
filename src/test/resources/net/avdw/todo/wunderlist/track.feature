@@ -4,4 +4,9 @@ Feature: Wunderlist track
     And an API Secret "869630c64d9bf7b065e48d8a059978a64e6ab12b4e13800764f3fa9b4c7e"
     And a Client Key "bcf5a937726fc583e183"
 
+  Scenario: Track list
+    Given no list is tracked
+    When I track the list ""
+    Then the property file will reflect the tracked list
+
   Scenario: Switch tracked lists
