@@ -1,15 +1,14 @@
 package net.avdw.todo.add;
 
-import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
-import net.avdw.todo.wunderlist.WunderlistClient;
+import net.avdw.todo.wunderlist.WunderlistClientOld;
 
 public class AddWunderlist implements AddApi {
-    private WunderlistClient client;
+    private WunderlistClientOld client;
 
     @Inject
-    AddWunderlist(WunderlistClient client) {
+    AddWunderlist(WunderlistClientOld client) {
         this.client = client;
     }
 

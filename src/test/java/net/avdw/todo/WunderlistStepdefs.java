@@ -9,7 +9,7 @@ import cucumber.api.java8.En;
 import net.avdw.todo.add.AddApi;
 import net.avdw.todo.add.AddWunderlist;
 import net.avdw.todo.wunderlist.IgnoreSsl;
-import net.avdw.todo.wunderlist.WunderlistClient;
+import net.avdw.todo.wunderlist.WunderlistClientOld;
 import net.avdw.todo.wunderlist.WunderlistModule;
 import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
@@ -27,15 +27,15 @@ public class WunderlistStepdefs implements En {
                 .formatPattern("{date:yyyy-MM-dd HH:mm:ss} [{thread}] {class}.{method}() {level}: {message}")
                 .level(Level.TRACE).activate();
         Given("^there is no Wunderlist$", () -> {
-            if (getInjector().getInstance(WunderlistClient.class).databaseExists()) {
-                getInjector().getInstance(WunderlistClient.class).deleteDatabase();
+            if (getInjector().getInstance(WunderlistClientOld.class).databaseExists()) {
+                getInjector().getInstance(WunderlistClientOld.class).deleteDatabase();
             }
         });
         When("^I take an action on Wunderlist$", () -> {
             getInjector().getInstance(AddApi.class).add("Taking an action on Wunderlist");
         });
         Then("^the Wunderlist will be created$", () -> {
-            assertThat(getInjector().getInstance(WunderlistClient.class).databaseExists(), is(equalTo(true)));
+            assertThat(getInjector().getInstance(WunderlistClientOld.class).databaseExists(), is(equalTo(true)));
         });
     }
 
@@ -67,9 +67,9 @@ public class WunderlistStepdefs implements En {
 //            bind(RemoveApi.class).to(RemoveWunderlist.class);
 //            bind(PriorityApi.class).to(PriorityWunderlist.class);
             bind(SimpleDateFormat.class).toInstance(new SimpleDateFormat("yyyy-MM-dd"));
-            bindInterceptor(Matchers.inSubpackage("net.avdw.todo"), Matchers.any(), new LoggingInterceptor());
             bind(IgnoreSsl.class).asEagerSingleton();
             bind(String.class).annotatedWith(Names.named("WUNDERLIST_NAME")).toInstance("todo.txt-test");
+            install(new LoggingModule());
             install(new WunderlistModule());
         }
     }

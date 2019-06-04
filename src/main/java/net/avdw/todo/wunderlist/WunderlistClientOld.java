@@ -16,7 +16,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class WunderlistClient {
+public class WunderlistClientOld {
 
     private Integer listId;
     private Integer revision;
@@ -25,7 +25,7 @@ public class WunderlistClient {
     private final OAuth2AccessToken accessToken;
 
     @Inject
-    public WunderlistClient(@Named("WUNDERLIST_NAME") String listName, OAuth20Service service, OAuth2AccessToken accessToken) {
+    public WunderlistClientOld(@Named("WUNDERLIST_NAME") String listName, OAuth20Service service, OAuth2AccessToken accessToken) {
         this.listName = listName;
         this.service = service;
         this.accessToken = accessToken;

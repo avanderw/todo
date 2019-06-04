@@ -10,12 +10,10 @@ import com.github.scribejava.core.oauth.OAuth20Service;
 import net.avdw.todo.wunderlist.IgnoreSsl;
 
 import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ExecutionException;
 
 public class WunderlistListExample {
-    public static void main(String[] args) throws InterruptedException, ExecutionException, IOException, KeyManagementException, NoSuchAlgorithmException {
+    public static void main(String[] args) throws InterruptedException, ExecutionException, IOException {
         new IgnoreSsl();
         final String apiKey = "34be69e3313a17355d82";
         final String apiSecret = "869630c64d9bf7b065e48d8a059978a64e6ab12b4e13800764f3fa9b4c7e";
