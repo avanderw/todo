@@ -9,7 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class FileStepdefs implements En {
     public FileStepdefs() {
-        Given("^the file \"([^\"]*)\" does not exist$", (String path) -> {
+        Given("^I delete the file \"([^\"]*)\"$", (String path) -> {
             if (!new File(path).delete()) {
                 Logger.debug(String.format("%s deleted", path));
             }

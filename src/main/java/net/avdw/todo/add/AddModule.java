@@ -8,6 +8,5 @@ public class AddModule extends AbstractModule {
     protected void configure() {
         bind(AddApi.class).to(AddEventDispatcher.class);
         bind(AddTodoTxt.class).asEagerSingleton();
-        bind(AddWunderlist.class).asEagerSingleton();
     }
 }

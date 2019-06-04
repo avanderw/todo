@@ -36,7 +36,7 @@ public class TodoTxtStepDefs implements En {
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     public TodoTxtStepDefs() {
-        Given("^I track the file \"([^\"]*)\"$", (String name) -> getModule().name = name);
+        Given("^I property the file \"([^\"]*)\"$", (String name) -> getModule().name = name);
         When("^I list the todo items with no arguments$", () -> items = getInjector().getInstance(ListApi.class).list());
         Then("^I will get a list with (\\d+) items$", (Integer num) -> assertThat(items.size(), is(equalTo(num))));
         When("^I list the todo items with arguments \"([^\"]*)\"$", (String args) -> items = getInjector().getInstance(ListApi.class).list(Arrays.asList(args.split(" "))));

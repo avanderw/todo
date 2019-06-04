@@ -3,11 +3,9 @@ package net.avdw.todo;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.matcher.Matchers;
 import com.google.inject.name.Names;
 import cucumber.api.java8.En;
 import net.avdw.todo.add.AddApi;
-import net.avdw.todo.add.AddWunderlist;
 import net.avdw.todo.wunderlist.IgnoreSsl;
 import net.avdw.todo.wunderlist.WunderlistClientOld;
 import net.avdw.todo.wunderlist.WunderlistModule;
@@ -60,7 +58,6 @@ public class WunderlistStepdefs implements En {
     private class WunderlistStepDefsModule extends AbstractModule {
         @Override
         protected void configure() {
-            bind(AddApi.class).to(AddWunderlist.class);
 //            bind(ReplaceApi.class).to(ReplaceWunderlist.class);
 //            bind(ListApi.class).to(ListTodo.class);
 //            bind(DoneApi.class).to(DoneWunderlist.class);
