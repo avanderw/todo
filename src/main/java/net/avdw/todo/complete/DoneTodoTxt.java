@@ -24,7 +24,7 @@ public class DoneTodoTxt implements DoneApi {
     @Inject
     public DoneTodoTxt(File todoFile, SimpleDateFormat sdf) {
         this.todoFile = todoFile;
-        this.doneFile = new File(todoFile.toString().substring(0, todoFile.toString().lastIndexOf("\\")+1) + "complete.txt");
+        this.doneFile = new File(todoFile.toString().substring(0, todoFile.toString().lastIndexOf("\\")+1) + "complete.lists");
         this.sdf = sdf;
     }
 

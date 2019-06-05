@@ -28,7 +28,7 @@ public class TodoModule extends AbstractModule {
         install(new PropertyModule());
 
         bind(SimpleDateFormat.class).toInstance(new SimpleDateFormat("yyyy-MM-dd"));
-        bind(String.class).annotatedWith(Names.named("WUNDERLIST_NAME")).toInstance("todo.txt-sync");
+        bind(String.class).annotatedWith(Names.named("WUNDERLIST_NAME")).toInstance("todo.lists-sync");
         bind(ListApi.class).to(ListTodo.class);
 
         install(new AddModule());
@@ -42,7 +42,7 @@ public class TodoModule extends AbstractModule {
 
     @Provides
     File todoFile() {
-        File todoFile = new File(String.format("%s/.todo/todo.txt", System.getProperty("user.home")));
+        File todoFile = new File(String.format("%s/.todo/todo.lists", System.getProperty("user.home")));
         File todoDir = new File(String.format("%s/.todo", System.getProperty("user.home")));
         if (!todoFile.exists()) {
             if (!todoDir.exists() && !todoDir.mkdirs()){

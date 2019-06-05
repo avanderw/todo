@@ -5,14 +5,7 @@ Feature: todo-txt
     And the file "./target/list.txt.bak" does not exist
     And the file "./target/done.txt" does not exist
 
-  Scenario: Add
-    Given I copy the file "./src/test/resources/todo.txt/list.txt" to "./target/list.txt"
-    And I track the file "./target/list.txt"
-    When I add a todo item
-    And I list the todo items with no arguments
-    Then I will get a list with 17 items
-    And the last item will have a created date of now
-    And the file "./target/list.txt.bak" exists
+
 
   Scenario: Done
     Given I copy the file "./src/test/resources/todo.txt/list.txt" to "./target/list.txt"
