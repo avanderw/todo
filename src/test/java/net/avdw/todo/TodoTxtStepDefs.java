@@ -5,19 +5,19 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import cucumber.api.java8.En;
-import net.avdw.todo.add.AddApi;
-import net.avdw.todo.add.AddTodoTxt;
-import net.avdw.todo.complete.DoneApi;
-import net.avdw.todo.complete.DoneTodoTxt;
-import net.avdw.todo.list.ListApi;
-import net.avdw.todo.list.ListTodo;
-import net.avdw.todo.priority.PriorityApi;
-import net.avdw.todo.priority.PriorityInput;
-import net.avdw.todo.priority.PriorityTodoTxt;
-import net.avdw.todo.remove.RemoveApi;
-import net.avdw.todo.remove.RemoveTodoTxt;
-import net.avdw.todo.replace.ReplaceApi;
-import net.avdw.todo.replace.ReplaceTodoTxt;
+import net.avdw.todo.list.addition.AListAddition;
+import net.avdw.todo.list.addition.AddTodoTxt;
+import net.avdw.todo.list.completion.DoneApi;
+import net.avdw.todo.list.completion.DoneTodoTxt;
+import net.avdw.todo.list.filtering.ListApi;
+import net.avdw.todo.list.filtering.ListTodo;
+import net.avdw.todo.list.prioritisation.PriorityApi;
+import net.avdw.todo.list.prioritisation.PriorityInput;
+import net.avdw.todo.list.prioritisation.PriorityTodoTxt;
+import net.avdw.todo.list.removal.RemoveApi;
+import net.avdw.todo.list.removal.RemoveTodoTxt;
+import net.avdw.todo.list.rewriting.ReplaceApi;
+import net.avdw.todo.list.rewriting.ReplaceTodoTxt;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -38,24 +38,24 @@ public class TodoTxtStepDefs implements En {
 
 
 
-        When("^I list the todo items with arguments \"([^\"]*)\"$", (String args) -> items = getInjector().getInstance(ListApi.class).list(Arrays.asList(args.split(" "))));
+        When("^I filtering the todo items with arguments \"([^\"]*)\"$", (String args) -> items = getInjector().getInstance(ListApi.class).list(Arrays.asList(args.split(" "))));
 
 
         And("^the last item will have a created date of now$", () -> assertThat("Must start with today's date", items.get(items.size() - 1).startsWith(sdf.format(new Date()), 5)));
         When("^I remove item (\\d+)$", (Integer idx) -> getInjector().getInstance(RemoveApi.class).remove(idx));
         And("^item (\\d+) will be \"([^\"]*)\"$", (Integer idx, String item) -> assertThat(items.get(idx - 1), is(equalTo(item))));
 
-        When("^I complete todo item (\\d+)$", (Integer idx) -> getInjector().getInstance(DoneApi.class).done(idx));
-        And("^the contents of file \"([^\"]*)\" starts with \"([^\"]*)\" together with today's date$", (String path, String startsWith) -> {
+        When("^I completion todo item (\\d+)$", (Integer idx) -> getInjector().getInstance(DoneApi.class).done(idx));
+        And("^the contents of plaintext \"([^\"]*)\" starts with \"([^\"]*)\" together with today's date$", (String path, String startsWith) -> {
             String content = new String(Files.readAllBytes(Paths.get(path)));
             startsWith += sdf.format(new Date());
             assertThat(content, startsWithIgnoringCase(startsWith));
         });
-        When("^I complete todo item (\\d+) (\\d+) (\\d+) (\\d+)$", (Integer arg0, Integer arg1, Integer arg2, Integer arg3) -> {
+        When("^I completion todo item (\\d+) (\\d+) (\\d+) (\\d+)$", (Integer arg0, Integer arg1, Integer arg2, Integer arg3) -> {
             List<Integer> args = Arrays.asList(arg0, arg1, arg2, arg3);
             getInjector().getInstance(DoneApi.class).done(args);
         });
-        And("^the contents of file \"([^\"]*)\" contains (\\d+) lines$", (String path, Integer num) -> {
+        And("^the contents of plaintext \"([^\"]*)\" contains (\\d+) lines$", (String path, Integer num) -> {
             int count = 0;
             Scanner scanner = new Scanner(new File(path));
             while (scanner.hasNext()) {
@@ -65,18 +65,18 @@ public class TodoTxtStepDefs implements En {
             }
             assertThat(count, equalTo(num));
         });
-        When("^I list the priority tasks$", () -> items = getInjector().getInstance(ListApi.class).listPriority());
-        When("^I list the contexts$", () -> items = getInjector().getInstance(ListApi.class).listContexts());
-        When("^I list the projects$", () -> items = getInjector().getInstance(ListApi.class).listProjects());
-        When("^I list everything$", () -> items = getInjector().getInstance(ListApi.class).listAll());
+        When("^I filtering the prioritisation tasks$", () -> items = getInjector().getInstance(ListApi.class).listPriority());
+        When("^I filtering the contexts$", () -> items = getInjector().getInstance(ListApi.class).listContexts());
+        When("^I filtering the projects$", () -> items = getInjector().getInstance(ListApi.class).listProjects());
+        When("^I filtering everything$", () -> items = getInjector().getInstance(ListApi.class).listAll());
         When("^I remove item (\\d+) (\\d+) (\\d+) (\\d+)$", (Integer arg0, Integer arg1, Integer arg2, Integer arg3) -> {
             List<Integer> args = Arrays.asList(arg0, arg1, arg2, arg3);
             getInjector().getInstance(RemoveApi.class).remove(args);
         });
-        When("^I replace item (\\d+) with \"([^\"]*)\"$", (Integer idx, String todoItem) -> getInjector().getInstance(ReplaceApi.class).replace(idx, todoItem));
+        When("^I rewriting item (\\d+) with \"([^\"]*)\"$", (Integer idx, String todoItem) -> getInjector().getInstance(ReplaceApi.class).replace(idx, todoItem));
         And("^item (\\d+) will contain \"([^\"]*)\"$", (Integer idx, String todoItem) -> assertThat(items.get(idx - 1), containsString(todoItem)));
-        When("^I add priority \"([^\"]*)\" to item (\\d+)$", (String priority, Integer idx) -> getInjector().getInstance(PriorityApi.class).add(idx, PriorityInput.valueOf(priority)));
-        When("^I remove priority from item (\\d+)$", (Integer idx) -> getInjector().getInstance(PriorityApi.class).remove(idx));
+        When("^I addition prioritisation \"([^\"]*)\" to item (\\d+)$", (String priority, Integer idx) -> getInjector().getInstance(PriorityApi.class).add(idx, PriorityInput.valueOf(priority)));
+        When("^I remove prioritisation from item (\\d+)$", (Integer idx) -> getInjector().getInstance(PriorityApi.class).remove(idx));
     }
 
     private Injector injector;
@@ -102,7 +102,7 @@ public class TodoTxtStepDefs implements En {
 
         @Override
         protected void configure() {
-            bind(AddApi.class).to(AddTodoTxt.class);
+            bind(AListAddition.class).to(AddTodoTxt.class);
             bind(ReplaceApi.class).to(ReplaceTodoTxt.class);
             bind(ListApi.class).to(ListTodo.class);
             bind(DoneApi.class).to(DoneTodoTxt.class);

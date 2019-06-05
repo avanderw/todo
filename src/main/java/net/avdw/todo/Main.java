@@ -12,7 +12,7 @@ public class Main {
         Logger.getConfiguration()
                 .formatPattern("{date:yyyy-MM-dd HH:mm:ss} [{thread}] {class}.{method}() {level}: {message}")
                 .level(Level.TRACE).activate();
-        CommandLine.run(Todo.class, new PicoGuiceFactory(), args);
+        CommandLine.run(TodoCli.class, new PicoGuiceFactory(), args);
     }
 
 }

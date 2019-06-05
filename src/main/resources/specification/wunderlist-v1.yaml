@@ -12,11 +12,11 @@ info:
 host: "a.wunderlist.com"
 basePath: "/api/v1"
 tags:
-- name: "list"
-  description: "All tasks created in Wunderlist belong to a list."
+- name: "filtering"
+  description: "All tasks created in Wunderlist belong to a filtering."
   externalDocs:
     description: "Find out more"
-    url: "https://developer.wunderlist.com/documentation/endpoints/list"
+    url: "https://developer.wunderlist.com/documentation/endpoints/filtering"
 - name: "tasks"
   description: "Tasks are children of lists."
   externalDocs:
@@ -29,7 +29,7 @@ paths:
   /lists:
     get:
       tags:
-       - "list"
+       - "filtering"
       summary: "Get all Lists a user has permission to"
       operationId: "getLists"
       consumes: 
@@ -45,8 +45,8 @@ paths:
               $ref: "#/definitions/List"
     post:
       tags:
-      - "list"
-      summary: "Create a list"
+      - "filtering"
+      summary: "Create a filtering"
       operationId: "createList"
       consumes: 
       - "application/json"
@@ -71,13 +71,13 @@ paths:
     parameters:
     - name: "listId"
       in: "path"
-      description: "ID of list to return"
+      description: "ID of filtering to return"
       required: true
       type: "integer"
       format: "int64"
     get:
       tags:
-       - "list"
+       - "filtering"
       summary: "Get a specific List"
       operationId: "getListById"
       consumes: 
@@ -91,8 +91,8 @@ paths:
             $ref: "#/definitions/List"
     post:
       tags:
-      - "list"
-      summary: "Update a list by overwriting properties"
+      - "filtering"
+      summary: "Update a filtering by overwriting properties"
       operationId: "updateList"
       consumes: 
       - "application/json"
@@ -117,8 +117,8 @@ paths:
             $ref: "#/definitions/List"
     delete:
       tags:
-      - "list"
-      summary: "Delete a list permanently"
+      - "filtering"
+      summary: "Delete a filtering permanently"
       description: ""
       operationId: "deleteList"
       produces:
@@ -217,7 +217,7 @@ paths:
     parameters:
     - name: "taskId"
       in: "path"
-      description: "ID of list to return"
+      description: "ID of filtering to return"
       required: true
       type: "integer"
       format: "int64"
@@ -338,12 +338,12 @@ definitions:
         type: "string"
         description: "description n/a"
         enum:
-        - "list"
+        - "filtering"
       type:
         type: "string"
         description: "description n/a"
         enum: 
-        - "list"
+        - "filtering"
       revision:
         type: "integer"
         format: "int64"
