@@ -1,12 +1,12 @@
-package net.avdw.todo.wunderlist;
+package net.avdw.todo.repository.wunderlist;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import cucumber.api.java8.En;
 import net.avdw.todo.LoggingModule;
-import net.avdw.todo.wunderlist.client.v1.AList;
-import net.avdw.todo.wunderlist.client.v1.ListEndpoint;
+import net.avdw.todo.repository.wunderlist.client.v1.AList;
+import net.avdw.todo.repository.wunderlist.client.v1.ListEndpoint;
 
 import java.util.List;
 

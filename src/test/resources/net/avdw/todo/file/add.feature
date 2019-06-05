@@ -10,7 +10,7 @@ Feature: Adding todo's
 
   Scenario: Add
     Given I copy the file "./src/test/resources/lists/populated-base.txt" to "./target/test-list.txt"
-    And I track the file "./target/list.txt"
+    And I track the list "test-list.txt"
     When I add a todo item
     And I list the todo items with no arguments
     Then I will get a list with 17 items

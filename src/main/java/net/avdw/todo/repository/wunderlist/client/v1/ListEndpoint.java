@@ -1,6 +1,5 @@
-package net.avdw.todo.wunderlist.client.v1;
+package net.avdw.todo.repository.wunderlist.client.v1;
 
-import com.github.scribejava.apis.WunderlistAPI;
 import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;

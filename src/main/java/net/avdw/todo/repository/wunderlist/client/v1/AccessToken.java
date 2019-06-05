@@ -1,7 +1,5 @@
-package net.avdw.todo.wunderlist.client.v1;
+package net.avdw.todo.repository.wunderlist.client.v1;
 
-import com.github.scribejava.apis.WunderlistAPI;
-import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.google.inject.Inject;

@@ -7,7 +7,7 @@ import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
-import net.avdw.todo.wunderlist.IgnoreSsl;
+import net.avdw.todo.repository.wunderlist.IgnoreSsl;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;

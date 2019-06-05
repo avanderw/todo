@@ -1,4 +1,4 @@
-package net.avdw.todo.wunderlist;
+package net.avdw.todo.repository.wunderlist;
 
 import com.github.scribejava.apis.WunderlistAPI;
 import com.github.scribejava.core.builder.ServiceBuilder;

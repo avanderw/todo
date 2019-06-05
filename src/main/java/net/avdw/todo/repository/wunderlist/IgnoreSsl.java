@@ -1,4 +1,4 @@
-package net.avdw.todo.wunderlist;
+package net.avdw.todo.repository.wunderlist;
 
 import com.google.inject.Inject;
 import org.pmw.tinylog.Logger;
