@@ -21,18 +21,18 @@ public class IgnoreSsl {
             sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, new TrustManager[]{new X509TrustManager() {
                 public X509Certificate[] getAcceptedIssuers() {
-                    Logger.debug("Ignoring accepted issuers");
+                    Logger.trace("Ignoring accepted issuers");
                     return null;
                 }
 
                 public void checkClientTrusted(X509Certificate[] certs,
                                                String authType) {
-                    Logger.debug("Ignoring client trusted certificates");
+                    Logger.trace("Ignoring client trusted certificates");
                 }
 
                 public void checkServerTrusted(X509Certificate[] certs,
                                                String authType) {
-                    Logger.debug("Ignoring server trusted certificates");
+                    Logger.trace("Ignoring server trusted certificates");
                 }
             }}, new SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(
@@ -40,7 +40,7 @@ public class IgnoreSsl {
 
             HttpsURLConnection
                     .setDefaultHostnameVerifier((arg0, arg1) -> {
-                        Logger.debug("Ignoring hostname verifier");
+                        Logger.trace("Ignoring hostname verifier");
                         return true;
                     });
 
