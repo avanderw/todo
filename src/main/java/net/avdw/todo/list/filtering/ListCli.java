@@ -8,16 +8,16 @@ import java.util.List;
 @CommandLine.Command(name = "filtering", aliases = "ls", description = "List the todo.txt items.")
 public class ListCli implements Runnable {
     @CommandLine.Parameters
-    List<String> filters;
-    
+    private List<String> filters;
+
     @CommandLine.Option(names = "-p", description = "List all project tags.")
-    boolean listProjects;
+    private boolean listProjects;
 
     @CommandLine.Option(names = "-c", description = "List all context tags.")
-    boolean listContexts;
+    private boolean listContexts;
 
     @Inject
-    ListApi listApi;
+    private ListApi listApi;
 
     @Override
     public void run() {
