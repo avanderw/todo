@@ -1,4 +1,4 @@
-package net.avdw.todo.stepdefs;
+package net.avdw.todo;
 
 import cucumber.api.java8.En;
 import org.pmw.tinylog.Logger;
@@ -10,8 +10,8 @@ import java.nio.file.StandardCopyOption;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class FileSteps implements En {
-    public FileSteps() {
+public class FileStepdefs implements En {
+    public FileStepdefs() {
         Given("^I copy the plaintext \"([^\"]*)\" to \"([^\"]*)\"$", (String from, String to) ->
                 Files.copy(Paths.get(from), Paths.get(to), StandardCopyOption.REPLACE_EXISTING));
         Given("^I delete the plaintext \"([^\"]*)\"$", (String path) -> {

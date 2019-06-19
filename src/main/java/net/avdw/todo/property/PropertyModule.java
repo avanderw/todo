@@ -7,10 +7,10 @@ import net.avdw.todo.list.tracking.TrackedList;
 
 import java.nio.file.Path;
 
-public class PropertyConfig extends AbstractModule {
+public class PropertyModule extends AbstractModule {
     private Path propertyDir;
 
-    public PropertyConfig(Path propertyDir) {
+    public PropertyModule(Path propertyDir) {
         this.propertyDir = propertyDir;
     }
 

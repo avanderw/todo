@@ -2,9 +2,9 @@ package net.avdw.todo;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import net.avdw.todo.list.addition.AddModule;
+import net.avdw.todo.admin.initialize.InitializeModule;
 import net.avdw.todo.eventbus.EventBusModule;
-import net.avdw.todo.property.PropertyConfig;
+import net.avdw.todo.property.PropertyModule;
 import net.avdw.todo.repository.RepositoryModule;
 import org.pmw.tinylog.Logger;
 
@@ -13,11 +13,11 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 
-public class TodoConfig extends AbstractModule {
+public class TodoModule extends AbstractModule {
     @Override
     protected void configure() {
         install(new LoggingModule());
-        install(new PropertyConfig(Paths.get(System.getProperty("user.home"))));
+        install(new PropertyModule(Paths.get(System.getProperty("user.home"))));
         install(new EventBusModule("EventBus"));
         install(new RepositoryModule());
 
@@ -25,7 +25,8 @@ public class TodoConfig extends AbstractModule {
 //        bind(String.class).annotatedWith(Names.named("WUNDERLIST_NAME")).toInstance("todo.lists-sync");
 //        bind(ListApi.class).to(ListTodo.class);
 
-        install(new AddModule());
+        install(new InitializeModule());
+//        install(new AddModule());
 //        install(new DoneModule());
 //        install(new PriorityModule());
 //        install(new RemoveModule());

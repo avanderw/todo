@@ -1,11 +1,8 @@
 package net.avdw.todo;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import cucumber.api.java8.En;
-import net.avdw.todo.list.tracking.TrackedList;
-import net.avdw.todo.property.AProperty;
-import net.avdw.todo.property.PropertyConfig;
+import net.avdw.todo.property.PropertyModule;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,7 +20,7 @@ public class PropertyStepdefs implements En {
                 Files.delete(propertyPath);
             }
         });
-        When("^the injector is configured$", () -> Guice.createInjector(new PropertyConfig(propertyDir)));
+        When("^the injector is configured$", () -> Guice.createInjector(new PropertyModule(propertyDir)));
         Then("^the properties file is created$", () -> assertThat("Property file exists", Files.exists(propertyPath)));
     }
 }

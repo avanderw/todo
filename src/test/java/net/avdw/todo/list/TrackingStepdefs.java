@@ -6,9 +6,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import cucumber.api.java8.En;
 import net.avdw.todo.property.AProperty;
-import net.avdw.todo.property.PropertyConfig;
 import net.avdw.todo.list.tracking.TrackApi;
-import net.avdw.todo.list.tracking.TrackingModule;
 import net.avdw.todo.list.tracking.TrackedList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,7 +24,7 @@ public class TrackingStepdefs implements En {
     class Config extends AbstractModule {
         @Override
         protected void configure() {
-            //install(new PropertyConfig());
+            //install(new PropertyModule());
 //            install(new TrackingModule());
         }
     }
