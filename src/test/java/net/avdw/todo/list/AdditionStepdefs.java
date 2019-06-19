@@ -40,8 +40,6 @@ public class AdditionStepdefs implements En {
         @Override
         protected void configure() {
             install(new EventBusModule("Test List Addition"));
-            bind(AListAddition.class).to(ListAddition.class);
-            bind(new TypeLiteral<ARepository<ATask>>(){}).annotatedWith(MemoryTask.class).to(MemoryTaskRepository.class).in(Singleton.class);
         }
     }
 }

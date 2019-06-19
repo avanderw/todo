@@ -33,4 +33,8 @@ public class ATask extends AItem {
     public List<String> getContexts() {
         throw new UnsupportedOperationException();
     }
+
+    public String getSummary() {
+        return summary;
+    }
 }

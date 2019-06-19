@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import net.avdw.todo.admin.initialize.InitializeModule;
 import net.avdw.todo.eventbus.EventBusModule;
+import net.avdw.todo.list.filtering.FilteringModule;
 import net.avdw.todo.property.PropertyModule;
 import net.avdw.todo.repository.RepositoryModule;
 import org.pmw.tinylog.Logger;
@@ -19,13 +20,14 @@ public class TodoModule extends AbstractModule {
         install(new LoggingModule());
         install(new PropertyModule(Paths.get(System.getProperty("user.home"))));
         install(new EventBusModule("EventBus"));
-        install(new RepositoryModule());
+        install(new RepositoryModule(Paths.get(".")));
 
         bind(SimpleDateFormat.class).toInstance(new SimpleDateFormat("yyyy-MM-dd"));
 //        bind(String.class).annotatedWith(Names.named("WUNDERLIST_NAME")).toInstance("todo.lists-sync");
 //        bind(ListApi.class).to(ListTodo.class);
 
         install(new InitializeModule());
+        install(new FilteringModule());
 //        install(new AddModule());
 //        install(new DoneModule());
 //        install(new PriorityModule());

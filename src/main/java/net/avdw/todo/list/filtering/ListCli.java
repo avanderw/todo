@@ -16,9 +16,6 @@ public class ListCli implements Runnable {
     @CommandLine.Option(names = "-c", description = "List all context tags.")
     private boolean listContexts;
 
-    @Inject
-    private ListApi ListApi;
-
     @Inject @Context
     private AFilter contextFilter;
     @Inject @TodoList
