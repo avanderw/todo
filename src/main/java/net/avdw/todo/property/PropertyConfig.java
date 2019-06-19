@@ -1,14 +1,22 @@
-package net.avdw.todo.config;
+package net.avdw.todo.property;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Names;
 import net.avdw.todo.list.tracking.TrackedList;
 
-public class PropertyModule extends AbstractModule {
+import java.nio.file.Path;
+
+public class PropertyConfig extends AbstractModule {
+    private Path propertyDir;
+
+    public PropertyConfig(Path propertyDir) {
+        this.propertyDir = propertyDir;
+    }
+
     @Override
     protected void configure() {
-        APropertyRepository repository = new PropertyFile("todo");
+        APropertyRepository repository = new PropertyFile(propertyDir);
         Names.bindProperties(binder(), repository.getProperties());
         bind(APropertyRepository.class).toInstance(repository);
     }

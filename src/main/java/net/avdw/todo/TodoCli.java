@@ -10,7 +10,7 @@ import net.avdw.todo.list.tracking.TrackCli;
 import picocli.CommandLine;
 
 @CommandLine.Command(name = "todo", description = "A tool to manage todo lists.",
-        subcommands = {CommandLine.HelpCommand.class, AddCli.class, DoneCli.class, ListCli.class, PriorityCli.class, RemoveCli.class, ReplaceCli.class, TrackCli.class})
+        subcommands = {CommandLine.HelpCommand.class, AddCli.class})
 public class TodoCli implements Runnable {
     public void run() {
         CommandLine.usage(TodoCli.class, System.out);

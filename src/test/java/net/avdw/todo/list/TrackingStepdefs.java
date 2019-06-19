@@ -5,8 +5,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import cucumber.api.java8.En;
-import net.avdw.todo.config.AProperty;
-import net.avdw.todo.config.PropertyModule;
+import net.avdw.todo.property.AProperty;
+import net.avdw.todo.property.PropertyConfig;
 import net.avdw.todo.list.tracking.TrackApi;
 import net.avdw.todo.list.tracking.TrackingModule;
 import net.avdw.todo.list.tracking.TrackedList;
@@ -26,8 +26,8 @@ public class TrackingStepdefs implements En {
     class Config extends AbstractModule {
         @Override
         protected void configure() {
-            install(new PropertyModule());
-            install(new TrackingModule());
+            //install(new PropertyConfig());
+//            install(new TrackingModule());
         }
     }
 }

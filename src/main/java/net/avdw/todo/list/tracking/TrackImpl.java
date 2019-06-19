@@ -1,7 +1,7 @@
 package net.avdw.todo.list.tracking;
 
 import com.google.inject.Inject;
-import net.avdw.todo.config.AProperty;
+import net.avdw.todo.property.AProperty;
 
 public class TrackImpl implements TrackApi {
     private AProperty trackProperty;

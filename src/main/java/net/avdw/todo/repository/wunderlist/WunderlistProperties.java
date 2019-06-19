@@ -18,7 +18,7 @@ public class WunderlistProperties {
     Properties load() {
         Properties properties = new Properties();
         if (!file.exists()) {
-            Logger.info("Create config plaintext");
+            Logger.info("Create property plaintext");
             save(properties);
         }
 

@@ -1,4 +1,4 @@
-package net.avdw.todo.config;
+package net.avdw.todo.property;
 
 public class AProperty implements APropertyDao {
     private final APropertyRepository repository;

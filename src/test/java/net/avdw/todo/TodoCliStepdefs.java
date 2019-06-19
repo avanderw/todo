@@ -16,7 +16,7 @@ public class TodoCliStepdefs implements En {
         final PrintStream originalErrStream = System.err;
         final ByteArrayOutputStream errOutput = new ByteArrayOutputStream();
         final PrintStream testErrStream = new PrintStream(errOutput);
-        
+
         When("^I type the arguments \"([^\"]*)\"$", (String command) -> {
             errOutput.reset();
             System.setErr(testErrStream);

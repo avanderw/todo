@@ -1,4 +1,4 @@
-package net.avdw.todo.config;
+package net.avdw.todo.property;
 
 public interface APropertyDao {
     void set(String value);

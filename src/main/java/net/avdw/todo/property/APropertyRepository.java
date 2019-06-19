@@ -1,4 +1,4 @@
-package net.avdw.todo.config;
+package net.avdw.todo.property;
 
 import java.util.Properties;
 

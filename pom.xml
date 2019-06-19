@@ -73,6 +73,11 @@
             <artifactId>scribejava-apis</artifactId>
             <version>6.5.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.9</version>
+        </dependency>
         <dependency> <!-- needs to be higher than junit dependencies -->
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>

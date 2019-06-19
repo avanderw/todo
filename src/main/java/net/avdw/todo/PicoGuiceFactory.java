@@ -4,7 +4,7 @@ import com.google.inject.*;
 import picocli.CommandLine;
 
 public class PicoGuiceFactory implements CommandLine.IFactory {
-    private final Injector injector = Guice.createInjector(new TodoModule());
+    private final Injector injector = Guice.createInjector(new TodoConfig());
 
     @Override
     public <K> K create(Class<K> aClass) throws Exception {

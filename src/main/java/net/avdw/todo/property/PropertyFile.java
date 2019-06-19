@@ -1,4 +1,4 @@
-package net.avdw.todo.config;
+package net.avdw.todo.property;
 
 import net.avdw.todo.list.tracking.TrackedList;
 import org.pmw.tinylog.Logger;
@@ -7,17 +7,19 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Properties;
 
 class PropertyFile implements APropertyRepository {
 
-    private final String name;
     private final File file;
     private Properties cache;
 
-    PropertyFile(String name) {
-        this.name = name;
-        this.file = new File(String.format("%s.properties", name));
+    PropertyFile(Path propertyDir) {
+        this.file = propertyDir.resolve("_todo.properties").toFile();
     }
 
     @Override
@@ -50,8 +52,16 @@ class PropertyFile implements APropertyRepository {
     }
 
     private void saveProperties(Properties properties) {
+        try {
+            if (!file.exists() && file.getParentFile().mkdirs() && file.createNewFile()) {
+                Logger.debug(String.format("%s created", file));
+            }
+        } catch (IOException e) {
+            Logger.error(e);
+        }
+
         try (FileWriter fileWriter = new FileWriter(file)) {
-            properties.store(fileWriter, String.format("%s config plaintext", name));
+            properties.store(fileWriter, "Todo by @avanderw properties");
         } catch (IOException e) {
             Logger.error(e);
         }
@@ -59,7 +69,7 @@ class PropertyFile implements APropertyRepository {
 
     private Properties loadProperties() {
         if (!file.exists()) {
-            Logger.debug("Creating config plaintext");
+            Logger.debug("Creating properties");
             Properties properties = createProperties();
             saveProperties(properties);
         }
