@@ -5,7 +5,7 @@ import java.util.List;
 public interface ListApi {
     List<String> list();
 
-    List<String> list(List<String> list);
+    List<String> list(List<String> filter);
 
     List<String> listPriority();
 

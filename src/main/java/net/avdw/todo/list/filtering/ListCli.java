@@ -17,16 +17,24 @@ public class ListCli implements Runnable {
     private boolean listContexts;
 
     @Inject
-    private ListApi listApi;
+    private ListApi ListApi;
+
+    @Inject @Context
+    private AFilter contextFilter;
+    @Inject @TodoList
+    private AFilter listFilter;
+    @Inject @Project
+    private AFilter projectFilter;
 
     @Override
     public void run() {
+
         if (listProjects) {
-            listApi.listProjects();
+            projectFilter.list().forEach(System.out::println);
         }
 
         if (listContexts) {
-            listApi.listContexts();
+            contextFilter.list().forEach(System.out::println);
         }
 
         if (listProjects || listContexts) {
@@ -34,9 +42,9 @@ public class ListCli implements Runnable {
         }
 
         if (filters == null || filters.isEmpty()) {
-            listApi.list();
+            listFilter.list().forEach(System.out::println);
         } else {
-            listApi.list(filters);
+            listFilter.list(filters).forEach(System.out::println);
         }
     }
 }

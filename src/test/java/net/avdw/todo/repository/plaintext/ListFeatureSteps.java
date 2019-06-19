@@ -1,7 +1,6 @@
 package net.avdw.todo.repository.plaintext;
 
 import cucumber.api.java8.En;
-import net.avdw.todo.list.filtering.ListApi;
 
 import java.util.List;
 
