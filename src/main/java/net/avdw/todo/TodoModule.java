@@ -45,7 +45,7 @@ public class TodoModule extends AbstractModule {
             }
             try {
                 if (!todoFile.createNewFile()) {
-                    Logger.warn(String.format("Could not create plaintext %s", todoFile));
+                    Logger.warn(String.format("Could not create file %s", todoFile));
                 }
             } catch (IOException e) {
                 Logger.error(e);

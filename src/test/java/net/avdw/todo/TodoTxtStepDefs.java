@@ -46,7 +46,7 @@ public class TodoTxtStepDefs implements En {
         And("^item (\\d+) will be \"([^\"]*)\"$", (Integer idx, String item) -> assertThat(items.get(idx - 1), is(equalTo(item))));
 
         When("^I completion todo item (\\d+)$", (Integer idx) -> getInjector().getInstance(DoneApi.class).done(idx));
-        And("^the contents of plaintext \"([^\"]*)\" starts with \"([^\"]*)\" together with today's date$", (String path, String startsWith) -> {
+        And("^the contents of file \"([^\"]*)\" starts with \"([^\"]*)\" together with today's date$", (String path, String startsWith) -> {
             String content = new String(Files.readAllBytes(Paths.get(path)));
             startsWith += sdf.format(new Date());
             assertThat(content, startsWithIgnoringCase(startsWith));
@@ -55,7 +55,7 @@ public class TodoTxtStepDefs implements En {
             List<Integer> args = Arrays.asList(arg0, arg1, arg2, arg3);
             getInjector().getInstance(DoneApi.class).done(args);
         });
-        And("^the contents of plaintext \"([^\"]*)\" contains (\\d+) lines$", (String path, Integer num) -> {
+        And("^the contents of file \"([^\"]*)\" contains (\\d+) lines$", (String path, Integer num) -> {
             int count = 0;
             Scanner scanner = new Scanner(new File(path));
             while (scanner.hasNext()) {

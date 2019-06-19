@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import net.avdw.todo.eventbus.ListUpdatedEvent;
 import net.avdw.todo.repository.ARepository;
-import net.avdw.todo.repository.memory.Memory;
+import net.avdw.todo.repository.memory.MemoryTask;
 import net.avdw.todo.repository.model.ATask;
 
 public class ListAddition implements AListAddition {
@@ -14,7 +14,7 @@ public class ListAddition implements AListAddition {
     private final EventBus eventBus;
 
     @Inject
-    ListAddition(@Memory ARepository<ATask> memoryTaskList, Provider<ATask> taskProvider, EventBus eventBus) {
+    ListAddition(@MemoryTask ARepository<ATask> memoryTaskList, Provider<ATask> taskProvider, EventBus eventBus) {
         this.memoryTaskList = memoryTaskList;
         this.taskProvider = taskProvider;
         this.eventBus = eventBus;

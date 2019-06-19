@@ -6,10 +6,9 @@ import net.avdw.todo.list.addition.AListAddition;
 import net.avdw.todo.list.addition.ListAddition;
 import net.avdw.todo.eventbus.EventBusModule;
 import net.avdw.todo.repository.ARepository;
-import net.avdw.todo.repository.memory.Memory;
+import net.avdw.todo.repository.memory.MemoryTask;
 import net.avdw.todo.repository.memory.MemoryTaskRepository;
 import net.avdw.todo.repository.model.ATask;
-import net.avdw.todo.repository.model.ATaskList;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,7 +29,7 @@ public class AdditionStepdefs implements En {
             addedTaskCount++;
         });
         Then("^the list added to will contain an additional task$", () -> {
-            assertThat(injector.getInstance(Key.get(new TypeLiteral<ARepository<ATask>>(){}, Memory.class)).list(), hasSize(addedTaskCount));
+            assertThat(injector.getInstance(Key.get(new TypeLiteral<ARepository<ATask>>(){}, MemoryTask.class)).list(), hasSize(addedTaskCount));
         });
         Then("^the added task's creation date will be today$", () -> {
             assertThat(addedTask, hasProperty("creationDate", equalTo(today)));
@@ -42,7 +41,7 @@ public class AdditionStepdefs implements En {
         protected void configure() {
             install(new EventBusModule("Test List Addition"));
             bind(AListAddition.class).to(ListAddition.class);
-            bind(new TypeLiteral<ARepository<ATask>>(){}).annotatedWith(Memory.class).to(MemoryTaskRepository.class).in(Singleton.class);
+            bind(new TypeLiteral<ARepository<ATask>>(){}).annotatedWith(MemoryTask.class).to(MemoryTaskRepository.class).in(Singleton.class);
         }
     }
 }
