@@ -15,7 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PropertyStepdefs implements En {
     private final Path propertyDir = Paths.get("target/test/properties");
-    private final Path propertyPath = propertyDir.resolve("_todo.properties");
+    private final Path propertyPath = propertyDir.resolve(".todo.properties");
 
     public PropertyStepdefs() {
         Given("^there is no properties file$", () -> {

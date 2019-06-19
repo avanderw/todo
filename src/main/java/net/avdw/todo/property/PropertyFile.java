@@ -19,7 +19,7 @@ class PropertyFile implements APropertyRepository {
     private Properties cache;
 
     PropertyFile(Path propertyDir) {
-        this.file = propertyDir.resolve("_todo.properties").toFile();
+        this.file = propertyDir.resolve(".todo.properties").toFile();
     }
 
     @Override
