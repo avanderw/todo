@@ -22,7 +22,7 @@ public class RepositoryModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        install(new MemoryTaskRepositoryModule());
         install(new FileTaskRepositoryModule(path));
+        install(new MemoryTaskRepositoryModule());
     }
 }

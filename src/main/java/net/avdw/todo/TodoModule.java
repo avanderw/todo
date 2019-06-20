@@ -20,7 +20,7 @@ public class TodoModule extends AbstractModule {
     protected void configure() {
         install(new LoggingModule());
         install(new PropertyModule(Paths.get(System.getProperty("user.home"))));
-        install(new EventBusModule("EventBus"));
+        install(new EventBusModule("Main"));
         install(new RepositoryModule(Paths.get(".")));
 
         bind(SimpleDateFormat.class).toInstance(new SimpleDateFormat("yyyy-MM-dd"));

@@ -20,20 +20,20 @@ public class EventBusModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        EventBus eventBus = new EventBus(String.format("%s Event Bus", name));
+        EventBus eventBus = new EventBus(String.format("%s EventBus", name));
         bind(EventBus.class).toInstance(eventBus);
         bindListener(Matchers.any(), new TypeListener() {
             public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
                 typeEncounter.register((InjectionListener<I>) eventBus::register);
             }
         });
-        eventBus.register(DeadEventListener.class);
+        eventBus.register(new DeadEventListener());
     }
 
     private class DeadEventListener {
         @Subscribe
         public void handleDeadEvent(DeadEvent deadEvent) {
-            Logger.warn(String.format("Dead event %s", deadEvent));
+            Logger.warn(deadEvent);
         }
     }
 }

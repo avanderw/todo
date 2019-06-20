@@ -11,5 +11,7 @@ public class MemoryTaskRepositoryModule extends AbstractModule {
     protected void configure() {
         bind(new TypeLiteral<ARepository<ATask>>() {
         }).annotatedWith(MemoryTask.class).to(MemoryTaskRepository.class).in(Singleton.class);
+
+        bind(MemoryTaskRepositoryEventListener.class).asEagerSingleton();
     }
 }

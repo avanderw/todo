@@ -1,7 +1,9 @@
 package net.avdw.todo.repository.file;
 
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import net.avdw.todo.eventbus.RepositorySetEvent;
 import net.avdw.todo.repository.ARepository;
 import net.avdw.todo.repository.model.ATask;
 import org.pmw.tinylog.Logger;
@@ -21,16 +23,19 @@ import java.util.stream.Collectors;
 public class FileTaskRepository implements ARepository<ATask> {
     private Path repositoryPath;
     private Provider<ATask> aTaskProvider;
+    private EventBus eventBus;
 
     @Inject
-    public FileTaskRepository(Provider<ATask> aTaskProvider) {
+    public FileTaskRepository(Provider<ATask> aTaskProvider, EventBus eventBus) {
         this.aTaskProvider = aTaskProvider;
+        this.eventBus = eventBus;
     }
 
     @Inject
     public void setRepositoryPath(@FileTask Path repositoryPath) {
         this.repositoryPath = repositoryPath;
         Logger.debug("Repository set to {}\\", repositoryPath);
+        eventBus.post(new RepositorySetEvent());
     }
 
     @Override

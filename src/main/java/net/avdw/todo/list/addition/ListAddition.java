@@ -23,14 +23,11 @@ public class ListAddition implements AListAddition {
 
     @Override
     public ATask add(String summary) {
-        try {
-            ATask task = taskProvider.get();
-            task.setSummary(summary);
-            memoryTaskList.add(task);
-            Logger.debug("Added task: {}", task);
-            return task;
-        } finally {
-            eventBus.post(new ListUpdatedEvent());
-        }
+        ATask task = taskProvider.get();
+        task.setSummary(summary);
+        memoryTaskList.add(task);
+        Logger.debug("Added task: {}", task);
+        eventBus.post(new ListUpdatedEvent());
+        return task;
     }
 }

@@ -45,6 +45,7 @@ public class MemoryTaskRepository implements ARepository<ATask> {
 
     @Override
     public void init() {
+        taskList.clear();
         taskList.addAll(fileTaskRepository.list());
     }
 
