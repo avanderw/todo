@@ -2,6 +2,7 @@ package net.avdw.todo.list;
 
 import com.google.inject.*;
 import cucumber.api.java8.En;
+import net.avdw.todo.LoggingModule;
 import net.avdw.todo.list.addition.AAddition;
 import net.avdw.todo.list.addition.AdditionModule;
 import net.avdw.todo.eventbus.EventBusModule;
@@ -42,7 +43,7 @@ public class AdditionStepdefs implements En {
     class Config extends AbstractModule {
         @Override
         protected void configure() {
-            install(new EventBusModule("Test List Addition"));
+            install(new LoggingModule());
             install(new AdditionModule());
             install(new RepositoryModule(Paths.get("src/test/resources/lists/addition")));
         }
