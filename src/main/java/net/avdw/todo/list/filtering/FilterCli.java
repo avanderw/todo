@@ -6,7 +6,7 @@ import picocli.CommandLine;
 import java.util.List;
 
 @CommandLine.Command(name = "filter", aliases = "ls", description = "Filter the todo.txt repository tasks.")
-public class ListCli implements Runnable {
+public class FilterCli implements Runnable {
     @CommandLine.Parameters
     private List<String> filters;
 

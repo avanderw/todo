@@ -3,13 +3,15 @@ package net.avdw.todo.list;
 import com.google.inject.*;
 import cucumber.api.java8.En;
 import net.avdw.todo.list.addition.AListAddition;
-import net.avdw.todo.list.addition.ListAddition;
+import net.avdw.todo.list.addition.AdditionModule;
 import net.avdw.todo.eventbus.EventBusModule;
 import net.avdw.todo.repository.ARepository;
+import net.avdw.todo.repository.RepositoryModule;
 import net.avdw.todo.repository.memory.MemoryTask;
-import net.avdw.todo.repository.memory.MemoryTaskRepository;
+import net.avdw.todo.repository.memory.MemoryTaskRepositoryModule;
 import net.avdw.todo.repository.model.ATask;
 
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -24,7 +26,9 @@ public class AdditionStepdefs implements En {
     public AdditionStepdefs() {
         final Injector injector = Guice.createInjector(new Config());
         final String today = injector.getInstance(SimpleDateFormat.class).format(new Date());
+
         When("^a task is added$", () -> {
+            addedTaskCount = injector.getInstance(Key.get(new TypeLiteral<ARepository<ATask>>(){}, MemoryTask.class)).list().size();
             addedTask = injector.getInstance(AListAddition.class).add(UUID.randomUUID().toString());
             addedTaskCount++;
         });
@@ -40,6 +44,8 @@ public class AdditionStepdefs implements En {
         @Override
         protected void configure() {
             install(new EventBusModule("Test List Addition"));
+            install(new AdditionModule());
+            install(new RepositoryModule(Paths.get("src/test/resources/lists/addition")));
         }
     }
 }

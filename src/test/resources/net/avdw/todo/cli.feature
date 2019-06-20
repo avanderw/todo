@@ -9,7 +9,7 @@ Feature: Command line interface
     Then I should not get an error
 
 
-  Scenario: List
+  Scenario: Filtering
     When I type the arguments "help list"
     Then I should not get an error
     When I type the arguments "help ls"
@@ -23,4 +23,13 @@ Feature: Command line interface
     When I type the arguments "ls -p"
     Then I should not get an error
     When I type the arguments "ls -cp"
+    Then I should not get an error
+
+
+  Scenario: Addition
+    When I type the arguments "help add"
+    Then I should not get an error
+    When I type the arguments "add"
+    Then I should get an error
+    When I type the arguments "add todo"
     Then I should not get an error

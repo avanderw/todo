@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import net.avdw.todo.repository.ARepository;
 import net.avdw.todo.repository.file.FileTask;
 import net.avdw.todo.repository.model.ATask;
+import org.pmw.tinylog.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,12 @@ public class MemoryTaskRepository implements ARepository<ATask> {
     @Inject
     MemoryTaskRepository(@FileTask ARepository<ATask> fileTaskRepository) {
         this.fileTaskRepository = fileTaskRepository;
-        init();
+        try {
+            init();
+        } catch (UnsupportedOperationException e) {
+            Logger.warn("Could not initialise memory repository");
+            Logger.error(e);
+        }
     }
 
     @Override

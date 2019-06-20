@@ -102,6 +102,7 @@ public class FileTaskRepository implements ARepository<ATask> {
 
     private Path resolveTodoPath() {
         if (!Files.exists(repositoryPath.resolve(".todo"))) {
+            Logger.warn("File repository {}\\ does not exist", repositoryPath);
             throw new UnsupportedOperationException();
         }
 

@@ -28,7 +28,7 @@ public class TodoModule extends AbstractModule {
 
         install(new InitializeModule());
         install(new FilteringModule());
-//        install(new AddModule());
+//        install(new AdditionModule());
 //        install(new DoneModule());
 //        install(new PriorityModule());
 //        install(new RemoveModule());

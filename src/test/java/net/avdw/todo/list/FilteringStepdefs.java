@@ -19,12 +19,9 @@ import static org.hamcrest.Matchers.hasSize;
 
 public class FilteringStepdefs implements En {
     private List<String> list;
-    private Injector injector;
+    private Injector injector = Guice.createInjector(new Config());
 
     public FilteringStepdefs() {
-        Given("^the task repository \"([^\"]*)\"$", (String repository) -> {
-            injector = Guice.createInjector(new Config(Paths.get(repository)));
-        });
         When("^I list the todo items$", () -> {
             list = injector.getInstance(Key.get(AFilter.class, TodoList.class)).list();
         });
@@ -48,16 +45,11 @@ public class FilteringStepdefs implements En {
     }
 
     class Config extends AbstractModule {
-        private Path path;
-
-        Config(Path path) {
-            this.path = path;
-        }
 
         @Override
         protected void configure() {
             install(new FilteringModule());
-            install(new RepositoryModule(path));
+            install(new RepositoryModule(Paths.get("src/test/resources/lists/filtering")));
         }
     }
 }

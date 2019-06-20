@@ -2,7 +2,7 @@ package net.avdw.todo.list.addition;
 
 import com.google.inject.AbstractModule;
 
-public class AddModule extends AbstractModule {
+public class AdditionModule extends AbstractModule {
 
     @Override
     protected void configure() {
