@@ -9,13 +9,13 @@ import net.avdw.todo.repository.memory.MemoryTask;
 import net.avdw.todo.repository.model.ATask;
 import org.pmw.tinylog.Logger;
 
-public class ListAddition implements AListAddition {
+public class Addition implements AAddition {
     private final ARepository<ATask> memoryTaskList;
     private final Provider<ATask> taskProvider;
     private final EventBus eventBus;
 
     @Inject
-    ListAddition(@MemoryTask ARepository<ATask> memoryTaskList, Provider<ATask> taskProvider, EventBus eventBus) {
+    Addition(@MemoryTask ARepository<ATask> memoryTaskList, Provider<ATask> taskProvider, EventBus eventBus) {
         this.memoryTaskList = memoryTaskList;
         this.taskProvider = taskProvider;
         this.eventBus = eventBus;

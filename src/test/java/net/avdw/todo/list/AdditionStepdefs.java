@@ -2,13 +2,12 @@ package net.avdw.todo.list;
 
 import com.google.inject.*;
 import cucumber.api.java8.En;
-import net.avdw.todo.list.addition.AListAddition;
+import net.avdw.todo.list.addition.AAddition;
 import net.avdw.todo.list.addition.AdditionModule;
 import net.avdw.todo.eventbus.EventBusModule;
 import net.avdw.todo.repository.ARepository;
 import net.avdw.todo.repository.RepositoryModule;
 import net.avdw.todo.repository.memory.MemoryTask;
-import net.avdw.todo.repository.memory.MemoryTaskRepositoryModule;
 import net.avdw.todo.repository.model.ATask;
 
 import java.nio.file.Paths;
@@ -29,7 +28,7 @@ public class AdditionStepdefs implements En {
 
         When("^a task is added$", () -> {
             addedTaskCount = injector.getInstance(Key.get(new TypeLiteral<ARepository<ATask>>(){}, MemoryTask.class)).list().size();
-            addedTask = injector.getInstance(AListAddition.class).add(UUID.randomUUID().toString());
+            addedTask = injector.getInstance(AAddition.class).add(UUID.randomUUID().toString());
             addedTaskCount++;
         });
         Then("^the list added to will contain an additional task$", () -> {

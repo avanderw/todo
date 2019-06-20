@@ -6,7 +6,7 @@ public class AdditionModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(AListAddition.class).to(ListAddition.class);
+        bind(AAddition.class).to(Addition.class);
         //bind(AddTodoTxt.class).asEagerSingleton();
     }
 }
