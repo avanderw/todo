@@ -18,7 +18,7 @@ public class ContextFilter implements AFilter {
 
     @Override
     public List<String> list() {
-        return memoryRepository.list().stream().flatMap(task->task.getContexts().stream()).collect(Collectors.toList());
+        return memoryRepository.list().stream().flatMap(task->task.getContexts().stream()).distinct().collect(Collectors.toList());
     }
 
     @Override

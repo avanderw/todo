@@ -5,6 +5,7 @@ import net.avdw.todo.repository.ARepository;
 import net.avdw.todo.repository.memory.MemoryTask;
 import net.avdw.todo.repository.model.ATask;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,7 @@ public class ProjectFilter implements AFilter {
 
     @Override
     public List<String> list() {
-        return memoryRepository.list().stream().flatMap(task->task.getProjects().stream()).collect(Collectors.toList());
+        return memoryRepository.list().stream().flatMap(task -> task.getProjects().stream()).distinct().collect(Collectors.toList());
     }
 
     @Override

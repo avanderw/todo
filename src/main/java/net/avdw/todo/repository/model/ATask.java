@@ -3,9 +3,7 @@ package net.avdw.todo.repository.model;
 import com.google.inject.Inject;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class ATask extends AItem {
     private String creationDate;
@@ -26,12 +24,28 @@ public class ATask extends AItem {
         this.summary = summary;
     }
 
-    public List<String> getProjects() {
-        throw new UnsupportedOperationException();
+    public Set<String> getProjects() {
+        Set<String> projects = new HashSet<>();
+        Scanner scanner  = new Scanner(summary);
+        while (scanner.hasNext()) {
+            String token = scanner.next();
+            if (token.startsWith("+")) {
+                projects.add(token.substring(1));
+            }
+        }
+        return projects;
     }
 
-    public List<String> getContexts() {
-        throw new UnsupportedOperationException();
+    public Set<String> getContexts() {
+        Set<String> contexts = new HashSet<>();
+        Scanner scanner  = new Scanner(summary);
+        while (scanner.hasNext()) {
+            String token = scanner.next();
+            if (token.startsWith("@")) {
+                contexts.add(token.substring(1));
+            }
+        }
+        return contexts;
     }
 
     public String getSummary() {

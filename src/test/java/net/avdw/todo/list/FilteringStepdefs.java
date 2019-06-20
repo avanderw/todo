@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 
 public class FilteringStepdefs implements En {
@@ -39,6 +40,10 @@ public class FilteringStepdefs implements En {
         });
         When("^I list the projects$", () -> {
             list = injector.getInstance(Key.get(AFilter.class, Project.class)).list();
+        });
+        Then("^the list will be \\[([^\"]*)\\]$", (String listString) -> {
+            String[] testList = listString.split(",");
+            assertThat(list, containsInAnyOrder(testList));
         });
     }
 
