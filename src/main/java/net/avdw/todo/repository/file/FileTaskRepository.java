@@ -26,6 +26,22 @@ public class FileTaskRepository implements ARepository<ATask> {
     }
 
     @Override
+    public void init() {
+        if (!Files.exists(repositoryPath.resolve(".todo"))) {
+            File file = repositoryPath.resolve(".todo/todo.txt").toFile();
+            try {
+                if (file.getParentFile().mkdirs() && file.createNewFile()) {
+                    Logger.debug(String.format("%s created", file));
+                }
+            } catch (IOException e) {
+                Logger.error(e);
+            }
+        } else {
+            Logger.warn("Repository {}/ already exists!", repositoryPath);
+        }
+    }
+
+    @Override
     public void add(ATask task) {
         throw new UnsupportedOperationException();
     }
@@ -81,17 +97,6 @@ public class FileTaskRepository implements ARepository<ATask> {
 
     @Override
     public void saveList(List<ATask> list) {
-        if (!Files.exists(repositoryPath.resolve(".todo"))) {
-            File file = repositoryPath.resolve(".todo/todo.txt").toFile();
-            try {
-                if (file.getParentFile().mkdirs() && file.createNewFile()) {
-                    Logger.debug(String.format("%s created", file));
-                }
-            } catch (IOException e) {
-                Logger.error(e);
-            }
-        }
-
         throw new UnsupportedOperationException();
     }
 

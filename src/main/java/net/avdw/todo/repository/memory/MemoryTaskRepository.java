@@ -13,10 +13,12 @@ import java.util.stream.Collectors;
 
 public class MemoryTaskRepository implements ARepository<ATask> {
     private final List<ATask> taskList = new ArrayList<>();
+    private ARepository<ATask> fileTaskRepository;
 
     @Inject
     MemoryTaskRepository(@FileTask ARepository<ATask> fileTaskRepository) {
-        taskList.addAll(fileTaskRepository.list());
+        this.fileTaskRepository = fileTaskRepository;
+        init();
     }
 
     @Override
@@ -32,6 +34,11 @@ public class MemoryTaskRepository implements ARepository<ATask> {
     @Override
     public ATask delete(ATask aTaskList) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void init() {
+        taskList.addAll(fileTaskRepository.list());
     }
 
     @Override

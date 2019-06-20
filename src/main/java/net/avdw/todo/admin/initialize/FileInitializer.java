@@ -33,6 +33,6 @@ public class FileInitializer implements AInitializer {
     private void initialize(Path path) {
         Guice.createInjector(new FileTaskRepositoryModule(path))
                 .getInstance(Key.get(new TypeLiteral<ARepository<ATask>>(){}, FileTask.class))
-                .saveList(new ArrayList<>());
+                .init();
     }
 }

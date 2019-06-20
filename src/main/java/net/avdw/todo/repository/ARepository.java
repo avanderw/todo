@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public interface ARepository<T extends AItem> {
+    void init();
+
     void add(ATask task);
     T retrieve(int id);
     T update(T t);
