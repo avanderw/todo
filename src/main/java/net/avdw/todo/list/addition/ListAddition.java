@@ -7,6 +7,7 @@ import net.avdw.todo.eventbus.ListUpdatedEvent;
 import net.avdw.todo.repository.ARepository;
 import net.avdw.todo.repository.memory.MemoryTask;
 import net.avdw.todo.repository.model.ATask;
+import org.pmw.tinylog.Logger;
 
 public class ListAddition implements AListAddition {
     private final ARepository<ATask> memoryTaskList;
@@ -26,6 +27,7 @@ public class ListAddition implements AListAddition {
             ATask task = taskProvider.get();
             task.setSummary(summary);
             memoryTaskList.add(task);
+            Logger.debug("Added task: {}", task);
             return task;
         } finally {
             eventBus.post(new ListUpdatedEvent());

@@ -16,10 +16,6 @@ public class ATask extends AItem {
         creationDate = simpleDateFormat.format(new Date());
     }
 
-    public String getCreationDate() {
-        return this.creationDate;
-    }
-
     public void setSummary(String summary) {
         this.summary = summary;
     }
@@ -48,7 +44,8 @@ public class ATask extends AItem {
         return contexts;
     }
 
-    public String getSummary() {
-        return summary;
+    @Override
+    public String toString() {
+        return String.format("%s %s", creationDate, summary);
     }
 }

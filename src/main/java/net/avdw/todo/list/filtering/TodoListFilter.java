@@ -18,14 +18,14 @@ public class TodoListFilter implements AFilter {
 
     @Override
     public List<String> list() {
-        return memoryRepository.list().stream().map(ATask::getSummary).collect(Collectors.toList());
+        return memoryRepository.list().stream().map(ATask::toString).collect(Collectors.toList());
     }
 
     @Override
     public List<String> list(List<String> filters) {
         return memoryRepository.list(aTask -> filters.stream()
-                .allMatch(filter -> aTask.getSummary().toLowerCase().contains(filter.toLowerCase()))).stream()
-                .map(ATask::getSummary)
+                .allMatch(filter -> aTask.toString().toLowerCase().contains(filter.toLowerCase()))).stream()
+                .map(ATask::toString)
                 .collect(Collectors.toList());
     }
 }

@@ -27,6 +27,7 @@ public class FileTaskRepository implements ARepository<ATask> {
     @Inject
     public void setRepositoryPath(@FileTask Path repositoryPath) {
         this.repositoryPath = repositoryPath;
+        Logger.debug("Repository set to {}\\", repositoryPath);
     }
 
     @Override
