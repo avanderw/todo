@@ -99,7 +99,7 @@ public class TodoTxtStepDefs implements En {
 
         @Override
         protected void configure() {
-            
+
             bind(ListApi.class).to(ListTodo.class);
             bind(DoneApi.class).to(DoneTodoTxt.class);
             bind(RemoveApi.class).to(RemoveTodoTxt.class);
