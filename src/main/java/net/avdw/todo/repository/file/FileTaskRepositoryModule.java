@@ -20,6 +20,8 @@ public class FileTaskRepositoryModule extends AbstractModule {
     protected void configure() {
         bind(new TypeLiteral<ARepository<ATask>>() {
         }).annotatedWith(FileTask.class).to(FileTaskRepository.class).in(Singleton.class);
+
+        bind(FileTaskRepositoryEventListener.class).asEagerSingleton();
     }
 
     @Provides

@@ -6,13 +6,14 @@ import net.avdw.todo.eventbus.ListUpdatedEvent;
 import net.avdw.todo.repository.ARepository;
 import net.avdw.todo.repository.memory.MemoryTask;
 import net.avdw.todo.repository.model.AItem;
+import net.avdw.todo.repository.model.ATask;
 
-class FileTaskRepositoryEventListener<T extends AItem> {
-    private final ARepository<T> memoryRepository;
-    private final ARepository<T> fileRepository;
+class FileTaskRepositoryEventListener {
+    private final ARepository<ATask> memoryRepository;
+    private final ARepository<ATask> fileRepository;
 
     @Inject
-    FileTaskRepositoryEventListener(@MemoryTask ARepository<T> memoryRepository, @FileTask ARepository<T> fileRepository) {
+    FileTaskRepositoryEventListener(@MemoryTask ARepository<ATask> memoryRepository, @FileTask ARepository<ATask> fileRepository) {
         this.memoryRepository = memoryRepository;
         this.fileRepository = fileRepository;
     }

@@ -10,10 +10,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class FileTaskRepository implements ARepository<ATask> {
     private Path repositoryPath;
@@ -102,7 +105,14 @@ public class FileTaskRepository implements ARepository<ATask> {
 
     @Override
     public void saveList(List<ATask> list) {
-        throw new UnsupportedOperationException();
+        Path todoPath = resolveTodoPath();
+        Path backupPath = resolveBackupPath();
+        try {
+            Files.copy(todoPath, backupPath, StandardCopyOption.REPLACE_EXISTING);
+            Files.write(todoPath, list.stream().map(ATask::toString).sorted().collect(Collectors.toList()), StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            Logger.error(e);
+        }
     }
 
     private Path resolveTodoPath() {
@@ -116,5 +126,13 @@ public class FileTaskRepository implements ARepository<ATask> {
         }
 
         return repositoryPath.resolve(".todo/todo.txt");
+    }
+    private Path resolveBackupPath() {
+        if (!Files.exists(repositoryPath.resolve(".todo"))) {
+            Logger.warn("File repository {}\\ does not exist", repositoryPath);
+            throw new UnsupportedOperationException();
+        }
+
+        return repositoryPath.resolve(".todo/todo.txt.bak");
     }
 }
