@@ -7,6 +7,7 @@ import net.avdw.todo.repository.file.FileTask;
 import net.avdw.todo.repository.model.ATask;
 import org.pmw.tinylog.Logger;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -64,6 +65,11 @@ public class MemoryTaskRepository implements ARepository<ATask> {
 
     @Override
     public void saveList(List<ATask> list) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setRepositoryPath(Path repositoryPath) {
         throw new UnsupportedOperationException();
     }
 }

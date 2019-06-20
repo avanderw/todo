@@ -17,8 +17,9 @@ public class Main {
         CommandLine.run(TodoCli.class, new GuiceFactory(), args);
     }
 
-    static class GuiceFactory implements CommandLine.IFactory {
+    public static class GuiceFactory implements CommandLine.IFactory {
         private final Injector injector = Guice.createInjector(new TodoModule());
+
 
         @Override
         public <K> K create(Class<K> aClass) {

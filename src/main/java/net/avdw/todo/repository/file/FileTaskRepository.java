@@ -20,9 +20,13 @@ public class FileTaskRepository implements ARepository<ATask> {
     private Provider<ATask> aTaskProvider;
 
     @Inject
-    public FileTaskRepository(@FileTask Path repositoryPath, Provider<ATask> aTaskProvider) {
-        this.repositoryPath = repositoryPath;
+    public FileTaskRepository(Provider<ATask> aTaskProvider) {
         this.aTaskProvider = aTaskProvider;
+    }
+
+    @Inject
+    public void setRepositoryPath(@FileTask Path repositoryPath) {
+        this.repositoryPath = repositoryPath;
     }
 
     @Override
