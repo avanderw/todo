@@ -5,8 +5,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import cucumber.api.java8.En;
-import net.avdw.todo.list.addition.AListAddition;
-import net.avdw.todo.list.addition.AddTodoTxt;
 import net.avdw.todo.list.completion.DoneApi;
 import net.avdw.todo.list.completion.DoneTodoTxt;
 import net.avdw.todo.list.filtering.ListApi;
@@ -17,7 +15,6 @@ import net.avdw.todo.list.prioritisation.PriorityTodoTxt;
 import net.avdw.todo.list.removal.RemoveApi;
 import net.avdw.todo.list.removal.RemoveTodoTxt;
 import net.avdw.todo.list.rewriting.ReplaceApi;
-import net.avdw.todo.list.rewriting.ReplaceTodoTxt;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -102,8 +99,7 @@ public class TodoTxtStepDefs implements En {
 
         @Override
         protected void configure() {
-            bind(AListAddition.class).to(AddTodoTxt.class);
-            bind(ReplaceApi.class).to(ReplaceTodoTxt.class);
+
             bind(ListApi.class).to(ListTodo.class);
             bind(DoneApi.class).to(DoneTodoTxt.class);
             bind(RemoveApi.class).to(RemoveTodoTxt.class);

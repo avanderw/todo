@@ -22,10 +22,13 @@ public class ATask extends AItem {
         this.simpleDateFormat = simpleDateFormat;
     }
 
+    public String getCreationDate() {
+        return creationDate;
+    }
+
     public void setSummary(String summary) {
         Matcher summaryMatcher = taskFormatPattern.matcher(summary);
         if (summaryMatcher.find()) {
-            System.out.println(summaryMatcher.group(0));
             isComplete = summaryMatcher.group(1) != null;
             priority = summaryMatcher.group(2);
             completionDate = isComplete ? summaryMatcher.group(3) : null;
