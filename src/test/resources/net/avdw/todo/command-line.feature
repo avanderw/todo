@@ -60,7 +60,6 @@ Feature: Command line
   Move local todo items to done.txt
   Move global todo items to done.txt
 
-
   Scenario: todo edit
   Open text file with editor
 
