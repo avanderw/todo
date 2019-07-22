@@ -5,5 +5,9 @@ import java.nio.file.Path;
 public interface ARepository {
     boolean exists();
 
-    Path getPath();
+    Path getDirectory();
+
+    void edit();
+
+    Path getTodoFile();
 }

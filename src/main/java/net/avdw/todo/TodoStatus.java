@@ -22,8 +22,8 @@ public class TodoStatus implements Runnable {
     @Override
     public void run() {
         Console.h1("Todo Status");
-        Console.info(String.format("Default: %s", localRepository.exists() ? localRepository.getPath().toAbsolutePath() : "todo init"));
-        Console.info(String.format("Global : %s", globalRepository.exists() ? globalRepository.getPath().toAbsolutePath() : "todo init --global"));
+        Console.info(String.format("Default: %s", localRepository.exists() ? localRepository.getDirectory() : "todo init"));
+        Console.info(String.format("Global : %s", globalRepository.exists() ? globalRepository.getDirectory() : "todo init --global"));
 
         if (!localRepository.exists() || !globalRepository.exists()) {
             CommandLine.usage(TodoInit.class, System.out);

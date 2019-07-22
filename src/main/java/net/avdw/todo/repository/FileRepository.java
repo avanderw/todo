@@ -2,6 +2,7 @@ package net.avdw.todo.repository;
 
 import com.google.inject.Inject;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,8 +23,23 @@ class FileRepository implements ARepository {
     }
 
     @Override
-    public Path getPath() {
+    public Path getDirectory() {
         return repositoryPath;
+    }
+
+    @Override
+    public void edit() {
+        ProcessBuilder pb = new ProcessBuilder("notepad.exe", getTodoFile().toString());
+        try {
+            pb.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Path getTodoFile() {
+        return repositoryPath.resolve("todo.txt");
     }
 
     private Path resolveRepositoryPath(Path currentPath) {

@@ -13,7 +13,8 @@ import picocli.CommandLine.Option;
         description = "The procrastination tool",
         subcommands = {
                 HelpCommand.class,
-                TodoStatus.class
+                TodoStatus.class,
+                TodoEdit.class
         })
 public class Todo implements Runnable {
     @Option(names = {"-g", "--global"}, description = "Target the global directory")
@@ -31,11 +32,15 @@ public class Todo implements Runnable {
         final ARepository repository = global ? globalRepository : localRepository;
 
         if (repository.exists()) {
-            Console.info(String.format("Repository: %s", repository.getPath().toAbsolutePath()));
+            Console.info(String.format("Repository: %s", repository.getDirectory().toAbsolutePath()));
             CommandLine.usage(Todo.class, System.out);
         } else {
             System.out.println("No repository found (or any of the parent directories)");
             System.out.println(String.format("Use `todo%sinit` to start procrastinating", global ? " -g " : " "));
         }
+    }
+
+    public ARepository getRepository() {
+        return global ? globalRepository : localRepository;
     }
 }
