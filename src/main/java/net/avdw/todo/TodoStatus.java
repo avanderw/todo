@@ -1,31 +1,35 @@
 package net.avdw.todo;
 
 import com.google.inject.Inject;
-import net.avdw.todo.repository.ARepository;
-import net.avdw.todo.repository.Global;
-import net.avdw.todo.repository.Local;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.ParentCommand;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Command(name = "status")
 public class TodoStatus implements Runnable {
 
+    @ParentCommand
+    private Todo todo;
+
     @Inject
     @Global
-    private ARepository globalRepository;
+    private Path globalPath;
 
     @Inject
     @Local
-    private ARepository localRepository;
-
+    private Path localPath;
 
     @Override
     public void run() {
         Console.h1("Todo Status");
-        Console.info(String.format("Default: %s", localRepository.exists() ? localRepository.getDirectory() : "todo init"));
-        Console.info(String.format("Global : %s", globalRepository.exists() ? globalRepository.getDirectory() : "todo init --global"));
+        Console.info(String.format("Local  : %s", Files.exists(localPath) ? localPath : "todo init"));
+        Console.info(String.format("Global : %s", Files.exists(globalPath) ? globalPath : "todo init --global"));
+        Console.info(String.format("Default: %s", todo.getDirectory()));
 
-        if (!localRepository.exists() || !globalRepository.exists()) {
+        if (!Files.exists(localPath) || !Files.exists(globalPath)) {
             CommandLine.usage(TodoInit.class, System.out);
         }
     }

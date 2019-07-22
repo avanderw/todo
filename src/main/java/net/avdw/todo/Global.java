@@ -1,12 +1,11 @@
-package net.avdw.todo.repository;
+package net.avdw.todo;
 
 import com.google.inject.BindingAnnotation;
 
 import java.lang.annotation.Retention;
-
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.RetentionPolicy;
 
 @BindingAnnotation
-@Retention(RUNTIME)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface Global {
 }

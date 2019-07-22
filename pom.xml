@@ -75,6 +75,7 @@
                         </goals>
                         <configuration>
                             <verbose>true</verbose>
+                            <excludeFromFailureFile>exclude-pmd.properties</excludeFromFailureFile>
                         </configuration>
                     </execution>
                 </executions>
@@ -106,6 +107,11 @@
                     <artifactId>guava</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-assistedinject</artifactId>
+            <version>4.2.2</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>

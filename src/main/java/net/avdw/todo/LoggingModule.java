@@ -14,8 +14,13 @@ import static com.google.inject.matcher.Matchers.not;
 public class LoggingModule extends AbstractModule {
     @Override
     protected void configure() {
+        String date = String.format("%s{date:HH:mm:ss}%s", Ansi.Green, Ansi.Reset);
+        String level = String.format("%s{level}%s", Ansi.Blue, Ansi.Reset);
+        String line = String.format("%s{line}%s", Ansi.Yellow, Ansi.Reset);
+        String clazz = String.format("%s{class}%s", Ansi.White, Ansi.Reset);
+        String method = String.format("%s{method}()%s", Ansi.Cyan, Ansi.Reset);
         Logger.getConfiguration()
-                .formatPattern("{date:yyyy-MM-dd HH:mm:ss} [{level}] {class}:{line}:{method}() {message}")
+                .formatPattern(String.format("%s [%s] %s:%s:%s {message}", date, level, clazz, line, method))
                 .level(Level.TRACE).activate();
 
         bindInterceptor(inSubpackage("net.avdw.todo")

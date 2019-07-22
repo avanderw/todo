@@ -22,16 +22,20 @@ public class ProfilingModule extends AbstractModule {
                 }, (methodInvocation) -> {
                     long start = System.currentTimeMillis();
                     try {
-                        Logger.trace(String.format("-> %s.%s",
+                        Logger.trace(String.format("%s-> %s.%s%s",
+                                Ansi.Magenta,
                                 methodInvocation.getMethod().getDeclaringClass().getSimpleName(),
-                                methodInvocation.getMethod().getName()
+                                methodInvocation.getMethod().getName(),
+                                Ansi.Reset
                         ));
                         return methodInvocation.proceed();
                     } finally {
-                        Logger.trace(String.format("<- %s.%s : %,d ms",
+                        Logger.trace(String.format("%s<- %s.%s : %,d ms%s",
+                                Ansi.Magenta,
                                 methodInvocation.getMethod().getDeclaringClass().getSimpleName(),
                                 methodInvocation.getMethod().getName(),
-                                System.currentTimeMillis() - start
+                                System.currentTimeMillis() - start,
+                                Ansi.Reset
                         ));
                     }
                 });

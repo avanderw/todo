@@ -1,13 +1,13 @@
 package net.avdw.todo;
 
 import com.google.inject.Inject;
-import net.avdw.todo.repository.ARepository;
-import net.avdw.todo.repository.Global;
-import net.avdw.todo.repository.Local;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.HelpCommand;
 import picocli.CommandLine.Option;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Command(name = "todo",
         description = "The procrastination tool",
@@ -21,26 +21,26 @@ public class Todo implements Runnable {
     private boolean global;
 
     @Inject
-    @Local
-    private ARepository localRepository;
+    @Global
+    private Path globalPath;
 
     @Inject
-    @Global
-    private ARepository globalRepository;
+    @Local
+    private Path localPath;
 
     public void run() {
-        final ARepository repository = global ? globalRepository : localRepository;
+        Path directory = getDirectory();
 
-        if (repository.exists()) {
-            Console.info(String.format("Repository: %s", repository.getDirectory().toAbsolutePath()));
+        if (Files.exists(directory)) {
+            Console.info(String.format("Repository: %s", directory));
             CommandLine.usage(Todo.class, System.out);
         } else {
             System.out.println("No repository found (or any of the parent directories)");
-            System.out.println(String.format("Use `todo%sinit` to start procrastinating", global ? " -g " : " "));
+            CommandLine.usage(TodoInit.class, System.out);
         }
     }
 
-    public ARepository getRepository() {
-        return global ? globalRepository : localRepository;
+    Path getDirectory() {
+        return global ? globalPath : localPath;
     }
 }
