@@ -18,9 +18,9 @@ x 2019-07-23 2019-07-23 Add list filter +list
 2019-07-23 Add list of contexts +list
 2019-07-23 Add reporting for duration +report
 2019-07-23 Add editor +properties
-2019-07-23 Fix x of y tasks shown @bug on +list
+x 2019-07-23 2019-07-23 Fix x of y tasks shown @bug on +list
 2019-07-23 Add auto-startdate +properties
-2019-07-23 Enhance +list to show not-done items
-2019-07-23 Enhance +list to show all items with option
+x 2019-07-23 2019-07-23 Enhance +list to show not-done items
+x 2019-07-23 2019-07-23 Enhance +list to show all items with option
 2019-07-23 Add default show all +properties
 2019-07-23 Add versioning command +support

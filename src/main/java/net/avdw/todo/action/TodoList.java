@@ -6,6 +6,7 @@ import net.avdw.todo.Todo;
 import net.avdw.todo.TodoItem;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
@@ -22,6 +23,9 @@ public class TodoList implements Runnable {
     @Parameters(description = "One or more filters to apply")
     private List<String> filters;
 
+    @Option(names = {"-a", "--all"}, description = "Show completed items")
+    private boolean showAll;
+
     @Override
     public void run() {
         Logger.debug(String.format("Filters: %s", filters));
@@ -32,11 +36,15 @@ public class TodoList implements Runnable {
             int lineNum = 0;
             int matched = 0;
             while (scanner.hasNext()) {
-                lineNum++;
                 String line = scanner.nextLine();
-                if (filters.stream().allMatch(line::contains)) {
-                    matched++;
-                    Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, lineNum, Ansi.Reset, new TodoItem(line)));
+                TodoItem item = new TodoItem(line);
+
+                if (item.isNotDone() || showAll) {
+                    lineNum++;
+                    if (filters.stream().allMatch(line::contains)) {
+                        matched++;
+                        Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, lineNum, Ansi.Reset, item));
+                    }
                 }
             }
             Console.divide();

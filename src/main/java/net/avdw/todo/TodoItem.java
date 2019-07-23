@@ -9,6 +9,14 @@ public class TodoItem {
         this.line = line;
     }
 
+    public boolean isNotDone() {
+        return !isDone();
+    }
+
+    private boolean isDone() {
+        return line.startsWith("x");
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -23,7 +31,7 @@ public class TodoItem {
             }
             if (token.length() == 10 && token.startsWith("20")) {
                 if (sb.length() > Ansi.Green.length() &&
-                        sb.charAt(Ansi.Green.length()) == 'x' &&
+                        isDone() &&
                         previousToken.length() != 10 &&
                         !previousToken.startsWith("20")) {
                     if (!completedDate) {
@@ -56,4 +64,5 @@ public class TodoItem {
         }
         return sb.toString();
     }
+
 }
