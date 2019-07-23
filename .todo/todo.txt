@@ -13,7 +13,7 @@ x 2019-07-19 2019-07-09 Add +edit of todo file
 2019-07-23 Add add +add
 2019-07-23 Add priority +priority
 2019-07-23 Add remove +remove
-2019-07-23 Add list filter +list
+x 2019-07-23 2019-07-23 Add list filter +list
 2019-07-23 Add list of projects +list
 2019-07-23 Add list of contexts +list
 2019-07-23 Add reporting for duration +report
