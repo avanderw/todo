@@ -2,6 +2,7 @@ package net.avdw.todo;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import net.avdw.todo.config.TodoModule;
 import picocli.CommandLine;
 
 public class Main {

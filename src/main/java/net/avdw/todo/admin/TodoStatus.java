@@ -1,6 +1,7 @@
-package net.avdw.todo;
+package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
+import net.avdw.todo.*;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ParentCommand;
@@ -8,7 +9,7 @@ import picocli.CommandLine.ParentCommand;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-@Command(name = "status")
+@Command(name = "status", description = "Display repository information")
 public class TodoStatus implements Runnable {
 
     @ParentCommand

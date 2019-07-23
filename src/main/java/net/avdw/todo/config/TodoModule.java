@@ -1,7 +1,10 @@
-package net.avdw.todo;
+package net.avdw.todo.config;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import net.avdw.todo.Execution;
+import net.avdw.todo.Global;
+import net.avdw.todo.Local;
 import org.pmw.tinylog.Logger;
 
 import java.nio.file.Files;

@@ -1,5 +1,7 @@
-package net.avdw.todo;
+package net.avdw.todo.admin;
 
+import net.avdw.todo.Console;
+import net.avdw.todo.Todo;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ParentCommand;
 
@@ -7,7 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-@Command(name = "edit")
+@Command(name = "edit", description = "Open the configured editor for the todo.txt file")
 public class TodoEdit implements Runnable {
     @ParentCommand
     private Todo todo;

@@ -1,7 +1,8 @@
-package net.avdw.todo;
+package net.avdw.todo.config;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.matcher.AbstractMatcher;
+import net.avdw.todo.Ansi;
 import org.pmw.tinylog.Logger;
 
 import java.lang.reflect.Method;

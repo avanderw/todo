@@ -1,6 +1,10 @@
 package net.avdw.todo;
 
 import com.google.inject.Inject;
+import net.avdw.todo.action.TodoList;
+import net.avdw.todo.admin.TodoEdit;
+import net.avdw.todo.admin.TodoInit;
+import net.avdw.todo.admin.TodoStatus;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.HelpCommand;
@@ -14,7 +18,8 @@ import java.nio.file.Path;
         subcommands = {
                 HelpCommand.class,
                 TodoStatus.class,
-                TodoEdit.class
+                TodoEdit.class,
+                TodoList.class
         })
 public class Todo implements Runnable {
     @Option(names = {"-g", "--global"}, description = "Target the global directory")
@@ -40,7 +45,7 @@ public class Todo implements Runnable {
         }
     }
 
-    Path getDirectory() {
+    public Path getDirectory() {
         return global ? globalPath : localPath;
     }
 }
