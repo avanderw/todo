@@ -11,9 +11,7 @@ import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 @Command(name = "ls", aliases = "list", description = "List the items in todo.txt")
 public class TodoList implements Runnable {
@@ -26,29 +24,50 @@ public class TodoList implements Runnable {
     @Option(names = {"-a", "--all"}, description = "Show completed items")
     private boolean showAll;
 
+    @Option(names = {"-p", "--projects"}, description = "List projects")
+    private boolean showProjects;
+
+    @Option(names = {"-c", "--contexts"}, description = "List contexts")
+    private boolean showContexts;
+
     @Override
     public void run() {
         Logger.debug(String.format("Filters: %s", filters));
         if (filters == null) {
             filters = new ArrayList<>();
         }
+
         try (Scanner scanner = new Scanner(todo.getTodoFile())) {
             int lineNum = 0;
             int matched = 0;
+            int completed = 0;
+            Set<String> projects = new HashSet<>();
+            Set<String> contexts = new HashSet<>();
             while (scanner.hasNext()) {
                 String line = scanner.nextLine();
                 TodoItem item = new TodoItem(line);
 
                 if (item.isNotDone() || showAll) {
                     lineNum++;
-                    if (filters.stream().allMatch(line::contains)) {
+                    if (item.isDone()) {
+                        completed++;
+                    }
+                    if (filters.stream().map(String::toLowerCase).allMatch(line.toLowerCase()::contains)) {
                         matched++;
-                        Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, lineNum, Ansi.Reset, item));
+                        projects.addAll(item.getProjects());
+                        contexts.addAll(item.getContexts());
+                        if (!(showProjects || showContexts)) {
+                            Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, lineNum, Ansi.Reset, item));
+                        }
                     }
                 }
             }
+
             Console.divide();
-            Console.info(String.format("%s of %s tasks shown", matched, lineNum));
+            Console.info(String.format("%s of %s (%s complete) tasks", matched, lineNum, completed));
+            Console.info(String.format("projects: %s", projects));
+            Console.info(String.format("contexts: %s", contexts));
+
         } catch (IOException e) {
             e.printStackTrace();
         }

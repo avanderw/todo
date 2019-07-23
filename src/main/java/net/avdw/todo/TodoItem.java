@@ -1,6 +1,8 @@
 package net.avdw.todo;
 
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 public class TodoItem {
     private final String line;
@@ -13,7 +15,7 @@ public class TodoItem {
         return !isDone();
     }
 
-    private boolean isDone() {
+    public boolean isDone() {
         return line.startsWith("x");
     }
 
@@ -50,7 +52,7 @@ public class TodoItem {
                 sb.append(Ansi.Magenta);
             } else if (token.startsWith("(") && token.length() == 3 && token.endsWith(")")) {
                 sb.append(Ansi.Yellow);
-            }else if (token.startsWith("due:")) {
+            } else if (token.startsWith("due:")) {
                 sb.append(Ansi.Red);
             }
 
@@ -65,4 +67,27 @@ public class TodoItem {
         return sb.toString();
     }
 
+    public Set<String> getProjects() {
+        Set<String> projects = new HashSet<>();
+        Scanner scanner = new Scanner(line);
+        while (scanner.hasNext()) {
+            String token = scanner.next();
+            if (token.startsWith("+")) {
+                projects.add(token.substring(1));
+            }
+        }
+        return projects;
+    }
+
+    public Set<String> getContexts() {
+        Set<String> projects = new HashSet<>();
+        Scanner scanner = new Scanner(line);
+        while (scanner.hasNext()) {
+            String token = scanner.next();
+            if (token.startsWith("@")) {
+                projects.add(token.substring(1));
+            }
+        }
+        return projects;
+    }
 }
