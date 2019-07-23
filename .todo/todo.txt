@@ -1,7 +1,16 @@
 x 2019-07-18 2019-06-19 Add repository tracking
 2019-06-20 Prevent adding duplicates
 x 2019-07-19 2019-07-09 Add open todo file
-2019-07-09 Sort todo 
-2019-07-09 Add archive for todo
-2019-07-09 Add auto-archive setting
+2019-07-09 Add +admin sort
+2019-07-09 Add +admin archive
+2019-07-09 Add auto-archive +properties
 2019-07-23 Refactor task +styling to template
+2019-07-23 Refactor log level to +properties
+2019-07-23 Add auto-sort +properties
+2019-07-23 Add add +feature
+2019-07-23 Add priority +feature
+2019-07-23 Add remove +feature
+2019-07-23 Add list filter +feature
+2019-07-23 Add list of projects +feature
+2019-07-23 Add list of contexts +feature
+2019-07-23 Add reporting for duration +feature
