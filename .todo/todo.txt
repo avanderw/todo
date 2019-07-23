@@ -1,6 +1,7 @@
-2019-06-19 Add repository tracking
+x 2019-07-18 2019-06-19 Add repository tracking
 2019-06-20 Prevent adding duplicates
-2019-07-09 Add open todo file
+x 2019-07-19 2019-07-09 Add open todo file
 2019-07-09 Sort todo 
 2019-07-09 Add archive for todo
 2019-07-09 Add auto-archive setting
+2019-07-23 Refactor task +styling to template

@@ -9,15 +9,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-@Command(name = "edit", description = "Open the configured editor for the todo.txt file")
+@Command(name = "edit", description = "Open the configured editor for todo.txt")
 public class TodoEdit implements Runnable {
     @ParentCommand
     private Todo todo;
 
     @Override
     public void run() {
-        Path path = todo.getDirectory();
-        Path file = path.resolve("todo.txt");
+        Path file = todo.getTodoFile();
 
         if (Files.exists(file)) {
             Console.info(String.format("Edit %s", file));

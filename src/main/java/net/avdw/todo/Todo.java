@@ -48,4 +48,7 @@ public class Todo implements Runnable {
     public Path getDirectory() {
         return global ? globalPath : localPath;
     }
+    public Path getTodoFile() {
+        return global ? globalPath.resolve("todo.txt") : localPath.resolve("todo.txt");
+    }
 }
