@@ -24,6 +24,8 @@ public class TodoList implements Runnable {
                 String line = scanner.nextLine();
                 Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, lineNum, Ansi.Reset, new TodoItem(line)));
             }
+            Console.divide();
+            Console.info(String.format("%s of %s tasks shown", lineNum, lineNum));
         } catch (IOException e) {
             e.printStackTrace();
         }

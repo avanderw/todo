@@ -1,16 +1,26 @@
-x 2019-07-18 2019-06-19 Add repository tracking
-2019-06-20 Prevent adding duplicates
-x 2019-07-19 2019-07-09 Add open todo file
+x 2019-07-18 2019-06-19 Add +repository lookup
+2019-06-20 Add warning when adding duplicates +admin
+2019-07-23 Add allow duplicate +properties
+2019-07-23 Add +admin deduplicate
+2019-07-23 Add done +done
+x 2019-07-19 2019-07-09 Add +edit of todo file
 2019-07-09 Add +admin sort
 2019-07-09 Add +admin archive
 2019-07-09 Add auto-archive +properties
 2019-07-23 Refactor task +styling to template
 2019-07-23 Refactor log level to +properties
 2019-07-23 Add auto-sort +properties
-2019-07-23 Add add +feature
-2019-07-23 Add priority +feature
-2019-07-23 Add remove +feature
-2019-07-23 Add list filter +feature
-2019-07-23 Add list of projects +feature
-2019-07-23 Add list of contexts +feature
-2019-07-23 Add reporting for duration +feature
+2019-07-23 Add add +add
+2019-07-23 Add priority +priority
+2019-07-23 Add remove +remove
+2019-07-23 Add list filter +list
+2019-07-23 Add list of projects +list
+2019-07-23 Add list of contexts +list
+2019-07-23 Add reporting for duration +report
+2019-07-23 Add editor +properties
+2019-07-23 Fix x of y tasks shown @bug on +list
+2019-07-23 Add auto-startdate +properties
+2019-07-23 Enhance +list to show not-done items
+2019-07-23 Enhance +list to show all items with option
+2019-07-23 Add default show all +properties
+2019-07-23 Add versioning command +support

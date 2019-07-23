@@ -9,4 +9,8 @@ public class Console {
     public static void info(String text) {
         System.out.println(String.format("i %s", text));
     }
+
+    public static void divide() {
+        System.out.println("--");
+    }
 }
