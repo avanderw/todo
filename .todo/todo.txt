@@ -29,3 +29,5 @@ x 2019-07-23 2019-07-23 Enhance +list to show all items with option
 2019-07-23 Fix @bug when global +repository does not exist
 2019-07-24 Remove priority when task is +done
 2019-07-24 Enhance +list of projects and contexts to only show when requested
+2019-07-24 Enhance +status to show projects and contexts for each repository
+2019-07-24 Improve performance of the +add command
