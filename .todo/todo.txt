@@ -31,3 +31,4 @@ x 2019-07-24 2019-07-24 Remove priority when task is +done
 2019-07-24 Enhance +list of projects and contexts to only show when requested
 2019-07-24 Enhance +status to show projects and contexts for each repository
 2019-07-24 Improve performance of the +add command
+2019-07-24 Add +init functionality

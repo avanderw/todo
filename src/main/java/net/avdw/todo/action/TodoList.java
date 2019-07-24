@@ -61,7 +61,11 @@ public class TodoList implements Runnable {
             }
 
             Console.divide();
-            Console.info(String.format("%s of %s (%s complete) tasks", matched, lineNum, completed));
+            if (todo.showAll()) {
+                Console.info(String.format("%s of %s (%s done) tasks", matched, lineNum, completed));
+            } else {
+                Console.info(String.format("%s of %s tasks", matched, lineNum));
+            }
             Console.info(String.format("projects: %s", projects));
             Console.info(String.format("contexts: %s", contexts));
 

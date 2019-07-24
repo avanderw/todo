@@ -22,7 +22,7 @@ public class LoggingModule extends AbstractModule {
         String method = String.format("%s{method}()%s", Ansi.Cyan, Ansi.Reset);
         Logger.getConfiguration()
                 .formatPattern(String.format("[%s] %s:%s:%s {message}", level, clazz, line, method))
-                .level(Level.TRACE).activate();
+                .level(Level.DEBUG).activate();
 
         bindInterceptor(inSubpackage("net.avdw.todo")
                         .and(not(inSubpackage("net.avdw.todo.model"))),
