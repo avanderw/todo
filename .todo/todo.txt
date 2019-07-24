@@ -28,7 +28,10 @@ x 2019-07-23 2019-07-23 Enhance +list to show all items with option
 2019-07-23 Enhance +list of contexts to contain counts
 2019-07-23 Fix @bug when global +repository does not exist
 x 2019-07-24 2019-07-24 Remove priority when task is +done
-2019-07-24 Enhance +list of projects and contexts to only show when requested
+x 2019-07-24 2019-07-24 Enhance +list of projects and contexts to only show when requested
 2019-07-24 Enhance +status to show projects and contexts for each repository
 2019-07-24 Improve performance of the +add command
 2019-07-24 Add +init functionality
+2019-07-24 Add +tag functionality to append text
+2019-07-24 Add README to +document installation with alias
+2019-07-24 Add +clear functionality for stale .todo directories

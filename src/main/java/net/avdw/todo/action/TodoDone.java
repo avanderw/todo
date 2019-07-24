@@ -51,7 +51,7 @@ public class TodoDone implements Runnable {
             } else {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String completeLine = String.format("x %s %s", sdf.format(new Date()), lineToComplete.replaceFirst("\\([A-Z]\\) ", ""));
-                Console.info(String.format("Done [%s]: %s", lineNum, item));
+                Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, lineNum, Ansi.Reset, item));
                 Console.divide();
                 Console.info(String.format("%s", new TodoItem(completeLine)));
 
