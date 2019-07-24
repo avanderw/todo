@@ -16,7 +16,7 @@ public class TodoItem {
     }
 
     public boolean isDone() {
-        return line.startsWith("x");
+        return line.startsWith("x ");
     }
 
     @Override
@@ -47,9 +47,9 @@ public class TodoItem {
                     }
                 }
             } else if (token.startsWith("+")) {
-                sb.append(Ansi.Cyan);
-            } else if (token.startsWith("@")) {
                 sb.append(Ansi.Magenta);
+            } else if (token.startsWith("@")) {
+                sb.append(Ansi.Cyan);
             } else if (token.startsWith("(") && token.length() == 3 && token.endsWith(")")) {
                 sb.append(Ansi.Yellow);
             } else if (token.startsWith("due:")) {

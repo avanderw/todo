@@ -21,9 +21,6 @@ public class TodoList implements Runnable {
     @Parameters(description = "One or more filters to apply")
     private List<String> filters;
 
-    @Option(names = {"-a", "--all"}, description = "Show completed items")
-    private boolean showAll;
-
     @Option(names = {"-p", "--projects"}, description = "List projects")
     private boolean showProjects;
 
@@ -47,7 +44,7 @@ public class TodoList implements Runnable {
                 String line = scanner.nextLine();
                 TodoItem item = new TodoItem(line);
 
-                if (item.isNotDone() || showAll) {
+                if (item.isNotDone() || todo.showAll()) {
                     lineNum++;
                     if (item.isDone()) {
                         completed++;

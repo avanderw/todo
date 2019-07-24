@@ -2,6 +2,7 @@ package net.avdw.todo;
 
 import com.google.inject.Inject;
 import net.avdw.todo.action.TodoAdd;
+import net.avdw.todo.action.TodoDone;
 import net.avdw.todo.action.TodoList;
 import net.avdw.todo.admin.TodoBackup;
 import net.avdw.todo.admin.TodoEdit;
@@ -23,11 +24,15 @@ import java.nio.file.Path;
                 TodoBackup.class,
                 TodoEdit.class,
                 TodoList.class,
-                TodoAdd.class
+                TodoAdd.class,
+                TodoDone.class
         })
 public class Todo implements Runnable {
     @Option(names = {"-g", "--global"}, description = "Target the global directory")
     private boolean global;
+
+    @Option(names = {"-a", "--all"}, description = "Show completed items")
+    private boolean showAll;
 
     @Inject
     @Global
@@ -58,5 +63,9 @@ public class Todo implements Runnable {
 
     public Path getBackupFile() {
         return getDirectory().resolve("todo.txt.bak");
+    }
+
+    public boolean showAll() {
+        return showAll;
     }
 }
