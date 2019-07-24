@@ -13,7 +13,7 @@ import picocli.CommandLine.ParentCommand;
 import java.io.IOException;
 import java.util.*;
 
-@Command(name = "ls", aliases = "list", description = "List the items in todo.txt")
+@Command(name = "ls", description = "List the items in todo.txt")
 public class TodoList implements Runnable {
     @ParentCommand
     private Todo todo;

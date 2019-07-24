@@ -28,3 +28,4 @@ x 2019-07-23 2019-07-23 Enhance +list to show all items with option
 2019-07-23 Enhance +list of contexts to contain counts
 2019-07-23 Fix @bug when global +repository does not exist
 2019-07-24 Remove priority when task is +done
+2019-07-24 Enhance +list of projects and contexts to only show when requested
