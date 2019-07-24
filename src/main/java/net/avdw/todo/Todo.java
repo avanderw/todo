@@ -4,10 +4,7 @@ import com.google.inject.Inject;
 import net.avdw.todo.action.TodoAdd;
 import net.avdw.todo.action.TodoDone;
 import net.avdw.todo.action.TodoList;
-import net.avdw.todo.admin.TodoBackup;
-import net.avdw.todo.admin.TodoEdit;
-import net.avdw.todo.admin.TodoInit;
-import net.avdw.todo.admin.TodoStatus;
+import net.avdw.todo.admin.*;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.HelpCommand;
@@ -22,6 +19,7 @@ import java.nio.file.Path;
                 HelpCommand.class,
                 TodoStatus.class,
                 TodoBackup.class,
+                TodoSort.class,
                 TodoEdit.class,
                 TodoList.class,
                 TodoAdd.class,
