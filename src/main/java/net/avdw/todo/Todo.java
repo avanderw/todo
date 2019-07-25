@@ -19,8 +19,10 @@ import java.nio.file.Path;
                 HelpCommand.class,
                 TodoStatus.class,
                 TodoBackup.class,
+                TodoRestore.class,
                 TodoSort.class,
                 TodoEdit.class,
+                TodoClear.class,
                 TodoList.class,
                 TodoAdd.class,
                 TodoDone.class
@@ -31,6 +33,9 @@ public class Todo implements Runnable {
 
     @Option(names = {"-a", "--all"}, description = "Show completed items")
     private boolean showAll;
+
+    @Option(names = {"-b", "--backup"}, description = "Backup todo.txt before command execution")
+    private boolean backup;
 
     @Inject
     @Global
@@ -71,5 +76,12 @@ public class Todo implements Runnable {
 
     public boolean showAll() {
         return showAll;
+    }
+
+    public void backup() {
+        if (backup) {
+            TodoBackup todoBackup = new TodoBackup();
+            todoBackup.backup(getTodoFile(), getBackupFile());
+        }
     }
 }

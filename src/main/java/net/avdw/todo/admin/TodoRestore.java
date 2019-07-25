@@ -8,25 +8,20 @@ import picocli.CommandLine.ParentCommand;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
-@Command(name = "backup", description = "Write todo.txt.bak")
-public class TodoBackup implements Runnable {
+@Command(name = "restore", description = "Replace todo.txt with backup")
+public class TodoRestore implements Runnable {
     @ParentCommand
     private Todo todo;
 
     @Override
     public void run() {
-        backup(todo.getTodoFile(), todo.getBackupFile());
-    }
-
-    public void backup(Path from, Path to) {
         try {
-            Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
-            Console.info(String.format("Replaced `%s` with `%s`", to, from));
+            Files.copy(todo.getBackupFile(), todo.getTodoFile(), StandardCopyOption.REPLACE_EXISTING);
+            Console.info(String.format("Replaced `%s` with `%s`", todo.getTodoFile(), todo.getBackupFile()));
         } catch (IOException e) {
-            Console.info("Error backing up todo.txt");
+            Console.error("Error restoring todo.txt");
             Logger.error(e);
         }
     }
