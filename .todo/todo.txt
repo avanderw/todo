@@ -22,6 +22,7 @@
 2019-07-24 Add +init functionality
 2019-07-24 Add +tag functionality to append text
 2019-07-24 Add README to +document installation with alias
+2019-07-24 Enhance +status check to show the amount of items in each repository
 2019-07-24 Enhance +status to show projects and contexts for each repository
 2019-07-24 Improve performance of the +add command
 x 2019-07-18 2019-06-19 Add +repository lookup
