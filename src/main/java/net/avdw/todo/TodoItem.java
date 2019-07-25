@@ -52,7 +52,7 @@ public class TodoItem {
                 sb.append(Ansi.Cyan);
             } else if (token.startsWith("(") && token.length() == 3 && token.endsWith(")")) {
                 sb.append(Ansi.Yellow);
-            } else if (token.startsWith("due:")) {
+            } else if (token.contains(":")) {
                 sb.append(Ansi.Red);
             }
 

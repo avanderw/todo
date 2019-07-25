@@ -8,20 +8,21 @@
 2019-07-23 Add default show all +properties
 2019-07-23 Add editor +properties
 2019-07-23 Add priority +priority
-2019-07-23 Add reporting for duration +report
+2019-07-23 Add @reporting for duration +report
 2019-07-23 Enhance +list of contexts to contain counts
 2019-07-23 Enhance +list of projects to contain counts
 2019-07-23 Fix @bug when global +repository does not exist
-2019-07-23 Refactor log level to +properties
+2019-07-23 Refactor +log level to +properties
 2019-07-23 Refactor task +styling to template
 2019-07-24 Add +backup option to state changing operations
 2019-07-24 Add +init functionality
 2019-07-24 Add +tag functionality to append text
-2019-07-24 Add README to +document installation with alias
+2019-07-24 Add +README to @document installation with alias
 2019-07-24 Enhance +status check to show the amount of items in each repository
 2019-07-24 Enhance +status to show projects and contexts for each repository
 2019-07-24 Improve performance of the +add command
-2019-07-25 Add +rename @admin functionality
+2019-07-25 Fix @bug in +add to global list when it does not exist
+2019-07-25 Fix @bug when +add with tilde is used in command prompt
 x 2019-07-18 2019-06-19 Add +repository lookup
 x 2019-07-19 2019-07-09 Add +edit of todo file
 x 2019-07-23 2019-07-23 Add list filter +list
@@ -38,5 +39,8 @@ x 2019-07-25 2019-07-09 Add @admin +sort
 x 2019-07-25 2019-07-23 Add remove +remove
 x 2019-07-25 2019-07-23 Add versioning command +support
 x 2019-07-25 2019-07-24 Add +clear functionality for stale .todo directories
-2019-07-25 Fix @bug in +add to global list when it does not exist
-2019-07-25 Fix @bug when +add with tilde is used in command prompt
+x 2019-07-25 2019-07-25 Add +rename @admin functionality
+2019-07-26 Add +start feature to indicate when todo was started
+2019-07-26 Add +in-progress feature to indicate what todos have been started
+2019-07-26 Add @reporting on todo, in-progress and done for previous months +report
+2019-07-26 Add +consolodate functionality to view all aware todo directories
