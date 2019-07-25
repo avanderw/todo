@@ -20,6 +20,7 @@ import java.nio.file.Path;
         mixinStandardHelpOptions = true,
         subcommands = {
                 HelpCommand.class,
+                TodoInit.class,
                 TodoStatus.class,
                 TodoBackup.class,
                 TodoRestore.class,
@@ -34,7 +35,7 @@ import java.nio.file.Path;
         })
 public class Todo implements Runnable {
     @Option(names = {"-g", "--global"}, description = "Use the global directory")
-    private boolean global;
+    public boolean global;
 
     @Option(names = {"-a", "--all"}, description = "Show completed items")
     private boolean showAll;
@@ -44,11 +45,11 @@ public class Todo implements Runnable {
 
     @Inject
     @Global
-    private Path globalPath;
+    public Path globalPath;
 
     @Inject
     @Local
-    private Path localPath;
+    public Path localPath;
 
     public void run() {
         Path directory = getDirectory();
