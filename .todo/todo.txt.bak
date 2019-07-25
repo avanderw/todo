@@ -1,30 +1,27 @@
-2019-06-20 Add warning when adding duplicates +admin
-2019-07-09 Add +admin archive
-2019-07-09 Add +admin sort
-2019-07-09 Add auto-archive +properties
-2019-07-23 Add +admin deduplicate
+2019-06-20 Add warning when adding duplicates @admin
+2019-07-09 Add @admin +archive
+2019-07-09 Add auto +archive +properties
+2019-07-23 Add @admin deduplicate
 2019-07-23 Add allow duplicate +properties
-2019-07-23 Add auto-sort +properties
-2019-07-23 Add auto-startdate +properties
+2019-07-23 Add auto +sort +properties
+2019-07-23 Add auto startdate +properties
 2019-07-23 Add default show all +properties
 2019-07-23 Add editor +properties
 2019-07-23 Add priority +priority
-2019-07-23 Add remove +remove
 2019-07-23 Add reporting for duration +report
-x 2019-07-25 2019-07-23 Add versioning command +support
 2019-07-23 Enhance +list of contexts to contain counts
 2019-07-23 Enhance +list of projects to contain counts
 2019-07-23 Fix @bug when global +repository does not exist
 2019-07-23 Refactor log level to +properties
 2019-07-23 Refactor task +styling to template
 2019-07-24 Add +backup option to state changing operations
-x 2019-07-25 2019-07-24 Add +clear functionality for stale .todo directories
 2019-07-24 Add +init functionality
 2019-07-24 Add +tag functionality to append text
 2019-07-24 Add README to +document installation with alias
 2019-07-24 Enhance +status check to show the amount of items in each repository
 2019-07-24 Enhance +status to show projects and contexts for each repository
 2019-07-24 Improve performance of the +add command
+2019-07-25 Add +rename @admin functionality
 x 2019-07-18 2019-06-19 Add +repository lookup
 x 2019-07-19 2019-07-09 Add +edit of todo file
 x 2019-07-23 2019-07-23 Add list filter +list
@@ -37,3 +34,7 @@ x 2019-07-24 2019-07-23 Add add +add
 x 2019-07-24 2019-07-23 Add done +done
 x 2019-07-24 2019-07-24 Enhance +list of projects and contexts to only show when requested
 x 2019-07-24 2019-07-24 Remove priority when task is +done
+x 2019-07-25 2019-07-09 Add @admin +sort
+x 2019-07-25 2019-07-23 Add remove +remove
+x 2019-07-25 2019-07-23 Add versioning command +support
+x 2019-07-25 2019-07-24 Add +clear functionality for stale .todo directories
