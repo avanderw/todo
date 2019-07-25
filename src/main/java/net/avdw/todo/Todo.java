@@ -15,6 +15,8 @@ import java.nio.file.Path;
 
 @Command(name = "todo",
         description = "The procrastination tool",
+        version = "1.0",
+        mixinStandardHelpOptions = true,
         subcommands = {
                 HelpCommand.class,
                 TodoStatus.class,
@@ -28,13 +30,13 @@ import java.nio.file.Path;
                 TodoDone.class
         })
 public class Todo implements Runnable {
-    @Option(names = {"-g", "--global"}, description = "Target the global directory")
+    @Option(names = {"-g", "--global"}, description = "Use the global directory")
     private boolean global;
 
     @Option(names = {"-a", "--all"}, description = "Show completed items")
     private boolean showAll;
 
-    @Option(names = {"-b", "--backup"}, description = "Backup todo.txt before command execution")
+    @Option(names = {"-b", "--backup"}, description = "Backup before command is executed")
     private boolean backup;
 
     @Inject
@@ -49,10 +51,10 @@ public class Todo implements Runnable {
         Path directory = getDirectory();
 
         if (Files.exists(directory)) {
-            Console.info(String.format("Repository: %s", directory));
+            Console.info(String.format("Directory: %s", directory));
             CommandLine.usage(Todo.class, System.out);
         } else {
-            System.out.println("No repository found (or any of the parent directories)");
+            System.out.println("No directory found (or any of the parent directories)");
             CommandLine.usage(TodoInit.class, System.out);
         }
     }
