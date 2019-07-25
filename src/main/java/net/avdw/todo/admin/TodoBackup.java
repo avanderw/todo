@@ -26,7 +26,7 @@ public class TodoBackup implements Runnable {
             Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
             Console.info(String.format("Replaced `%s` with `%s`", to, from));
         } catch (IOException e) {
-            Console.info("Error backing up todo.txt");
+            Console.error(String.format("Error writing `%s`", to));
             Logger.error(e);
         }
     }

@@ -90,4 +90,8 @@ public class TodoItem {
         }
         return projects;
     }
+
+    public String rawValue() {
+        return line;
+    }
 }

@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import net.avdw.todo.action.TodoAdd;
 import net.avdw.todo.action.TodoDone;
 import net.avdw.todo.action.TodoList;
+import net.avdw.todo.action.TodoRemove;
 import net.avdw.todo.admin.*;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -27,7 +28,8 @@ import java.nio.file.Path;
                 TodoClear.class,
                 TodoList.class,
                 TodoAdd.class,
-                TodoDone.class
+                TodoDone.class,
+                TodoRemove.class
         })
 public class Todo implements Runnable {
     @Option(names = {"-g", "--global"}, description = "Use the global directory")
