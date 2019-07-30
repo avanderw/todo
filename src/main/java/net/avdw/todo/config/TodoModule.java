@@ -18,6 +18,7 @@ public class TodoModule extends AbstractModule {
     protected void configure() {
         install(new LoggingModule());
         install(new ProfilingModule());
+        install(new AdminModule());
 
         bind(Path.class).annotatedWith(Execution.class).toInstance(Paths.get(""));
     }

@@ -1,9 +1,6 @@
 package net.avdw.todo.action;
 
-import net.avdw.todo.Ansi;
-import net.avdw.todo.Console;
-import net.avdw.todo.Todo;
-import net.avdw.todo.TodoItem;
+import net.avdw.todo.*;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
@@ -25,7 +22,7 @@ public class TodoDone implements Runnable {
 
     @Override
     public void run() {
-        Optional<TodoItem> line = new TodoReader(todo).readLine(idx);
+        Optional<TodoItem> line = new TodoReader(todo.showAll()).readLine(todo.getTodoFile(), idx);
         if (line.isPresent() && line.get().isNotDone()) {
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

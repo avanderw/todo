@@ -26,6 +26,7 @@ import java.nio.file.Path;
                 TodoRestore.class,
                 TodoSort.class,
                 TodoEdit.class,
+                TodoMigrate.class,
                 TodoRename.class,
                 TodoClear.class,
                 TodoList.class,

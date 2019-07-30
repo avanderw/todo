@@ -4,6 +4,7 @@ import net.avdw.todo.Ansi;
 import net.avdw.todo.Console;
 import net.avdw.todo.Todo;
 import net.avdw.todo.TodoItem;
+import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
@@ -13,6 +14,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -45,15 +47,22 @@ public class TodoAdd implements Runnable {
             }
             lineNum++;
 
-            try (FileWriter fw = new FileWriter(todo.getTodoFile().toFile(), true);
-                 BufferedWriter bw = new BufferedWriter(fw);
-                 PrintWriter out = new PrintWriter(bw)) {
-                out.println(addition);
-            }
-
+            add(todo.getTodoFile(), addition);
             Console.info(String.format("[%s%2s%s] %sAdded%s: %s", Ansi.Blue, lineNum, Ansi.Reset, Ansi.Green, Ansi.Reset, new TodoItem(addition)));
         } catch (IOException e) {
-            e.printStackTrace();
+            Console.error(String.format("Could not add `%s` to `%s`", todo.getTodoFile(), addition));
+            Logger.error(e);
+        }
+    }
+
+    public void add(Path toFile, String rawValue) {
+        try (FileWriter fw = new FileWriter(toFile.toFile(), true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
+            out.println(rawValue);
+        } catch (IOException e) {
+            Console.error(String.format("Could not add `%s` to `%s`", rawValue, toFile));
+            Logger.error(e);
         }
     }
 }

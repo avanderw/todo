@@ -1,30 +1,30 @@
-package net.avdw.todo.action;
+package net.avdw.todo;
 
-import net.avdw.todo.Console;
-import net.avdw.todo.Todo;
-import net.avdw.todo.TodoItem;
+import com.google.inject.Inject;
 import org.pmw.tinylog.Logger;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.Scanner;
 
-class TodoReader {
+public class TodoReader {
 
-    private Todo todo;
+    private boolean showAll;
 
-    TodoReader(Todo todo) {
-        this.todo = todo;
+    @Inject
+    public TodoReader(Boolean showAll) {
+        this.showAll = showAll;
     }
 
-    Optional<TodoItem> readLine(int idx) {
+    public Optional<TodoItem> readLine(Path todoFile, int idx) {
         TodoItem readLine = null;
-        try (Scanner scanner = new Scanner(todo.getTodoFile())) {
+        try (Scanner scanner = new Scanner(todoFile)) {
             int lineNum = 0;
             while (scanner.hasNext()) {
                 String line = scanner.nextLine();
                 TodoItem item = new TodoItem(line);
-                if (item.isNotDone() || todo.showAll()) {
+                if (item.isNotDone() || showAll) {
                     lineNum++;
                     if (lineNum == idx) {
                         readLine = item;
@@ -33,7 +33,7 @@ class TodoReader {
                 }
             }
         } catch (IOException e) {
-            Console.error(String.format("Error reading `%s`", todo.getTodoFile()));
+            Console.error(String.format("Error reading `%s`", todoFile));
             Logger.error(e);
         }
 
