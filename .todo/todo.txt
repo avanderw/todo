@@ -51,3 +51,4 @@ x 2019-08-07 2019-07-26 Add +start feature to indicate when todo was started sta
 x 2019-07-30 2019-07-30 Add feature to +migrate items from local to global and visa versa
 2019-07-30 Fix +remove functionality on LF vs CRLF
 2019-07-30 Enhance +migrate functionality logging to be friendlier
+2019-07-30 Fix +list to fail when targeting non-existing global with existing local
