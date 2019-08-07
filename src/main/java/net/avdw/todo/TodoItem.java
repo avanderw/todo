@@ -19,6 +19,10 @@ public class TodoItem {
         return line.startsWith("x ");
     }
 
+    public boolean isStarted() {
+        return line.contains("started:");
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -94,4 +98,5 @@ public class TodoItem {
     public String rawValue() {
         return line;
     }
+
 }

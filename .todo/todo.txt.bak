@@ -1,7 +1,6 @@
 2019-06-20 Add warning when adding duplicates @admin
 2019-07-09 Add @admin +archive
 2019-07-09 Add auto +archive +properties
-2019-07-23 Add @admin deduplicate
 2019-07-23 Add allow duplicate +properties
 2019-07-23 Add auto +sort +properties
 2019-07-23 Add auto startdate +properties
@@ -40,7 +39,7 @@ x 2019-07-25 2019-07-23 Add remove +remove
 x 2019-07-25 2019-07-23 Add versioning command +support
 x 2019-07-25 2019-07-24 Add +clear functionality for stale .todo directories
 x 2019-07-25 2019-07-25 Add +rename @admin functionality
-2019-07-26 Add +start feature to indicate when todo was started
+2019-07-26 Add +start feature to indicate when todo was started start:2019-08-07
 2019-07-26 Add +in-progress feature to indicate what todos have been started
 2019-07-26 Add @reporting on todo, in-progress and done for previous months +report
 2019-07-26 Add +consolodate functionality to view all aware todo directories
@@ -49,4 +48,6 @@ x 2019-07-25 2019-07-25 Add +rename @admin functionality
 2019-07-26 Add +clean feature which will remove duplicates
 2019-07-26 Add +clean feature which will add priority to started items
 2019-07-26 Add +clean feature which will remove blank lines
-2019-07-30 Add feature to +migrate items from local to global and visa versa
+x 2019-07-30 2019-07-30 Add feature to +migrate items from local to global and visa versa
+2019-07-30 Fix +remove functionality on LF vs CRLF
+2019-07-30 Enhance +migrate functionality logging to be friendlier

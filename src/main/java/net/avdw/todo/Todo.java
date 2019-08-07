@@ -1,10 +1,7 @@
 package net.avdw.todo;
 
 import com.google.inject.Inject;
-import net.avdw.todo.action.TodoAdd;
-import net.avdw.todo.action.TodoDone;
-import net.avdw.todo.action.TodoList;
-import net.avdw.todo.action.TodoRemove;
+import net.avdw.todo.action.*;
 import net.avdw.todo.admin.*;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -31,6 +28,7 @@ import java.nio.file.Path;
                 TodoClear.class,
                 TodoList.class,
                 TodoAdd.class,
+                TodoStart.class,
                 TodoDone.class,
                 TodoRemove.class
         })
