@@ -17,4 +17,8 @@ public class Console {
     public static void error(String text) {
         System.out.println(String.format("err %s", text));
     }
+
+    public static void blank() {
+        System.out.println();
+    }
 }

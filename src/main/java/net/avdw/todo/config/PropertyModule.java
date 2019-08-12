@@ -1,0 +1,48 @@
+package net.avdw.todo.config;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
+import net.avdw.todo.Console;
+import net.avdw.todo.Global;
+import net.avdw.todo.Property;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Properties;
+
+public class PropertyModule extends AbstractModule {
+    public static final String TODO_PATHS = "todo.paths";
+
+    private static final String propertyFile = "todo.properties";
+
+    @Provides
+    @Singleton
+    @Property
+    Path propertyPath(@Global Path globalPath) {
+        return globalPath.resolve(propertyFile);
+    }
+
+    @Provides
+    @Singleton
+    Properties properties(@Property Path propertyPath) {
+        Properties properties = new Properties();
+        if (Files.exists(propertyPath)) {
+            try {
+                properties.load(new FileReader(propertyPath.toFile()));
+            } catch (IOException e) {
+                Console.error("Could not load property file");
+            }
+        } else {
+            try {
+                properties.store(new FileWriter(propertyPath.toFile()), "Todo Properties");
+            } catch (IOException e) {
+                Console.error("Could not save property file");
+            }
+        }
+        return properties;
+    }
+}

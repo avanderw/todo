@@ -1,5 +1,5 @@
 (A) 2019-07-24 Add +README to @document installation with alias
-(A) 2019-08-12 Add all known repositories to +status check @1d @develop start:2019-08-12
+x 2019-08-12 2019-08-12 Add all known repositories to +status check @1d @develop start:2019-08-12
 (B) 2019-07-23 Add default show all +properties
 2019-06-20 Add warning when adding duplicates +admin
 2019-07-09 Add +admin +archive
@@ -53,3 +53,4 @@ x 2019-07-30 2019-07-30 Add feature to +migrate items from local to global and v
 x 2019-08-07 2019-07-26 Add +start feature to indicate when todo was started start:2019-08-07
 x 2019-08-12 2019-07-23 Add priority +priority start:2019-08-12
 x 2019-08-12 2019-07-26 Add +in-progress feature to indicate what todos have been started start:2019-08-07
+2019-08-12 Add google +sync support @research

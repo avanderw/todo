@@ -3,13 +3,21 @@ package net.avdw.todo;
 import com.google.inject.Inject;
 import net.avdw.todo.action.*;
 import net.avdw.todo.admin.*;
+import net.avdw.todo.config.PropertyModule;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.HelpCommand;
 import picocli.CommandLine.Option;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Command(name = "todo",
         description = "The procrastination tool",
@@ -51,6 +59,13 @@ public class Todo implements Runnable {
     @Local
     public Path localPath;
 
+    @Inject
+    Properties properties;
+
+    @Inject
+    @Property
+    Path propertyPath;
+
     public void run() {
         Path directory = getDirectory();
 
@@ -72,8 +87,26 @@ public class Todo implements Runnable {
             return globalPath;
         }
     }
+
     public Path getTodoFile() {
-        return getDirectory().resolve("todo.txt");
+        Path directory = getDirectory();
+        if (Files.exists(directory)) {
+            Set<String> paths;
+            if (properties.containsKey(PropertyModule.TODO_PATHS)) {
+                paths = Arrays.stream(properties.getProperty(PropertyModule.TODO_PATHS).split(",")).collect(Collectors.toSet());
+            } else {
+                paths = new HashSet<>();
+            }
+            paths.add(directory.toAbsolutePath().toString());
+
+            try {
+                properties.setProperty(PropertyModule.TODO_PATHS, String.join(",", paths));
+                properties.store(new FileWriter(propertyPath.toFile()), "Todo Properties");
+            } catch (IOException e) {
+                Console.error("Could not save property file");
+            }
+        }
+        return directory.resolve("todo.txt");
     }
 
     public Path getBackupFile() {
