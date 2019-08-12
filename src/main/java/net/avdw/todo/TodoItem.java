@@ -20,7 +20,7 @@ public class TodoItem {
     }
 
     public boolean isStarted() {
-        return line.contains("started:");
+        return line.contains("start:");
     }
 
     @Override
@@ -99,4 +99,7 @@ public class TodoItem {
         return line;
     }
 
+    public boolean isInProgress() {
+        return isStarted();
+    }
 }

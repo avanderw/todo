@@ -27,6 +27,9 @@ public class TodoList implements Runnable {
     @Option(names = {"-c", "--contexts"}, description = "List contexts")
     private boolean showContexts;
 
+    @Option(names = {"-w", "--in-progress"}, description = "List in progress items")
+    private boolean inProgress;
+
     @Override
     public void run() {
         Logger.debug(String.format("Filters: %s", filters));
@@ -50,11 +53,21 @@ public class TodoList implements Runnable {
                         completed++;
                     }
                     if (filters.stream().map(String::toLowerCase).allMatch(line.toLowerCase()::contains)) {
-                        matched++;
                         projects.addAll(item.getProjects());
                         contexts.addAll(item.getContexts());
-                        if (!(showProjects || showContexts)) {
-                            Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, lineNum, Ansi.Reset, item));
+
+                        if (inProgress) {
+                            if (item.isInProgress()) {
+                                matched++;
+                                if (!(showProjects || showContexts)) {
+                                    Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, lineNum, Ansi.Reset, item));
+                                }
+                            }
+                        } else {
+                            matched++;
+                            if (!(showProjects || showContexts)) {
+                                Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, lineNum, Ansi.Reset, item));
+                            }
                         }
                     }
                 }
