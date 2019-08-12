@@ -40,7 +40,7 @@ public class TodoStart implements Runnable {
 
                     Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, idx, Ansi.Reset, line.get()));
                     Console.divide();
-                    Console.info(String.format("%s", new TodoItem(startedLine)));
+                    Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, idx, Ansi.Reset, new TodoItem(startedLine)));
                 }
             } catch (IOException e) {
                 Console.error(String.format("Error writing `%s`", todo.getTodoFile()));
