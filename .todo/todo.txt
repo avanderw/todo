@@ -1,19 +1,19 @@
-2019-06-20 Add warning when adding duplicates @admin
-2019-07-09 Add @admin +archive
+(A) 2019-07-24 Add +README to @document installation with alias
+(A) 2019-08-12 Add all known repositories to +status check @1d @develop start:2019-08-12
+(B) 2019-07-23 Add default show all +properties
+2019-06-20 Add warning when adding duplicates +admin
+2019-07-09 Add +admin +archive
 2019-07-09 Add auto +archive +properties
 2019-07-23 Add @reporting for duration +report
 2019-07-23 Add allow duplicate +properties
 2019-07-23 Add auto +sort +properties
 2019-07-23 Add auto startdate +properties
-2019-07-23 Add default show all +properties
 2019-07-23 Add editor +properties
-x 2019-08-12 2019-07-23 Add priority +priority start:2019-08-12
 2019-07-23 Enhance +list of contexts to contain counts
 2019-07-23 Enhance +list of projects to contain counts
 2019-07-23 Fix @bug when global +repository does not exist
 2019-07-23 Refactor +log level to +properties
 2019-07-23 Refactor task +styling to template
-2019-07-24 Add +README to @document installation with alias
 2019-07-24 Add +backup option to state changing operations
 2019-07-24 Add +tag functionality to append text
 2019-07-24 Enhance +status check to show the amount of items in each repository
@@ -24,7 +24,6 @@ x 2019-08-12 2019-07-23 Add priority +priority start:2019-08-12
 2019-07-26 Add +clean feature which will remove blank lines
 2019-07-26 Add +clean feature which will remove duplicates
 2019-07-26 Add +consolodate functionality to view all aware todo directories
-x 2019-08-12 2019-07-26 Add +in-progress feature to indicate what todos have been started start:2019-08-07
 2019-07-26 Add @reporting on todo, in-progress and done for previous months +report
 2019-07-26 Add auto +priority +property for +start functionality
 2019-07-26 Enhance +start feature to update priority to (S) if none is assinged and the option is provided
@@ -43,12 +42,14 @@ x 2019-07-24 2019-07-23 Add add +add
 x 2019-07-24 2019-07-23 Add done +done
 x 2019-07-24 2019-07-24 Enhance +list of projects and contexts to only show when requested
 x 2019-07-24 2019-07-24 Remove priority when task is +done
-x 2019-07-25 2019-07-09 Add @admin +sort
+x 2019-07-25 2019-07-09 Add +admin +sort
 x 2019-07-25 2019-07-23 Add remove +remove
 x 2019-07-25 2019-07-23 Add versioning command +support
 x 2019-07-25 2019-07-24 Add +clear functionality for stale .todo directories
-x 2019-07-25 2019-07-25 Add +rename @admin functionality
+x 2019-07-25 2019-07-25 Add +rename +admin functionality
 x 2019-07-30 2019-07-24 Add +init functionality start:2019-07-25
 x 2019-07-30 2019-07-24 Improve performance of the +add command
 x 2019-07-30 2019-07-30 Add feature to +migrate items from local to global and visa versa
 x 2019-08-07 2019-07-26 Add +start feature to indicate when todo was started start:2019-08-07
+x 2019-08-12 2019-07-23 Add priority +priority start:2019-08-12
+x 2019-08-12 2019-07-26 Add +in-progress feature to indicate what todos have been started start:2019-08-07

@@ -10,11 +10,11 @@ import java.util.Scanner;
 
 public class TodoReader {
 
-    private boolean showAll;
+    private Todo todo;
 
     @Inject
-    public TodoReader(Boolean showAll) {
-        this.showAll = showAll;
+    public TodoReader(Todo todo) {
+        this.todo = todo;
     }
 
     public Optional<TodoItem> readLine(Path todoFile, int idx) {
@@ -24,7 +24,7 @@ public class TodoReader {
             while (scanner.hasNext()) {
                 String line = scanner.nextLine();
                 TodoItem item = new TodoItem(line);
-                if (item.isNotDone() || showAll) {
+                if (item.isNotDone() || todo.showAll()) {
                     lineNum++;
                     if (lineNum == idx) {
                         readLine = item;

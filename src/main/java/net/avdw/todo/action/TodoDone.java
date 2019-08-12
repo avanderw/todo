@@ -1,5 +1,6 @@
 package net.avdw.todo.action;
 
+import com.google.inject.Inject;
 import net.avdw.todo.*;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
@@ -20,9 +21,12 @@ public class TodoDone implements Runnable {
     @Parameters(description = "Index to complete", arity = "1")
     private int idx;
 
+    @Inject
+    TodoReader reader;
+
     @Override
     public void run() {
-        Optional<TodoItem> line = new TodoReader(todo.showAll()).readLine(todo.getTodoFile(), idx);
+        Optional<TodoItem> line = reader.readLine(todo.getTodoFile(), idx);
         if (line.isPresent() && line.get().isNotDone()) {
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
