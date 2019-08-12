@@ -6,6 +6,7 @@ import com.google.inject.Singleton;
 import net.avdw.todo.Console;
 import net.avdw.todo.Global;
 import net.avdw.todo.Property;
+import net.avdw.todo.action.TodoAdd;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -16,6 +17,7 @@ import java.util.Properties;
 
 public class PropertyModule extends AbstractModule {
     public static final String TODO_PATHS = "todo.paths";
+    public static final String AUTO_DATE_ADD = String.format("%s.date", TodoAdd.class.getCanonicalName());
 
     private static final String propertyFile = "todo.properties";
 

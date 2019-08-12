@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
         subcommands = {
                 HelpCommand.class,
                 TodoInit.class,
+                TodoSet.class,
                 TodoStatus.class,
                 TodoBackup.class,
                 TodoRestore.class,
@@ -73,7 +74,7 @@ public class Todo implements Runnable {
             Console.info(String.format("Directory: %s", directory));
             CommandLine.usage(Todo.class, System.out);
         } else {
-            System.out.println("No directory found (or any of the parent directories)");
+            Console.error("No directory found (or any of the parent directories)");
             CommandLine.usage(TodoInit.class, System.out);
         }
     }
@@ -93,14 +94,14 @@ public class Todo implements Runnable {
         if (Files.exists(directory)) {
             Set<String> paths;
             if (properties.containsKey(PropertyModule.TODO_PATHS)) {
-                paths = Arrays.stream(properties.getProperty(PropertyModule.TODO_PATHS).split(",")).collect(Collectors.toSet());
+                paths = Arrays.stream(properties.getProperty(PropertyModule.TODO_PATHS).split(";")).collect(Collectors.toSet());
             } else {
                 paths = new HashSet<>();
             }
             paths.add(directory.toAbsolutePath().toString());
 
             try {
-                properties.setProperty(PropertyModule.TODO_PATHS, String.join(",", paths));
+                properties.setProperty(PropertyModule.TODO_PATHS, String.join(";", paths));
                 properties.store(new FileWriter(propertyPath.toFile()), "Todo Properties");
             } catch (IOException e) {
                 Console.error("Could not save property file");

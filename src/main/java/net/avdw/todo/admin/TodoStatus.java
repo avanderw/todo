@@ -38,7 +38,7 @@ public class TodoStatus implements Runnable {
         Console.blank();
         Console.h1("Known Paths");
         if (properties.containsKey(PropertyModule.TODO_PATHS)) {
-            Arrays.stream(properties.getProperty(PropertyModule.TODO_PATHS).split(",")).forEach(Console::info);
+            Arrays.stream(properties.getProperty(PropertyModule.TODO_PATHS).split(";")).forEach(Console::info);
         } else {
             Console.info("No paths found");
         }
