@@ -35,7 +35,7 @@ public class TodoDone implements Runnable {
 
                 Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, idx, Ansi.Reset, line.get()));
                 Console.divide();
-                Console.info(String.format("%s", new TodoItem(completeLine)));
+                Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, idx, Ansi.Reset, new TodoItem(completeLine)));
             } catch (IOException e) {
                 Console.error(String.format("Error writing `%s`", todo.getTodoFile()));
                 Logger.error(e);

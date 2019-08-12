@@ -7,7 +7,7 @@
 2019-07-23 Add auto startdate +properties
 2019-07-23 Add default show all +properties
 2019-07-23 Add editor +properties
-2019-07-23 Add priority +priority
+x 2019-08-12 2019-07-23 Add priority +priority start:2019-08-12
 2019-07-23 Enhance +list of contexts to contain counts
 2019-07-23 Enhance +list of projects to contain counts
 2019-07-23 Fix @bug when global +repository does not exist

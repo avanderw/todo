@@ -102,4 +102,8 @@ public class TodoItem {
     public boolean isInProgress() {
         return isStarted();
     }
+
+    public boolean hasPriority() {
+        return line.matches("^\\([A-Z]\\).*");
+    }
 }

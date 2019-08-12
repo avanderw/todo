@@ -29,6 +29,7 @@ import java.nio.file.Path;
                 TodoList.class,
                 TodoAdd.class,
                 TodoStart.class,
+                TodoPriority.class,
                 TodoDone.class,
                 TodoRemove.class
         })
