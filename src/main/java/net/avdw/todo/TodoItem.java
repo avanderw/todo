@@ -1,6 +1,9 @@
 package net.avdw.todo;
 
+import net.avdw.todo.action.TodoPriority;
+
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -105,5 +108,13 @@ public class TodoItem {
 
     public boolean hasPriority() {
         return line.matches("^\\([A-Z]\\).*");
+    }
+
+    public Optional<TodoPriority.Priority> getPriority() {
+        if (!hasPriority()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(TodoPriority.Priority.valueOf(line.substring(line.indexOf("(")+1, line.indexOf(")"))));
     }
 }

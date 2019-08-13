@@ -1,12 +1,10 @@
-(A) 2019-07-23 Add auto startdate +properties start:2019-08-12
-(A) 2019-08-12 Enhance +priority to allow for removal
-(B) 2019-07-23 Add default show all +properties
 2019-06-20 Add warning when adding duplicates +admin
 2019-07-09 Add +admin +archive
 2019-07-09 Add auto +archive +properties
 2019-07-23 Add @reporting for duration +report
 2019-07-23 Add allow duplicate +properties
 2019-07-23 Add auto +sort +properties
+2019-07-23 Add default show all +properties
 2019-07-23 Add editor +properties
 2019-07-23 Enhance +list of contexts to contain counts
 2019-07-23 Enhance +list of projects to contain counts
@@ -41,7 +39,12 @@
 2019-08-12 Enhance +report to list completely done projects and their done date
 2019-08-12 Enhance +report to list contexts and projects with priority
 2019-08-12 Enhance +report to list done items by day dating back x days with omit option
+2019-08-12 Enhance +report to show lead and cycle time
 2019-08-12 Fix +rename when using + on term to replace with
+2019-08-12 Fix bug when resolving parent directory in nested directories
+2019-08-13 Add +top command to list top x todos
+2019-08-13 Fix bug when listing projects and there is an empty project
+2019-08-13 Fix cannot find index bug when removing index on completed item from all items
 x 2019-07-18 2019-06-19 Add +repository lookup
 x 2019-07-19 2019-07-09 Add +edit of todo file
 x 2019-07-23 2019-07-23 Add list filter +list
@@ -63,7 +66,8 @@ x 2019-07-30 2019-07-24 Add +init functionality start:2019-07-25
 x 2019-07-30 2019-07-24 Improve performance of the +add command
 x 2019-07-30 2019-07-30 Add feature to +migrate items from local to global and visa versa
 x 2019-08-07 2019-07-26 Add +start feature to indicate when todo was started start:2019-08-07
+x 2019-08-12 2019-07-23 Add auto startdate +properties start:2019-08-12
 x 2019-08-12 2019-07-23 Add priority +priority start:2019-08-12
 x 2019-08-12 2019-07-26 Add +in-progress feature to indicate what todos have been started start:2019-08-07
 x 2019-08-12 2019-08-12 Add all known repositories to +status check @1d @develop start:2019-08-12
-2019-08-12 Fix bug when resolving parent directory in nested directories
+x 2019-08-13 2019-08-12 Enhance +priority to allow for removal start:2019-08-13
