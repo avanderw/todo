@@ -21,7 +21,7 @@
 2019-07-26 Add +clean feature which will add priority to started items
 2019-07-26 Add +clean feature which will remove blank lines
 2019-07-26 Add +clean feature which will remove duplicates
-2019-07-26 Add +consolodate functionality to view all aware todo directories
+(A) 2019-07-26 Add +consolodate functionality to view all aware todo directories
 2019-07-26 Add @reporting on todo, in-progress and done for previous months +report
 2019-07-26 Add auto +priority +property for +start functionality
 2019-07-26 Enhance +start feature to update priority to (S) if none is assinged and the option is provided
@@ -44,7 +44,7 @@
 2019-08-12 Fix bug when resolving parent directory in nested directories
 2019-08-13 Add +append functionality
 x 2019-08-13 2019-08-13 Add +top command to list top x todos start:2019-08-13
-2019-08-13 Add clean +priority option, which will remove all priorities
+x 2019-08-13 2019-08-13 Add clean +priority option, which will remove all priorities start:2019-08-13
 2019-08-13 Enhance +explore to be OS independant
 2019-08-13 Fix bug when listing projects and there is an empty project
 2019-08-13 Fix cannot find index bug when removing index on completed item from all items
@@ -76,3 +76,4 @@ x 2019-08-12 2019-08-12 Add all known repositories to +status check @1d @develop
 x 2019-08-13 2019-08-12 Enhance +priority to allow for removal start:2019-08-13
 x 2019-08-13 2019-08-13 Add +explore command to open directory start:2019-08-13
 x 2019-08-13 2019-08-13 Add listing of only +priority items start:2019-08-13
+2019-08-13 Fix bug in +remove not finding completed items when listing all

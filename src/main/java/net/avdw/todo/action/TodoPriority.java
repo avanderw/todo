@@ -4,23 +4,22 @@ import com.google.inject.Inject;
 import net.avdw.todo.*;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
-import picocli.CommandLine.Option;
-import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
+import picocli.CommandLine.Parameters;
+import picocli.CommandLine.Option;
+import picocli.CommandLine.ArgGroup;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.Scanner;
 
 @Command(name = "pri", description = "Prioritize a todo item")
 public class TodoPriority implements Runnable {
     @ParentCommand
     private Todo todo;
-
-    @Parameters(description = "Index to prioritize", arity = "1", index = "0")
-    private int idx;
 
     @Parameters(description = "Priority to assign. Valid values: ${COMPLETION-CANDIDATES}", arity = "0..1", index = "1")
     private Priority priority;
@@ -28,42 +27,74 @@ public class TodoPriority implements Runnable {
     @Option(names = {"-r", "--remove"}, description = "Remove priority from index")
     private boolean remove;
 
+    @ArgGroup(multiplicity = "1")
+    private Exclusive exclusive;
+
+    static class Exclusive {
+        @Parameters(description = "Index to prioritize", arity = "1", index = "0")
+        private int idx;
+
+        @Option(names = "--clean", description = "Remove all priorities")
+        private boolean clean;
+    }
+
     @Inject
     private TodoReader reader;
 
     @Override
     public void run() {
-        Optional<TodoItem> line = reader.readLine(todo.getTodoFile(), idx);
-
-        if (line.isPresent()) {
-            String newLine = null;
-            if (remove) {
-                newLine = line.get().rawValue().replaceFirst("\\([A-Z]\\)\\s", "");
-            } else if (line.get().isDone()) {
-                Console.error("Priority cannot be assigned to complete items");
-            } else {
-                if (line.get().hasPriority()) {
-                    if (priority == null) {
-                        priority = line.get().getPriority().orElse(Priority.A);
-                        priority = priority.promote();
+        if (exclusive.clean) {
+            try (Scanner scanner = new Scanner(todo.getTodoFile())) {
+                Console.info("Removing priority from all items");
+                int idx = 0;
+                while (scanner.hasNext()) {
+                    String raw = scanner.nextLine();
+                    TodoItem item = new TodoItem(raw);
+                    if (item.isNotDone()) {
+                        idx++;
                     }
-                    newLine = line.get().rawValue().replaceFirst("\\([A-Z]\\)", String.format("(%s)", priority.name()));
-                } else {
-                    if (priority == null) {
-                        priority = Priority.A;
+                    if (item.hasPriority()) {
+                        String newValue = item.rawValue().replaceFirst("^\\([A-Z]\\)\\s", "");
+                        replace(item.rawValue(), newValue, todo.getTodoFile());
+                        Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, idx, Ansi.Reset, new TodoItem(newValue)));
                     }
-                    newLine = String.format("(%s) %s", priority.name(), line.get().rawValue());
                 }
-            }
-            if (newLine != null) {
-                replace(line.get().rawValue(), newLine, todo.getTodoFile());
-
-                Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, idx, Ansi.Reset, line.get()));
-                Console.divide();
-                Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, idx, Ansi.Reset, new TodoItem(newLine)));
+            } catch (IOException e) {
+                Console.error(String.format("Could not read file %s", todo.getTodoFile()));
             }
         } else {
-            Console.error(String.format("Could not find index (%s)", idx));
+            Optional<TodoItem> line = reader.readLine(todo.getTodoFile(), exclusive.idx);
+
+            if (line.isPresent()) {
+                String newLine = null;
+                if (remove) {
+                    newLine = line.get().rawValue().replaceFirst("\\([A-Z]\\)\\s", "");
+                } else if (line.get().isDone()) {
+                    Console.error("Priority cannot be assigned to complete items");
+                } else {
+                    if (line.get().hasPriority()) {
+                        if (priority == null) {
+                            priority = line.get().getPriority().orElse(Priority.A);
+                            priority = priority.promote();
+                        }
+                        newLine = line.get().rawValue().replaceFirst("\\([A-Z]\\)", String.format("(%s)", priority.name()));
+                    } else {
+                        if (priority == null) {
+                            priority = Priority.A;
+                        }
+                        newLine = String.format("(%s) %s", priority.name(), line.get().rawValue());
+                    }
+                }
+                if (newLine != null) {
+                    replace(line.get().rawValue(), newLine, todo.getTodoFile());
+
+                    Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, exclusive.idx, Ansi.Reset, line.get()));
+                    Console.divide();
+                    Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, exclusive.idx, Ansi.Reset, new TodoItem(newLine)));
+                }
+            } else {
+                Console.error(String.format("Could not find index (%s)", exclusive.idx));
+            }
         }
     }
 
@@ -81,6 +112,7 @@ public class TodoPriority implements Runnable {
         A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z;
 
         private static final HashMap<Priority, Priority> promote = new HashMap<>();
+
         static {
             promote.put(Priority.A, Priority.A);
             promote.put(Priority.B, Priority.A);
@@ -109,6 +141,7 @@ public class TodoPriority implements Runnable {
             promote.put(Priority.Y, Priority.X);
             promote.put(Priority.Z, Priority.Y);
         }
+
         Priority promote() {
             return promote.get(this);
         }
