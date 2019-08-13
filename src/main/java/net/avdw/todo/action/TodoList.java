@@ -33,6 +33,9 @@ public class TodoList implements Runnable {
     @Option(names = "--priority", description = "List priority items")
     private boolean onlyPriority;
 
+    @Option(names = {"-l", "--limit"}, description = "Limit the amount of items shown")
+    private int limit = Integer.MAX_VALUE;
+
     @Override
     public void run() {
         Logger.debug(String.format("Filters: %s", filters));
@@ -46,7 +49,7 @@ public class TodoList implements Runnable {
             int completed = 0;
             Set<String> projects = new HashSet<>();
             Set<String> contexts = new HashSet<>();
-            while (scanner.hasNext()) {
+            while (scanner.hasNext() && matched < limit) {
                 String line = scanner.nextLine();
                 TodoItem item = new TodoItem(line);
 
@@ -92,9 +95,17 @@ public class TodoList implements Runnable {
 
             Console.divide();
             if (todo.showAll()) {
-                Console.info(String.format("TODO: %s of %s (%s done) tasks", matched, lineNum, completed));
+                if (matched == limit) {
+                    Console.info(String.format("TODO: %s (%s done) of ... (limited to %s) tasks shown", matched, completed, limit));
+                } else {
+                    Console.info(String.format("TODO: %s (%s done) of %s tasks shown", matched, completed, lineNum));
+                }
             } else {
-                Console.info(String.format("TODO: %s of %s tasks", matched, lineNum));
+                if (matched == limit) {
+                    Console.info(String.format("TODO: %s of ... (limited to %s) tasks shown", matched, limit));
+                } else {
+                    Console.info(String.format("TODO: %s of %s tasks shown", matched, lineNum));
+                }
             }
             if (showProjects) {
                 Console.info(String.format("projects: %s", projects));

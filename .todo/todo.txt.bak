@@ -42,7 +42,10 @@
 2019-08-12 Enhance +report to show lead and cycle time
 2019-08-12 Fix +rename when using + on term to replace with
 2019-08-12 Fix bug when resolving parent directory in nested directories
-2019-08-13 Add +top command to list top x todos
+2019-08-13 Add +append functionality
+2019-08-13 Add +top command to list top x todos start:2019-08-13
+2019-08-13 Add clean +priority option, which will remove all priorities
+2019-08-13 Enhance +explore to be OS independant
 2019-08-13 Fix bug when listing projects and there is an empty project
 2019-08-13 Fix cannot find index bug when removing index on completed item from all items
 x 2019-07-18 2019-06-19 Add +repository lookup
@@ -71,3 +74,5 @@ x 2019-08-12 2019-07-23 Add priority +priority start:2019-08-12
 x 2019-08-12 2019-07-26 Add +in-progress feature to indicate what todos have been started start:2019-08-07
 x 2019-08-12 2019-08-12 Add all known repositories to +status check @1d @develop start:2019-08-12
 x 2019-08-13 2019-08-12 Enhance +priority to allow for removal start:2019-08-13
+x 2019-08-13 2019-08-13 Add +explore command to open directory start:2019-08-13
+x 2019-08-13 2019-08-13 Add listing of only +priority items start:2019-08-13
