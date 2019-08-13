@@ -30,6 +30,9 @@ public class TodoList implements Runnable {
     @Option(names = {"-w", "--in-progress"}, description = "List in progress items")
     private boolean inProgress;
 
+    @Option(names = "--priority", description = "List priority items")
+    private boolean onlyPriority;
+
     @Override
     public void run() {
         Logger.debug(String.format("Filters: %s", filters));
@@ -56,7 +59,21 @@ public class TodoList implements Runnable {
                         projects.addAll(item.getProjects());
                         contexts.addAll(item.getContexts());
 
-                        if (inProgress) {
+                        if (onlyPriority && inProgress) {
+                            if (item.hasPriority() && item.isInProgress()) {
+                                matched++;
+                                if (!(showProjects || showContexts)) {
+                                    Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, lineNum, Ansi.Reset, item));
+                                }
+                            }
+                        } else if (onlyPriority) {
+                            if (item.hasPriority()) {
+                                matched++;
+                                if (!(showProjects || showContexts)) {
+                                    Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, lineNum, Ansi.Reset, item));
+                                }
+                            }
+                        } else if (inProgress) {
                             if (item.isInProgress()) {
                                 matched++;
                                 if (!(showProjects || showContexts)) {
