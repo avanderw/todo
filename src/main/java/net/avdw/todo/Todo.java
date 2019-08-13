@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
                 TodoRestore.class,
                 TodoSort.class,
                 TodoEdit.class,
+                TodoExplore.class,
                 TodoMigrate.class,
                 TodoRename.class,
                 TodoClear.class,

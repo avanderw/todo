@@ -71,3 +71,8 @@ x 2019-08-12 2019-07-23 Add priority +priority start:2019-08-12
 x 2019-08-12 2019-07-26 Add +in-progress feature to indicate what todos have been started start:2019-08-07
 x 2019-08-12 2019-08-12 Add all known repositories to +status check @1d @develop start:2019-08-12
 x 2019-08-13 2019-08-12 Enhance +priority to allow for removal start:2019-08-13
+2019-08-13 Add listing of only +priority items start:2019-08-13
+2019-08-13 Add +append functionality
+x 2019-08-13 2019-08-13 Add +explore command to open directory start:2019-08-13
+2019-08-13 Enhance +explore to be OS independant
+2019-08-13 Add clean +priority option, which will remove all priorities

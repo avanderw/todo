@@ -25,7 +25,7 @@ public class TodoPriority implements Runnable {
     @Parameters(description = "Priority to assign. Valid values: ${COMPLETION-CANDIDATES}", arity = "0..1", index = "1")
     private Priority priority;
 
-    @Option(names = {"-r", "--remove"})
+    @Option(names = {"-r", "--remove"}, description = "Remove priority from index")
     private boolean remove;
 
     @Inject
