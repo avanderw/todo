@@ -11,7 +11,12 @@ import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.HashSet;
+
 
 @Command(name = "ls", description = "List the items in todo.txt")
 public class TodoList implements Runnable {

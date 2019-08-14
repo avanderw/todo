@@ -16,9 +16,6 @@ public class TodoModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        install(new LoggingModule());
-        install(new ProfilingModule());
-
         Path globalPath = Paths.get(System.getProperty("user.home")).resolve(dataDirectory);
         bind(Path.class).annotatedWith(Execution.class).toInstance(Paths.get(""));
         bind(Path.class).annotatedWith(Global.class).toInstance(globalPath);
