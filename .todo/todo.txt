@@ -14,7 +14,7 @@
 2019-07-24 Add +README to @document installation with alias
 2019-07-24 Add +backup option to state changing operations
 2019-07-24 Add +tag functionality to append text
-2019-07-24 Enhance +status check to show the amount of items in each repository
+x 2019-08-14 2019-07-24 Enhance +status check to show the amount of items in each repository start:2019-08-14
 2019-07-24 Enhance +status to show projects and contexts for each repository
 2019-07-25 Fix @bug in +add to global list when it does not exist
 2019-07-25 Fix @bug when +add with tilde is used in command prompt
@@ -79,3 +79,4 @@ x 2019-08-13 2019-08-13 Add clean +priority option, which will remove all priori
 x 2019-08-13 2019-08-13 Add listing of only +priority items start:2019-08-13
 2019-08-13 Enhance empty +priority to choose next available priority
 x 2019-08-14 2019-08-14 Fix bug when adding specified +priority start:2019-08-14
+2019-08-14 Add +report in the style of github contribution graph

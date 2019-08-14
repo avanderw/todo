@@ -9,6 +9,7 @@ import picocli.CommandLine.ParentCommand;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Properties;
 
@@ -38,7 +39,10 @@ public class TodoStatus implements Runnable {
         Console.blank();
         Console.h1("Known Paths");
         if (properties.containsKey(PropertyModule.TODO_PATHS)) {
-            Arrays.stream(properties.getProperty(PropertyModule.TODO_PATHS).split(";")).forEach(Console::info);
+            Arrays.stream(properties.getProperty(PropertyModule.TODO_PATHS).split(";")).forEach(path -> {
+                TodoDirectory todoDirectory = new TodoDirectory(Paths.get(path));
+                Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, todoDirectory.numIncompleteItems(), Ansi.Reset, path));
+            });
         } else {
             Console.info("No paths found");
         }
