@@ -78,4 +78,4 @@ x 2019-08-13 2019-08-13 Add +top command to list top x todos start:2019-08-13
 x 2019-08-13 2019-08-13 Add clean +priority option, which will remove all priorities start:2019-08-13
 x 2019-08-13 2019-08-13 Add listing of only +priority items start:2019-08-13
 2019-08-13 Enhance empty +priority to choose next available priority
-2019-08-14 Fix bug when adding specified +priority
+x 2019-08-14 2019-08-14 Fix bug when adding specified +priority start:2019-08-14

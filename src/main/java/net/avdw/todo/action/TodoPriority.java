@@ -3,11 +3,11 @@ package net.avdw.todo.action;
 import com.google.inject.Inject;
 import net.avdw.todo.*;
 import org.pmw.tinylog.Logger;
+import picocli.CommandLine;
 import picocli.CommandLine.Command;
-import picocli.CommandLine.ParentCommand;
-import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Option;
-import picocli.CommandLine.ArgGroup;
+import picocli.CommandLine.Parameters;
+import picocli.CommandLine.ParentCommand;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,23 +27,18 @@ public class TodoPriority implements Runnable {
     @Option(names = {"-r", "--remove"}, description = "Remove priority from index")
     private boolean remove;
 
-    @ArgGroup(multiplicity = "1")
-    private Exclusive exclusive;
+    @Parameters(description = "Index to prioritize", arity = "0..1", index = "0")
+    private int idx;
 
-    static class Exclusive {
-        @Parameters(description = "Index to prioritize", arity = "1", index = "0")
-        private int idx;
-
-        @Option(names = "--clean", description = "Remove all priorities")
-        private boolean clean;
-    }
+    @Option(names = "--clean", description = "Remove all priorities")
+    private boolean clean;
 
     @Inject
     private TodoReader reader;
 
     @Override
     public void run() {
-        if (exclusive.clean) {
+        if (clean) {
             try (Scanner scanner = new Scanner(todo.getTodoFile())) {
                 Console.info("Removing priority from all items");
                 int idx = 0;
@@ -62,8 +57,10 @@ public class TodoPriority implements Runnable {
             } catch (IOException e) {
                 Console.error(String.format("Could not read file %s", todo.getTodoFile()));
             }
+        } else if (idx == 0) {
+            CommandLine.usage(TodoPriority.class, System.out);
         } else {
-            Optional<TodoItem> line = reader.readLine(todo.getTodoFile(), exclusive.idx);
+            Optional<TodoItem> line = reader.readLine(todo.getTodoFile(), idx);
 
             if (line.isPresent()) {
                 String newLine = null;
@@ -88,12 +85,12 @@ public class TodoPriority implements Runnable {
                 if (newLine != null) {
                     replace(line.get().rawValue(), newLine, todo.getTodoFile());
 
-                    Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, exclusive.idx, Ansi.Reset, line.get()));
+                    Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, idx, Ansi.Reset, line.get()));
                     Console.divide();
-                    Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, exclusive.idx, Ansi.Reset, new TodoItem(newLine)));
+                    Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, idx, Ansi.Reset, new TodoItem(newLine)));
                 }
             } else {
-                Console.error(String.format("Could not find index (%s)", exclusive.idx));
+                Console.error(String.format("Could not find index (%s)", idx));
             }
         }
     }
