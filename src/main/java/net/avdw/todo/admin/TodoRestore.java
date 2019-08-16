@@ -15,6 +15,9 @@ public class TodoRestore implements Runnable {
     @ParentCommand
     private Todo todo;
 
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
         try {

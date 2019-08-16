@@ -13,18 +13,21 @@ import java.nio.file.Path;
 import java.util.Properties;
 
 @Command(name = "set", description = "Set a property")
-public class TodoSet implements Runnable{
+public class TodoSet implements Runnable {
 
     @Option(names = "--auto-date-add", description = "Automatically add the date when creating a todo")
     private Boolean autoDateAdd;
 
     @Inject
-    Properties properties;
+    private Properties properties;
 
     @Inject
     @Property
-    Path propertyPath;
+    private Path propertyPath;
 
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
         if (autoDateAdd != null) {

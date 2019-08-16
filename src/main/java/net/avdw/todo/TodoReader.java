@@ -13,11 +13,20 @@ public class TodoReader {
     private Todo todo;
 
     @Inject
-    public TodoReader(Todo todo) {
+    public TodoReader(final Todo todo) {
         this.todo = todo;
     }
 
-    public Optional<TodoItem> readLine(Path todoFile, int idx) {
+    /**
+     * Find the todo item in the todo.txt file.
+     * Take into account the visibility of items configured when determining the index.
+     * Currently this method does not take into account filters.
+     *
+     * @param todoFile the file to search through
+     * @param idx the index in the file to find
+     * @return the todo item that was found
+     */
+    public Optional<TodoItem> readLine(final Path todoFile, final int idx) {
         TodoItem readLine = null;
         try (Scanner scanner = new Scanner(todoFile)) {
             int lineNum = 0;

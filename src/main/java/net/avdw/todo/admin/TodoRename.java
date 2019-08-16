@@ -24,6 +24,9 @@ public class TodoRename implements Runnable {
             arity = "1", index = "1")
     private String to;
 
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
         todo.backup();

@@ -9,8 +9,10 @@ import java.util.Set;
 
 public class TodoItem {
     private final String line;
+    private static final int DATE_LENGTH = 10;
+    private static final int PRIORITY_LENGTH = 3;
 
-    public TodoItem(String line) {
+    public TodoItem(final String line) {
         this.line = line;
     }
 
@@ -36,31 +38,31 @@ public class TodoItem {
         while (scanner.hasNext()) {
             String token = scanner.next();
             if (token.startsWith("x") && sb.length() == 0) {
-                sb.append(Ansi.Green);
+                sb.append(Ansi.GREEN);
             }
-            if (token.length() == 10 && token.startsWith("20")) {
-                if (sb.length() > Ansi.Green.length() &&
+            if (token.length() == DATE_LENGTH && token.startsWith("20")) {
+                if (sb.length() > Ansi.GREEN.length() &&
                         isDone() &&
-                        previousToken.length() != 10 &&
+                        previousToken.length() != DATE_LENGTH &&
                         !previousToken.startsWith("20")) {
                     if (!completedDate) {
-                        sb.append(Ansi.Green);
+                        sb.append(Ansi.GREEN);
                         completedDate = true;
                     }
                 } else {
                     if (!startDate) {
-                        sb.append(Ansi.White);
+                        sb.append(Ansi.WHITE);
                         startDate = true;
                     }
                 }
             } else if (token.startsWith("+")) {
-                sb.append(Ansi.Magenta);
+                sb.append(Ansi.MAGENTA);
             } else if (token.startsWith("@")) {
-                sb.append(Ansi.Cyan);
-            } else if (token.startsWith("(") && token.length() == 3 && token.endsWith(")")) {
-                sb.append(Ansi.Yellow);
+                sb.append(Ansi.CYAN);
+            } else if (token.startsWith("(") && token.length() == PRIORITY_LENGTH && token.endsWith(")")) {
+                sb.append(Ansi.YELLOW);
             } else if (token.contains(":")) {
-                sb.append(Ansi.Red);
+                sb.append(Ansi.RED);
             }
 
             sb.append(token);
@@ -68,7 +70,7 @@ public class TodoItem {
             if (scanner.hasNext()) {
                 sb.append(" ");
             }
-            sb.append(Ansi.Reset);
+            sb.append(Ansi.RESET);
             previousToken = token;
         }
         return sb.toString();
@@ -115,6 +117,6 @@ public class TodoItem {
             return Optional.empty();
         }
 
-        return Optional.of(TodoPriority.Priority.valueOf(line.substring(line.indexOf("(")+1, line.indexOf(")"))));
+        return Optional.of(TodoPriority.Priority.valueOf(line.substring(line.indexOf("(") + 1, line.indexOf(")"))));
     }
 }

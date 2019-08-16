@@ -34,8 +34,11 @@ public class TodoAdd implements Runnable {
     private boolean date;
 
     @Inject
-    Properties properties;
+    private Properties properties;
 
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
         if (date || Boolean.parseBoolean(String.valueOf(properties.getOrDefault(PropertyModule.AUTO_DATE_ADD, "false")))) {
@@ -54,14 +57,21 @@ public class TodoAdd implements Runnable {
             lineNum++;
 
             add(todo.getTodoFile(), addition);
-            Console.info(String.format("[%s%2s%s] %sAdded%s: %s", Ansi.Blue, lineNum, Ansi.Reset, Ansi.Green, Ansi.Reset, new TodoItem(addition)));
+            Console.info(String.format("[%s%2s%s] %sAdded%s: %s", Ansi.BLUE, lineNum, Ansi.RESET, Ansi.GREEN, Ansi.RESET, new TodoItem(addition)));
         } catch (IOException e) {
             Console.error(String.format("Could not add `%s` to `%s`", todo.getTodoFile(), addition));
             Logger.error(e);
         }
     }
 
-    public void add(Path toFile, String rawValue) {
+    /**
+     * Append text to the end of a file.
+     * The intention is to append a new todo in the file.
+     *
+     * @param toFile the file to append to
+     * @param rawValue the text value to append
+     */
+    public void add(final Path toFile, final String rawValue) {
         try (FileWriter fw = new FileWriter(toFile.toFile(), true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {

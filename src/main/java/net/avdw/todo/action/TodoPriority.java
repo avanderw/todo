@@ -36,22 +36,25 @@ public class TodoPriority implements Runnable {
     @Inject
     private TodoReader reader;
 
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
         if (clean) {
             try (Scanner scanner = new Scanner(todo.getTodoFile())) {
                 Console.info("Removing priority from all items");
-                int idx = 0;
+                int currIdx = 0;
                 while (scanner.hasNext()) {
                     String raw = scanner.nextLine();
                     TodoItem item = new TodoItem(raw);
                     if (item.isNotDone()) {
-                        idx++;
+                        currIdx++;
                     }
                     if (item.hasPriority()) {
                         String newValue = item.rawValue().replaceFirst("^\\([A-Z]\\)\\s", "");
                         replace(item.rawValue(), newValue, todo.getTodoFile());
-                        Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, idx, Ansi.Reset, new TodoItem(newValue)));
+                        Console.info(String.format("[%s%2s%s] %s", Ansi.BLUE, currIdx, Ansi.RESET, new TodoItem(newValue)));
                     }
                 }
             } catch (IOException e) {
@@ -85,9 +88,9 @@ public class TodoPriority implements Runnable {
                 if (newLine != null) {
                     replace(line.get().rawValue(), newLine, todo.getTodoFile());
 
-                    Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, idx, Ansi.Reset, line.get()));
+                    Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, line.get()));
                     Console.divide();
-                    Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, idx, Ansi.Reset, new TodoItem(newLine)));
+                    Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItem(newLine)));
                 }
             } else {
                 Console.error(String.format("Could not find index (%s)", idx));
@@ -95,7 +98,7 @@ public class TodoPriority implements Runnable {
         }
     }
 
-    private void replace(String line, String newLine, Path fromFile) {
+    private void replace(final String line, final String newLine, final Path fromFile) {
         try {
             String contents = new String(Files.readAllBytes(fromFile));
             Files.write(fromFile, contents.replace(line, newLine).getBytes());
@@ -108,39 +111,39 @@ public class TodoPriority implements Runnable {
     public enum Priority {
         A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z;
 
-        private static final HashMap<Priority, Priority> promote = new HashMap<>();
+        private static final HashMap<Priority, Priority> PROMOTE = new HashMap<>();
 
         static {
-            promote.put(Priority.A, Priority.A);
-            promote.put(Priority.B, Priority.A);
-            promote.put(Priority.C, Priority.B);
-            promote.put(Priority.D, Priority.C);
-            promote.put(Priority.E, Priority.D);
-            promote.put(Priority.F, Priority.E);
-            promote.put(Priority.G, Priority.F);
-            promote.put(Priority.H, Priority.G);
-            promote.put(Priority.I, Priority.H);
-            promote.put(Priority.J, Priority.I);
-            promote.put(Priority.K, Priority.J);
-            promote.put(Priority.L, Priority.K);
-            promote.put(Priority.M, Priority.L);
-            promote.put(Priority.N, Priority.M);
-            promote.put(Priority.O, Priority.N);
-            promote.put(Priority.P, Priority.O);
-            promote.put(Priority.Q, Priority.P);
-            promote.put(Priority.R, Priority.Q);
-            promote.put(Priority.S, Priority.R);
-            promote.put(Priority.T, Priority.S);
-            promote.put(Priority.U, Priority.T);
-            promote.put(Priority.V, Priority.U);
-            promote.put(Priority.W, Priority.V);
-            promote.put(Priority.X, Priority.W);
-            promote.put(Priority.Y, Priority.X);
-            promote.put(Priority.Z, Priority.Y);
+            PROMOTE.put(Priority.A, Priority.A);
+            PROMOTE.put(Priority.B, Priority.A);
+            PROMOTE.put(Priority.C, Priority.B);
+            PROMOTE.put(Priority.D, Priority.C);
+            PROMOTE.put(Priority.E, Priority.D);
+            PROMOTE.put(Priority.F, Priority.E);
+            PROMOTE.put(Priority.G, Priority.F);
+            PROMOTE.put(Priority.H, Priority.G);
+            PROMOTE.put(Priority.I, Priority.H);
+            PROMOTE.put(Priority.J, Priority.I);
+            PROMOTE.put(Priority.K, Priority.J);
+            PROMOTE.put(Priority.L, Priority.K);
+            PROMOTE.put(Priority.M, Priority.L);
+            PROMOTE.put(Priority.N, Priority.M);
+            PROMOTE.put(Priority.O, Priority.N);
+            PROMOTE.put(Priority.P, Priority.O);
+            PROMOTE.put(Priority.Q, Priority.P);
+            PROMOTE.put(Priority.R, Priority.Q);
+            PROMOTE.put(Priority.S, Priority.R);
+            PROMOTE.put(Priority.T, Priority.S);
+            PROMOTE.put(Priority.U, Priority.T);
+            PROMOTE.put(Priority.V, Priority.U);
+            PROMOTE.put(Priority.W, Priority.V);
+            PROMOTE.put(Priority.X, Priority.W);
+            PROMOTE.put(Priority.Y, Priority.X);
+            PROMOTE.put(Priority.Z, Priority.Y);
         }
 
         Priority promote() {
-            return promote.get(this);
+            return PROMOTE.get(this);
         }
     }
 }

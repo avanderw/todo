@@ -14,6 +14,9 @@ public class TodoClear implements Runnable {
     @ParentCommand
     private Todo todo;
 
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
         todo.backup();

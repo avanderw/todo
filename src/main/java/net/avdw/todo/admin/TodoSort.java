@@ -12,16 +12,19 @@ import java.util.List;
 import java.util.Scanner;
 
 @Command(name = "sort", description = "Sort todo.txt")
-public class TodoSort  implements Runnable{
+public class TodoSort implements Runnable {
     @ParentCommand
     private Todo todo;
 
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
         List<String> todos = new ArrayList<>();
         try (Scanner scanner = new Scanner(todo.getTodoFile())) {
             while (scanner.hasNext()) {
-                String line=scanner.nextLine();
+                String line = scanner.nextLine();
                 if (!line.trim().isEmpty()) {
                     todos.add(line);
                 }
@@ -30,7 +33,7 @@ public class TodoSort  implements Runnable{
             e.printStackTrace();
         }
 
-        String contents = todos.stream().sorted().reduce("", (orig, item)-> orig + item + "\n");
+        String contents = todos.stream().sorted().reduce("", (orig, item) -> orig + item + "\n");
         try {
             Files.write(todo.getTodoFile(), contents.getBytes());
             Console.info("Sorted items");

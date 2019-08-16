@@ -22,8 +22,11 @@ public class TodoDone implements Runnable {
     private int idx;
 
     @Inject
-    TodoReader reader;
+    private TodoReader reader;
 
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
         Optional<TodoItem> line = reader.readLine(todo.getTodoFile(), idx);
@@ -37,16 +40,16 @@ public class TodoDone implements Runnable {
                 String contents = new String(Files.readAllBytes(todo.getTodoFile()));
                 Files.write(todo.getTodoFile(), contents.replace(line.get().rawValue(), completeLine).getBytes());
 
-                Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, idx, Ansi.Reset, line.get()));
+                Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, line.get()));
                 Console.divide();
-                Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, idx, Ansi.Reset, new TodoItem(completeLine)));
+                Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItem(completeLine)));
             } catch (IOException e) {
                 Console.error(String.format("Error writing `%s`", todo.getTodoFile()));
                 Logger.error(e);
             }
-        } else if (line.isPresent() && line.get().isDone()){
+        } else if (line.isPresent() && line.get().isDone()) {
             Console.info(String.format("[%s%s%s] %s",
-                    Ansi.Blue, idx, Ansi.Reset,
+                    Ansi.BLUE, idx, Ansi.RESET,
                     line));
             Console.divide();
             Console.error("Item is already marked as done");

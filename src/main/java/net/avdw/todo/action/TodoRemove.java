@@ -23,17 +23,28 @@ public class TodoRemove implements Runnable {
     @Inject
     private TodoReader reader;
 
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
         Optional<TodoItem> line = remove(todo.getTodoFile(), idx);
 
         line.ifPresent(s -> Console.info(String.format("[%s%s%s] %sRemoved:%s %s",
-                Ansi.Blue, idx, Ansi.Reset,
-                Ansi.Red, Ansi.Reset,
+                Ansi.BLUE, idx, Ansi.RESET,
+                Ansi.RED, Ansi.RESET,
                 s)));
     }
 
-    public Optional<TodoItem> remove(Path fromFile, int idx) {
+    /**
+     * Remove a line from a text file.
+     * The index to delete is relative to what is displayed.
+     *
+     * @param fromFile the file to remove the line index of
+     * @param idx the todo index to find
+     * @return the todo entry that was removed
+     */
+    public Optional<TodoItem> remove(final Path fromFile, final int idx) {
         Optional<TodoItem> line = reader.readLine(fromFile, idx);
         if (line.isPresent()) {
             try {

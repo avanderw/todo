@@ -1,6 +1,9 @@
 package net.avdw.todo.admin;
 
+import com.google.inject.Inject;
 import net.avdw.todo.Console;
+import net.avdw.todo.Global;
+import net.avdw.todo.Local;
 import net.avdw.todo.Todo;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
@@ -15,9 +18,20 @@ public class TodoInit implements Runnable {
     @ParentCommand
     private Todo todo;
 
+    @Inject
+    @Global
+    private Path globalPath;
+
+    @Inject
+    @Local
+    private Path localPath;
+
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
-        Path path = todo.global ? todo.globalPath : todo.localPath;
+        Path path = todo.isGlobal() ? globalPath : localPath;
 
         if (Files.exists(path)) {
             Console.error("Directory `%s` already exists");

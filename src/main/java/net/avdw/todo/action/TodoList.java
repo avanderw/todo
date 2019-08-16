@@ -41,6 +41,9 @@ public class TodoList implements Runnable {
     @Option(names = {"-l", "--limit"}, description = "Limit the amount of items shown")
     private int limit = Integer.MAX_VALUE;
 
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
         Logger.debug(String.format("Filters: %s", filters));
@@ -71,27 +74,27 @@ public class TodoList implements Runnable {
                             if (item.hasPriority() && item.isInProgress()) {
                                 matched++;
                                 if (!(showProjects || showContexts)) {
-                                    Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, lineNum, Ansi.Reset, item));
+                                    Console.info(String.format("[%s%2s%s] %s", Ansi.BLUE, lineNum, Ansi.RESET, item));
                                 }
                             }
                         } else if (onlyPriority) {
                             if (item.hasPriority()) {
                                 matched++;
                                 if (!(showProjects || showContexts)) {
-                                    Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, lineNum, Ansi.Reset, item));
+                                    Console.info(String.format("[%s%2s%s] %s", Ansi.BLUE, lineNum, Ansi.RESET, item));
                                 }
                             }
                         } else if (inProgress) {
                             if (item.isInProgress()) {
                                 matched++;
                                 if (!(showProjects || showContexts)) {
-                                    Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, lineNum, Ansi.Reset, item));
+                                    Console.info(String.format("[%s%2s%s] %s", Ansi.BLUE, lineNum, Ansi.RESET, item));
                                 }
                             }
                         } else {
                             matched++;
                             if (!(showProjects || showContexts)) {
-                                Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, lineNum, Ansi.Reset, item));
+                                Console.info(String.format("[%s%2s%s] %s", Ansi.BLUE, lineNum, Ansi.RESET, item));
                             }
                         }
                     }

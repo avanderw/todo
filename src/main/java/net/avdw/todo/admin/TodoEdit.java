@@ -14,6 +14,9 @@ public class TodoEdit implements Runnable {
     @ParentCommand
     private Todo todo;
 
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
         Path file = todo.getTodoFile();

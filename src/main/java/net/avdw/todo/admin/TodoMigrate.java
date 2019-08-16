@@ -1,10 +1,7 @@
 package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Console;
-import net.avdw.todo.Todo;
-import net.avdw.todo.TodoItem;
-import net.avdw.todo.TodoReader;
+import net.avdw.todo.*;
 import net.avdw.todo.action.TodoAdd;
 import net.avdw.todo.action.TodoRemove;
 import picocli.CommandLine.Command;
@@ -32,10 +29,21 @@ public class TodoMigrate implements Runnable {
     @Inject
     private TodoRemove todoRemove;
 
+    @Inject
+    @Global
+    private Path globalPath;
+
+    @Inject
+    @Local
+    private Path localPath;
+
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
-        Path fromDirectory = todo.global ? todo.globalPath : todo.localPath;
-        Path toDirectory = todo.global ? todo.localPath : todo.globalPath;
+        Path fromDirectory = todo.isGlobal() ? globalPath : localPath;
+        Path toDirectory = todo.isGlobal() ? localPath : globalPath;
         Path fromFile = fromDirectory.resolve("todo.txt");
         Path toFile = toDirectory.resolve("todo.txt");
 

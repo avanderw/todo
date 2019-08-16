@@ -11,12 +11,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class TodoModule extends AbstractModule {
-    private static final String dataDirectory = ".todo";
+public final class TodoModule extends AbstractModule {
+    private static final String DATA_DIRECTORY = ".todo";
 
     @Override
     protected void configure() {
-        Path globalPath = Paths.get(System.getProperty("user.home")).resolve(dataDirectory);
+        Path globalPath = Paths.get(System.getProperty("user.home")).resolve(DATA_DIRECTORY);
         bind(Path.class).annotatedWith(Execution.class).toInstance(Paths.get(""));
         bind(Path.class).annotatedWith(Global.class).toInstance(globalPath);
 
@@ -25,15 +25,15 @@ public class TodoModule extends AbstractModule {
 
     @Provides
     @Local
-    private Path resolveLocalPath(@Execution Path currentPath) {
+    private Path resolveLocalPath(final @Execution Path currentPath) {
         Logger.debug(String.format("Resolving: %s", currentPath.toAbsolutePath()));
-        Path localRepositoryPath = currentPath.resolve(dataDirectory);
+        Path localRepositoryPath = currentPath.resolve(DATA_DIRECTORY);
         if (Files.exists(localRepositoryPath)) {
             return localRepositoryPath;
         } else if (currentPath.getParent() != null) {
             return resolveLocalPath(currentPath.getParent());
         } else {
-            return Paths.get("").resolve(dataDirectory);
+            return Paths.get("").resolve(DATA_DIRECTORY);
         }
     }
 }

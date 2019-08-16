@@ -14,6 +14,9 @@ public class TodoExplore implements Runnable {
     @ParentCommand
     private Todo todo;
 
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
         Path directory = todo.getDirectory();

@@ -16,12 +16,20 @@ public class TodoBackup implements Runnable {
     @ParentCommand
     private Todo todo;
 
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
         backup(todo.getTodoFile(), todo.getBackupFile());
     }
 
-    public void backup(Path from, Path to) {
+    /**
+     * Copy a file from one location to another.
+     * @param from the file to backup
+     * @param to the backed up file
+     */
+    public void backup(final Path from, final Path to) {
         try {
             Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
             Console.info(String.format("Replaced `%s` with `%s`", to, from));

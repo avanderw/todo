@@ -15,22 +15,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 
-public class PropertyModule extends AbstractModule {
+public final class PropertyModule extends AbstractModule {
     public static final String TODO_PATHS = "todo.paths";
     public static final String AUTO_DATE_ADD = String.format("%s.date", TodoAdd.class.getCanonicalName());
 
-    private static final String propertyFile = "todo.properties";
+    private static final String PROPERTY_FILE = "todo.properties";
 
     @Provides
     @Singleton
     @Property
-    Path propertyPath(@Global Path globalPath) {
-        return globalPath.resolve(propertyFile);
+    Path propertyPath(final @Global Path globalPath) {
+        return globalPath.resolve(PROPERTY_FILE);
     }
 
     @Provides
     @Singleton
-    Properties properties(@Property Path propertyPath) {
+    Properties properties(final @Property Path propertyPath) {
         Properties properties = new Properties();
         if (Files.exists(propertyPath)) {
             try {

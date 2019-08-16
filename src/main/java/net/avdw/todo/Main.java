@@ -11,18 +11,21 @@ import picocli.CommandLine;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Main {
-    public static void main(String[] args) {
+public final class Main {
+    private Main() {
+    }
+
+    public static void main(final String[] args) {
         CommandLine commandLine = new CommandLine(Todo.class, new GuiceFactory());
         commandLine.setCaseInsensitiveEnumValuesAllowed(true);
         commandLine.execute(args);
     }
 
-    public static class GuiceFactory implements CommandLine.IFactory {
+    public static final class GuiceFactory implements CommandLine.IFactory {
         private final Injector injector = Guice.createInjector(new GuiceModule());
 
         @Override
-        public <K> K create(Class<K> aClass) {
+        public <K> K create(final Class<K> aClass) {
             return injector.getInstance(aClass);
         }
 

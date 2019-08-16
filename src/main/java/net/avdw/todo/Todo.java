@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
         })
 public class Todo implements Runnable {
     @Option(names = {"-g", "--global"}, description = "Use the global directory")
-    public boolean global;
+    private boolean global;
 
     @Option(names = {"-a", "--all"}, description = "Show completed items")
     private boolean showAll;
@@ -55,19 +55,22 @@ public class Todo implements Runnable {
 
     @Inject
     @Global
-    public Path globalPath;
+    private Path globalPath;
 
     @Inject
     @Local
-    public Path localPath;
+    private Path localPath;
 
     @Inject
-    Properties properties;
+    private Properties properties;
 
     @Inject
     @Property
-    Path propertyPath;
+    private Path propertyPath;
 
+    /**
+     * Entry point for picocli.
+     */
     public void run() {
         Path directory = getDirectory();
 
@@ -80,6 +83,10 @@ public class Todo implements Runnable {
         }
     }
 
+    /**
+     * Return the local path unless overridden with the global flag.
+     * @return the path that resolved
+     */
     public Path getDirectory() {
         if (Files.exists(localPath) && Files.exists(globalPath)) {
             return global ? globalPath : localPath;
@@ -90,6 +97,12 @@ public class Todo implements Runnable {
         }
     }
 
+    /**
+     * Get the todo.txt file in the todo directory.
+     * Update the properties to include the directory as a known path.
+     *
+     * @return the path to the todo.txt file
+     */
     public Path getTodoFile() {
         Path directory = getDirectory();
         if (Files.exists(directory)) {
@@ -111,18 +124,38 @@ public class Todo implements Runnable {
         return directory.resolve("todo.txt");
     }
 
+    /**
+     * Wrapper to protect the naming of the backup file.
+     * @return the path to the backup file
+     */
     public Path getBackupFile() {
         return getDirectory().resolve("todo.txt.bak");
     }
 
+    /**
+     * Whether complete todos should be shown.
+     * @return whether to include complete todos
+     */
     public boolean showAll() {
         return showAll;
     }
 
+    /**
+     * Wrapper to backup if the flag is set.
+     * The intention is for this to be used with state changing sub-commands.
+     */
     public void backup() {
         if (backup) {
             TodoBackup todoBackup = new TodoBackup();
             todoBackup.backup(getTodoFile(), getBackupFile());
         }
+    }
+
+    /**
+     * Is the global todo path targeted.
+     * @return whether the global flag was set
+     */
+    public boolean isGlobal() {
+        return global;
     }
 }

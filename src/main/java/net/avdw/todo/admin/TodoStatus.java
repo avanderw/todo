@@ -28,8 +28,11 @@ public class TodoStatus implements Runnable {
     private Path localPath;
 
     @Inject
-    Properties properties;
+    private Properties properties;
 
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
         Console.h1("Working Paths");
@@ -41,7 +44,7 @@ public class TodoStatus implements Runnable {
         if (properties.containsKey(PropertyModule.TODO_PATHS)) {
             Arrays.stream(properties.getProperty(PropertyModule.TODO_PATHS).split(";")).forEach(path -> {
                 TodoDirectory todoDirectory = new TodoDirectory(Paths.get(path));
-                Console.info(String.format("[%s%2s%s] %s", Ansi.Blue, todoDirectory.numIncompleteItems(), Ansi.Reset, path));
+                Console.info(String.format("[%s%2s%s] %s", Ansi.BLUE, todoDirectory.numIncompleteItems(), Ansi.RESET, path));
             });
         } else {
             Console.info("No paths found");

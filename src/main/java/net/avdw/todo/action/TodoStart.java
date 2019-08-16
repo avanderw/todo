@@ -23,8 +23,11 @@ public class TodoStart implements Runnable {
     private int idx;
 
     @Inject
-    TodoReader reader;
+    private TodoReader reader;
 
+    /**
+     * Entry point for picocli.
+     */
     @Override
     public void run() {
         Optional<TodoItem> line = reader.readLine(todo.getTodoFile(), idx);
@@ -32,7 +35,7 @@ public class TodoStart implements Runnable {
             try {
                 if (line.get().isStarted()) {
                     Console.info(String.format("[%s%s%s] %s",
-                            Ansi.Blue, idx, Ansi.Reset,
+                            Ansi.BLUE, idx, Ansi.RESET,
                             line.get().rawValue()));
                     Console.divide();
                     Console.error("Item is already started");
@@ -42,9 +45,9 @@ public class TodoStart implements Runnable {
                     String contents = new String(Files.readAllBytes(todo.getTodoFile()));
                     Files.write(todo.getTodoFile(), contents.replace(line.get().rawValue(), startedLine).getBytes());
 
-                    Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, idx, Ansi.Reset, line.get()));
+                    Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, line.get()));
                     Console.divide();
-                    Console.info(String.format("[%s%s%s]: %s", Ansi.Blue, idx, Ansi.Reset, new TodoItem(startedLine)));
+                    Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItem(startedLine)));
                 }
             } catch (IOException e) {
                 Console.error(String.format("Error writing `%s`", todo.getTodoFile()));
@@ -52,7 +55,7 @@ public class TodoStart implements Runnable {
             }
         } else if (line.isPresent() && line.get().isDone()) {
             Console.info(String.format("[%s%s%s] %s",
-                    Ansi.Blue, idx, Ansi.Reset,
+                    Ansi.BLUE, idx, Ansi.RESET,
                     line));
             Console.divide();
             Console.error("Item is already marked as done");
