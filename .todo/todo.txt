@@ -82,3 +82,4 @@ x 2019-08-14 2019-08-14 Fix bug when adding specified +priority start:2019-08-14
 2019-08-14 Add +report in the style of github contribution graph
 2019-08-14 Consider adding +roadmap generation based off priority, version or combined
 2019-08-14 Add proxy for when todo push is used instead of git push
+2019-08-21 Enhance +priority to prioritise a project or context

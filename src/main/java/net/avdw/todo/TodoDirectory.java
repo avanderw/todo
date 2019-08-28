@@ -12,7 +12,7 @@ public class TodoDirectory {
     private Path path;
     private List<TodoItem> todoItemList = new ArrayList<>();
 
-    public TodoDirectory(final Path path) {
+    public TodoDirectory(final Path path) throws ReadException {
         this.path = path;
         todoItemList.addAll(loadItems());
     }
@@ -25,18 +25,25 @@ public class TodoDirectory {
         return todoItemList.stream().filter(TodoItem::isNotDone).count();
     }
 
-    private List<TodoItem> loadItems() {
+    private List<TodoItem> loadItems() throws ReadException {
         List<TodoItem> items = new ArrayList<>();
         try (Scanner scanner = new Scanner(path.resolve("todo.txt"))) {
             while (scanner.hasNext()) {
                 items.add(new TodoItem(scanner.nextLine()));
             }
         } catch (IOException e) {
-            Console.error(String.format("Could not load items from %s", path));
-            Logger.error(e);
+            Logger.warn(String.format("Could not load items from %s", path));
+            Logger.debug(e);
+            throw new ReadException(e);
         }
 
         Logger.debug(String.format("Loaded items (%s)", items.size()));
         return items;
+    }
+
+    public static class ReadException extends Exception {
+        ReadException(final Throwable cause) {
+            super(cause);
+        }
     }
 }

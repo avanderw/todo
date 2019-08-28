@@ -17,10 +17,14 @@ public final class Console {
     }
 
     public static void error(final String text) {
-        System.out.println(String.format("! %s", text));
+        System.out.println(String.format("[ERROR] %s", text));
     }
 
     public static void blank() {
         System.out.println();
+    }
+
+    public static void warn(final String text) {
+        System.out.println(String.format("[WARN] %s", text));
     }
 }
