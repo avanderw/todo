@@ -42,6 +42,9 @@ public class TodoStart implements Runnable {
                 } else {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     String startedLine = String.format("%s start:%s", line.get().rawValue(), sdf.format(new Date()));
+                    if (!line.get().hasPriority()) {
+                        startedLine = String.format("(%s) %s", reader.readHighestFreePriority(todo.getTodoFile()).name(), startedLine);
+                    }
                     String contents = new String(Files.readAllBytes(todo.getTodoFile()));
                     Files.write(todo.getTodoFile(), contents.replace(line.get().rawValue(), startedLine).getBytes());
 

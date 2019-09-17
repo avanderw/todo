@@ -1,5 +1,5 @@
 (A) 2019-07-23 Add editor +properties
-x 2019-09-17 2019-08-13 Enhance empty +priority to choose next available priority start:2019-09-17
+x 2019-09-17 2019-07-26 Enhance +start feature to update priority to (S) if none is assinged and the option is provided start:2019-09-17
 (B) 2019-08-12 Enhance +priority to shift todos up or down
 2019-06-20 Add warning when adding duplicates +admin
 2019-07-09 Add +admin +archive
@@ -25,7 +25,6 @@ x 2019-09-17 2019-08-13 Enhance empty +priority to choose next available priorit
 2019-07-26 Add +consolodate functionality to view all aware todo directories
 2019-07-26 Add @reporting on todo, in-progress and done for previous months +report
 2019-07-26 Add auto +priority +property for +start functionality
-2019-07-26 Enhance +start feature to update priority to (S) if none is assinged and the option is provided
 2019-07-30 Enhance +migrate functionality logging to be friendlier
 2019-07-30 Fix +list to fail when targeting non-existing global with existing local
 2019-07-30 Fix +remove functionality on LF vs CRLF
@@ -86,3 +85,4 @@ x 2019-08-13 2019-08-13 Add listing of only +priority items start:2019-08-13
 x 2019-08-14 2019-07-24 Enhance +status check to show the amount of items in each repository start:2019-08-14
 x 2019-08-14 2019-08-14 Fix bug when adding specified +priority start:2019-08-14
 x 2019-09-17 2019-08-12 Add +repeat functionality to remove and add an item with due date
+x 2019-09-17 2019-08-13 Enhance empty +priority to choose next available priority start:2019-09-17
