@@ -36,14 +36,16 @@ public class TodoAdd implements Runnable {
     @Inject
     private Properties properties;
 
+    @Inject
+    private SimpleDateFormat simpleDateFormat;
+
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
         if (date || Boolean.parseBoolean(String.valueOf(properties.getOrDefault(PropertyModule.AUTO_DATE_ADD, "false")))) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            addition = String.format("%s %s", sdf.format(new Date()), addition);
+            addition = String.format("%s %s", simpleDateFormat.format(new Date()), addition);
         }
 
         try (Scanner scanner = new Scanner(todo.getTodoFile())) {
@@ -68,7 +70,7 @@ public class TodoAdd implements Runnable {
      * Append text to the end of a file.
      * The intention is to append a new todo in the file.
      *
-     * @param toFile the file to append to
+     * @param toFile   the file to append to
      * @param rawValue the text value to append
      */
     public void add(final Path toFile, final String rawValue) {

@@ -10,6 +10,7 @@ import org.pmw.tinylog.Logger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 
 public final class TodoModule extends AbstractModule {
     private static final String DATA_DIRECTORY = ".todo";
@@ -19,6 +20,7 @@ public final class TodoModule extends AbstractModule {
         Path globalPath = Paths.get(System.getProperty("user.home")).resolve(DATA_DIRECTORY);
         bind(Path.class).annotatedWith(Execution.class).toInstance(Paths.get(""));
         bind(Path.class).annotatedWith(Global.class).toInstance(globalPath);
+        bind(SimpleDateFormat.class).toInstance(new SimpleDateFormat("yyyy-MM-dd"));
 
         install(new PropertyModule());
     }

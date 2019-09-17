@@ -9,6 +9,7 @@ import picocli.CommandLine.ParentCommand;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
@@ -24,27 +25,39 @@ public class TodoDone implements Runnable {
     @Inject
     private TodoReader reader;
 
+    @Inject
+    private SimpleDateFormat simpleDateFormat;
+
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        Optional<TodoItem> line = reader.readLine(todo.getTodoFile(), idx);
+        done(todo.getTodoFile(), idx);
+    }
+
+    /**
+     * Find and mark an entry in a file at idx as done.
+     * @param todoFile the file to search
+     * @param idx the entry in the file to complete
+     * @return the original line that was marked as done
+     */
+    Optional<TodoItem> done(final Path todoFile, final int idx) {
+        Optional<TodoItem> line = reader.readLine(todoFile, idx);
         if (line.isPresent() && line.get().isNotDone()) {
             try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String completeLine = String.format("x %s %s",
-                        sdf.format(new Date()),
+                        simpleDateFormat.format(new Date()),
                         line.get().rawValue().replaceFirst("\\([A-Z]\\) ", ""));
 
-                String contents = new String(Files.readAllBytes(todo.getTodoFile()));
-                Files.write(todo.getTodoFile(), contents.replace(line.get().rawValue(), completeLine).getBytes());
+                String contents = new String(Files.readAllBytes(todoFile));
+                Files.write(todoFile, contents.replace(line.get().rawValue(), completeLine).getBytes());
 
                 Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, line.get()));
                 Console.divide();
                 Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItem(completeLine)));
             } catch (IOException e) {
-                Console.error(String.format("Error writing `%s`", todo.getTodoFile()));
+                Console.error(String.format("Error writing `%s`", todoFile));
                 Logger.error(e);
             }
         } else if (line.isPresent() && line.get().isDone()) {
@@ -56,5 +69,6 @@ public class TodoDone implements Runnable {
         } else {
             Console.error(String.format("Could not find index (%s)", idx));
         }
+        return line;
     }
 }
