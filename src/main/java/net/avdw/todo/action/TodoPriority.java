@@ -80,7 +80,7 @@ public class TodoPriority implements Runnable {
                         newLine = line.get().rawValue().replaceFirst("\\([A-Z]\\)", String.format("(%s)", priority.name()));
                     } else {
                         if (priority == null) {
-                            priority = Priority.A;
+                            priority = reader.readHighestFreePriority(todo.getTodoFile());
                         }
                         newLine = String.format("(%s) %s", priority.name(), line.get().rawValue());
                     }

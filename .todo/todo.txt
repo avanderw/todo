@@ -1,6 +1,6 @@
 (A) 2019-07-23 Add editor +properties
-x 2019-09-17 2019-08-12 Add +repeat functionality to remove and add an item with due date
-(A) 2019-08-13 Enhance empty +priority to choose next available priority
+x 2019-09-17 2019-08-13 Enhance empty +priority to choose next available priority start:2019-09-17
+(B) 2019-08-12 Enhance +priority to shift todos up or down
 2019-06-20 Add warning when adding duplicates +admin
 2019-07-09 Add +admin +archive
 2019-07-09 Add auto +archive +properties
@@ -34,7 +34,6 @@ x 2019-09-17 2019-08-12 Add +repeat functionality to remove and add an item with
 2019-08-12 Add google +sync support @research
 2019-08-12 Enhance +clean to move todos into a stale.txt
 2019-08-12 Enhance +list -w to show empty results when nothing is in progress
-2019-08-12 Enhance +priority to shift todos up or down
 2019-08-12 Enhance +report for showing percentage complete on projects
 2019-08-12 Enhance +report to list completely done projects and their done date
 2019-08-12 Enhance +report to list contexts and projects with priority
@@ -51,6 +50,8 @@ x 2019-09-17 2019-08-12 Add +repeat functionality to remove and add an item with
 2019-08-14 Add proxy for when todo push is used instead of git push
 2019-08-14 Consider adding +roadmap generation based off priority, version or combined
 2019-08-21 Enhance +priority to prioritise a project or context
+2019-09-17 Refactor +repeat messages
+2019-09-17 Refactor all console output to use logger
 2019-09-17 Rename feature rename to replace
 x 2019-07-18 2019-06-19 Add +repository lookup
 x 2019-07-19 2019-07-09 Add +edit of todo file
@@ -84,4 +85,4 @@ x 2019-08-13 2019-08-13 Add clean +priority option, which will remove all priori
 x 2019-08-13 2019-08-13 Add listing of only +priority items start:2019-08-13
 x 2019-08-14 2019-07-24 Enhance +status check to show the amount of items in each repository start:2019-08-14
 x 2019-08-14 2019-08-14 Fix bug when adding specified +priority start:2019-08-14
-2019-09-17 Refactor +repeat messages
+x 2019-09-17 2019-08-12 Add +repeat functionality to remove and add an item with due date
