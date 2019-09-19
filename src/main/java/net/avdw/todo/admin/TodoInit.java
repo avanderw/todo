@@ -2,8 +2,8 @@ package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
 import net.avdw.todo.Console;
-import net.avdw.todo.Global;
-import net.avdw.todo.Local;
+import net.avdw.todo.GlobalTodo;
+import net.avdw.todo.LocalTodo;
 import net.avdw.todo.Todo;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
@@ -19,11 +19,11 @@ public class TodoInit implements Runnable {
     private Todo todo;
 
     @Inject
-    @Global
+    @GlobalTodo
     private Path globalPath;
 
     @Inject
-    @Local
+    @LocalTodo
     private Path localPath;
 
     /**

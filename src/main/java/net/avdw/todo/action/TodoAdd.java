@@ -5,7 +5,7 @@ import net.avdw.todo.Ansi;
 import net.avdw.todo.Console;
 import net.avdw.todo.Todo;
 import net.avdw.todo.TodoItem;
-import net.avdw.todo.config.PropertyModule;
+import net.avdw.todo.property.PropertyKey;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -44,7 +44,7 @@ public class TodoAdd implements Runnable {
      */
     @Override
     public void run() {
-        if (date || Boolean.parseBoolean(String.valueOf(properties.getOrDefault(PropertyModule.AUTO_DATE_ADD, "false")))) {
+        if (date || Boolean.parseBoolean(String.valueOf(properties.get(PropertyKey.TODO_ADD_AUTO_DATE)))) {
             addition = String.format("%s %s", simpleDateFormat.format(new Date()), addition);
         }
 

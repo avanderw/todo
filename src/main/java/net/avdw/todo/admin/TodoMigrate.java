@@ -30,11 +30,11 @@ public class TodoMigrate implements Runnable {
     private TodoRemove todoRemove;
 
     @Inject
-    @Global
+    @GlobalTodo
     private Path globalPath;
 
     @Inject
-    @Local
+    @LocalTodo
     private Path localPath;
 
     /**

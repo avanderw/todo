@@ -1,6 +1,10 @@
 (A) 2019-07-23 Add editor +properties
-x 2019-09-17 2019-07-26 Enhance +start feature to update priority to (S) if none is assinged and the option is provided start:2019-09-17
 (B) 2019-08-12 Enhance +priority to shift todos up or down
+x 2019-09-18 2019-07-24 Add +README to @document installation with alias
+x 2019-09-19 2019-07-23 Refactor +log level to +properties
+(E) 2019-07-23 Enhance +list of contexts to contain counts
+(F) 2019-07-23 Enhance +list of projects to contain counts
+2019-08-12 Enhance +report to list done items by day dating back x days with omit option
 2019-06-20 Add warning when adding duplicates +admin
 2019-07-09 Add +admin +archive
 2019-07-09 Add auto +archive +properties
@@ -8,12 +12,8 @@ x 2019-09-17 2019-07-26 Enhance +start feature to update priority to (S) if none
 2019-07-23 Add allow duplicate +properties
 2019-07-23 Add auto +sort +properties
 2019-07-23 Add default show all +properties
-2019-07-23 Enhance +list of contexts to contain counts
-2019-07-23 Enhance +list of projects to contain counts
 2019-07-23 Fix @bug when global +repository does not exist
-2019-07-23 Refactor +log level to +properties
 2019-07-23 Refactor task +styling to template
-2019-07-24 Add +README to @document installation with alias
 2019-07-24 Add +backup option to state changing operations
 2019-07-24 Add +tag functionality to append text
 2019-07-24 Enhance +status to show projects and contexts for each repository
@@ -36,7 +36,6 @@ x 2019-09-17 2019-07-26 Enhance +start feature to update priority to (S) if none
 2019-08-12 Enhance +report for showing percentage complete on projects
 2019-08-12 Enhance +report to list completely done projects and their done date
 2019-08-12 Enhance +report to list contexts and projects with priority
-2019-08-12 Enhance +report to list done items by day dating back x days with omit option
 2019-08-12 Enhance +report to show lead and cycle time
 2019-08-12 Fix +rename when using + on term to replace with
 2019-08-12 Fix bug when resolving parent directory in nested directories
@@ -84,5 +83,6 @@ x 2019-08-13 2019-08-13 Add clean +priority option, which will remove all priori
 x 2019-08-13 2019-08-13 Add listing of only +priority items start:2019-08-13
 x 2019-08-14 2019-07-24 Enhance +status check to show the amount of items in each repository start:2019-08-14
 x 2019-08-14 2019-08-14 Fix bug when adding specified +priority start:2019-08-14
+x 2019-09-17 2019-07-26 Enhance +start feature to update priority to (S) if none is assinged and the option is provided start:2019-09-17
 x 2019-09-17 2019-08-12 Add +repeat functionality to remove and add an item with due date
 x 2019-09-17 2019-08-13 Enhance empty +priority to choose next available priority start:2019-09-17

@@ -19,7 +19,7 @@ public class TodoExplore implements Runnable {
      */
     @Override
     public void run() {
-        Path directory = todo.getDirectory();
+        Path directory = todo.findDirectory();
 
         if (Files.exists(directory)) {
             Console.info(String.format("Exploring %s", directory));

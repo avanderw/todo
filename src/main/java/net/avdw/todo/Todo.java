@@ -3,7 +3,9 @@ package net.avdw.todo;
 import com.google.inject.Inject;
 import net.avdw.todo.action.*;
 import net.avdw.todo.admin.*;
-import net.avdw.todo.config.PropertyModule;
+import net.avdw.todo.property.GlobalProperty;
+import net.avdw.todo.property.PropertyModule;
+import org.pmw.tinylog.Logger;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.HelpCommand;
@@ -55,25 +57,26 @@ public class Todo implements Runnable {
     private boolean backup;
 
     @Inject
-    @Global
-    private Path globalPath;
+    @GlobalTodo
+    private Path globalTodoPath;
 
     @Inject
-    @Local
-    private Path localPath;
+    @LocalTodo
+    private Path localTodoPath;
 
     @Inject
-    private Properties properties;
+    @GlobalProperty
+    private Properties globalProperties;
 
     @Inject
-    @Property
-    private Path propertyPath;
+    @GlobalProperty
+    private Path globalPropertyPath;
 
     /**
      * Entry point for picocli.
      */
     public void run() {
-        Path directory = getDirectory();
+        Path directory = findDirectory();
 
         if (Files.exists(directory)) {
             Console.info(String.format("Directory: %s", directory));
@@ -88,13 +91,17 @@ public class Todo implements Runnable {
      * Return the local path unless overridden with the global flag.
      * @return the path that resolved
      */
-    public Path getDirectory() {
-        if (Files.exists(localPath) && Files.exists(globalPath)) {
-            return global ? globalPath : localPath;
-        } else if (Files.exists(localPath)) {
-            return localPath;
+    public Path findDirectory() {
+        if (Files.exists(localTodoPath) && Files.exists(globalTodoPath)) {
+            Logger.debug(String.format("Local todo exists: %s", localTodoPath));
+            Logger.debug(String.format("Global todo exists: %s", globalTodoPath));
+            return global ? globalTodoPath : localTodoPath;
+        } else if (Files.exists(localTodoPath)) {
+            Logger.debug(String.format("Local todo exists: %s", localTodoPath));
+            return localTodoPath;
         } else {
-            return globalPath;
+            Logger.debug(String.format("Global todo exists: %s", globalTodoPath));
+            return globalTodoPath;
         }
     }
 
@@ -105,19 +112,20 @@ public class Todo implements Runnable {
      * @return the path to the todo.txt file
      */
     public Path getTodoFile() {
-        Path directory = getDirectory();
+        Path directory = findDirectory();
         if (Files.exists(directory)) {
             Set<String> paths;
-            if (properties.containsKey(PropertyModule.TODO_PATHS)) {
-                paths = Arrays.stream(properties.getProperty(PropertyModule.TODO_PATHS).split(";")).collect(Collectors.toSet());
+            if (globalProperties.containsKey(PropertyModule.TODO_PATHS)) {
+                paths = Arrays.stream(globalProperties.getProperty(PropertyModule.TODO_PATHS).split(";")).collect(Collectors.toSet());
             } else {
                 paths = new HashSet<>();
             }
             paths.add(directory.toAbsolutePath().toString());
 
             try {
-                properties.setProperty(PropertyModule.TODO_PATHS, String.join(";", paths));
-                properties.store(new FileWriter(propertyPath.toFile()), "Todo Properties");
+                globalProperties.setProperty(PropertyModule.TODO_PATHS, String.join(";", paths));
+                globalProperties.store(new FileWriter(globalPropertyPath.toFile()), "Todo Properties");
+                Logger.debug(String.format("Wrote %s", globalPropertyPath));
             } catch (IOException e) {
                 Console.error("Could not save property file");
             }
@@ -130,7 +138,7 @@ public class Todo implements Runnable {
      * @return the path to the backup file
      */
     public Path getBackupFile() {
-        return getDirectory().resolve("todo.txt.bak");
+        return findDirectory().resolve("todo.txt.bak");
     }
 
     /**

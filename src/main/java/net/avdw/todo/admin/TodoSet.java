@@ -2,8 +2,8 @@ package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
 import net.avdw.todo.Console;
-import net.avdw.todo.Property;
-import net.avdw.todo.config.PropertyModule;
+import net.avdw.todo.property.GlobalProperty;
+import net.avdw.todo.property.PropertyKey;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
@@ -22,7 +22,7 @@ public class TodoSet implements Runnable {
     private Properties properties;
 
     @Inject
-    @Property
+    @GlobalProperty
     private Path propertyPath;
 
     /**
@@ -31,8 +31,8 @@ public class TodoSet implements Runnable {
     @Override
     public void run() {
         if (autoDateAdd != null) {
-            properties.setProperty(PropertyModule.AUTO_DATE_ADD, autoDateAdd.toString());
-            Console.info(String.format("Setting %s=%s", PropertyModule.AUTO_DATE_ADD, autoDateAdd));
+            properties.setProperty(PropertyKey.TODO_ADD_AUTO_DATE, autoDateAdd.toString());
+            Console.info(String.format("Setting %s=%s", PropertyKey.TODO_ADD_AUTO_DATE, autoDateAdd));
         }
 
         try {

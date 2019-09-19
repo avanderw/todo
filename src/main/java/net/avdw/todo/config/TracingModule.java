@@ -2,8 +2,6 @@ package net.avdw.todo.config;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.matcher.AbstractMatcher;
-import net.avdw.todo.Ansi;
-import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
 
 import java.lang.reflect.Method;
@@ -12,18 +10,9 @@ import java.lang.reflect.Parameter;
 import static com.google.inject.matcher.Matchers.inSubpackage;
 import static com.google.inject.matcher.Matchers.not;
 
-public final class LoggingModule extends AbstractModule {
+public final class TracingModule extends AbstractModule {
     @Override
     protected void configure() {
-//        String date = String.format("%s{date:HH:mm:ss}%s", Ansi.Green, Ansi.Reset);
-        String level = String.format("%s{level}%s", Ansi.BLUE, Ansi.RESET);
-        String line = String.format("%s{line}%s", Ansi.YELLOW, Ansi.RESET);
-        String clazz = String.format("%s{class}%s", Ansi.WHITE, Ansi.RESET);
-        String method = String.format("%s{method}()%s", Ansi.CYAN, Ansi.RESET);
-        Logger.getConfiguration()
-                .formatPattern(String.format("[%s] %s:%s:%s {message}", level, clazz, line, method))
-                .level(Level.INFO).activate();
-
         bindInterceptor(inSubpackage("net.avdw.todo")
                         .and(not(inSubpackage("net.avdw.todo.model"))),
                 new AbstractMatcher<Method>() {

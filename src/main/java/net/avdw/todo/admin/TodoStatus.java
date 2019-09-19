@@ -2,7 +2,8 @@ package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
 import net.avdw.todo.*;
-import net.avdw.todo.config.PropertyModule;
+import net.avdw.todo.property.GlobalProperty;
+import net.avdw.todo.property.PropertyModule;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -25,18 +26,19 @@ public class TodoStatus implements Runnable {
     private Todo todo;
 
     @Inject
-    @Global
+    @GlobalTodo
     private Path globalPath;
 
     @Inject
-    @Local
+    @LocalTodo
     private Path localPath;
 
     @Inject
+    @GlobalProperty
     private Properties properties;
 
     @Inject
-    @Property
+    @GlobalProperty
     private Path propertyPath;
 
     /**
@@ -47,7 +49,7 @@ public class TodoStatus implements Runnable {
         Console.h1("Working Paths");
         Console.info(String.format("Local    : %s", Files.exists(localPath) ? localPath : "todo init"));
         Console.info(String.format("Global   : %s", Files.exists(globalPath) ? globalPath : "todo --global init"));
-        Console.info(String.format("Selected : %s", todo.getDirectory()));
+        Console.info(String.format("Selected : %s", todo.findDirectory()));
         Console.blank();
         Console.h1("Known Paths");
         if (properties.containsKey(PropertyModule.TODO_PATHS)) {
