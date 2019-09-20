@@ -72,6 +72,12 @@ public final class PropertyModule extends AbstractModule {
         Properties properties = new Properties();
         properties.put(PropertyKey.TODO_ADD_AUTO_DATE, "false");
         properties.put(PropertyKey.LOGGING_LEVEL, "TRACE");
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            properties.put(PropertyKey.EDITOR_PATH, "notepad.exe");
+        } else {
+            Logger.error(String.format("Unknown OS: %s", System.getProperty("os.name")));
+            throw new UnsupportedOperationException();
+        }
         return properties;
     }
 
