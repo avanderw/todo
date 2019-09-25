@@ -1,7 +1,7 @@
 x 2019-09-25 2019-07-26 Add +clean feature which will add priority to started items
 x 2019-09-25 2019-08-12 Enhance +priority to shift todos up or down
-(B) 2019-07-23 Enhance +list of contexts to contain counts
-(C) 2019-07-23 Enhance +list of projects to contain counts
+x 2019-09-25 2019-07-23 Enhance +list of contexts to contain counts
+x 2019-09-25 2019-07-23 Enhance +list of projects to contain counts
 2019-06-20 Add warning when adding duplicates +admin
 2019-07-09 Add +admin +archive
 2019-07-09 Add auto +archive +properties

@@ -11,11 +11,7 @@ import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.*;
 
 
 @Command(name = "ls", description = "List the items in todo.txt")
@@ -55,8 +51,8 @@ public class TodoList implements Runnable {
             int lineNum = 0;
             int matched = 0;
             int completed = 0;
-            Set<String> projects = new HashSet<>();
-            Set<String> contexts = new HashSet<>();
+            Map<String, Integer> projects = new HashMap<>();
+            Map<String, Integer> contexts = new HashMap<>();
             while (scanner.hasNext() && matched < limit) {
                 String line = scanner.nextLine();
                 TodoItem item = new TodoItem(line);
@@ -67,8 +63,14 @@ public class TodoList implements Runnable {
                         completed++;
                     }
                     if (filters.stream().map(String::toLowerCase).allMatch(line.toLowerCase()::contains)) {
-                        projects.addAll(item.getProjects());
-                        contexts.addAll(item.getContexts());
+                        item.getProjects().forEach(project -> {
+                            projects.putIfAbsent(project, 0);
+                            projects.put(project, projects.get(project) + 1);
+                        });
+                        item.getContexts().forEach(context -> {
+                            contexts.putIfAbsent(context, 0);
+                            contexts.put(context, contexts.get(context) + 1);
+                        });
 
                         if (onlyPriority && inProgress) {
                             if (item.hasPriority() && item.isInProgress()) {
