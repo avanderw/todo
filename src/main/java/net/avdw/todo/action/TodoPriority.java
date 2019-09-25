@@ -12,9 +12,7 @@ import picocli.CommandLine.ParentCommand;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 @Command(name = "pri", description = "Prioritize a todo item")
 public class TodoPriority implements Runnable {
@@ -30,18 +28,80 @@ public class TodoPriority implements Runnable {
     @Parameters(description = "Index to prioritize", arity = "0..1", index = "0")
     private int idx;
 
-    @Option(names = "--clean", description = "Remove all priorities")
-    private boolean clean;
+    @Option(names = "--clear", description = "Remove all priorities")
+    private boolean clear;
+
+    @Option(names = {"-o", "--optimize"}, description = "Optimize priority usage")
+    private boolean optimize;
 
     @Inject
     private TodoReader reader;
+
+    @Inject
+    private TodoWriter writer;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        if (clean) {
+        if (optimize) {
+            List<Priority> availablePriorities = new ArrayList<>(Arrays.asList(Priority.values()));
+            List<Priority> usedPriorities = new ArrayList<>();
+
+            try (Scanner scanner = new Scanner(todo.getTodoFile())) {
+                List<TodoItem> todoItems = new ArrayList<>();
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    TodoItem item = new TodoItem(line);
+                    todoItems.add(item);
+
+                    item.getPriority().ifPresent(priority -> {
+                        if (availablePriorities.contains(priority)) {
+                            usedPriorities.add(priority);
+                            availablePriorities.remove(priority);
+                        }
+                    });
+                }
+
+                Map<Priority, Priority> mapping = new HashMap<>();
+                usedPriorities.forEach(priority -> {
+                    if (!availablePriorities.isEmpty()) {
+                        if (priority.compareTo(availablePriorities.get(0)) > 0) {
+                            mapping.put(priority, availablePriorities.get(0));
+                            availablePriorities.add(priority);
+                            availablePriorities.remove(0);
+                            availablePriorities.sort(Enum::compareTo);
+                        }
+                    } else {
+                        Logger.debug("No more priorities available to assign from");
+                    }
+                });
+
+                for (int i = 0; i < todoItems.size(); i++) {
+                    TodoItem item = todoItems.get(i);
+                    if (item.getPriority().isPresent() && mapping.containsKey(item.getPriority().get())) {
+                        todoItems.set(i, new TodoItem(item.rawValue().replace(
+                                String.format("(%s)", item.getPriority().get()),
+                                String.format("(%s)", mapping.get(item.getPriority().get())))));
+                        Logger.debug(String.format("Replacing%n%s%n%s", item, todoItems.get(i)));
+                    }
+                }
+
+                Logger.debug(String.format("Available priorities: %s", availablePriorities));
+                Logger.debug(String.format("Used priorities: %s", usedPriorities));
+                Logger.debug(String.format("Mapping: %s", mapping));
+                if (mapping.isEmpty()) {
+                    Logger.info("The priorities are already optimized");
+                } else {
+                    writer.write(todoItems, todo.getTodoFile());
+                    Logger.info("The priorities have been optimized");
+                }
+            } catch (IOException e) {
+                Logger.error(String.format("Error scanning %s: %s", todo.getTodoFile(), e.getMessage()));
+                Logger.debug(e);
+            }
+        } else if (clear) {
             try (Scanner scanner = new Scanner(todo.getTodoFile())) {
                 Console.info("Removing priority from all items");
                 int currIdx = 0;
@@ -59,6 +119,7 @@ public class TodoPriority implements Runnable {
                 }
             } catch (IOException e) {
                 Console.error(String.format("Could not read file %s", todo.getTodoFile()));
+                Logger.debug(e);
             }
         } else if (idx == 0) {
             CommandLine.usage(TodoPriority.class, System.out);
@@ -104,7 +165,7 @@ public class TodoPriority implements Runnable {
             Files.write(fromFile, contents.replace(line, newLine).getBytes());
         } catch (IOException e) {
             Console.error(String.format("Error writing `%s`", fromFile));
-            Logger.error(e);
+            Logger.debug(e);
         }
     }
 
