@@ -55,10 +55,37 @@ public class TodoReader {
 
     /**
      * Find out the highest available priority that can be assigned that is not currently assigned.
+     *
      * @param todoFile the file to search for the priority in
      * @return the first available priority or the lowest priority if there is none
      */
     public TodoPriority.Priority readHighestFreePriority(final Path todoFile) {
+        List<TodoPriority.Priority> priorities = getAvailablePriorities(todoFile);
+
+        if (priorities.isEmpty()) {
+            return TodoPriority.Priority.Z;
+        } else {
+            return priorities.get(0);
+        }
+    }
+
+    /**
+     * Find out the lowest available priority that can be assigned that is not currently assigned.
+     *
+     * @param todoFile the file to search for the priority in
+     * @return the last available priority or empty if there is none
+     */
+    public Optional<TodoPriority.Priority> readLowestFreePriority(final Path todoFile) {
+        List<TodoPriority.Priority> priorities = getAvailablePriorities(todoFile);
+
+        if (priorities.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(priorities.get(priorities.size() - 1));
+        }
+    }
+
+    private List<TodoPriority.Priority> getAvailablePriorities(final Path todoFile) {
         List<TodoPriority.Priority> priorities = new ArrayList<>(Arrays.asList(TodoPriority.Priority.values()));
         try (Scanner scanner = new Scanner(todoFile)) {
             while (scanner.hasNext()) {
@@ -72,11 +99,6 @@ public class TodoReader {
             Console.error(String.format("Error reading `%s`", todoFile));
             Logger.debug(e);
         }
-
-        if (priorities.isEmpty()) {
-            return TodoPriority.Priority.Z;
-        } else {
-            return priorities.get(0);
-        }
+        return priorities;
     }
 }
