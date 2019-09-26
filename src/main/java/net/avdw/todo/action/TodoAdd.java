@@ -6,6 +6,7 @@ import net.avdw.todo.Console;
 import net.avdw.todo.Todo;
 import net.avdw.todo.TodoItem;
 import net.avdw.todo.property.PropertyKey;
+import net.avdw.todo.property.PropertyResolver;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -19,7 +20,6 @@ import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Properties;
 import java.util.Scanner;
 
 @Command(name = "add", description = "Add an item to todo.txt")
@@ -34,7 +34,7 @@ public class TodoAdd implements Runnable {
     private boolean date;
 
     @Inject
-    private Properties properties;
+    private PropertyResolver propertyResolver;
 
     @Inject
     private SimpleDateFormat simpleDateFormat;
@@ -44,7 +44,7 @@ public class TodoAdd implements Runnable {
      */
     @Override
     public void run() {
-        if (date || Boolean.parseBoolean(String.valueOf(properties.get(PropertyKey.TODO_ADD_AUTO_DATE)))) {
+        if (date || Boolean.parseBoolean(propertyResolver.resolve(PropertyKey.TODO_ADD_AUTO_DATE))) {
             addition = String.format("%s %s", simpleDateFormat.format(new Date()), addition);
         }
 
