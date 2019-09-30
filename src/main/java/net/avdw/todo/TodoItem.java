@@ -1,16 +1,18 @@
 package net.avdw.todo;
 
 import net.avdw.todo.action.TodoPriority;
+import org.pmw.tinylog.Logger;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Scanner;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class TodoItem {
     private final String line;
     private static final int DATE_LENGTH = 10;
     private static final int PRIORITY_LENGTH = 3;
+
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     public TodoItem(final String line) {
         this.line = line;
@@ -62,7 +64,23 @@ public class TodoItem {
             } else if (token.startsWith("(") && token.length() == PRIORITY_LENGTH && token.endsWith(")")) {
                 sb.append(Ansi.YELLOW);
             } else if (token.contains(":")) {
-                sb.append(Ansi.RED);
+                if (token.startsWith("due:")) {
+                    try {
+                        Date date = SIMPLE_DATE_FORMAT.parse(token.replace("due:", ""));
+                        if (date.before(new Date())) {
+                            sb.append(Ansi.RED);
+                        } else {
+                            sb.append(Ansi.GREEN);
+                        }
+                    } catch (ParseException e) {
+                        Logger.error(e.getMessage());
+                        Logger.debug("Could not parse the date to apply formatting, defaulting to green");
+                        Logger.debug(e);
+                        sb.append(Ansi.GREEN);
+                    }
+                } else {
+                    sb.append(Ansi.RED);
+                }
             }
 
             sb.append(token);
