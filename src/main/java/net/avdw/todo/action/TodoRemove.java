@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Command(name = "rm", description = "Remove a todo item")
 public class TodoRemove implements Runnable {
@@ -50,7 +51,8 @@ public class TodoRemove implements Runnable {
             try {
                 String contents = new String(Files.readAllBytes(fromFile));
                 Files.write(fromFile,
-                        contents.replace(String.format("%s%n", line.get().rawValue()), "").getBytes());
+                        contents.replaceAll(String.format("%s\\r?\\n", Pattern.quote(line.get().rawValue())), "")
+                                .getBytes());
             } catch (IOException e) {
                 Console.error(String.format("Error writing `%s`", fromFile));
                 Logger.error(e);
