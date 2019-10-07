@@ -4,6 +4,7 @@
 (D) 2019-07-23 Fix @bug when global +repository does not exist
 (E) 2019-07-24 Add +tag functionality to append text
 (F) 2019-07-26 Add +consolodate functionality to view all aware todo directories
+(G) 2019-07-30 Fix +remove functionality on LF vs CRLF start:2019-10-07
 2019-06-20 Add warning when adding duplicates +admin
 2019-07-09 Add +admin +archive
 2019-07-09 Add auto +archive +properties
@@ -20,7 +21,6 @@
 2019-07-26 Add auto +priority +property for +start functionality
 2019-07-30 Enhance +migrate functionality logging to be friendlier
 2019-07-30 Fix +list to fail when targeting non-existing global with existing local
-2019-07-30 Fix +remove functionality on LF vs CRLF
 2019-08-12 Add +grouping feature to list, e.g. by project or search term
 2019-08-12 Add +report graph chain for completed items
 2019-08-12 Add google +sync support @research

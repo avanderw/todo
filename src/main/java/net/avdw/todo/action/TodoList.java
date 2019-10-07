@@ -1,5 +1,6 @@
 package net.avdw.todo.action;
 
+import com.google.inject.Inject;
 import net.avdw.todo.Ansi;
 import net.avdw.todo.Console;
 import net.avdw.todo.Todo;
@@ -16,6 +17,7 @@ import java.util.*;
 
 @Command(name = "ls", description = "List the items in todo.txt")
 public class TodoList implements Runnable {
+    @Inject
     @ParentCommand
     private Todo todo;
 

@@ -1,7 +1,9 @@
 package net.avdw.todo.admin;
 
-import net.avdw.todo.Console;
+import com.google.inject.Inject;
 import net.avdw.todo.Todo;
+import net.avdw.todo.action.TodoList;
+import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ParentCommand;
 
@@ -15,6 +17,9 @@ import java.util.Scanner;
 public class TodoSort implements Runnable {
     @ParentCommand
     private Todo todo;
+
+    @Inject
+    private TodoList list;
 
     /**
      * Entry point for picocli.
@@ -36,11 +41,13 @@ public class TodoSort implements Runnable {
         String contents = todos.stream().sorted().reduce("", (orig, item) -> orig + item + "\n");
         try {
             Files.write(todo.getTodoFile(), contents.getBytes());
-            Console.info("Sorted items");
-            Console.divide();
-            Console.info(String.format("Wrote %s", todo.getTodoFile()));
+            Logger.info("Sorted items");
+            Logger.info(String.format("Wrote %s", todo.getTodoFile()));
+            Logger.info("---");
+            list.run();
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.error(String.format("Error sorting todo %s because %s", todo.getTodoFile(), e.getMessage()));
+            Logger.debug(e);
         }
     }
 }
