@@ -7,20 +7,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class TodoItem {
-    private int idx;
+public class TodoItemV1 {
     private final String line;
     private static final int DATE_LENGTH = 10;
     private static final int PRIORITY_LENGTH = 3;
 
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
-    public TodoItem(final int idx, final String line) {
-        this.idx = idx;
+    public TodoItemV1(final String line) {
         this.line = line;
     }
 
-    public boolean isIncomplete() {
+    public boolean isNotDone() {
         return !isDone();
     }
 
@@ -138,9 +136,5 @@ public class TodoItem {
         }
 
         return Optional.of(TodoPriority.Priority.valueOf(line.substring(line.indexOf("(") + 1, line.indexOf(")"))));
-    }
-
-    public int getIdx() {
-        return idx;
     }
 }

@@ -12,7 +12,9 @@ import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Command(name = "ls", description = "List the items in todo.txt")
@@ -22,21 +24,21 @@ public class TodoList implements Runnable {
     private Todo todo;
 
     @Parameters(description = "One or more filters to apply")
-    private List<String> filters;
+    private List<String> filters = new ArrayList<>();
 
-    @Option(names = {"-p", "--projects"}, description = "List projects")
-    private boolean showProjects;
+    @Option(names = "--projects", description = "Display projects")
+    private boolean displayProjects;
 
-    @Option(names = {"-c", "--contexts"}, description = "List contexts")
-    private boolean showContexts;
+    @Option(names = "--contexts", description = "Display contexts")
+    private boolean displayContexts;
 
-    @Option(names = {"-w", "--in-progress"}, description = "List in progress items")
-    private boolean inProgress;
+    @Option(names = "--in-progress", description = "Filter in-progress items")
+    private boolean filterInProgress;
 
-    @Option(names = "--priority", description = "List priority items")
-    private boolean onlyPriority;
+    @Option(names = "--priority", description = "Filter priority items")
+    private boolean filterPriority;
 
-    @Option(names = {"-l", "--limit"}, description = "Limit the amount of items shown")
+    @Option(names = "--limit", description = "Limit the amount of items shown")
     private int limit = Integer.MAX_VALUE;
 
     /**
@@ -44,90 +46,119 @@ public class TodoList implements Runnable {
      */
     @Override
     public void run() {
-        Logger.debug(String.format("Filters: %s", filters));
-        if (filters == null) {
-            filters = new ArrayList<>();
+        List<TodoItem> allTodoItems = readAllTodoItems(todo.getTodoFile());
+        List<TodoItem> filteredTodoItems = filterTodoItems(allTodoItems, filters);
+
+        if (!todo.showAll()) {
+            filteredTodoItems = filterIncompleteItems(filteredTodoItems);
         }
 
-        try (Scanner scanner = new Scanner(todo.getTodoFile())) {
-            int lineNum = 0;
-            int matched = 0;
-            int completed = 0;
-            Map<String, Integer> projects = new HashMap<>();
+        if (filterInProgress) {
+            filteredTodoItems = filterInProgressTodoItems(filteredTodoItems);
+        }
+
+        if (filterPriority) {
+            filteredTodoItems = filterPriorityItems(filteredTodoItems);
+        }
+
+        if (filteredTodoItems.isEmpty()) {
+            Logger.info("The list is empty");
+        }
+
+        for (int i = 0; i < filteredTodoItems.size() && i < limit; i++) {
+            TodoItem item = filteredTodoItems.get(i);
+            Console.info(String.format("[%s%2s%s] %s", Ansi.BLUE, item.getIdx(), Ansi.RESET, item));
+        }
+
+        Console.divide();
+        long completed = allTodoItems.stream().filter(TodoItem::isDone).count();
+        Logger.info(String.format("%s of %s (%s done) todo items shown", filteredTodoItems.size(), allTodoItems.size(), completed));
+
+        listProjects(filteredTodoItems);
+        listContexts(filteredTodoItems);
+    }
+
+    private List<TodoItem> filterPriorityItems(final List<TodoItem> todoItemList) {
+        Logger.debug(String.format("Filtering priority items from '%s' todo items", todoItemList.size()));
+        List<TodoItem> filteredTodoItems = todoItemList.stream()
+                .filter(TodoItem::hasPriority)
+                .collect(Collectors.toList());
+        Logger.debug(String.format("Filtered list contains '%s' todo items", filteredTodoItems.size()));
+        return filteredTodoItems;
+    }
+
+    private List<TodoItem> filterInProgressTodoItems(final List<TodoItem> todoItemList) {
+        Logger.debug(String.format("Filtering in-progress items from '%s' todo items", todoItemList.size()));
+        List<TodoItem> filteredTodoItems = todoItemList.stream()
+                .filter(TodoItem::isInProgress)
+                .collect(Collectors.toList());
+        Logger.debug(String.format("Filtered list contains '%s' todo items", filteredTodoItems.size()));
+        return filteredTodoItems;
+    }
+
+    private List<TodoItem> filterIncompleteItems(final List<TodoItem> todoItemList) {
+        Logger.debug(String.format("Filtering done items from '%s' todo items", todoItemList.size()));
+        List<TodoItem> filteredTodoItems = todoItemList.stream()
+                .filter(TodoItem::isIncomplete)
+                .collect(Collectors.toList());
+        Logger.debug(String.format("Filtered list contains '%s' todo items", filteredTodoItems.size()));
+        return filteredTodoItems;
+
+    }
+
+    private void listContexts(final List<TodoItem> todoItemList) {
+        if (displayContexts) {
             Map<String, Integer> contexts = new HashMap<>();
-            while (scanner.hasNext() && matched < limit) {
-                String line = scanner.nextLine();
-                TodoItem item = new TodoItem(line);
+            todoItemList.forEach(todoItem
+                    -> todoItem.getContexts().forEach(context -> {
+                contexts.putIfAbsent(context, 0);
+                contexts.computeIfPresent(context, (key, value) -> value + 1);
+            }));
 
-                if (item.isNotDone() || todo.showAll()) {
-                    lineNum++;
-                    if (item.isDone()) {
-                        completed++;
-                    }
-                    if (filters.stream().map(String::toLowerCase).allMatch(line.toLowerCase()::contains)) {
-                        item.getProjects().forEach(project -> {
-                            projects.putIfAbsent(project, 0);
-                            projects.put(project, projects.get(project) + 1);
-                        });
-                        item.getContexts().forEach(context -> {
-                            contexts.putIfAbsent(context, 0);
-                            contexts.put(context, contexts.get(context) + 1);
-                        });
-
-                        if (onlyPriority && inProgress) {
-                            if (item.hasPriority() && item.isInProgress()) {
-                                matched++;
-                                if (!(showProjects || showContexts)) {
-                                    Console.info(String.format("[%s%2s%s] %s", Ansi.BLUE, lineNum, Ansi.RESET, item));
-                                }
-                            }
-                        } else if (onlyPriority) {
-                            if (item.hasPriority()) {
-                                matched++;
-                                if (!(showProjects || showContexts)) {
-                                    Console.info(String.format("[%s%2s%s] %s", Ansi.BLUE, lineNum, Ansi.RESET, item));
-                                }
-                            }
-                        } else if (inProgress) {
-                            if (item.isInProgress()) {
-                                matched++;
-                                if (!(showProjects || showContexts)) {
-                                    Console.info(String.format("[%s%2s%s] %s", Ansi.BLUE, lineNum, Ansi.RESET, item));
-                                }
-                            }
-                        } else {
-                            matched++;
-                            if (!(showProjects || showContexts)) {
-                                Console.info(String.format("[%s%2s%s] %s", Ansi.BLUE, lineNum, Ansi.RESET, item));
-                            }
-                        }
-                    }
-                }
-            }
-
-            Console.divide();
-            if (todo.showAll()) {
-                if (matched == limit) {
-                    Console.info(String.format("TODO: %s (%s done) of ... (limited to %s) tasks shown", matched, completed, limit));
-                } else {
-                    Console.info(String.format("TODO: %s (%s done) of %s tasks shown", matched, completed, lineNum));
-                }
-            } else {
-                if (matched == limit) {
-                    Console.info(String.format("TODO: %s of ... (limited to %s) tasks shown", matched, limit));
-                } else {
-                    Console.info(String.format("TODO: %s of %s tasks shown", matched, lineNum));
-                }
-            }
-            if (showProjects) {
-                Console.info(String.format("projects: %s", projects));
-            }
-            if (showContexts) {
-                Console.info(String.format("contexts: %s", contexts));
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            Logger.info(String.format("contexts: %s", contexts));
         }
+    }
+
+    private void listProjects(final List<TodoItem> todoItemList) {
+        if (displayProjects) {
+            Map<String, Integer> projects = new HashMap<>();
+            todoItemList.forEach(todoItem
+                    -> todoItem.getProjects().forEach(project -> {
+                projects.putIfAbsent(project, 0);
+                projects.computeIfPresent(project, (key, value) -> value + 1);
+            }));
+
+            Logger.info(String.format("projects: %s", projects));
+        }
+    }
+
+    private List<TodoItem> filterTodoItems(final List<TodoItem> todoItemList, final List<String> filters) {
+        Logger.debug(String.format("Filtering '%s' todo items with filters '%s'", todoItemList.size(), filters));
+        if (filters.isEmpty()) {
+            Logger.debug("No filters defined, returning original list");
+            return new ArrayList<>(todoItemList);
+        } else {
+            List<TodoItem> filteredTodoItems = todoItemList.stream()
+                    .filter(item -> filters.stream()
+                            .map(String::toLowerCase)
+                            .allMatch(item.rawValue().toLowerCase()::contains))
+                    .collect(Collectors.toList());
+            Logger.debug(String.format("Filtered list contains '%s' todo items", filteredTodoItems.size()));
+            return filteredTodoItems;
+        }
+    }
+
+    private List<TodoItem> readAllTodoItems(final Path todoFile) {
+        Logger.debug(String.format("Reading all todo.txt items from '%s'", todoFile));
+        List<TodoItem> todoItemList = new ArrayList<>();
+        try (Scanner scanner = new Scanner(todoFile)) {
+            while (scanner.hasNextLine()) {
+                todoItemList.add(new TodoItem(todoItemList.size() + 1, scanner.nextLine()));
+            }
+        } catch (IOException e) {
+            Logger.error(String.format("Could not read '%s' because %s", todoFile, e.getMessage()));
+            Logger.debug(e);
+        }
+        return todoItemList;
     }
 }

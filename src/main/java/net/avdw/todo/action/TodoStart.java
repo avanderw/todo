@@ -30,7 +30,7 @@ public class TodoStart implements Runnable {
      */
     @Override
     public void run() {
-        Optional<TodoItem> line = reader.readLine(todo.getTodoFile(), idx);
+        Optional<TodoItemV1> line = reader.readLine(todo.getTodoFile(), idx);
         if (line.isPresent() && line.get().isNotDone()) {
             try {
                 if (line.get().isStarted()) {
@@ -50,7 +50,7 @@ public class TodoStart implements Runnable {
 
                     Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, line.get()));
                     Console.divide();
-                    Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItem(startedLine)));
+                    Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItemV1(startedLine)));
                 }
             } catch (IOException e) {
                 Console.error(String.format("Error writing `%s`", todo.getTodoFile()));

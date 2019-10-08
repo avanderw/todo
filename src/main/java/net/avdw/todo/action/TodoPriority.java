@@ -62,7 +62,7 @@ public class TodoPriority implements Runnable {
         } else if (idx == 0) {
             CommandLine.usage(TodoPriority.class, System.out);
         } else {
-            Optional<TodoItem> line = reader.readLine(todo.getTodoFile(), idx);
+            Optional<TodoItemV1> line = reader.readLine(todo.getTodoFile(), idx);
 
             if (line.isPresent()) {
                 String newLine = null;
@@ -89,7 +89,7 @@ public class TodoPriority implements Runnable {
 
                     Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, line.get()));
                     Console.divide();
-                    Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItem(newLine)));
+                    Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItemV1(newLine)));
                 }
             } else {
                 Console.error(String.format("Could not find index (%s)", idx));
@@ -103,14 +103,14 @@ public class TodoPriority implements Runnable {
             int currIdx = 0;
             while (scanner.hasNext()) {
                 String raw = scanner.nextLine();
-                TodoItem item = new TodoItem(raw);
+                TodoItemV1 item = new TodoItemV1(raw);
                 if (item.isNotDone()) {
                     currIdx++;
                 }
                 if (item.hasPriority()) {
                     String newValue = item.rawValue().replaceFirst("^\\([A-Z]\\)\\s", "");
                     replace(item.rawValue(), newValue, todo.getTodoFile());
-                    Console.info(String.format("[%s%2s%s] %s", Ansi.BLUE, currIdx, Ansi.RESET, new TodoItem(newValue)));
+                    Console.info(String.format("[%s%2s%s] %s", Ansi.BLUE, currIdx, Ansi.RESET, new TodoItemV1(newValue)));
                 }
             }
         } catch (IOException e) {
@@ -124,10 +124,10 @@ public class TodoPriority implements Runnable {
         List<Priority> usedPriorities = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(todo.getTodoFile())) {
-            List<TodoItem> todoItems = new ArrayList<>();
+            List<TodoItemV1> todoItems = new ArrayList<>();
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                TodoItem item = new TodoItem(line);
+                TodoItemV1 item = new TodoItemV1(line);
                 todoItems.add(item);
 
                 item.getPriority().ifPresent(priority -> {
@@ -153,9 +153,9 @@ public class TodoPriority implements Runnable {
             });
 
             for (int i = 0; i < todoItems.size(); i++) {
-                TodoItem item = todoItems.get(i);
+                TodoItemV1 item = todoItems.get(i);
                 if (item.getPriority().isPresent() && mapping.containsKey(item.getPriority().get())) {
-                    todoItems.set(i, new TodoItem(item.rawValue().replace(
+                    todoItems.set(i, new TodoItemV1(item.rawValue().replace(
                             String.format("(%s)", item.getPriority().get()),
                             String.format("(%s)", mapping.get(item.getPriority().get())))));
                     Logger.debug(String.format("Replacing%n%s%n%s", item, todoItems.get(i)));
@@ -181,12 +181,12 @@ public class TodoPriority implements Runnable {
         Optional<Priority> lowestFreePriority = reader.readLowestFreePriority(todo.getTodoFile());
         if (lowestFreePriority.isPresent()) {
             if (lowestFreePriority.get() == Priority.Z) {
-                List<TodoItem> items = new ArrayList<>();
+                List<TodoItemV1> items = new ArrayList<>();
                 try (Scanner scanner = new Scanner(todo.getTodoFile())) {
                     while (scanner.hasNextLine()) {
-                        TodoItem item = new TodoItem(scanner.nextLine());
+                        TodoItemV1 item = new TodoItemV1(scanner.nextLine());
                         if (item.getPriority().isPresent()) {
-                            items.add(new TodoItem(item.rawValue()
+                            items.add(new TodoItemV1(item.rawValue()
                                     .replace(String.format("(%s)", item.getPriority().get()),
                                             String.format("(%s)", item.getPriority().get().demote()))));
                         } else {
@@ -211,12 +211,12 @@ public class TodoPriority implements Runnable {
 
     private void shiftUpPriorities() {
         if (reader.readHighestFreePriority(todo.getTodoFile()) == Priority.A) {
-            List<TodoItem> items = new ArrayList<>();
+            List<TodoItemV1> items = new ArrayList<>();
             try (Scanner scanner = new Scanner(todo.getTodoFile())) {
                 while (scanner.hasNextLine()) {
-                    TodoItem item = new TodoItem(scanner.nextLine());
+                    TodoItemV1 item = new TodoItemV1(scanner.nextLine());
                     if (item.getPriority().isPresent()) {
-                        items.add(new TodoItem(item.rawValue()
+                        items.add(new TodoItemV1(item.rawValue()
                                 .replace(String.format("(%s)", item.getPriority().get()),
                                         String.format("(%s)", item.getPriority().get().promote()))));
                     } else {

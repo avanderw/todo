@@ -3,7 +3,7 @@ package net.avdw.todo.action;
 import com.google.inject.Inject;
 import net.avdw.todo.Console;
 import net.avdw.todo.Todo;
-import net.avdw.todo.TodoItem;
+import net.avdw.todo.TodoItemV1;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
@@ -38,7 +38,7 @@ public class TodoRepeat implements Runnable {
      */
     @Override
     public void run() {
-        Optional<TodoItem> doneItem = todoDone.done(todo.getTodoFile(), idx);
+        Optional<TodoItemV1> doneItem = todoDone.done(todo.getTodoFile(), idx);
         doneItem.ifPresent(todoItem -> {
             String rawValue = todoItem.rawValue();
             if (todoItem.hasPriority()) {
@@ -48,7 +48,7 @@ public class TodoRepeat implements Runnable {
             }
             rawValue = rawValue.replaceAll("due:\\d\\d\\d\\d-\\d\\d-\\d\\d", String.format("due:%s", simpleDateFormat.format(dueDate)));
             todoAdd.add(todo.getTodoFile(), rawValue);
-            Console.info(String.format("Added: %s", new TodoItem(rawValue)));
+            Console.info(String.format("Added: %s", new TodoItemV1(rawValue)));
         });
     }
 }

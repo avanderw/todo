@@ -14,7 +14,7 @@ public class TodoWriter {
      * @param todoItems the list of todo items
      * @param todoFile  the file to write the todo items to
      */
-    public void write(final List<TodoItem> todoItems, final Path todoFile) {
+    public void write(final List<TodoItemV1> todoItems, final Path todoFile) {
         StringBuilder stringBuilder = new StringBuilder();
         todoItems.forEach(todoItem -> stringBuilder.append(String.format("%s%n", todoItem.rawValue())));
         try {

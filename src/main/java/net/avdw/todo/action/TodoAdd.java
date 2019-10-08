@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import net.avdw.todo.Ansi;
 import net.avdw.todo.Console;
 import net.avdw.todo.Todo;
-import net.avdw.todo.TodoItem;
+import net.avdw.todo.TodoItemV1;
 import net.avdw.todo.property.PropertyKey;
 import net.avdw.todo.property.PropertyResolver;
 import org.pmw.tinylog.Logger;
@@ -59,7 +59,7 @@ public class TodoAdd implements Runnable {
             lineNum++;
 
             add(todo.getTodoFile(), addition);
-            Console.info(String.format("[%s%2s%s] %sAdded%s: %s", Ansi.BLUE, lineNum, Ansi.RESET, Ansi.GREEN, Ansi.RESET, new TodoItem(addition)));
+            Console.info(String.format("[%s%2s%s] %sAdded%s: %s", Ansi.BLUE, lineNum, Ansi.RESET, Ansi.GREEN, Ansi.RESET, new TodoItemV1(addition)));
         } catch (IOException e) {
             Console.error(String.format("Could not add `%s` to `%s`", todo.getTodoFile(), addition));
             Logger.error(e);

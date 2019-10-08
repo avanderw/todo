@@ -26,13 +26,13 @@ public class TodoReader {
      * @param idx      the index in the file to find
      * @return the todo item that was found
      */
-    public Optional<TodoItem> readLine(final Path todoFile, final int idx) {
-        TodoItem readLine = null;
+    public Optional<TodoItemV1> readLine(final Path todoFile, final int idx) {
+        TodoItemV1 readLine = null;
         try (Scanner scanner = new Scanner(todoFile)) {
             int lineNum = 0;
             while (scanner.hasNext()) {
                 String line = scanner.nextLine();
-                TodoItem item = new TodoItem(line);
+                TodoItemV1 item = new TodoItemV1(line);
                 if (item.isNotDone() || todo.showAll()) {
                     lineNum++;
                     if (lineNum == idx) {
@@ -90,7 +90,7 @@ public class TodoReader {
         try (Scanner scanner = new Scanner(todoFile)) {
             while (scanner.hasNext()) {
                 String line = scanner.nextLine();
-                TodoItem item = new TodoItem(line);
+                TodoItemV1 item = new TodoItemV1(line);
                 if (item.hasPriority()) {
                     item.getPriority().ifPresent(priorities::remove);
                 }

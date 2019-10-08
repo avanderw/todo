@@ -13,5 +13,5 @@
     <suppress checks="LineLength"/>
     <suppress checks="AvoidStarImport"/>
     <suppress checks="HiddenField"/>
-    <suppress checks="DesignForExtension" files="TodoItem\.java"/>
+    <suppress checks="DesignForExtension" files="TodoItem.java|TodoItemV1.java"/>
 </suppressions>

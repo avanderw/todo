@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class TodoDirectory {
     private Path path;
-    private List<TodoItem> todoItemList = new ArrayList<>();
+    private List<TodoItemV1> todoItemList = new ArrayList<>();
 
     public TodoDirectory(final Path path) throws ReadException {
         this.path = path;
@@ -22,14 +22,14 @@ public class TodoDirectory {
      * @return the number of incomplete items in the todo.txt file
      */
     public long numIncompleteItems() {
-        return todoItemList.stream().filter(TodoItem::isNotDone).count();
+        return todoItemList.stream().filter(TodoItemV1::isNotDone).count();
     }
 
-    private List<TodoItem> loadItems() throws ReadException {
-        List<TodoItem> items = new ArrayList<>();
+    private List<TodoItemV1> loadItems() throws ReadException {
+        List<TodoItemV1> items = new ArrayList<>();
         try (Scanner scanner = new Scanner(path.resolve("todo.txt"))) {
             while (scanner.hasNext()) {
-                items.add(new TodoItem(scanner.nextLine()));
+                items.add(new TodoItemV1(scanner.nextLine()));
             }
         } catch (IOException e) {
             Logger.warn(String.format("Could not load items from %s", path));

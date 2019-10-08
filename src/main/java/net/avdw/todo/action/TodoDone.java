@@ -42,8 +42,8 @@ public class TodoDone implements Runnable {
      * @param idx the entry in the file to complete
      * @return the original line that was marked as done
      */
-    Optional<TodoItem> done(final Path todoFile, final int idx) {
-        Optional<TodoItem> line = reader.readLine(todoFile, idx);
+    Optional<TodoItemV1> done(final Path todoFile, final int idx) {
+        Optional<TodoItemV1> line = reader.readLine(todoFile, idx);
         if (line.isPresent() && line.get().isNotDone()) {
             try {
                 String completeLine = String.format("x %s %s",
@@ -55,7 +55,7 @@ public class TodoDone implements Runnable {
 
                 Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, line.get()));
                 Console.divide();
-                Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItem(completeLine)));
+                Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItemV1(completeLine)));
             } catch (IOException e) {
                 Console.error(String.format("Error writing `%s`", todoFile));
                 Logger.error(e);

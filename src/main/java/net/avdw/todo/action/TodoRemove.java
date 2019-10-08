@@ -29,7 +29,7 @@ public class TodoRemove implements Runnable {
      */
     @Override
     public void run() {
-        Optional<TodoItem> line = remove(todo.getTodoFile(), idx);
+        Optional<TodoItemV1> line = remove(todo.getTodoFile(), idx);
 
         line.ifPresent(s -> Console.info(String.format("[%s%s%s] %sRemoved:%s %s",
                 Ansi.BLUE, idx, Ansi.RESET,
@@ -45,8 +45,8 @@ public class TodoRemove implements Runnable {
      * @param idx the todo index to find
      * @return the todo entry that was removed
      */
-    public Optional<TodoItem> remove(final Path fromFile, final int idx) {
-        Optional<TodoItem> line = reader.readLine(fromFile, idx);
+    public Optional<TodoItemV1> remove(final Path fromFile, final int idx) {
+        Optional<TodoItemV1> line = reader.readLine(fromFile, idx);
         if (line.isPresent()) {
             try {
                 String contents = new String(Files.readAllBytes(fromFile));

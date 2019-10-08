@@ -47,7 +47,7 @@ public class TodoMigrate implements Runnable {
         Path fromFile = fromDirectory.resolve("todo.txt");
         Path toFile = toDirectory.resolve("todo.txt");
 
-        Optional<TodoItem> line = reader.readLine(fromFile, idx);
+        Optional<TodoItemV1> line = reader.readLine(fromFile, idx);
         if (line.isPresent()) {
             todoAdd.add(toFile, line.get().rawValue());
             todoRemove.remove(fromFile, idx);
