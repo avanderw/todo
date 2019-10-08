@@ -109,15 +109,15 @@ public class TodoItem {
     }
 
     public Set<String> getContexts() {
-        Set<String> projects = new HashSet<>();
+        Set<String> contexts = new HashSet<>();
         Scanner scanner = new Scanner(line);
         while (scanner.hasNext()) {
             String token = scanner.next();
             if (token.startsWith("@")) {
-                projects.add(token.substring(1));
+                contexts.add(token.substring(1));
             }
         }
-        return projects;
+        return contexts;
     }
 
     public String rawValue() {
@@ -142,5 +142,13 @@ public class TodoItem {
 
     public int getIdx() {
         return idx;
+    }
+
+    public boolean hasContext() {
+        return !getContexts().isEmpty();
+    }
+
+    public boolean hasProjects() {
+        return !getProjects().isEmpty();
     }
 }

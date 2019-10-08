@@ -39,7 +39,6 @@ import java.util.stream.Collectors;
                 TodoRename.class,
                 TodoClear.class,
                 TodoList.class,
-                TodoListV1.class,
                 TodoAdd.class,
                 TodoStart.class,
                 TodoPriority.class,

@@ -21,11 +21,11 @@
 2019-07-30 Enhance +migrate functionality logging to be friendlier
 2019-07-30 Fix +list to fail when targeting non-existing global with existing local
 2019-08-12 Add +grouping feature to list, e.g. by project or search term
-2019-08-12 Add +report graph chain for completed items
+x 2019-10-08 2019-08-12 Add +report graph chain for completed items
 2019-08-12 Add google +sync support @research
 2019-08-12 Enhance +clean to move todos into a stale.txt
 2019-08-12 Enhance +list -w to show empty results when nothing is in progress
-2019-08-12 Enhance +report for showing percentage complete on projects
+x 2019-10-08 2019-08-12 Enhance +report for showing percentage complete on projects
 2019-08-12 Enhance +report to list completely done projects and their done date
 2019-08-12 Enhance +report to list contexts and projects with priority
 2019-08-12 Enhance +report to list done items by day dating back x days with omit option
@@ -87,3 +87,4 @@ x 2019-09-25 2019-07-26 Add +clean feature which will add priority to started it
 x 2019-09-25 2019-08-12 Enhance +priority to shift todos up or down
 x 2019-09-30 2019-09-27 Update +due date to color according to deadline
 x 2019-10-07 2019-07-30 Fix +remove functionality on LF vs CRLF start:2019-10-07
+2019-10-08 Fix inconsistencies between done and list

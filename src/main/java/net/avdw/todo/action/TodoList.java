@@ -5,6 +5,7 @@ import net.avdw.todo.Ansi;
 import net.avdw.todo.Console;
 import net.avdw.todo.Todo;
 import net.avdw.todo.TodoItem;
+import net.avdw.todo.render.TodoDoneStatusbar;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -19,6 +20,9 @@ import java.util.stream.Collectors;
 
 @Command(name = "ls", description = "List the items in todo.txt")
 public class TodoList implements Runnable {
+    private static final double PERCENTAGE = 100.;
+    private static final double UPPER_BOUND = 75.;
+
     @Inject
     @ParentCommand
     private Todo todo;
@@ -40,6 +44,9 @@ public class TodoList implements Runnable {
 
     @Option(names = "--limit", description = "Limit the amount of items shown")
     private int limit = Integer.MAX_VALUE;
+
+    @Inject
+    private TodoDoneStatusbar todoDoneStatusbar;
 
     /**
      * Entry point for picocli.
@@ -108,27 +115,51 @@ public class TodoList implements Runnable {
 
     private void listContexts(final List<TodoItem> todoItemList) {
         if (displayContexts) {
-            Map<String, Integer> contexts = new HashMap<>();
+            Map<String, List<TodoItem>> contexts = new HashMap<>();
             todoItemList.forEach(todoItem
                     -> todoItem.getContexts().forEach(context -> {
-                contexts.putIfAbsent(context, 0);
-                contexts.computeIfPresent(context, (key, value) -> value + 1);
+                contexts.putIfAbsent(context, new ArrayList<>());
+                contexts.get(context).add(todoItem);
             }));
 
-            Logger.info(String.format("contexts: %s", contexts));
+            contexts.forEach((key, value) -> {
+                Collections.reverse(value);
+                long done = value.stream().filter(TodoItem::isDone).count();
+                double percentage = done * PERCENTAGE / value.size();
+
+                Logger.info(String.format("%s%16s%s ( %s%3.0f%%%s ): %s",
+                        Ansi.CYAN, key, Ansi.RESET,
+                        percentage > UPPER_BOUND ? Ansi.GREEN : "", percentage, Ansi.RESET,
+                        todoDoneStatusbar.createBar(value)));
+            });
+            Logger.info("---");
+            long withContext = todoItemList.stream().filter(TodoItem::hasContext).count();
+            Logger.info(String.format("%s contexts, %s todo items", contexts.size(), withContext));
         }
     }
 
     private void listProjects(final List<TodoItem> todoItemList) {
         if (displayProjects) {
-            Map<String, Integer> projects = new HashMap<>();
+            Map<String, List<TodoItem>> projects = new HashMap<>();
             todoItemList.forEach(todoItem
                     -> todoItem.getProjects().forEach(project -> {
-                projects.putIfAbsent(project, 0);
-                projects.computeIfPresent(project, (key, value) -> value + 1);
+                projects.putIfAbsent(project, new ArrayList<>());
+                projects.get(project).add(todoItem);
             }));
 
-            Logger.info(String.format("projects: %s", projects));
+            projects.forEach((key, value) -> {
+                Collections.reverse(value);
+                long done = value.stream().filter(TodoItem::isDone).count();
+                double percentage = done * PERCENTAGE / value.size();
+
+                Logger.info(String.format("%s%16s%s ( %s%3.0f%%%s ): %s",
+                        Ansi.MAGENTA, key, Ansi.RESET,
+                        percentage > UPPER_BOUND ? Ansi.GREEN : "", percentage, Ansi.RESET,
+                        todoDoneStatusbar.createBar(value)));
+            });
+            Logger.info("---");
+            long withProjects = todoItemList.stream().filter(TodoItem::hasProjects).count();
+            Logger.info(String.format("%s projects, %s todo items", projects.size(), withProjects));
         }
     }
 

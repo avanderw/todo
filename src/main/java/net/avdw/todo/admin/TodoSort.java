@@ -2,7 +2,7 @@ package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
 import net.avdw.todo.Todo;
-import net.avdw.todo.action.TodoListV1;
+import net.avdw.todo.action.TodoList;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ParentCommand;
@@ -19,7 +19,7 @@ public class TodoSort implements Runnable {
     private Todo todo;
 
     @Inject
-    private TodoListV1 list;
+    private TodoList list;
 
     /**
      * Entry point for picocli.
