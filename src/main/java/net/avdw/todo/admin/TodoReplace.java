@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 
-@Command(name = "rename", description = "Replace one string for another")
-public class TodoRename implements Runnable {
+@Command(name = "replace", description = "Replace one string for another")
+public class TodoReplace implements Runnable {
     @ParentCommand
     private Todo todo;
 
