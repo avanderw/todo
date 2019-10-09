@@ -15,6 +15,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
+import static net.avdw.todo.render.ConsoleFormatting.h1;
+
 @Command(name = "do", description = "Complete a todo item")
 public class TodoDone implements Runnable {
     @ParentCommand
@@ -37,6 +39,7 @@ public class TodoDone implements Runnable {
      */
     @Override
     public void run() {
+        h1("todo:done");
         done(todo.getTodoFile(), idx);
     }
 

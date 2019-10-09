@@ -1,6 +1,5 @@
 package net.avdw.todo.admin;
 
-import net.avdw.todo.Console;
 import net.avdw.todo.Todo;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
@@ -10,6 +9,8 @@ import picocli.CommandLine.ParentCommand;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+
+import static net.avdw.todo.render.ConsoleFormatting.h1;
 
 @Command(name = "replace", description = "Replace one string for another")
 public class TodoReplace implements Runnable {
@@ -29,14 +30,15 @@ public class TodoReplace implements Runnable {
      */
     @Override
     public void run() {
+        h1("todo:replace");
         todo.backup();
         try {
             String contents = new String(Files.readAllBytes(todo.getTodoFile()));
             Files.write(todo.getTodoFile(), contents.replaceAll(from, to).getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
-            Console.info(String.format("Changed %s to %s", from, to));
+            Logger.info(String.format("Changed %s to %s", from, to));
         } catch (IOException e) {
-            Console.error(String.format("Error writing `%s`", to));
-            Logger.error(e);
+            Logger.error(String.format("Error writing `%s`", to));
+            Logger.debug(e);
         }
     }
 }

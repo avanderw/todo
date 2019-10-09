@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static net.avdw.todo.render.ConsoleFormatting.h1;
+
 @Command(name = "sort", description = "Sort todo.txt")
 public class TodoSort implements Runnable {
     @ParentCommand
@@ -26,6 +28,7 @@ public class TodoSort implements Runnable {
      */
     @Override
     public void run() {
+        h1("todo:sort");
         List<String> todos = new ArrayList<>();
         try (Scanner scanner = new Scanner(todo.getTodoFile())) {
             while (scanner.hasNext()) {

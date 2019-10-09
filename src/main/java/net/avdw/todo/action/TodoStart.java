@@ -13,6 +13,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
 
+import static net.avdw.todo.render.ConsoleFormatting.h1;
+import static net.avdw.todo.render.ConsoleFormatting.hr;
+
 @Command(name = "start", description = "Start a todo item")
 public class TodoStart implements Runnable {
 
@@ -30,15 +33,16 @@ public class TodoStart implements Runnable {
      */
     @Override
     public void run() {
+        h1("todo:start");
         Optional<TodoItemV1> line = reader.readLine(todo.getTodoFile(), idx);
         if (line.isPresent() && line.get().isNotDone()) {
             try {
                 if (line.get().isStarted()) {
-                    Console.info(String.format("[%s%s%s] %s",
+                    Logger.info(String.format("[%s%s%s] %s",
                             Ansi.BLUE, idx, Ansi.RESET,
                             line.get().rawValue()));
-                    Console.divide();
-                    Console.error("Item is already started");
+                    hr();
+                    Logger.warn("Item is already started");
                 } else {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     String startedLine = String.format("%s start:%s", line.get().rawValue(), sdf.format(new Date()));
@@ -48,22 +52,22 @@ public class TodoStart implements Runnable {
                     String contents = new String(Files.readAllBytes(todo.getTodoFile()));
                     Files.write(todo.getTodoFile(), contents.replace(line.get().rawValue(), startedLine).getBytes());
 
-                    Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, line.get()));
-                    Console.divide();
-                    Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItemV1(startedLine)));
+                    Logger.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, line.get()));
+                    hr();
+                    Logger.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItemV1(startedLine)));
                 }
             } catch (IOException e) {
-                Console.error(String.format("Error writing `%s`", todo.getTodoFile()));
-                Logger.error(e);
+                Logger.error(String.format("Error writing `%s`", todo.getTodoFile()));
+                Logger.debug(e);
             }
         } else if (line.isPresent() && line.get().isDone()) {
-            Console.info(String.format("[%s%s%s] %s",
+            Logger.info(String.format("[%s%s%s] %s",
                     Ansi.BLUE, idx, Ansi.RESET,
                     line));
-            Console.divide();
-            Console.error("Item is already marked as done");
+            hr();
+            Logger.warn("Item is already marked as done");
         } else {
-            Console.error(String.format("Could not find index (%s)", idx));
+            Logger.warn(String.format("Could not find index (%s)", idx));
         }
     }
 }

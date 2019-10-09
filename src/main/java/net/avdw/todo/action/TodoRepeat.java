@@ -1,10 +1,10 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Console;
 import net.avdw.todo.Todo;
 import net.avdw.todo.TodoItemV1;
 import net.avdw.todo.item.TodoItem;
+import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
@@ -12,6 +12,8 @@ import picocli.CommandLine.ParentCommand;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Optional;
+
+import static net.avdw.todo.render.ConsoleFormatting.h1;
 
 @Command(name = "repeat", description = "Do and add an entry to todo.txt")
 public class TodoRepeat implements Runnable {
@@ -39,6 +41,7 @@ public class TodoRepeat implements Runnable {
      */
     @Override
     public void run() {
+        h1("todo:repeat");
         Optional<TodoItem> doneItem = todoDone.done(todo.getTodoFile(), idx);
         doneItem.ifPresent(todoItem -> {
             String rawValue = todoItem.rawValue();
@@ -49,7 +52,7 @@ public class TodoRepeat implements Runnable {
             }
             rawValue = rawValue.replaceAll("due:\\d\\d\\d\\d-\\d\\d-\\d\\d", String.format("due:%s", simpleDateFormat.format(dueDate)));
             todoAdd.add(todo.getTodoFile(), rawValue);
-            Console.info(String.format("Added: %s", new TodoItemV1(rawValue)));
+            Logger.info(String.format("Added: %s", new TodoItemV1(rawValue)));
         });
     }
 }

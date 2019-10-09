@@ -19,6 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import static net.avdw.todo.render.ConsoleFormatting.h1;
+
 @Command(name = "status", description = "Display repository information")
 public class TodoStatus implements Runnable {
 
@@ -46,19 +48,20 @@ public class TodoStatus implements Runnable {
      */
     @Override
     public void run() {
-        Console.h1("Working Paths");
-        Console.info(String.format("Local    : %s", Files.exists(localPath) ? localPath : "todo init"));
-        Console.info(String.format("Global   : %s", Files.exists(globalPath) ? globalPath : "todo --global init"));
-        Console.info(String.format("Selected : %s", todo.findDirectory()));
-        Console.blank();
-        Console.h1("Known Paths");
+        h1("todo:status");
+        Logger.info("Working Paths");
+        Logger.info(String.format("Local    : %s", Files.exists(localPath) ? localPath : "todo init"));
+        Logger.info(String.format("Global   : %s", Files.exists(globalPath) ? globalPath : "todo --global init"));
+        Logger.info(String.format("Selected : %s", todo.findDirectory()));
+        Logger.info("");
+        Logger.info("Known Paths");
         if (properties.containsKey(PropertyModule.TODO_PATHS)) {
             String todoPaths = properties.getProperty(PropertyModule.TODO_PATHS);
             List<String> removePaths = new ArrayList<>();
             Arrays.stream(todoPaths.split(";")).forEach(path -> {
                 try {
                     TodoDirectory todoDirectory = new TodoDirectory(Paths.get(path));
-                    Console.info(String.format("[%s%2s%s] %s", Ansi.BLUE, todoDirectory.numIncompleteItems(), Ansi.RESET, path));
+                    Logger.info(String.format("[%s%2s%s] %s", Ansi.BLUE, todoDirectory.numIncompleteItems(), Ansi.RESET, path));
                 } catch (TodoDirectory.ReadException e) {
                     Logger.info(String.format("Going to remove known path %s", path));
                     removePaths.add(path);
@@ -80,11 +83,11 @@ public class TodoStatus implements Runnable {
                 Logger.info("Wrote new property file");
             }
         } else {
-            Console.info("No paths found");
+            Logger.info("No paths found");
         }
 
         if (!Files.exists(localPath) || !Files.exists(globalPath)) {
-            Console.divide();
+            Logger.info("---");
             CommandLine.usage(TodoInit.class, System.out);
         }
     }

@@ -79,10 +79,10 @@ public class Todo implements Runnable {
         Path directory = findDirectory();
 
         if (Files.exists(directory)) {
-            Console.info(String.format("Directory: %s", directory));
+            Logger.info(String.format("Directory: %s", directory));
             CommandLine.usage(Todo.class, System.out);
         } else {
-            Console.error("No directory found (or any of the parent directories)");
+            Logger.warn("No directory found (or any of the parent directories)");
             CommandLine.usage(TodoInit.class, System.out);
         }
     }
@@ -127,7 +127,8 @@ public class Todo implements Runnable {
                 globalProperties.store(new FileWriter(globalPropertyPath.toFile()), "Todo Properties");
                 Logger.debug(String.format("Wrote %s", globalPropertyPath));
             } catch (IOException e) {
-                Console.error("Could not save property file");
+                Logger.error("Could not save property file");
+                Logger.debug(e);
             }
         }
         return directory.resolve("todo.txt");

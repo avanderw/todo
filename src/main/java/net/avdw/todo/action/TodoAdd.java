@@ -2,7 +2,6 @@ package net.avdw.todo.action;
 
 import com.google.inject.Inject;
 import net.avdw.todo.Ansi;
-import net.avdw.todo.Console;
 import net.avdw.todo.Todo;
 import net.avdw.todo.TodoItemV1;
 import net.avdw.todo.property.PropertyKey;
@@ -21,6 +20,8 @@ import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
+
+import static net.avdw.todo.render.ConsoleFormatting.h1;
 
 @Command(name = "add", description = "Add an item to todo.txt")
 public class TodoAdd implements Runnable {
@@ -44,6 +45,7 @@ public class TodoAdd implements Runnable {
      */
     @Override
     public void run() {
+        h1("todo:add");
         if (date || Boolean.parseBoolean(propertyResolver.resolve(PropertyKey.TODO_ADD_AUTO_DATE))) {
             addition = String.format("%s %s", simpleDateFormat.format(new Date()), addition);
         }
@@ -59,10 +61,10 @@ public class TodoAdd implements Runnable {
             lineNum++;
 
             add(todo.getTodoFile(), addition);
-            Console.info(String.format("[%s%2s%s] %sAdded%s: %s", Ansi.BLUE, lineNum, Ansi.RESET, Ansi.GREEN, Ansi.RESET, new TodoItemV1(addition)));
+            Logger.info(String.format("[%s%2s%s] %sAdded%s: %s", Ansi.BLUE, lineNum, Ansi.RESET, Ansi.GREEN, Ansi.RESET, new TodoItemV1(addition)));
         } catch (IOException e) {
-            Console.error(String.format("Could not add `%s` to `%s`", todo.getTodoFile(), addition));
-            Logger.error(e);
+            Logger.error(String.format("Could not add `%s` to `%s`", todo.getTodoFile(), addition));
+            Logger.debug(e);
         }
     }
 
@@ -79,8 +81,8 @@ public class TodoAdd implements Runnable {
              PrintWriter out = new PrintWriter(bw)) {
             out.println(rawValue);
         } catch (IOException e) {
-            Console.error(String.format("Could not add `%s` to `%s`", rawValue, toFile));
-            Logger.error(e);
+            Logger.error(String.format("Could not add `%s` to `%s`", rawValue, toFile));
+            Logger.debug(e);
         }
     }
 }

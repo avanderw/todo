@@ -2,10 +2,9 @@ package net.avdw.todo.action;
 
 import com.google.inject.Inject;
 import net.avdw.todo.Ansi;
-import net.avdw.todo.Console;
 import net.avdw.todo.Todo;
-import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.file.TodoFileReader;
+import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.render.TodoDoneStatusbar;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
@@ -15,6 +14,9 @@ import picocli.CommandLine.ParentCommand;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static net.avdw.todo.render.ConsoleFormatting.h1;
+import static net.avdw.todo.render.ConsoleFormatting.hr;
 
 
 @Command(name = "ls", description = "List the items in todo.txt")
@@ -55,6 +57,7 @@ public class TodoList implements Runnable {
      */
     @Override
     public void run() {
+        h1("todo:list");
         List<TodoItem> allTodoItems = todoFileReader.readAll(todo.getTodoFile());
         List<TodoItem> filteredTodoItems = filterTodoItems(allTodoItems, filters);
 
@@ -76,10 +79,10 @@ public class TodoList implements Runnable {
 
         for (int i = 0; i < filteredTodoItems.size() && i < limit; i++) {
             TodoItem item = filteredTodoItems.get(i);
-            Console.info(String.format("%s", item));
+            Logger.info(String.format("%s", item));
         }
 
-        Console.divide();
+        hr();
         long completed = allTodoItems.stream().filter(TodoItem::isComplete).count();
         Logger.info(String.format("%s of %s (%s done) todo items shown", filteredTodoItems.size(), allTodoItems.size(), completed));
 

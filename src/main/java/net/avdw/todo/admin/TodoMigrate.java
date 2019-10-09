@@ -4,12 +4,15 @@ import com.google.inject.Inject;
 import net.avdw.todo.*;
 import net.avdw.todo.action.TodoAdd;
 import net.avdw.todo.action.TodoRemove;
+import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
 import java.nio.file.Path;
 import java.util.Optional;
+
+import static net.avdw.todo.render.ConsoleFormatting.h1;
 
 @Command(name = "migrate", description = "Move todo between local and global")
 public class TodoMigrate implements Runnable {
@@ -42,6 +45,7 @@ public class TodoMigrate implements Runnable {
      */
     @Override
     public void run() {
+        h1("todo:migrate");
         Path fromDirectory = todo.isGlobal() ? globalPath : localPath;
         Path toDirectory = todo.isGlobal() ? localPath : globalPath;
         Path fromFile = fromDirectory.resolve("todo.txt");
@@ -51,9 +55,9 @@ public class TodoMigrate implements Runnable {
         if (line.isPresent()) {
             todoAdd.add(toFile, line.get().rawValue());
             todoRemove.remove(fromFile, idx);
-            Console.info(String.format("Migrated line `%s` from `%s` to `%s`", line.get(), fromDirectory, toDirectory));
+            Logger.info(String.format("Migrated line `%s` from `%s` to `%s`", line.get(), fromDirectory, toDirectory));
         } else {
-            Console.error(String.format("Could not find index `%s` in `%s`", idx, fromDirectory));
+            Logger.warn(String.format("Could not find index `%s` in `%s`", idx, fromDirectory));
         }
     }
 }

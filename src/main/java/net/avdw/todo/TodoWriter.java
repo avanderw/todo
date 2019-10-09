@@ -21,7 +21,7 @@ public class TodoWriter {
             Files.write(todoFile, stringBuilder.toString().getBytes());
             Logger.debug(String.format("Wrote list of todo items to file '%s'", todoFile));
         } catch (IOException e) {
-            Console.error(String.format("Error writing `%s`", todoFile));
+            Logger.error(String.format("Error writing `%s`", todoFile));
             Logger.debug(e);
         }
     }

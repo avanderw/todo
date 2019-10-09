@@ -1,7 +1,6 @@
 package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Console;
 import net.avdw.todo.GlobalTodo;
 import net.avdw.todo.LocalTodo;
 import net.avdw.todo.Todo;
@@ -12,6 +11,8 @@ import picocli.CommandLine.ParentCommand;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import static net.avdw.todo.render.ConsoleFormatting.h1;
 
 @Command(name = "init", description = "Initialize .todo directory")
 public class TodoInit implements Runnable {
@@ -31,18 +32,19 @@ public class TodoInit implements Runnable {
      */
     @Override
     public void run() {
+        h1("todo:init");
         Path path = todo.isGlobal() ? globalPath : localPath;
 
         if (Files.exists(path)) {
-            Console.error("Directory `%s` already exists");
+            Logger.warn("Directory `%s` already exists");
         } else {
             try {
                 Files.createDirectories(path);
                 Files.createFile(path.resolve("todo.txt"));
-                Console.info(String.format("Initialized `%s` with a blank todo.txt", path));
+                Logger.info(String.format("Initialized `%s` with a blank todo.txt", path));
             } catch (IOException e) {
-                Console.error(String.format("Could not initialize directory `%s`", path));
-                Logger.error(e);
+                Logger.error(String.format("Could not initialize directory `%s`", path));
+                Logger.debug(e);
             }
         }
     }

@@ -1,4 +1,4 @@
-(A) 2019-09-17 Refactor all console output to use logger
+x 2019-10-09 2019-09-17 Refactor all console output to use logger
 (B) 2019-07-24 Enhance +status to show projects and contexts for each repository
 (C) 2019-07-23 Add @reporting for duration +report
 (D) 2019-07-23 Fix @bug when global +repository does not exist

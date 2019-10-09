@@ -42,8 +42,8 @@ public class TodoReader {
                 }
             }
         } catch (IOException e) {
-            Console.error(String.format("Error reading `%s`", todoFile));
-            Logger.error(e);
+            Logger.error(String.format("Error reading `%s`", todoFile));
+            Logger.debug(e);
         }
 
         if (readLine != null) {
@@ -96,7 +96,7 @@ public class TodoReader {
                 }
             }
         } catch (IOException e) {
-            Console.error(String.format("Error reading `%s`", todoFile));
+            Logger.error(String.format("Error reading `%s`", todoFile));
             Logger.debug(e);
         }
         return priorities;

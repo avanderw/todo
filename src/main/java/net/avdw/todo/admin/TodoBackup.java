@@ -1,6 +1,5 @@
 package net.avdw.todo.admin;
 
-import net.avdw.todo.Console;
 import net.avdw.todo.Todo;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
@@ -10,6 +9,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+
+import static net.avdw.todo.render.ConsoleFormatting.h1;
 
 @Command(name = "backup", description = "Write todo.txt.bak")
 public class TodoBackup implements Runnable {
@@ -21,6 +22,7 @@ public class TodoBackup implements Runnable {
      */
     @Override
     public void run() {
+        h1("todo:backup");
         backup(todo.getTodoFile(), todo.getBackupFile());
     }
 
@@ -32,10 +34,10 @@ public class TodoBackup implements Runnable {
     public void backup(final Path from, final Path to) {
         try {
             Files.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
-            Console.info(String.format("Replaced `%s` with `%s`", to, from));
+            Logger.info(String.format("Replaced '%s' with '%s'", to, from));
         } catch (IOException e) {
-            Console.error(String.format("Error writing `%s`", to));
-            Logger.error(e);
+            Logger.error(String.format("Error writing '%s'", to));
+            Logger.debug(e);
         }
     }
 }

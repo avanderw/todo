@@ -1,9 +1,9 @@
 package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Console;
 import net.avdw.todo.property.GlobalProperty;
 import net.avdw.todo.property.PropertyKey;
+import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
@@ -11,6 +11,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Properties;
+
+import static net.avdw.todo.render.ConsoleFormatting.h1;
 
 @Command(name = "set", description = "Set a property")
 public class TodoSet implements Runnable {
@@ -30,17 +32,18 @@ public class TodoSet implements Runnable {
      */
     @Override
     public void run() {
+        h1("todo:set");
         if (autoDateAdd != null) {
             properties.setProperty(PropertyKey.TODO_ADD_AUTO_DATE, autoDateAdd.toString());
-            Console.info(String.format("Setting %s=%s", PropertyKey.TODO_ADD_AUTO_DATE, autoDateAdd));
+            Logger.info(String.format("Setting %s=%s", PropertyKey.TODO_ADD_AUTO_DATE, autoDateAdd));
         }
 
         try {
             properties.store(new FileWriter(propertyPath.toFile()), "Todo Properties");
-            Console.divide();
-            Console.info("Property file saved");
+            Logger.info("");
+            Logger.info("Property file saved");
         } catch (IOException e) {
-            Console.error("Could not save property file");
+            Logger.warn("Could not save property file");
         }
     }
 }

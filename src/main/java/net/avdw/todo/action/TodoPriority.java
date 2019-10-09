@@ -14,6 +14,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+import static net.avdw.todo.render.ConsoleFormatting.h1;
+import static net.avdw.todo.render.ConsoleFormatting.hr;
+
 @Command(name = "pri", description = "Prioritize a todo item")
 public class TodoPriority implements Runnable {
     @ParentCommand
@@ -51,6 +54,7 @@ public class TodoPriority implements Runnable {
      */
     @Override
     public void run() {
+        h1("todo:priority");
         if (shiftUp) {
             shiftUpPriorities();
         } else if (shiftDown) {
@@ -69,7 +73,7 @@ public class TodoPriority implements Runnable {
                 if (remove) {
                     newLine = line.get().rawValue().replaceFirst("\\([A-Z]\\)\\s", "");
                 } else if (line.get().isDone()) {
-                    Console.error("Priority cannot be assigned to complete items");
+                    Logger.warn("Priority cannot be assigned to complete items");
                 } else {
                     if (line.get().hasPriority()) {
                         if (priority == null) {
@@ -87,19 +91,19 @@ public class TodoPriority implements Runnable {
                 if (newLine != null) {
                     replace(line.get().rawValue(), newLine, todo.getTodoFile());
 
-                    Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, line.get()));
-                    Console.divide();
-                    Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItemV1(newLine)));
+                    Logger.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, line.get()));
+                    hr();
+                    Logger.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItemV1(newLine)));
                 }
             } else {
-                Console.error(String.format("Could not find index (%s)", idx));
+                Logger.warn(String.format("Could not find index '%s'", idx));
             }
         }
     }
 
     private void clearPriorities() {
         try (Scanner scanner = new Scanner(todo.getTodoFile())) {
-            Console.info("Removing priority from all items");
+            Logger.info("Removing priority from all items");
             int currIdx = 0;
             while (scanner.hasNext()) {
                 String raw = scanner.nextLine();
@@ -110,11 +114,11 @@ public class TodoPriority implements Runnable {
                 if (item.hasPriority()) {
                     String newValue = item.rawValue().replaceFirst("^\\([A-Z]\\)\\s", "");
                     replace(item.rawValue(), newValue, todo.getTodoFile());
-                    Console.info(String.format("[%s%2s%s] %s", Ansi.BLUE, currIdx, Ansi.RESET, new TodoItemV1(newValue)));
+                    Logger.info(String.format("[%s%2s%s] %s", Ansi.BLUE, currIdx, Ansi.RESET, new TodoItemV1(newValue)));
                 }
             }
         } catch (IOException e) {
-            Console.error(String.format("Could not read file %s", todo.getTodoFile()));
+            Logger.error(String.format("Could not read file %s", todo.getTodoFile()));
             Logger.debug(e);
         }
     }
@@ -240,7 +244,7 @@ public class TodoPriority implements Runnable {
             String contents = new String(Files.readAllBytes(fromFile));
             Files.write(fromFile, contents.replace(line, newLine).getBytes());
         } catch (IOException e) {
-            Console.error(String.format("Error writing `%s`", fromFile));
+            Logger.error(String.format("Error writing `%s`", fromFile));
             Logger.debug(e);
         }
     }

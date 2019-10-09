@@ -1,7 +1,10 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.*;
+import net.avdw.todo.Ansi;
+import net.avdw.todo.Todo;
+import net.avdw.todo.TodoItemV1;
+import net.avdw.todo.TodoReader;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
@@ -12,6 +15,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.regex.Pattern;
+
+import static net.avdw.todo.render.ConsoleFormatting.h1;
 
 @Command(name = "rm", description = "Remove a todo item")
 public class TodoRemove implements Runnable {
@@ -29,9 +34,10 @@ public class TodoRemove implements Runnable {
      */
     @Override
     public void run() {
+        h1("todo:remove");
         Optional<TodoItemV1> line = remove(todo.getTodoFile(), idx);
 
-        line.ifPresent(s -> Console.info(String.format("[%s%s%s] %sRemoved:%s %s",
+        line.ifPresent(s -> Logger.info(String.format("[%s%s%s] %sRemoved:%s %s",
                 Ansi.BLUE, idx, Ansi.RESET,
                 Ansi.RED, Ansi.RESET,
                 s)));
@@ -54,11 +60,11 @@ public class TodoRemove implements Runnable {
                         contents.replaceAll(String.format("%s\\r?\\n", Pattern.quote(line.get().rawValue())), "")
                                 .getBytes());
             } catch (IOException e) {
-                Console.error(String.format("Error writing `%s`", fromFile));
-                Logger.error(e);
+                Logger.error(String.format("Error writing `%s`", fromFile));
+                Logger.debug(e);
             }
         } else {
-            Console.error(String.format("Could not find index (%s)", idx));
+            Logger.warn(String.format("Could not find index (%s)", idx));
         }
 
         return line;
