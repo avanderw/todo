@@ -2,42 +2,42 @@ package net.avdw.todo.number;
 
 import com.google.inject.Inject;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
-public class SampledNumberGenerator {
+public class IteratingNumberGenerator {
     private int currentIdx = -1;
     private int direction = 1;
     private final boolean wrap;
-    private final List<Double> sampledNumbers;
+    private final List<Double> numbers;
 
     @Inject
-    public SampledNumberGenerator(List<Double> numbers, boolean wrap) {
-        this.sampledNumbers = numbers;
+    public IteratingNumberGenerator(List<Double> numbers, boolean wrap) {
+        this.numbers = numbers;
         this.wrap = wrap;
-    }
-
-    public static void main(String[] args) {
-        NumberSampler sampler = new NumberSampler(0, 20, 10);
-        SampledNumberGenerator instance = new SampledNumberGenerator(sampler, true);
-        for (int i = 0; i < 21; i++) {
-            System.out.print(instance.nextValue());
-        }
     }
 
     public double nextValue() {
         currentIdx += direction;
 
-        if (currentIdx < 0 || currentIdx == sampledNumbers.size()) {
+        if (currentIdx < 0 || currentIdx == numbers.size()) {
             if (wrap) {
-                currentIdx %= sampledNumbers.size();
+                currentIdx %= numbers.size();
             } else {
                 direction *= -1;
-                currentIdx += direction;
+                currentIdx += 2 * direction;
             }
         }
 
-        return sampledNumbers.get(currentIdx);
+        return numbers.get(currentIdx);
+    }
+
+    public static void main(String[] args) {
+        NumberInterpolater numberInterpolater = new NumberInterpolater(Interpolation.BACK_EASE_IN_OUT);
+        NumberSampler sampler = new NumberSampler(numberInterpolater);
+        IteratingNumberGenerator instance = new IteratingNumberGenerator(sampler.sample(3, 30, 10), false);
+        for (int i = 0; i < 24; i++) {
+            System.out.print(String.format(" %4.2f ", instance.nextValue()));
+        }
+        System.out.println();
     }
 }
