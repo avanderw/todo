@@ -3,18 +3,20 @@ package net.avdw.todo.config;
 import com.google.inject.AbstractModule;
 import com.google.inject.matcher.AbstractMatcher;
 import net.avdw.todo.Ansi;
+import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.item.TodoItemTokenIdentifier;
 import org.pmw.tinylog.Logger;
 
 import java.lang.reflect.Method;
 
-import static com.google.inject.matcher.Matchers.inSubpackage;
-import static com.google.inject.matcher.Matchers.not;
+import static com.google.inject.matcher.Matchers.*;
 
 public final class ProfilingModule extends AbstractModule {
     @Override
     protected void configure() {
         bindInterceptor(inSubpackage("net.avdw.todo")
-                        .and(not(inSubpackage("net.avdw.todo.model"))),
+                        .and(not(identicalTo(TodoItem.class)))
+                        .and(not(identicalTo(TodoItemTokenIdentifier.class))),
                 new AbstractMatcher<Method>() {
                     @Override
                     public boolean matches(final Method method) {

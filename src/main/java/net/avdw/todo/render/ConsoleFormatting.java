@@ -18,6 +18,10 @@ public final class ConsoleFormatting {
         Logger.info(StringUtils.center(String.format("[ %s ]", text), LINE_LENGTH, "-"));
     }
 
+    public static void h3(final String text) {
+        Logger.info(text);
+    }
+
     public static void hr() {
         Logger.info(StringUtils.repeat("-", LINE_LENGTH));
     }

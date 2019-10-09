@@ -2,8 +2,11 @@ package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
 import net.avdw.todo.*;
+import net.avdw.todo.file.TodoFileReader;
+import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.property.GlobalProperty;
 import net.avdw.todo.property.PropertyModule;
+import net.avdw.todo.render.TodoDoneStatusbar;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -19,7 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
-import static net.avdw.todo.render.ConsoleFormatting.h1;
+import static net.avdw.todo.render.ConsoleFormatting.*;
 
 @Command(name = "status", description = "Display repository information")
 public class TodoStatus implements Runnable {
@@ -43,33 +46,40 @@ public class TodoStatus implements Runnable {
     @GlobalProperty
     private Path propertyPath;
 
+    @Inject
+    private TodoFileReader todoFileReader;
+
+    @Inject
+    private TodoDoneStatusbar todoDoneStatusbar;
+
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
         h1("todo:status");
-        Logger.info("Working Paths");
-        Logger.info(String.format("Local    : %s", Files.exists(localPath) ? localPath : "todo init"));
-        Logger.info(String.format("Global   : %s", Files.exists(globalPath) ? globalPath : "todo --global init"));
-        Logger.info(String.format("Selected : %s", todo.findDirectory()));
-        Logger.info("");
-        Logger.info("Known Paths");
+        Logger.info(String.format("Local   : %s", Files.exists(localPath) ? localPath.toAbsolutePath() : "todo init"));
+        Logger.info(String.format("Global  : %s", Files.exists(globalPath) ? globalPath.toAbsolutePath() : "todo --global init"));
+        Logger.info(String.format("Default : %s", todo.findDirectory().toAbsolutePath()));
+
+        h2("status:paths");
         if (properties.containsKey(PropertyModule.TODO_PATHS)) {
             String todoPaths = properties.getProperty(PropertyModule.TODO_PATHS);
-            List<String> removePaths = new ArrayList<>();
+            List<String> pathsToRemove = new ArrayList<>();
             Arrays.stream(todoPaths.split(";")).forEach(path -> {
                 try {
-                    TodoDirectory todoDirectory = new TodoDirectory(Paths.get(path));
-                    Logger.info(String.format("[%s%2s%s] %s", Ansi.BLUE, todoDirectory.numIncompleteItems(), Ansi.RESET, path));
-                } catch (TodoDirectory.ReadException e) {
-                    Logger.info(String.format("Going to remove known path %s", path));
-                    removePaths.add(path);
+                    List<TodoItem> allTodoItemList = todoFileReader.readAll(Paths.get(path).resolve("todo.txt"));
+                    h3(path);
+                    Logger.info(String.format("Progress: %s", todoDoneStatusbar.createPercentageBar(allTodoItemList)));
+                } catch (Exception e) {
+                    Logger.error(String.format("Cannot read path '%s'", path));
+                    Logger.info("Removing path from property file");
+                    pathsToRemove.add(path);
                 }
             });
 
-            if (!removePaths.isEmpty()) {
-                for (String path : removePaths) {
+            if (!pathsToRemove.isEmpty()) {
+                for (String path : pathsToRemove) {
                     todoPaths = todoPaths.replace(path, "");
                     todoPaths = todoPaths.replaceAll(";;", ";");
                 }
@@ -87,7 +97,7 @@ public class TodoStatus implements Runnable {
         }
 
         if (!Files.exists(localPath) || !Files.exists(globalPath)) {
-            Logger.info("---");
+            hr();
             CommandLine.usage(TodoInit.class, System.out);
         }
     }
