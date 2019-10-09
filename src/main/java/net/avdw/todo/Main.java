@@ -3,7 +3,6 @@ package net.avdw.todo;
 import com.google.inject.*;
 import net.avdw.todo.config.LoggingSetup;
 import net.avdw.todo.config.ProfilingModule;
-import net.avdw.todo.config.TracingModule;
 import net.avdw.todo.item.TodoItemModule;
 import net.avdw.todo.property.PropertyModule;
 import org.pmw.tinylog.Logger;
@@ -43,7 +42,6 @@ public final class Main {
                 install(new PropertyModule());
                 bind(LoggingSetup.class).asEagerSingleton();
 
-                install(new TracingModule());
                 install(new ProfilingModule());
 
                 Path globalPath = Paths.get(System.getProperty("user.home")).resolve(DATA_DIRECTORY);
