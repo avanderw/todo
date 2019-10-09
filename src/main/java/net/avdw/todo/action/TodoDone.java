@@ -1,17 +1,18 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.*;
+import net.avdw.todo.Todo;
+import net.avdw.todo.file.TodoFileReader;
+import net.avdw.todo.file.TodoFileWriter;
+import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.item.TodoItemCompletor;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Command(name = "do", description = "Complete a todo item")
@@ -23,10 +24,13 @@ public class TodoDone implements Runnable {
     private int idx;
 
     @Inject
-    private TodoReader reader;
+    private TodoFileReader todoFileReader;
 
     @Inject
-    private SimpleDateFormat simpleDateFormat;
+    private TodoFileWriter todoFileWriter;
+
+    @Inject
+    private TodoItemCompletor todoItemCompletor;
 
     /**
      * Entry point for picocli.
@@ -38,37 +42,33 @@ public class TodoDone implements Runnable {
 
     /**
      * Find and mark an entry in a file at idx as done.
+     *
      * @param todoFile the file to search
-     * @param idx the entry in the file to complete
+     * @param idx      the entry in the file to complete
      * @return the original line that was marked as done
      */
-    Optional<TodoItemV1> done(final Path todoFile, final int idx) {
-        Optional<TodoItemV1> line = reader.readLine(todoFile, idx);
-        if (line.isPresent() && line.get().isNotDone()) {
-            try {
-                String completeLine = String.format("x %s %s",
-                        simpleDateFormat.format(new Date()),
-                        line.get().rawValue().replaceFirst("\\([A-Z]\\) ", ""));
-
-                String contents = new String(Files.readAllBytes(todoFile));
-                Files.write(todoFile, contents.replace(line.get().rawValue(), completeLine).getBytes());
-
-                Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, line.get()));
-                Console.divide();
-                Console.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItemV1(completeLine)));
-            } catch (IOException e) {
-                Console.error(String.format("Error writing `%s`", todoFile));
-                Logger.error(e);
-            }
-        } else if (line.isPresent() && line.get().isDone()) {
-            Console.info(String.format("[%s%s%s] %s",
-                    Ansi.BLUE, idx, Ansi.RESET,
-                    line));
-            Console.divide();
-            Console.error("Item is already marked as done");
-        } else {
-            Console.error(String.format("Could not find index (%s)", idx));
+    Optional<TodoItem> done(final Path todoFile, final int idx) {
+        List<TodoItem> allTodoItems = todoFileReader.readAll(todoFile);
+        if (idx > allTodoItems.size()) {
+            Logger.warn(String.format("There are only '%s' items in the todo file and idx '%s' is too high", allTodoItems.size(), idx));
+            return Optional.empty();
+        } else if (idx <= 0) {
+            Logger.warn(String.format("The idx '%s' cannot be negative", idx));
+            return Optional.empty();
         }
-        return line;
+
+        TodoItem todoItem = allTodoItems.get(idx - 1);
+        Logger.info(todoItem);
+        if (todoItem.isComplete()) {
+            Logger.warn("Item is already marked as done");
+            return Optional.of(todoItem);
+        } else {
+            TodoItem completeItem = todoItemCompletor.complete(todoItem);
+            Logger.info(completeItem);
+
+            allTodoItems.set(idx - 1, completeItem);
+            todoFileWriter.write(allTodoItems, todoFile);
+            return Optional.of(completeItem);
+        }
     }
 }

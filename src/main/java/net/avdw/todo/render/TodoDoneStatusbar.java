@@ -1,7 +1,7 @@
 package net.avdw.todo.render;
 
 import net.avdw.todo.Ansi;
-import net.avdw.todo.TodoItem;
+import net.avdw.todo.item.TodoItem;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class TodoDoneStatusbar {
         StringBuilder stringBuilder = new StringBuilder();
 
         todoItemList.forEach(todoItem -> {
-            stringBuilder.append(todoItem.isDone() ? Ansi.GREEN : Ansi.WHITE);
+            stringBuilder.append(todoItem.isComplete() ? Ansi.GREEN : Ansi.WHITE);
             stringBuilder.append("#");
         });
         stringBuilder.append(Ansi.RESET);

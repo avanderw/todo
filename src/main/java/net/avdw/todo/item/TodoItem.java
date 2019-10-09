@@ -1,5 +1,6 @@
-package net.avdw.todo;
+package net.avdw.todo.item;
 
+import net.avdw.todo.Ansi;
 import net.avdw.todo.action.TodoPriority;
 import org.pmw.tinylog.Logger;
 
@@ -21,10 +22,10 @@ public class TodoItem {
     }
 
     public boolean isIncomplete() {
-        return !isDone();
+        return !isComplete();
     }
 
-    public boolean isDone() {
+    public boolean isComplete() {
         return line.startsWith("x ");
     }
 
@@ -46,7 +47,7 @@ public class TodoItem {
             }
             if (token.length() == DATE_LENGTH && token.startsWith("20")) {
                 if (sb.length() > Ansi.GREEN.length() &&
-                        isDone() &&
+                        isComplete() &&
                         previousToken.length() != DATE_LENGTH &&
                         !previousToken.startsWith("20")) {
                     if (!completedDate) {

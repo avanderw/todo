@@ -87,4 +87,4 @@ x 2019-09-25 2019-07-26 Add +clean feature which will add priority to started it
 x 2019-09-25 2019-08-12 Enhance +priority to shift todos up or down
 x 2019-09-30 2019-09-27 Update +due date to color according to deadline
 x 2019-10-07 2019-07-30 Fix +remove functionality on LF vs CRLF start:2019-10-07
-2019-10-08 Fix inconsistencies between done and list
+x 2019-10-09 2019-10-08 Fix inconsistencies between done and list

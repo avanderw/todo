@@ -4,7 +4,8 @@ import com.google.inject.Inject;
 import net.avdw.todo.Ansi;
 import net.avdw.todo.Console;
 import net.avdw.todo.Todo;
-import net.avdw.todo.TodoItem;
+import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.render.TodoDoneStatusbar;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
@@ -12,8 +13,6 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,12 +47,15 @@ public class TodoList implements Runnable {
     @Inject
     private TodoDoneStatusbar todoDoneStatusbar;
 
+    @Inject
+    private TodoFileReader todoFileReader;
+
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        List<TodoItem> allTodoItems = readAllTodoItems(todo.getTodoFile());
+        List<TodoItem> allTodoItems = todoFileReader.readAll(todo.getTodoFile());
         List<TodoItem> filteredTodoItems = filterTodoItems(allTodoItems, filters);
 
         if (!todo.showAll()) {
@@ -78,7 +80,7 @@ public class TodoList implements Runnable {
         }
 
         Console.divide();
-        long completed = allTodoItems.stream().filter(TodoItem::isDone).count();
+        long completed = allTodoItems.stream().filter(TodoItem::isComplete).count();
         Logger.info(String.format("%s of %s (%s done) todo items shown", filteredTodoItems.size(), allTodoItems.size(), completed));
 
         listProjects(filteredTodoItems);
@@ -124,7 +126,7 @@ public class TodoList implements Runnable {
 
             contexts.forEach((key, value) -> {
                 Collections.reverse(value);
-                long done = value.stream().filter(TodoItem::isDone).count();
+                long done = value.stream().filter(TodoItem::isComplete).count();
                 double percentage = done * PERCENTAGE / value.size();
 
                 Logger.info(String.format("%s%16s%s ( %s%3.0f%%%s ): %s",
@@ -149,7 +151,7 @@ public class TodoList implements Runnable {
 
             projects.forEach((key, value) -> {
                 Collections.reverse(value);
-                long done = value.stream().filter(TodoItem::isDone).count();
+                long done = value.stream().filter(TodoItem::isComplete).count();
                 double percentage = done * PERCENTAGE / value.size();
 
                 Logger.info(String.format("%s%16s%s ( %s%3.0f%%%s ): %s",
@@ -179,17 +181,4 @@ public class TodoList implements Runnable {
         }
     }
 
-    private List<TodoItem> readAllTodoItems(final Path todoFile) {
-        Logger.debug(String.format("Reading all todo.txt items from '%s'", todoFile));
-        List<TodoItem> todoItemList = new ArrayList<>();
-        try (Scanner scanner = new Scanner(todoFile)) {
-            while (scanner.hasNextLine()) {
-                todoItemList.add(new TodoItem(todoItemList.size() + 1, scanner.nextLine()));
-            }
-        } catch (IOException e) {
-            Logger.error(String.format("Could not read '%s' because %s", todoFile, e.getMessage()));
-            Logger.debug(e);
-        }
-        return todoItemList;
-    }
 }

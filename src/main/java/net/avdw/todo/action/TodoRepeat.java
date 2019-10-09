@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import net.avdw.todo.Console;
 import net.avdw.todo.Todo;
 import net.avdw.todo.TodoItemV1;
+import net.avdw.todo.item.TodoItem;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
@@ -38,7 +39,7 @@ public class TodoRepeat implements Runnable {
      */
     @Override
     public void run() {
-        Optional<TodoItemV1> doneItem = todoDone.done(todo.getTodoFile(), idx);
+        Optional<TodoItem> doneItem = todoDone.done(todo.getTodoFile(), idx);
         doneItem.ifPresent(todoItem -> {
             String rawValue = todoItem.rawValue();
             if (todoItem.hasPriority()) {
