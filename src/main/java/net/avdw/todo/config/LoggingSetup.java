@@ -22,8 +22,15 @@ public class LoggingSetup {
         String clazz = String.format("%s{class}%s", Ansi.WHITE, Ansi.RESET);
         String method = String.format("%s{method}()%s", Ansi.CYAN, Ansi.RESET);
 
+        String formatPattern;
+        if (Boolean.parseBoolean(propertyResolver.resolve(PropertyKey.RELEASE_MODE))) {
+            formatPattern = "{message}";
+        } else {
+            formatPattern = String.format("[%s] %s:%s:%s {message}", level, clazz, line, method);
+        }
+
         Logger.getConfiguration()
-                .formatPattern(String.format("[%s] %s:%s:%s {message}", level, clazz, line, method))
+                .formatPattern(formatPattern)
                 .level(Level.valueOf(propertyResolver.resolve(PropertyKey.LOGGING_LEVEL)))
                 .activate();
     }
