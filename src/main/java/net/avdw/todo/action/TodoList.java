@@ -1,18 +1,19 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Ansi;
 import net.avdw.todo.Todo;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
-import net.avdw.todo.render.TodoDoneStatusbar;
+import net.avdw.todo.render.TodoContextTable;
+import net.avdw.todo.render.TodoProjectTable;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static net.avdw.todo.render.ConsoleFormatting.h1;
@@ -21,9 +22,6 @@ import static net.avdw.todo.render.ConsoleFormatting.hr;
 
 @Command(name = "ls", description = "List the items in todo.txt")
 public class TodoList implements Runnable {
-    private static final double PERCENTAGE = 100.;
-    private static final double UPPER_BOUND = 75.;
-
     @Inject
     @ParentCommand
     private Todo todo;
@@ -47,7 +45,10 @@ public class TodoList implements Runnable {
     private int limit = Integer.MAX_VALUE;
 
     @Inject
-    private TodoDoneStatusbar todoDoneStatusbar;
+    private TodoContextTable todoContextTable;
+
+    @Inject
+    private TodoProjectTable todoProjectTable;
 
     @Inject
     private TodoFileReader todoFileReader;
@@ -86,8 +87,12 @@ public class TodoList implements Runnable {
         long completed = allTodoItems.stream().filter(TodoItem::isComplete).count();
         Logger.info(String.format("%s of %s (%s done) todo items shown", filteredTodoItems.size(), allTodoItems.size(), completed));
 
-        listProjects(filteredTodoItems);
-        listContexts(filteredTodoItems);
+        if (displayContexts) {
+            todoContextTable.printContextTable(filteredTodoItems);
+        }
+        if (displayProjects) {
+            todoProjectTable.printProjectTable(filteredTodoItems);
+        }
     }
 
     private List<TodoItem> filterPriorityItems(final List<TodoItem> todoItemList) {
@@ -116,56 +121,6 @@ public class TodoList implements Runnable {
         Logger.debug(String.format("Filtered list contains '%s' todo items", filteredTodoItems.size()));
         return filteredTodoItems;
 
-    }
-
-    private void listContexts(final List<TodoItem> todoItemList) {
-        if (displayContexts) {
-            Map<String, List<TodoItem>> contexts = new HashMap<>();
-            todoItemList.forEach(todoItem
-                    -> todoItem.getContexts().forEach(context -> {
-                contexts.putIfAbsent(context, new ArrayList<>());
-                contexts.get(context).add(todoItem);
-            }));
-
-            contexts.forEach((key, value) -> {
-                Collections.reverse(value);
-                long done = value.stream().filter(TodoItem::isComplete).count();
-                double percentage = done * PERCENTAGE / value.size();
-
-                Logger.info(String.format("%s%16s%s ( %s%3.0f%%%s ): %s",
-                        Ansi.CYAN, key, Ansi.RESET,
-                        percentage > UPPER_BOUND ? Ansi.GREEN : "", percentage, Ansi.RESET,
-                        todoDoneStatusbar.createBar(value)));
-            });
-            Logger.info("---");
-            long withContext = todoItemList.stream().filter(TodoItem::hasContext).count();
-            Logger.info(String.format("%s contexts, %s todo items", contexts.size(), withContext));
-        }
-    }
-
-    private void listProjects(final List<TodoItem> todoItemList) {
-        if (displayProjects) {
-            Map<String, List<TodoItem>> projects = new HashMap<>();
-            todoItemList.forEach(todoItem
-                    -> todoItem.getProjects().forEach(project -> {
-                projects.putIfAbsent(project, new ArrayList<>());
-                projects.get(project).add(todoItem);
-            }));
-
-            projects.forEach((key, value) -> {
-                Collections.reverse(value);
-                long done = value.stream().filter(TodoItem::isComplete).count();
-                double percentage = done * PERCENTAGE / value.size();
-
-                Logger.info(String.format("%s%16s%s ( %s%3.0f%%%s ): %s",
-                        Ansi.MAGENTA, key, Ansi.RESET,
-                        percentage > UPPER_BOUND ? Ansi.GREEN : "", percentage, Ansi.RESET,
-                        todoDoneStatusbar.createBar(value)));
-            });
-            Logger.info("---");
-            long withProjects = todoItemList.stream().filter(TodoItem::hasProjects).count();
-            Logger.info(String.format("%s projects, %s todo items", projects.size(), withProjects));
-        }
     }
 
     private List<TodoItem> filterTodoItems(final List<TodoItem> todoItemList, final List<String> filters) {

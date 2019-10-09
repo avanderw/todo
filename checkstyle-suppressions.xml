@@ -13,5 +13,6 @@
     <suppress checks="LineLength"/>
     <suppress checks="AvoidStarImport"/>
     <suppress checks="HiddenField"/>
+    <suppress checks="MagicNumber" files="Ansi.java"/>
     <suppress checks="DesignForExtension" files="TodoItem.java|TodoItemV1.java|.*Module.java"/>
 </suppressions>
