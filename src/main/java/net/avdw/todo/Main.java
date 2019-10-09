@@ -4,6 +4,7 @@ import com.google.inject.*;
 import net.avdw.todo.config.LoggingSetup;
 import net.avdw.todo.config.ProfilingModule;
 import net.avdw.todo.config.TracingModule;
+import net.avdw.todo.item.TodoItemModule;
 import net.avdw.todo.property.PropertyModule;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine;
@@ -49,6 +50,8 @@ public final class Main {
                 bind(Path.class).annotatedWith(Execution.class).toInstance(Paths.get("."));
                 bind(Path.class).annotatedWith(GlobalTodo.class).toInstance(globalPath);
                 bind(SimpleDateFormat.class).toInstance(new SimpleDateFormat("yyyy-MM-dd"));
+
+                install(new TodoItemModule());
             }
 
             @Provides

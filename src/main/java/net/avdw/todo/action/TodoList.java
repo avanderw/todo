@@ -76,7 +76,7 @@ public class TodoList implements Runnable {
 
         for (int i = 0; i < filteredTodoItems.size() && i < limit; i++) {
             TodoItem item = filteredTodoItems.get(i);
-            Console.info(String.format("[%s%2s%s] %s", Ansi.BLUE, item.getIdx(), Ansi.RESET, item));
+            Console.info(String.format("%s", item));
         }
 
         Console.divide();

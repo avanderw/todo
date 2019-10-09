@@ -1,5 +1,7 @@
 package net.avdw.todo.item;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import net.avdw.todo.Ansi;
 import net.avdw.todo.action.TodoPriority;
 import org.pmw.tinylog.Logger;
@@ -11,14 +13,21 @@ import java.util.*;
 public class TodoItem {
     private int idx;
     private final String line;
+    private TodoItemTokenIdentifier todoItemTokenIdentifier;
+
+    private final Set<String> contexts = new HashSet<>();
+    private final Set<String> projects = new HashSet<>();
+    private boolean tokensHaveBeenCached = false;
     private static final int DATE_LENGTH = 10;
     private static final int PRIORITY_LENGTH = 3;
 
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
-    public TodoItem(final int idx, final String line) {
+    @Inject
+    public TodoItem(@Assisted final int idx, @Assisted final String line, final TodoItemTokenIdentifier todoItemTokenIdentifier) {
         this.idx = idx;
         this.line = line;
+        this.todoItemTokenIdentifier = todoItemTokenIdentifier;
     }
 
     public boolean isIncomplete() {
@@ -35,7 +44,7 @@ public class TodoItem {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(String.format("[%s%2s%s] ", Ansi.BLUE, idx, Ansi.RESET));
         Scanner scanner = new Scanner(line);
         String previousToken = "";
         boolean completedDate = false;
@@ -97,29 +106,7 @@ public class TodoItem {
         return sb.toString();
     }
 
-    public Set<String> getProjects() {
-        Set<String> projects = new HashSet<>();
-        Scanner scanner = new Scanner(line);
-        while (scanner.hasNext()) {
-            String token = scanner.next();
-            if (token.startsWith("+")) {
-                projects.add(token.substring(1));
-            }
-        }
-        return projects;
-    }
 
-    public Set<String> getContexts() {
-        Set<String> contexts = new HashSet<>();
-        Scanner scanner = new Scanner(line);
-        while (scanner.hasNext()) {
-            String token = scanner.next();
-            if (token.startsWith("@")) {
-                contexts.add(token.substring(1));
-            }
-        }
-        return contexts;
-    }
 
     public String rawValue() {
         return line;
@@ -143,6 +130,41 @@ public class TodoItem {
 
     public int getIdx() {
         return idx;
+    }
+
+    public Set<String> getProjects() {
+        cacheTokens();
+        return projects;
+    }
+
+    public Set<String> getContexts() {
+        cacheTokens();
+        return contexts;
+    }
+
+    private void cacheTokens() {
+        if (tokensHaveBeenCached) {
+            return;
+        }
+
+        Scanner scanner = new Scanner(line);
+        while (scanner.hasNext()) {
+            String token = scanner.next();
+            switch (todoItemTokenIdentifier.identify(token)) {
+                case PROJECT:
+                    projects.add(token.substring(1));
+                    break;
+                case CONTEXT:
+                    contexts.add(token.substring(1));
+                    break;
+                case NORMAL:
+                    break;
+                default:
+                    Logger.warn(String.format("Unidentified token '%s' for '%s'", token, this));
+            }
+        }
+
+        tokensHaveBeenCached = true;
     }
 
     public boolean hasContext() {

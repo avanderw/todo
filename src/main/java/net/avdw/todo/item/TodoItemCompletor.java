@@ -9,10 +9,12 @@ import java.util.Date;
 public class TodoItemCompletor {
 
     private final SimpleDateFormat simpleDateFormat;
+    private TodoItemFactory todoItemFactory;
 
     @Inject
-    TodoItemCompletor(final SimpleDateFormat simpleDateFormat) {
+    TodoItemCompletor(final SimpleDateFormat simpleDateFormat, final TodoItemFactory todoItemFactory) {
         this.simpleDateFormat = simpleDateFormat;
+        this.todoItemFactory = todoItemFactory;
     }
 
     /**
@@ -30,6 +32,6 @@ public class TodoItemCompletor {
         String completedRawValue = String.format("x %s %s",
                 simpleDateFormat.format(new Date()),
                 todoItem.rawValue().replaceFirst("\\([A-Z]\\) ", ""));
-        return new TodoItem(todoItem.getIdx(), completedRawValue);
+        return todoItemFactory.create(todoItem.getIdx(), completedRawValue);
     }
 }

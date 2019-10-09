@@ -35,7 +35,7 @@ x 2019-10-08 2019-08-12 Enhance +report for showing percentage complete on proje
 2019-08-13 Add +append functionality
 2019-08-13 Enhance +explore to be OS independant
 2019-08-13 Fix bug in +remove not finding completed items when listing all
-2019-08-13 Fix bug when listing projects and there is an empty project
+x 2019-10-09 2019-08-13 Fix bug when listing projects and there is an empty project
 2019-08-13 Fix cannot find index bug when removing index on completed item from all items
 2019-08-14 Add +report in the style of github contribution graph
 2019-08-14 Add proxy for when todo push is used instead of git push
