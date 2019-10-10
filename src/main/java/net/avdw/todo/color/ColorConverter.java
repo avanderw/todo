@@ -1,7 +1,6 @@
 package net.avdw.todo.color;
 
 public class ColorConverter {
-    private ColorConverter() {}
     
     /**
      * Convert RGB values to a hue using a linear transformation.
@@ -11,7 +10,7 @@ public class ColorConverter {
      * @param b range [0..1]
      * @return hue angel in range [0..360]
      */
-    public static int rgbToHue(double r, double g, double b) {
+    public int rgbToHue(double r, double g, double b) {
         double f, min, mid, max, n;
         max = Math.max(r, Math.max(g, b));
         min = Math.min(r, Math.min(g, b));
@@ -45,7 +44,7 @@ public class ColorConverter {
      * @param value      range [0..1]
      * @return rgb with values in range [0..1]
      */
-    public static RGB hsvToRgb(int hue, double saturation, double value) {
+    public RGB hsvToRgb(int hue, double saturation, double value) {
         double min = (1 - saturation) * value;
         return hueToRgb(min, value, hue);
     }
@@ -58,7 +57,7 @@ public class ColorConverter {
      * @param luminance  range [0..1]
      * @return rgb with values in range [0..1]
      */
-    public static RGB hslToRgb(int hue, double saturation, double luminance) {
+    public RGB hslToRgb(int hue, double saturation, double luminance) {
         double delta = 0;
         if (luminance < 0.5) {
             delta = saturation * luminance;
@@ -77,7 +76,7 @@ public class ColorConverter {
      * @param hue angle in range [0..360]
      * @return rgb with values in range [0..1]
      */
-    public static RGB hueToRgb(double min, double max, int hue) {
+    public RGB hueToRgb(double min, double max, int hue) {
         final int maxHue = 360;
         int n;
         double mu, md, F;
@@ -110,7 +109,7 @@ public class ColorConverter {
         }
     }
 
-    private static double middleValue(double a, double b, double c) {
+    private double middleValue(double a, double b, double c) {
         if (a > b && a > c) {
             return (b > c) ? b : c;
         } else if (b > a && b > c) {

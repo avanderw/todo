@@ -1,10 +1,10 @@
-package net.avdw.todo.number;
+package net.avdw.todo.number.generator;
 
 import com.google.inject.Inject;
 
 import java.util.List;
 
-public class IteratingNumberGenerator {
+public class IteratingNumberGenerator implements NumberGenerator {
     private int currentIdx = -1;
     private int direction = 1;
     private final boolean wrap;
@@ -16,7 +16,8 @@ public class IteratingNumberGenerator {
         this.wrap = wrap;
     }
 
-    public double nextValue() {
+    @Override
+    public Double nextValue() {
         currentIdx += direction;
 
         if (currentIdx < 0 || currentIdx == numbers.size()) {
@@ -29,15 +30,5 @@ public class IteratingNumberGenerator {
         }
 
         return numbers.get(currentIdx);
-    }
-
-    public static void main(String[] args) {
-        NumberInterpolater numberInterpolater = new NumberInterpolater(Interpolation.BACK_EASE_IN_OUT);
-        NumberSampler sampler = new NumberSampler(numberInterpolater);
-        IteratingNumberGenerator instance = new IteratingNumberGenerator(sampler.sample(3, 30, 10), false);
-        for (int i = 0; i < 24; i++) {
-            System.out.print(String.format(" %4.2f ", instance.nextValue()));
-        }
-        System.out.println();
     }
 }
