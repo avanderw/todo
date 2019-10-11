@@ -1,9 +1,13 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.*;
+import net.avdw.todo.Todo;
+import net.avdw.todo.TodoReader;
+import net.avdw.todo.file.TodoFileReader;
+import net.avdw.todo.file.TodoFileWriter;
+import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.item.TodoItemFactory;
 import org.pmw.tinylog.Logger;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
@@ -13,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static net.avdw.todo.render.ConsoleFormatting.h1;
 import static net.avdw.todo.render.ConsoleFormatting.hr;
@@ -22,32 +27,32 @@ public class TodoPriority implements Runnable {
     @ParentCommand
     private Todo todo;
 
+    @Parameters(description = "Index to prioritize", arity = "0..1", index = "0")
+    private int idx;
     @Parameters(description = "Priority to assign. Valid values: ${COMPLETION-CANDIDATES}", arity = "0..1", index = "1")
     private Priority priority;
 
     @Option(names = {"-r", "--remove"}, description = "Remove priority from index")
     private boolean remove;
-
-    @Parameters(description = "Index to prioritize", arity = "0..1", index = "0")
-    private int idx;
-
     @Option(names = "--clear", description = "Remove all priorities")
     private boolean clear;
-
     @Option(names = {"-o", "--optimize"}, description = "Optimize priority usage")
     private boolean optimize;
-
     @Option(names = "--shift-up", description = "Shift all the priorities one up")
     private boolean shiftUp;
-
     @Option(names = "--shift-down", description = "Shift all teh priorities one down")
     private boolean shiftDown;
 
     @Inject
     private TodoReader reader;
-
     @Inject
-    private TodoWriter writer;
+    private TodoFileReader todoFileReader;
+    @Inject
+    private TodoFileWriter todoFileWriter;
+    @Inject
+    private TodoItemFactory todoItemFactory;
+    @Inject
+    private TodoList todoList;
 
     /**
      * Entry point for picocli.
@@ -56,153 +61,133 @@ public class TodoPriority implements Runnable {
     public void run() {
         h1("todo:priority");
         if (shiftUp) {
-            shiftUpPriorities();
+            shiftUpPriorities(todo.getTodoFile());
+            todoList.listPriorities(todo.getTodoFile());
         } else if (shiftDown) {
-            shiftDownPriorities();
+            shiftDownPriorities(todo.getTodoFile());
+            todoList.listPriorities(todo.getTodoFile());
         } else if (optimize) {
-            optimizePriorities();
+            optimizePriorities(todo.getTodoFile());
+            todoList.listPriorities(todo.getTodoFile());
         } else if (clear) {
             clearPriorities();
-        } else if (idx == 0) {
-            CommandLine.usage(TodoPriority.class, System.out);
         } else {
-            Optional<TodoItemV1> line = reader.readLine(todo.getTodoFile(), idx);
+            List<TodoItem> allTodoItems = todoFileReader.readAll(todo.getTodoFile());
+            if (idx > allTodoItems.size()) {
+                Logger.warn(String.format("There are only '%s' items in the todo file and idx '%s' is too high", allTodoItems.size(), idx));
+                return;
+            } else if (idx <= 0) {
+                Logger.warn(String.format("The idx '%s' cannot be negative", idx));
+                return;
+            }
 
-            if (line.isPresent()) {
-                String newLine = null;
-                if (remove) {
-                    newLine = line.get().rawValue().replaceFirst("\\([A-Z]\\)\\s", "");
-                } else if (line.get().isDone()) {
-                    Logger.warn("Priority cannot be assigned to complete items");
-                } else {
-                    if (line.get().hasPriority()) {
-                        if (priority == null) {
-                            priority = line.get().getPriority().orElse(Priority.A);
-                            priority = priority.promote();
-                        }
-                        newLine = line.get().rawValue().replaceFirst("\\([A-Z]\\)", String.format("(%s)", priority.name()));
-                    } else {
-                        if (priority == null) {
-                            priority = reader.readHighestFreePriority(todo.getTodoFile());
-                        }
-                        newLine = String.format("(%s) %s", priority.name(), line.get().rawValue());
-                    }
-                }
-                if (newLine != null) {
-                    replace(line.get().rawValue(), newLine, todo.getTodoFile());
-
-                    Logger.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, line.get()));
-                    hr();
-                    Logger.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItemV1(newLine)));
-                }
+            TodoItem todoItem = allTodoItems.get(idx - 1);
+            String newLine = null;
+            if (remove) {
+                newLine = todoItem.rawValue().replaceFirst("\\([A-Z]\\)\\s", "");
+            } else if (todoItem.isComplete()) {
+                Logger.warn("Priority cannot be assigned to complete items");
             } else {
-                Logger.warn(String.format("Could not find index '%s'", idx));
+                if (todoItem.hasPriority()) {
+                    if (priority == null) {
+                        priority = todoItem.getPriority().orElse(Priority.A);
+                        priority = priority.promote();
+                    }
+                    newLine = todoItem.rawValue().replaceFirst("\\([A-Z]\\)", String.format("(%s)", priority.name()));
+                } else {
+                    if (priority == null) {
+                        priority = reader.readHighestFreePriority(todo.getTodoFile());
+                    }
+                    newLine = String.format("(%s) %s", priority.name(), todoItem.rawValue());
+                }
+            }
+
+            if (newLine != null) {
+                replace(todoItem.rawValue(), newLine, todo.getTodoFile());
+
+                Logger.info(String.format("%s", todoItem));
+                hr();
+                Logger.info(String.format("%s", todoItemFactory.create(todoItem.getIdx(), newLine)));
             }
         }
     }
 
     private void clearPriorities() {
-        try (Scanner scanner = new Scanner(todo.getTodoFile())) {
-            Logger.info("Removing priority from all items");
-            int currIdx = 0;
-            while (scanner.hasNext()) {
-                String raw = scanner.nextLine();
-                TodoItemV1 item = new TodoItemV1(raw);
-                if (item.isNotDone()) {
-                    currIdx++;
-                }
-                if (item.hasPriority()) {
-                    String newValue = item.rawValue().replaceFirst("^\\([A-Z]\\)\\s", "");
-                    replace(item.rawValue(), newValue, todo.getTodoFile());
-                    Logger.info(String.format("[%s%2s%s] %s", Ansi.BLUE, currIdx, Ansi.RESET, new TodoItemV1(newValue)));
-                }
+        Logger.info("Removing priority from all items");
+        List<TodoItem> allTodoItemList = todoFileReader.readAll(todo.getTodoFile());
+        List<TodoItem> clearedTodoItemList = allTodoItemList.stream().map(todoItem -> {
+            if (todoItem.hasPriority()) {
+                TodoItem clearedTodoItem = todoItemFactory.create(todoItem.getIdx(),
+                        todoItem.rawValue().replaceFirst("^\\([A-Z]\\)\\s", ""));
+                Logger.info(String.format("%s", clearedTodoItem));
+                return clearedTodoItem;
+            } else {
+                return todoItem;
             }
-        } catch (IOException e) {
-            Logger.error(String.format("Could not read file %s", todo.getTodoFile()));
-            Logger.debug(e);
-        }
+        }).collect(Collectors.toList());
+
+        todoFileWriter.write(clearedTodoItemList, todo.getTodoFile());
     }
 
-    private void optimizePriorities() {
+    private void optimizePriorities(final Path todoFile) {
         List<Priority> availablePriorities = new ArrayList<>(Arrays.asList(Priority.values()));
         List<Priority> usedPriorities = new ArrayList<>();
 
-        try (Scanner scanner = new Scanner(todo.getTodoFile())) {
-            List<TodoItemV1> todoItems = new ArrayList<>();
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                TodoItemV1 item = new TodoItemV1(line);
-                todoItems.add(item);
-
-                item.getPriority().ifPresent(priority -> {
-                    if (availablePriorities.contains(priority)) {
-                        usedPriorities.add(priority);
-                        availablePriorities.remove(priority);
-                    }
-                });
+        List<TodoItem> allTodoItems = todoFileReader.readAll(todoFile);
+        allTodoItems.forEach(todoItem -> todoItem.getPriority().ifPresent(priority -> {
+            if (availablePriorities.contains(priority)) {
+                usedPriorities.add(priority);
+                availablePriorities.remove(priority);
             }
+        }));
 
-            Map<Priority, Priority> mapping = new HashMap<>();
-            usedPriorities.forEach(priority -> {
-                if (!availablePriorities.isEmpty()) {
-                    if (priority.compareTo(availablePriorities.get(0)) > 0) {
-                        mapping.put(priority, availablePriorities.get(0));
-                        availablePriorities.add(priority);
-                        availablePriorities.remove(0);
-                        availablePriorities.sort(Enum::compareTo);
-                    }
-                } else {
-                    Logger.debug("No more priorities available to assign from");
+        Map<Priority, Priority> mapping = new HashMap<>();
+        usedPriorities.forEach(priority -> {
+            if (!availablePriorities.isEmpty()) {
+                if (priority.compareTo(availablePriorities.get(0)) > 0) {
+                    mapping.put(priority, availablePriorities.get(0));
+                    availablePriorities.add(priority);
+                    availablePriorities.remove(0);
+                    availablePriorities.sort(Enum::compareTo);
                 }
-            });
-
-            for (int i = 0; i < todoItems.size(); i++) {
-                TodoItemV1 item = todoItems.get(i);
-                if (item.getPriority().isPresent() && mapping.containsKey(item.getPriority().get())) {
-                    todoItems.set(i, new TodoItemV1(item.rawValue().replace(
-                            String.format("(%s)", item.getPriority().get()),
-                            String.format("(%s)", mapping.get(item.getPriority().get())))));
-                    Logger.debug(String.format("Replacing%n%s%n%s", item, todoItems.get(i)));
-                }
-            }
-
-            Logger.debug(String.format("Available priorities: %s", availablePriorities));
-            Logger.debug(String.format("Used priorities: %s", usedPriorities));
-            Logger.debug(String.format("Mapping: %s", mapping));
-            if (mapping.isEmpty()) {
-                Logger.info("The priorities are already optimized");
             } else {
-                writer.write(todoItems, todo.getTodoFile());
-                Logger.info("The priorities have been optimized");
+                Logger.debug("No more priorities available to assign from");
             }
-        } catch (IOException e) {
-            Logger.error(String.format("Error scanning %s: %s", todo.getTodoFile(), e.getMessage()));
-            Logger.debug(e);
+        });
+
+        List<TodoItem> optimizedTodoItems = allTodoItems.stream().map(todoItem ->
+                todoItem.getPriority().isPresent() && mapping.containsKey(todoItem.getPriority().get())
+                        ? todoItemFactory.create(todoItem.getIdx(), todoItem.rawValue().replace(
+                        String.format("(%s)", todoItem.getPriority().get()),
+                        String.format("(%s)", mapping.get(todoItem.getPriority().get()))))
+                        : todoItem)
+                .collect(Collectors.toList());
+
+        Logger.debug(String.format("Available priorities: %s", availablePriorities));
+        Logger.debug(String.format("Used priorities: %s", usedPriorities));
+        Logger.debug(String.format("Mapping: %s", mapping));
+        if (mapping.isEmpty()) {
+            Logger.info("The priorities are already optimized");
+        } else {
+            todoFileWriter.write(optimizedTodoItems, todo.getTodoFile());
+            Logger.info("The priorities have been optimized");
         }
     }
 
-    private void shiftDownPriorities() {
-        Optional<Priority> lowestFreePriority = reader.readLowestFreePriority(todo.getTodoFile());
+    private void shiftDownPriorities(final Path todoFile) {
+        // todo refactor to not read the file twice
+        Optional<Priority> lowestFreePriority = reader.readLowestFreePriority(todoFile);
         if (lowestFreePriority.isPresent()) {
             if (lowestFreePriority.get() == Priority.Z) {
-                List<TodoItemV1> items = new ArrayList<>();
-                try (Scanner scanner = new Scanner(todo.getTodoFile())) {
-                    while (scanner.hasNextLine()) {
-                        TodoItemV1 item = new TodoItemV1(scanner.nextLine());
-                        if (item.getPriority().isPresent()) {
-                            items.add(new TodoItemV1(item.rawValue()
-                                    .replace(String.format("(%s)", item.getPriority().get()),
-                                            String.format("(%s)", item.getPriority().get().demote()))));
-                        } else {
-                            items.add(item);
-                        }
-                    }
-                    writer.write(items, todo.getTodoFile());
-                    Logger.info("Priorities shifted down one");
-                } catch (IOException e) {
-                    Logger.error(String.format("Error scanning %s: %s", todo.getTodoFile(), e.getMessage()));
-                    Logger.debug(e);
-                }
+                List<TodoItem> allTodoItems = todoFileReader.readAll(todoFile);
+                List<TodoItem> shiftedTodoItems = allTodoItems.stream().map(todoItem -> todoItem.getPriority().isPresent()
+                        ? todoItemFactory.create(todoItem.getIdx(), todoItem.rawValue()
+                        .replace(String.format("(%s)", todoItem.getPriority().get()), String.format("(%s)", todoItem.getPriority().get().demote())))
+                        : todoItem)
+                        .collect(Collectors.toList());
+
+                todoFileWriter.write(shiftedTodoItems, todoFile);
+                Logger.info("Priorities shifted down one");
             } else {
                 Logger.warn("There is an item with a priority of Z");
                 Logger.info("Cannot shift the priorities down by one");
@@ -213,26 +198,18 @@ public class TodoPriority implements Runnable {
         }
     }
 
-    private void shiftUpPriorities() {
-        if (reader.readHighestFreePriority(todo.getTodoFile()) == Priority.A) {
-            List<TodoItemV1> items = new ArrayList<>();
-            try (Scanner scanner = new Scanner(todo.getTodoFile())) {
-                while (scanner.hasNextLine()) {
-                    TodoItemV1 item = new TodoItemV1(scanner.nextLine());
-                    if (item.getPriority().isPresent()) {
-                        items.add(new TodoItemV1(item.rawValue()
-                                .replace(String.format("(%s)", item.getPriority().get()),
-                                        String.format("(%s)", item.getPriority().get().promote()))));
-                    } else {
-                        items.add(item);
-                    }
-                }
-                writer.write(items, todo.getTodoFile());
-                Logger.info("Priorities shifted up one");
-            } catch (IOException e) {
-                Logger.error(String.format("Error scanning %s: %s", todo.getTodoFile(), e.getMessage()));
-                Logger.debug(e);
-            }
+    private void shiftUpPriorities(final Path todoFile) {
+        // todo refactor to not read the file twice
+        if (reader.readHighestFreePriority(todoFile) == Priority.A) {
+            List<TodoItem> allTodoItems = todoFileReader.readAll(todoFile);
+            List<TodoItem> shiftedTodoItems = allTodoItems.stream().map(todoItem -> todoItem.getPriority().isPresent()
+                    ? todoItemFactory.create(todoItem.getIdx(), todoItem.rawValue()
+                    .replace(String.format("(%s)", todoItem.getPriority().get()), String.format("(%s)", todoItem.getPriority().get().promote())))
+                    : todoItem)
+                    .collect(Collectors.toList());
+
+            todoFileWriter.write(shiftedTodoItems, todoFile);
+            Logger.info("Priorities shifted up one");
         } else {
             Logger.warn("There is an item with a priority of A");
             Logger.info("Cannot shift the priorities up by one");

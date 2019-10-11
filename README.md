@@ -9,6 +9,7 @@
 Do you context switch much?
 Do you have many things you need to keep track of?
 Do you love procrastinating?
+Do you enjoy [rabbit holes](https://news.ycombinator.com/item?id=12778836)?
 
 Well this will allow you to keep on procrastinating.
 Todo will allow you manage things you need to do without actually doing them.

@@ -12,6 +12,7 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -139,4 +140,12 @@ public class TodoList implements Runnable {
         }
     }
 
+    /**
+     * List priority items.
+     */
+    public void listPriorities(final Path todoFile) {
+        List<TodoItem> allTodoItems = todoFileReader.readAll(todoFile);
+        List<TodoItem> filteredTodoItems = filterPriorityItems(allTodoItems);
+        filteredTodoItems.forEach(Logger::info);
+    }
 }

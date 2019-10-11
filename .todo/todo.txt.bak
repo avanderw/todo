@@ -91,5 +91,5 @@ x 2019-10-09 2019-09-17 Rename feature rename to replace
 x 2019-10-09 2019-10-08 @Fix inconsistencies between done and list
 2019-10-11 @Fix inconsistencies between ls and pri
 2019-10-11 @Fix inconsitencies between ls and add
-
-2019-10-11 Fix inconsistencies between ls and rm
+x 2019-10-11 2019-10-11 Fix inconsistencies between ls and rm
+2019-10-11 Refactor colors to a TodoColor class
