@@ -3,7 +3,10 @@ package net.avdw.todo.action;
 import com.google.inject.Inject;
 import net.avdw.todo.Ansi;
 import net.avdw.todo.Todo;
-import net.avdw.todo.TodoItemV1;
+import net.avdw.todo.file.TodoFileReader;
+import net.avdw.todo.file.TodoFileWriter;
+import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.item.TodoItemFactory;
 import net.avdw.todo.property.PropertyKey;
 import net.avdw.todo.property.PropertyResolver;
 import org.pmw.tinylog.Logger;
@@ -19,7 +22,7 @@ import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Scanner;
+import java.util.List;
 
 import static net.avdw.todo.render.ConsoleFormatting.h1;
 
@@ -36,9 +39,14 @@ public class TodoAdd implements Runnable {
 
     @Inject
     private PropertyResolver propertyResolver;
-
     @Inject
     private SimpleDateFormat simpleDateFormat;
+    @Inject
+    private TodoFileReader todoFileReader;
+    @Inject
+    private TodoFileWriter todoFileWriter;
+    @Inject
+    private TodoItemFactory todoItemFactory;
 
     /**
      * Entry point for picocli.
@@ -49,22 +57,17 @@ public class TodoAdd implements Runnable {
         if (date || Boolean.parseBoolean(propertyResolver.resolve(PropertyKey.TODO_ADD_AUTO_DATE))) {
             addition = String.format("%s %s", simpleDateFormat.format(new Date()), addition);
         }
+        List<TodoItem> allTodoItems = todoFileReader.readAll(todo.getTodoFile());
 
-        try (Scanner scanner = new Scanner(todo.getTodoFile())) {
-            int lineNum = 0;
-            while (scanner.hasNext()) {
-                String line = scanner.nextLine();
-                if (!line.startsWith("x ")) {
-                    lineNum++;
-                }
-            }
-            lineNum++;
-
-            add(todo.getTodoFile(), addition);
-            Logger.info(String.format("[%s%2s%s] %sAdded%s: %s", Ansi.BLUE, lineNum, Ansi.RESET, Ansi.GREEN, Ansi.RESET, new TodoItemV1(addition)));
-        } catch (IOException e) {
-            Logger.error(String.format("Could not add `%s` to `%s`", todo.getTodoFile(), addition));
-            Logger.debug(e);
+        TodoItem additionalTodoItem = todoItemFactory.create(allTodoItems.size() + 1, addition);
+        if (allTodoItems.stream().filter(TodoItem::isIncomplete).anyMatch(todoItem -> todoItem.rawValue().equals(addition))) {
+            Logger.info(additionalTodoItem);
+            Logger.warn("The todo item will not be added");
+            Logger.info("Adding will create a duplicate");
+        } else {
+            allTodoItems.add(additionalTodoItem);
+            todoFileWriter.write(allTodoItems, todo.getTodoFile());
+            Logger.info(String.format("%sAdded%s: %s", Ansi.GREEN, Ansi.RESET, additionalTodoItem));
         }
     }
 
