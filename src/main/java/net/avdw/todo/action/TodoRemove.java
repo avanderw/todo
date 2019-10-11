@@ -3,18 +3,17 @@ package net.avdw.todo.action;
 import com.google.inject.Inject;
 import net.avdw.todo.Ansi;
 import net.avdw.todo.Todo;
-import net.avdw.todo.TodoItemV1;
-import net.avdw.todo.TodoReader;
+import net.avdw.todo.file.TodoFileReader;
+import net.avdw.todo.file.TodoFileWriter;
+import net.avdw.todo.item.TodoItem;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 import static net.avdw.todo.render.ConsoleFormatting.h1;
 
@@ -22,12 +21,12 @@ import static net.avdw.todo.render.ConsoleFormatting.h1;
 public class TodoRemove implements Runnable {
     @ParentCommand
     private Todo todo;
-
     @Parameters(description = "Index to remove", arity = "1")
     private int idx;
-
     @Inject
-    private TodoReader reader;
+    private TodoFileReader todoFileReader;
+    @Inject
+    private TodoFileWriter todoFileWriter;
 
     /**
      * Entry point for picocli.
@@ -35,10 +34,9 @@ public class TodoRemove implements Runnable {
     @Override
     public void run() {
         h1("todo:remove");
-        Optional<TodoItemV1> line = remove(todo.getTodoFile(), idx);
+        Optional<TodoItem> line = remove(todo.getTodoFile(), idx);
 
-        line.ifPresent(s -> Logger.info(String.format("[%s%s%s] %sRemoved:%s %s",
-                Ansi.BLUE, idx, Ansi.RESET,
+        line.ifPresent(s -> Logger.info(String.format("%sRemoved:%s %s",
                 Ansi.RED, Ansi.RESET,
                 s)));
     }
@@ -48,25 +46,23 @@ public class TodoRemove implements Runnable {
      * The index to delete is relative to what is displayed.
      *
      * @param fromFile the file to remove the line index of
-     * @param idx the todo index to find
+     * @param idx      the todo index to find
      * @return the todo entry that was removed
      */
-    public Optional<TodoItemV1> remove(final Path fromFile, final int idx) {
-        Optional<TodoItemV1> line = reader.readLine(fromFile, idx);
-        if (line.isPresent()) {
-            try {
-                String contents = new String(Files.readAllBytes(fromFile));
-                Files.write(fromFile,
-                        contents.replaceAll(String.format("%s\\r?\\n", Pattern.quote(line.get().rawValue())), "")
-                                .getBytes());
-            } catch (IOException e) {
-                Logger.error(String.format("Error writing `%s`", fromFile));
-                Logger.debug(e);
-            }
-        } else {
-            Logger.warn(String.format("Could not find index (%s)", idx));
+    public Optional<TodoItem> remove(final Path fromFile, final int idx) {
+        List<TodoItem> allTodoItems = todoFileReader.readAll(fromFile);
+        if (idx > allTodoItems.size()) {
+            Logger.warn(String.format("There are only '%s' items in the todo file and idx '%s' is too high", allTodoItems.size(), idx));
+            return Optional.empty();
+        } else if (idx <= 0) {
+            Logger.warn(String.format("The idx '%s' cannot be negative", idx));
+            return Optional.empty();
         }
 
-        return line;
+        TodoItem todoItem = allTodoItems.get(idx - 1);
+        Logger.info(todoItem);
+        allTodoItems.remove(idx - 1);
+        todoFileWriter.write(allTodoItems, fromFile);
+        return Optional.of(todoItem);
     }
 }
