@@ -13,6 +13,8 @@
     <suppress checks="LineLength"/>
     <suppress checks="AvoidStarImport"/>
     <suppress checks="HiddenField"/>
-    <suppress checks="MagicNumber" files="Ansi.java"/>
-    <suppress checks="DesignForExtension" files="TodoItem.java|TodoItemV1.java|.*Module.java"/>
+    <suppress checks="EmptyBlock" files="Interpolation"/>
+    <suppress checks="MagicNumber"
+              files="Ansi|Interpolation|RandomGenerator|ColorConverter|HSLColorGenerator|HSVColorGenerator"/>
+    <suppress checks="DesignForExtension" files="TodoItem|TodoItemV1|.*Module"/>
 </suppressions>

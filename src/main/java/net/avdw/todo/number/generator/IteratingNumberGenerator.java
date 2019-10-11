@@ -11,11 +11,16 @@ public class IteratingNumberGenerator implements NumberGenerator {
     private final List<Double> numbers;
 
     @Inject
-    public IteratingNumberGenerator(List<Double> numbers, boolean wrap) {
+    public IteratingNumberGenerator(final List<Double> numbers, final boolean wrap) {
         this.numbers = numbers;
         this.wrap = wrap;
     }
 
+    /**
+     * Generate a value.
+     *
+     * @return a value following the implementation rule
+     */
     @Override
     public Double nextValue() {
         currentIdx += direction;

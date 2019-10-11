@@ -8,12 +8,20 @@ public class RGBColorGenerator implements ColorGenerator {
     private final NumberGenerator greenGenerator;
     private final NumberGenerator blueGenerator;
 
-    RGBColorGenerator(NumberGenerator redGenerator, NumberGenerator greenGenerator, NumberGenerator blueGenerator) {
+    RGBColorGenerator(final NumberGenerator redGenerator, final NumberGenerator greenGenerator, final NumberGenerator blueGenerator) {
         this.redGenerator = redGenerator;
         this.greenGenerator = greenGenerator;
         this.blueGenerator = blueGenerator;
     }
 
+    /**
+     * Generate a color in the RGB format.
+     * R in range [0..1]
+     * G in range [0..1]
+     * B in range [0..1]
+     *
+     * @return color in RGB
+     */
     @Override
     public RGB generateRGB() {
         double red = Math.max(0, Math.min(1, redGenerator.nextValue()));

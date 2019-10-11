@@ -7,7 +7,7 @@ public class WalkingNumberGenerator implements NumberGenerator {
     private final boolean inBothDirections;
     private final RandomGenerator randomGenerator;
 
-    WalkingNumberGenerator(Double walkingNumber, Double minWalk, Double maxWalk, boolean inBothDirections, RandomGenerator randomGenerator) {
+    WalkingNumberGenerator(final Double walkingNumber, final Double minWalk, final Double maxWalk, final boolean inBothDirections, final RandomGenerator randomGenerator) {
         this.walkingNumber = walkingNumber;
         this.minWalk = minWalk;
         this.maxWalk = maxWalk;
@@ -15,8 +15,14 @@ public class WalkingNumberGenerator implements NumberGenerator {
         this.randomGenerator = randomGenerator;
     }
 
+    /**
+     * Generate a value.
+     *
+     * @return a value following the implementation rule
+     */
     @Override
     public Double nextValue() {
-        return walkingNumber += randomGenerator.nextOffset(walkingNumber, minWalk, maxWalk, inBothDirections);
+        walkingNumber += randomGenerator.nextOffset(walkingNumber, minWalk, maxWalk, inBothDirections);
+        return walkingNumber;
     }
 }

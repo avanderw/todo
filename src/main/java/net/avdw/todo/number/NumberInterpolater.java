@@ -33,7 +33,7 @@ public class NumberInterpolater {
     public double interpolate(final double from, final double to, final double weight) {
         double distance = Math.abs(from - to);
 
-        return (from < to)
+        return from < to
                 ? Math.min(from, to) + distance * interpolationFunction.apply(weight)
                 : Math.max(from, to) - distance * interpolationFunction.apply(weight);
     }

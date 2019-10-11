@@ -6,14 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NumberSampler {
-    private NumberNormaliser numberNormaliser;
-    private NumberInterpolater numberInterpolater;
+    private final NumberNormaliser numberNormaliser;
+    private final NumberInterpolater numberInterpolater;
 
     NumberSampler() {
         this(new NumberNormaliser(), new NumberInterpolater());
     }
 
-    NumberSampler(NumberInterpolater numberInterpolater) {
+    NumberSampler(final NumberInterpolater numberInterpolater) {
         this(new NumberNormaliser(), numberInterpolater);
     }
 
@@ -22,7 +22,7 @@ public class NumberSampler {
      * @param numberInterpolater the way in which to interpolate the numbers
      */
     @Inject
-    public NumberSampler(NumberNormaliser numberNormaliser, NumberInterpolater numberInterpolater) {
+    public NumberSampler(final NumberNormaliser numberNormaliser, final NumberInterpolater numberInterpolater) {
         this.numberNormaliser = numberNormaliser;
         this.numberInterpolater = numberInterpolater;
     }
@@ -35,7 +35,7 @@ public class NumberSampler {
      * @param sampleCount the amount of samples to collect
      * @return a list of numbers samples from the range
      */
-    public List<Double> sample(double start, double end, int sampleCount) {
+    public List<Double> sample(final double start, final double end, final int sampleCount) {
         List<Double> sampleList = new ArrayList<>();
         for (int i = 0; i < sampleCount; i++) {
             double weight = numberNormaliser.normalise(i, sampleCount - 1);
