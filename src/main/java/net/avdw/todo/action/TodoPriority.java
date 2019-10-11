@@ -28,7 +28,7 @@ public class TodoPriority implements Runnable {
     private Todo todo;
 
     @Parameters(description = "Index to prioritize", arity = "0..1", index = "0")
-    private int idx;
+    private int idx = -1;
     @Parameters(description = "Priority to assign. Valid values: ${COMPLETION-CANDIDATES}", arity = "0..1", index = "1")
     private Priority priority;
 
@@ -36,7 +36,7 @@ public class TodoPriority implements Runnable {
     private boolean remove;
     @Option(names = "--clear", description = "Remove all priorities")
     private boolean clear;
-    @Option(names = {"-o", "--optimize"}, description = "Optimize priority usage")
+    @Option(names = "--optimize", description = "Optimize priority usage")
     private boolean optimize;
     @Option(names = "--shift-up", description = "Shift all the priorities one up")
     private boolean shiftUp;
@@ -71,6 +71,8 @@ public class TodoPriority implements Runnable {
             todoList.listPriorities(todo.getTodoFile());
         } else if (clear) {
             clearPriorities();
+        } else if (idx == -1) {
+            todoList.listPriorities(todo.getTodoFile());
         } else {
             List<TodoItem> allTodoItems = todoFileReader.readAll(todo.getTodoFile());
             if (idx > allTodoItems.size()) {
