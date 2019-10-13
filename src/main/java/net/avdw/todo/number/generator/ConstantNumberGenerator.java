@@ -3,7 +3,7 @@ package net.avdw.todo.number.generator;
 public class ConstantNumberGenerator implements NumberGenerator {
     private final Double number;
 
-    ConstantNumberGenerator(final Double number) {
+    public ConstantNumberGenerator(final Double number) {
         this.number = number;
     }
 

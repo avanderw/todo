@@ -12,7 +12,7 @@ public class HSLColorGenerator implements ColorGenerator {
     private final ColorConverter colorConverter;
 
     @Inject
-    HSLColorGenerator(final NumberGenerator hueGenerator, final NumberGenerator saturationGenerator, final NumberGenerator luminanceGenerator, final ColorConverter colorConverter) {
+    public HSLColorGenerator(final NumberGenerator hueGenerator, final NumberGenerator saturationGenerator, final NumberGenerator luminanceGenerator, final ColorConverter colorConverter) {
         this.hueGenerator = hueGenerator;
         this.saturationGenerator = saturationGenerator;
         this.luminanceGenerator = luminanceGenerator;

@@ -84,8 +84,8 @@ public class ColorConverter {
             h += maxHue;
         }
 
-        n = (int) Math.floor(h / 60);
-        f = (h - n * 60) / 60;
+        n = (int) Math.floor(h / 60.);
+        f = (h - n * 60.) / 60.;
         n %= 6;
 
         mu = min + ((max - min) * f);

@@ -13,7 +13,7 @@ public class NumberSampler {
         this(new NumberNormaliser(), new NumberInterpolater());
     }
 
-    NumberSampler(final NumberInterpolater numberInterpolater) {
+    public NumberSampler(final NumberInterpolater numberInterpolater) {
         this(new NumberNormaliser(), numberInterpolater);
     }
 

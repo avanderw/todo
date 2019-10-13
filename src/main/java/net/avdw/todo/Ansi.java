@@ -1,5 +1,13 @@
 package net.avdw.todo;
 
+import net.avdw.todo.color.ColorConverter;
+import net.avdw.todo.color.RGB;
+import net.avdw.todo.color.generator.HSLColorGenerator;
+import net.avdw.todo.number.NumberInterpolater;
+import net.avdw.todo.number.NumberSampler;
+import net.avdw.todo.number.generator.ConstantNumberGenerator;
+import net.avdw.todo.number.generator.IteratingNumberGenerator;
+
 // http://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html#16-colors
 public final class Ansi {
     private Ansi() {
@@ -19,26 +27,24 @@ public final class Ansi {
     public static final String CONTEXT_COLOR = CYAN;
 
     public static void main(final String[] args) {
-        for (int r = 0; r < 256; r++) {
-            if (r % 32 == 0) {
-                System.out.println();
-            }
-            System.out.print(String.format("\u001b[38;2;%s;0;0m %3s \u001b[0m", r, r));
+        int sampleCount = 60;
+        int sampleCountDiv4 = sampleCount / 4;
+        NumberInterpolater interpolater = new NumberInterpolater();
+        NumberSampler sampler = new NumberSampler(interpolater);
+        IteratingNumberGenerator numberGenerator = new IteratingNumberGenerator(sampler.sample(0, 120, sampleCount), true);
+        ColorConverter colorConverter = new ColorConverter();
+        HSLColorGenerator colorGenerator = new HSLColorGenerator(numberGenerator, new ConstantNumberGenerator(.75), new ConstantNumberGenerator(.5), colorConverter);
+        for (int i = 0; i < sampleCount; i++) {
+            RGB rgb = colorGenerator.generateRGB();
+            System.out.print(String.format("\u001b[48;2;%s;%s;%sm \u001b[0m", (int) (rgb.getR() * 255), (int) (rgb.getG() * 255), (int) (rgb.getB() * 255)));
         }
         System.out.println();
-        for (int g = 0; g < 256; g++) {
-            if (g % 32 == 0) {
+        for (int i = 0; i < sampleCount; i++) {
+            if (i % sampleCountDiv4 == 0) {
                 System.out.println();
             }
-            System.out.print(String.format("\u001b[38;2;0;%s;0m %3s \u001b[0m", g, g));
+            RGB rgb = colorGenerator.generateRGB();
+            System.out.print(String.format("\u001b[1;38;2;%s;%s;%sm %3s\u001b[0m", (int) (rgb.getR() * 255), (int) (rgb.getG() * 255), (int) (rgb.getB() * 255), colorConverter.rgbToHue(rgb.getR(), rgb.getG(), rgb.getB())));
         }
-        System.out.println();
-        for (int b = 0; b < 256; b++) {
-            if (b % 32 == 0) {
-                System.out.println();
-            }
-            System.out.print(String.format("\u001b[38;2;0;0;%sm %3s \u001b[0m", b, b));
-        }
-        System.out.println();
     }
 }
