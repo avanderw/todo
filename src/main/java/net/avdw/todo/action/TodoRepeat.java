@@ -1,9 +1,11 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
+import net.avdw.todo.Ansi;
 import net.avdw.todo.Todo;
-import net.avdw.todo.TodoItemV1;
+import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.item.TodoItemFactory;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
@@ -11,7 +13,7 @@ import picocli.CommandLine.ParentCommand;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Optional;
+import java.util.List;
 
 import static net.avdw.todo.render.ConsoleFormatting.h1;
 
@@ -35,6 +37,10 @@ public class TodoRepeat implements Runnable {
 
     @Inject
     private SimpleDateFormat simpleDateFormat;
+    @Inject
+    private TodoItemFactory todoItemFactory;
+    @Inject
+    private TodoFileReader todoFileReader;
 
     /**
      * Entry point for picocli.
@@ -42,17 +48,24 @@ public class TodoRepeat implements Runnable {
     @Override
     public void run() {
         h1("todo:repeat");
-        Optional<TodoItem> doneItem = todoDone.done(todo.getTodoFile(), idx);
-        doneItem.ifPresent(todoItem -> {
-            String rawValue = todoItem.rawValue();
-            if (todoItem.hasPriority()) {
-                rawValue = rawValue.replaceFirst("\\([A-Z]\\) \\d\\d\\d\\d-\\d\\d-\\d\\d", simpleDateFormat.format(new Date()));
-            } else {
-                rawValue = rawValue.replaceFirst("\\d\\d\\d\\d-\\d\\d-\\d\\d", simpleDateFormat.format(new Date()));
-            }
-            rawValue = rawValue.replaceAll("due:\\d\\d\\d\\d-\\d\\d-\\d\\d", String.format("due:%s", simpleDateFormat.format(dueDate)));
-            todoAdd.add(todo.getTodoFile(), rawValue);
-            Logger.info(String.format("Added: %s", new TodoItemV1(rawValue)));
-        });
+        List<TodoItem> allTodoItems = todoFileReader.readAll(todo.getTodoFile());
+        if (idx > allTodoItems.size()) {
+            Logger.warn(String.format("There are only '%s' items in the todo file and idx '%s' is too high", allTodoItems.size(), idx));
+            return;
+        } else if (idx <= 0) {
+            Logger.warn(String.format("The idx '%s' cannot be negative", idx));
+            return;
+        }
+
+        todoDone.complete(todo.getTodoFile(), idx);
+
+        TodoItem toCompleteTodoItem = allTodoItems.get(idx - 1);
+        String rawValue = toCompleteTodoItem.rawValue().replaceFirst("^x \\d\\d\\d\\d-\\d\\d-\\d\\d\\s", "");
+        rawValue = rawValue.replaceFirst("^\\([A-Z]\\)\\s", "");
+        rawValue = rawValue.replaceFirst("^\\d\\d\\d\\d-\\d\\d-\\d\\d\\s", "");
+        rawValue = rawValue.replaceAll("due:\\d\\d\\d\\d-\\d\\d-\\d\\d", String.format("due:%s", simpleDateFormat.format(dueDate)));
+        rawValue = String.format("%s %s", simpleDateFormat.format(new Date()), rawValue);
+        todoAdd.add(todo.getTodoFile(), rawValue);
+        Logger.info(String.format("%sAdded%s: %s", Ansi.GREEN, Ansi.RESET, todoItemFactory.create(allTodoItems.size() + 1, rawValue)));
     }
 }

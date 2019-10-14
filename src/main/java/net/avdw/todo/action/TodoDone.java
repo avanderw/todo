@@ -1,6 +1,7 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
+import net.avdw.todo.Ansi;
 import net.avdw.todo.Todo;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.file.TodoFileWriter;
@@ -13,7 +14,6 @@ import picocli.CommandLine.ParentCommand;
 
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 
 import static net.avdw.todo.render.ConsoleFormatting.h1;
 
@@ -40,7 +40,7 @@ public class TodoDone implements Runnable {
     @Override
     public void run() {
         h1("todo:done");
-        done(todo.getTodoFile(), idx);
+        complete(todo.getTodoFile(), idx);
     }
 
     /**
@@ -50,28 +50,26 @@ public class TodoDone implements Runnable {
      * @param idx      the entry in the file to complete
      * @return the original line that was marked as done
      */
-    Optional<TodoItem> done(final Path todoFile, final int idx) {
+    void complete(final Path todoFile, final int idx) {
         List<TodoItem> allTodoItems = todoFileReader.readAll(todoFile);
         if (idx > allTodoItems.size()) {
             Logger.warn(String.format("There are only '%s' items in the todo file and idx '%s' is too high", allTodoItems.size(), idx));
-            return Optional.empty();
+            return;
         } else if (idx <= 0) {
             Logger.warn(String.format("The idx '%s' cannot be negative", idx));
-            return Optional.empty();
+            return;
         }
 
         TodoItem todoItem = allTodoItems.get(idx - 1);
-        Logger.info(todoItem);
+        Logger.info(String.format("%sFound%s: %s", Ansi.YELLOW, Ansi.RESET, todoItem));
         if (todoItem.isComplete()) {
             Logger.warn("Item is already marked as done");
-            return Optional.of(todoItem);
         } else {
             TodoItem completeItem = todoItemCompletor.complete(todoItem);
-            Logger.info(completeItem);
+            Logger.info(String.format("%sDone%s : %s", Ansi.GREEN, Ansi.RESET, completeItem));
 
             allTodoItems.set(idx - 1, completeItem);
             todoFileWriter.write(allTodoItems, todoFile);
-            return Optional.of(completeItem);
         }
     }
 }

@@ -1,16 +1,16 @@
-(A) 2019-07-23 @Add reporting for duration +report
-(B) 2019-07-23 @Fix bug when global repository does not exist
-(C) 2019-07-24 @Add +tag functionality to append text
-(D) 2019-07-26 @Add +consolodate functionality to view all aware todo directories
-x 2019-10-11 2019-10-11 @Change default 'pri' command to list priorities start:2019-10-11
+x 2019-10-14 2019-10-14 @Fix +repeat as it is completely broken
+(B) 2019-07-26 @Add +consolodate functionality to view all aware todo directories
 2019-07-09 @Add admin +archive
 2019-07-09 @Add auto +archive +properties
 2019-07-23 @Add auto +sort +properties
 2019-07-23 @Add default show all +properties
+2019-07-23 @Add reporting for duration +report
+2019-07-23 @Fix bug when global repository does not exist
 2019-07-23 @Refactor task styling to template
 2019-07-24 @Add +backup option to state changing operations
-2019-07-25 @Fix bug in +@Add to global list when it does not exist
-2019-07-25 @Fix bug when +@Add with tilde is used in command prompt
+2019-07-24 @Add +tag functionality to append text
+2019-07-25 @Fix bug in +add to global list when it does not exist
+2019-07-25 @Fix bug when +add with tilde is used in command prompt
 2019-07-26 @Add +clean feature which will remove blank lines
 2019-07-26 @Add auto +priority +properties for +start functionality
 2019-07-26 @Add reporting on todo, in-progress and done for previous months +report
@@ -42,7 +42,7 @@ x 2019-10-11 2019-10-11 @Change default 'pri' command to list priorities start:2
 2019-10-11 @Fix formatting for +sort command
 2019-10-11 @Fix formatting of +start
 2019-10-11 @Fix inconsistency between +start and list
-2019-10-11 @Fix not allowing multi-line todo +@Add
+2019-10-11 @Fix not allowing multi-line todo +add
 2019-10-11 @Refactor colors to a TodoColor class
 2019-10-11 @Refactor priority shifting to not read the file twice
 x 2019-07-18 2019-06-19 @Add repository lookup
@@ -53,7 +53,7 @@ x 2019-07-23 2019-07-23 @Add list of projects +list
 x 2019-07-23 2019-07-23 @Enhance +list to show all items with option
 x 2019-07-23 2019-07-23 @Enhance +list to show not-done items
 x 2019-07-23 2019-07-23 @Fix x of y tasks shown bug on +list
-x 2019-07-24 2019-07-23 @Add @Add +@Add
+x 2019-07-24 2019-07-23 @Add @Add +add
 x 2019-07-24 2019-07-23 @Add done +done
 x 2019-07-24 2019-07-24 @Enhance +list of projects and contexts to only show when requested
 x 2019-07-24 2019-07-24 Remove priority when task is +done
@@ -63,7 +63,7 @@ x 2019-07-25 2019-07-23 @Add versioning command support
 x 2019-07-25 2019-07-24 @Add +clear functionality for stale .todo directories
 x 2019-07-25 2019-07-25 @Add +rename admin functionality
 x 2019-07-30 2019-07-24 @Add +init functionality start:2019-07-25
-x 2019-07-30 2019-07-24 Improve performance of the +@Add command
+x 2019-07-30 2019-07-24 Improve performance of the +add command
 x 2019-07-30 2019-07-30 @Add feature to +migrate items from local to global and visa versa
 x 2019-08-07 2019-07-26 @Add +start feature to indicate when todo was started start:2019-08-07
 x 2019-08-12 2019-07-23 @Add auto startdate +properties start:2019-08-12
@@ -95,7 +95,8 @@ x 2019-10-09 2019-08-13 @Fix bug when listing projects and there is an empty pro
 x 2019-10-09 2019-09-17 @Refactor all console output to use logger
 x 2019-10-09 2019-09-17 Rename feature rename to replace
 x 2019-10-09 2019-10-08 @Fix inconsistencies between +done and list
-x 2019-10-11 2019-06-20 @Add warning when adding duplicates +@Add
+x 2019-10-11 2019-06-20 @Add warning when adding duplicates +add
+x 2019-10-11 2019-10-11 @Change default 'pri' command to list priorities start:2019-10-11
 x 2019-10-11 2019-10-11 @Fix inconsistencies between ls and pri
 x 2019-10-11 2019-10-11 @Fix inconsistencies between ls and rm
 x 2019-10-11 2019-10-11 @Fix inconsitencies between ls and @Add
