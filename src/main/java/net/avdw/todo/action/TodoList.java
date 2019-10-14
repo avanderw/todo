@@ -1,6 +1,7 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
+import net.avdw.todo.Ansi;
 import net.avdw.todo.Todo;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
@@ -86,7 +87,10 @@ public class TodoList implements Runnable {
 
         hr();
         long completed = allTodoItems.stream().filter(TodoItem::isComplete).count();
-        Logger.info(String.format("%s of %s (%s done) todo items shown", filteredTodoItems.size(), allTodoItems.size(), completed));
+        Logger.info(String.format("[%s%2s%s] of %s (%s%s done%s) todo items shown",
+                Ansi.BLUE, filteredTodoItems.size(), Ansi.RESET,
+                allTodoItems.size(),
+                Ansi.GREEN, completed, Ansi.RESET));
 
         if (displayContexts) {
             todoContextTable.printContextTable(filteredTodoItems);
