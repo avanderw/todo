@@ -36,7 +36,7 @@ public final class Ansi {
         HSLColorGenerator colorGenerator = new HSLColorGenerator(numberGenerator, new ConstantNumberGenerator(.75), new ConstantNumberGenerator(.5), colorConverter);
         for (int i = 0; i < sampleCount; i++) {
             RGB rgb = colorGenerator.generateRGB();
-            System.out.print(String.format("\u001b[48;2;%s;%s;%sm \u001b[0m", (int) (rgb.getR() * 255), (int) (rgb.getG() * 255), (int) (rgb.getB() * 255)));
+            System.out.print(String.format("%s \u001b[0m", getBackgroundColor(rgb)));
         }
         System.out.println();
         for (int i = 0; i < sampleCount; i++) {
@@ -44,7 +44,17 @@ public final class Ansi {
                 System.out.println();
             }
             RGB rgb = colorGenerator.generateRGB();
-            System.out.print(String.format("\u001b[1;38;2;%s;%s;%sm %3s\u001b[0m", (int) (rgb.getR() * 255), (int) (rgb.getG() * 255), (int) (rgb.getB() * 255), colorConverter.rgbToHue(rgb.getR(), rgb.getG(), rgb.getB())));
+            System.out.print(String.format("%s %3s\u001b[0m", getForegroundColor(rgb, true), colorConverter.rgbToHue(rgb.getR(), rgb.getG(), rgb.getB())));
         }
+    }
+
+    public static String getForegroundColor(final RGB color, final boolean bold) {
+        return bold
+                ? String.format("\u001b[1;38;2;%s;%s;%sm", (int) (color.getR() * 255), (int) (color.getG() * 255), (int) (color.getB() * 255))
+                : String.format("\u001b[38;2;%s;%s;%sm", (int) (color.getR() * 255), (int) (color.getG() * 255), (int) (color.getB() * 255));
+    }
+
+    public static String getBackgroundColor(final RGB color) {
+        return  String.format("\u001b[48;2;%s;%s;%sm", (int) (color.getR() * 255), (int) (color.getG() * 255), (int) (color.getB() * 255));
     }
 }

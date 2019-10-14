@@ -69,7 +69,7 @@ public class ColorConverter {
     }
 
     /**
-     * Convert hue to RG B values using a linear transformation.
+     * Convert hue to RGB values using a linear transformation.
      *
      * @param min of R,G,B
      * @param max of R,G,B
