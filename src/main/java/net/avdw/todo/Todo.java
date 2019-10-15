@@ -76,7 +76,7 @@ public class Todo implements Runnable {
      * Entry point for picocli.
      */
     public void run() {
-        Path directory = findDirectory();
+        Path directory = resolveTodoPath();
 
         if (Files.exists(directory)) {
             Logger.info(String.format("Directory: %s", directory));
@@ -91,7 +91,7 @@ public class Todo implements Runnable {
      * Return the local path unless overridden with the global flag.
      * @return the path that resolved
      */
-    public Path findDirectory() {
+    public Path resolveTodoPath() {
         if (Files.exists(localTodoPath) && Files.exists(globalTodoPath)) {
             Logger.debug(String.format("Local todo exists: %s", localTodoPath));
             Logger.debug(String.format("Global todo exists: %s", globalTodoPath));
@@ -112,7 +112,7 @@ public class Todo implements Runnable {
      * @return the path to the todo.txt file
      */
     public Path getTodoFile() {
-        Path directory = findDirectory();
+        Path directory = resolveTodoPath();
         if (Files.exists(directory)) {
             Set<String> paths;
             if (globalProperties.containsKey(PropertyModule.TODO_PATHS)) {
@@ -139,7 +139,7 @@ public class Todo implements Runnable {
      * @return the path to the backup file
      */
     public Path getBackupFile() {
-        return findDirectory().resolve("todo.txt.bak");
+        return resolveTodoPath().resolve("todo.txt.bak");
     }
 
     /**

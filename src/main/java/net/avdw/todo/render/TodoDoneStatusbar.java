@@ -1,13 +1,22 @@
 package net.avdw.todo.render;
 
-import net.avdw.todo.Ansi;
+import com.google.inject.Inject;
+import net.avdw.todo.AnsiColor;
 import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.theme.ThemeApplicator;
 
 import java.util.Comparator;
 import java.util.List;
 
 public class TodoDoneStatusbar {
-    private static final float PERCENTAGE = 100f;
+    private final PercentageRenderer percentageRenderer;
+    private final ThemeApplicator themeApplicator;
+
+    @Inject
+    TodoDoneStatusbar(final PercentageRenderer percentageRenderer, final ThemeApplicator themeApplicator) {
+        this.percentageRenderer = percentageRenderer;
+        this.themeApplicator = themeApplicator;
+    }
 
     /**
      * Build a ANSI bar showing which items are complete vs incomplete.
@@ -19,10 +28,9 @@ public class TodoDoneStatusbar {
         StringBuilder stringBuilder = new StringBuilder();
 
         todoItemList.stream().sorted(Comparator.comparing(TodoItem::isComplete).reversed()).forEach(todoItem -> {
-            stringBuilder.append(todoItem.isComplete() ? Ansi.GREEN : Ansi.WHITE);
-            stringBuilder.append("#");
+            stringBuilder.append(todoItem.isComplete() ? themeApplicator.blockComplete() : themeApplicator.blockIncomplete());
         });
-        stringBuilder.append(Ansi.RESET);
+        stringBuilder.append(AnsiColor.RESET);
 
         return stringBuilder.toString();
     }
@@ -35,8 +43,7 @@ public class TodoDoneStatusbar {
      */
     public String createPercentageBar(final List<TodoItem> todoItemList) {
         String bar = createBar(todoItemList);
-        long complete = todoItemList.stream().filter(TodoItem::isComplete).count();
-        String percentage = String.format("%.0f", complete * PERCENTAGE / todoItemList.size());
-        return String.format("%s%% [%s]", percentage, bar);
+        double complete = todoItemList.stream().filter(TodoItem::isComplete).count() * 1.;
+        return String.format("%s %s", percentageRenderer.renderText(complete / todoItemList.size()), bar);
     }
 }

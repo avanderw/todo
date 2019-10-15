@@ -1,11 +1,12 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Ansi;
+import net.avdw.todo.AnsiColor;
 import net.avdw.todo.Todo;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.item.TodoItemFactory;
+import net.avdw.todo.theme.ThemeApplicator;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
@@ -14,8 +15,6 @@ import picocli.CommandLine.ParentCommand;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import static net.avdw.todo.render.ConsoleFormatting.h1;
 
 @Command(name = "repeat", description = "Do and add an entry to todo.txt")
 public class TodoRepeat implements Runnable {
@@ -41,13 +40,15 @@ public class TodoRepeat implements Runnable {
     private TodoItemFactory todoItemFactory;
     @Inject
     private TodoFileReader todoFileReader;
+    @Inject
+    private ThemeApplicator themeApplicator;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        h1("todo:repeat");
+        System.out.println(themeApplicator.h1("todo:repeat"));
         List<TodoItem> allTodoItems = todoFileReader.readAll(todo.getTodoFile());
         if (idx > allTodoItems.size()) {
             Logger.warn(String.format("There are only '%s' items in the todo file and idx '%s' is too high", allTodoItems.size(), idx));
@@ -66,6 +67,6 @@ public class TodoRepeat implements Runnable {
         rawValue = rawValue.replaceAll("due:\\d\\d\\d\\d-\\d\\d-\\d\\d", String.format("due:%s", simpleDateFormat.format(dueDate)));
         rawValue = String.format("%s %s", simpleDateFormat.format(new Date()), rawValue);
         todoAdd.add(todo.getTodoFile(), rawValue);
-        Logger.info(String.format("%sAdded%s: %s", Ansi.GREEN, Ansi.RESET, todoItemFactory.create(allTodoItems.size() + 1, rawValue)));
+        Logger.info(String.format("%sAdded%s: %s", AnsiColor.GREEN, AnsiColor.RESET, todoItemFactory.create(allTodoItems.size() + 1, rawValue)));
     }
 }

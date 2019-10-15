@@ -2,7 +2,7 @@ package net.avdw.todo.item;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-import net.avdw.todo.Ansi;
+import net.avdw.todo.AnsiColor;
 import net.avdw.todo.action.TodoPriority;
 import org.pmw.tinylog.Logger;
 
@@ -44,7 +44,7 @@ public class TodoItem {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(String.format("[%s%2s%s] ", Ansi.BLUE, idx, Ansi.RESET));
+        StringBuilder sb = new StringBuilder(String.format("[%s%2s%s] ", AnsiColor.BLUE, idx, AnsiColor.RESET));
         Scanner scanner = new Scanner(line);
         String previousToken = "";
         boolean completedDate = false;
@@ -52,46 +52,46 @@ public class TodoItem {
         while (scanner.hasNext()) {
             String token = scanner.next();
             if (token.startsWith("x") && sb.length() == 0) {
-                sb.append(Ansi.GREEN);
+                sb.append(AnsiColor.GREEN);
             }
             if (token.length() == DATE_LENGTH && token.startsWith("20")) {
-                if (sb.length() > Ansi.GREEN.length() &&
+                if (sb.length() > AnsiColor.GREEN.length() &&
                         isComplete() &&
                         previousToken.length() != DATE_LENGTH &&
                         !previousToken.startsWith("20")) {
                     if (!completedDate) {
-                        sb.append(Ansi.GREEN);
+                        sb.append(AnsiColor.GREEN);
                         completedDate = true;
                     }
                 } else {
                     if (!startDate) {
-                        sb.append(Ansi.WHITE);
+                        sb.append(AnsiColor.WHITE);
                         startDate = true;
                     }
                 }
             } else if (token.startsWith("+")) {
-                sb.append(Ansi.MAGENTA);
+                sb.append(AnsiColor.MAGENTA);
             } else if (token.startsWith("@")) {
-                sb.append(Ansi.CYAN);
+                sb.append(AnsiColor.CYAN);
             } else if (token.startsWith("(") && token.length() == PRIORITY_LENGTH && token.endsWith(")")) {
-                sb.append(Ansi.YELLOW);
+                sb.append(AnsiColor.YELLOW);
             } else if (token.contains(":")) {
                 if (token.startsWith("due:")) {
                     try {
                         Date date = SIMPLE_DATE_FORMAT.parse(token.replace("due:", ""));
                         if (date.before(new Date())) {
-                            sb.append(Ansi.RED);
+                            sb.append(AnsiColor.RED);
                         } else {
-                            sb.append(Ansi.GREEN);
+                            sb.append(AnsiColor.GREEN);
                         }
                     } catch (ParseException e) {
                         Logger.error(e.getMessage());
                         Logger.debug("Could not parse the date to apply formatting, defaulting to green");
                         Logger.debug(e);
-                        sb.append(Ansi.GREEN);
+                        sb.append(AnsiColor.GREEN);
                     }
                 } else {
-                    sb.append(Ansi.RED);
+                    sb.append(AnsiColor.RED);
                 }
             }
 
@@ -100,7 +100,7 @@ public class TodoItem {
             if (scanner.hasNext()) {
                 sb.append(" ");
             }
-            sb.append(Ansi.RESET);
+            sb.append(AnsiColor.RESET);
             previousToken = token;
         }
         return sb.toString();

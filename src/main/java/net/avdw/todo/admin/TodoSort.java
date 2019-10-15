@@ -3,6 +3,7 @@ package net.avdw.todo.admin;
 import com.google.inject.Inject;
 import net.avdw.todo.Todo;
 import net.avdw.todo.action.TodoList;
+import net.avdw.todo.theme.ThemeApplicator;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ParentCommand;
@@ -13,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static net.avdw.todo.render.ConsoleFormatting.h1;
-
 @Command(name = "sort", description = "Sort todo.txt")
 public class TodoSort implements Runnable {
     @ParentCommand
@@ -22,13 +21,15 @@ public class TodoSort implements Runnable {
 
     @Inject
     private TodoList list;
+    @Inject
+    private ThemeApplicator themeApplicator;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        h1("todo:sort");
+        System.out.println(themeApplicator.h1("todo:sort"));
         List<String> todos = new ArrayList<>();
         try (Scanner scanner = new Scanner(todo.getTodoFile())) {
             while (scanner.hasNext()) {

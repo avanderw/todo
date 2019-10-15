@@ -1,11 +1,12 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Ansi;
+import net.avdw.todo.AnsiColor;
 import net.avdw.todo.Todo;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.file.TodoFileWriter;
 import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.theme.ThemeApplicator;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
@@ -14,8 +15,6 @@ import picocli.CommandLine.ParentCommand;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-
-import static net.avdw.todo.render.ConsoleFormatting.h1;
 
 @Command(name = "rm", description = "Remove a todo item")
 public class TodoRemove implements Runnable {
@@ -27,13 +26,15 @@ public class TodoRemove implements Runnable {
     private TodoFileReader todoFileReader;
     @Inject
     private TodoFileWriter todoFileWriter;
+    @Inject
+    private ThemeApplicator themeApplicator;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        h1("todo:remove");
+        System.out.println(themeApplicator.h1("todo:remove"));
         remove(todo.getTodoFile(), idx);
     }
 
@@ -59,7 +60,7 @@ public class TodoRemove implements Runnable {
         allTodoItems.remove(idx - 1);
         todoFileWriter.write(allTodoItems, fromFile);
         Logger.info(String.format("%sRemoved%s: %s",
-                Ansi.RED, Ansi.RESET,
+                AnsiColor.RED, AnsiColor.RESET,
                 todoItem));
         return Optional.of(todoItem);
     }

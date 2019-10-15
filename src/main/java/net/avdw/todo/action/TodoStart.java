@@ -7,6 +7,7 @@ import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.file.TodoFileWriter;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.item.TodoItemFactory;
+import net.avdw.todo.theme.ThemeApplicator;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
@@ -15,9 +16,6 @@ import picocli.CommandLine.ParentCommand;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import static net.avdw.todo.render.ConsoleFormatting.h1;
-import static net.avdw.todo.render.ConsoleFormatting.hr;
 
 @Command(name = "start", description = "Start a todo item")
 public class TodoStart implements Runnable {
@@ -39,13 +37,15 @@ public class TodoStart implements Runnable {
     private TodoItemFactory todoItemFactory;
     @Inject
     private SimpleDateFormat simpleDateFormat;
+    @Inject
+    private ThemeApplicator themeApplicator;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        h1("todo:start");
+        System.out.println(themeApplicator.h1("todo:start"));
 
         List<TodoItem> allTodoItems = todoFileReader.readAll(todo.getTodoFile());
         if (idx > allTodoItems.size()) {
@@ -77,6 +77,6 @@ public class TodoStart implements Runnable {
         allTodoItems.set(idx - 1, changedTodoItem);
         todoFileWriter.write(allTodoItems, todo.getTodoFile());
         Logger.info(String.format("Started: %s", changedTodoItem));
-        hr();
+        System.out.println(themeApplicator.hr());
     }
 }

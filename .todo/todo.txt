@@ -1,4 +1,4 @@
-x 2019-10-15 2019-10-15 @Refactor TodoItemV1 to TodoItem
+(A) 2019-10-11 @Change status to show +status for the current repository start:2019-10-15
 (B) 2019-07-26 @Add +consolodate functionality to view all aware todo directories
 2019-07-09 @Add admin +archive
 2019-07-09 @Add auto +archive +properties
@@ -29,8 +29,6 @@ x 2019-10-15 2019-10-15 @Refactor TodoItemV1 to TodoItem
 2019-08-13 @Add +tag functionality
 2019-08-13 @Add +top command to list top x todos
 2019-08-13 @Enhance +explore to be OS independant
-2019-08-13 @Fix bug in +remove not finding completed items when listing all
-2019-08-13 @Fix cannot find index bug when removing index on completed item from all items
 2019-08-14 @Add +report in the style of github contribution graph
 2019-08-14 @Add proxy for when todo push is used instead of git push
 2019-08-14 Consider adding roadmap generation based off priority, version or combined
@@ -38,10 +36,6 @@ x 2019-10-15 2019-10-15 @Refactor TodoItemV1 to TodoItem
 2019-09-17 @Refactor +repeat messages
 2019-10-09 @Change set command to become config command which manages property files
 2019-10-11 @Add an easter egg for making 100 todo items
-2019-10-11 @Change status to show +status for the current repository
-2019-10-11 @Fix formatting for +sort command
-2019-10-11 @Fix formatting of +start
-2019-10-11 @Fix inconsistency between +start and list
 2019-10-11 @Fix not allowing multi-line todo +add
 2019-10-11 @Refactor colors to a TodoColor class
 2019-10-11 @Refactor priority shifting to not read the file twice
@@ -101,3 +95,9 @@ x 2019-10-11 2019-10-11 @Fix inconsistencies between ls and pri
 x 2019-10-11 2019-10-11 @Fix inconsistencies between ls and rm
 x 2019-10-11 2019-10-11 @Fix inconsitencies between ls and @Add
 x 2019-10-14 2019-10-14 @Fix +repeat as it is completely broken
+x 2019-10-15 2019-08-13 @Fix bug in +remove not finding completed items when listing all
+x 2019-10-15 2019-08-13 @Fix cannot find index bug when removing index on completed item from all items
+x 2019-10-15 2019-10-11 @Fix formatting for +sort command
+x 2019-10-15 2019-10-11 @Fix formatting of +start
+x 2019-10-15 2019-10-11 @Fix inconsistency between +start and list
+x 2019-10-15 2019-10-15 @Refactor TodoItemV1 to TodoItem

@@ -1,9 +1,6 @@
 package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Ansi;
-import net.avdw.todo.GlobalTodo;
-import net.avdw.todo.LocalTodo;
 import net.avdw.todo.Todo;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
@@ -12,22 +9,19 @@ import net.avdw.todo.property.PropertyModule;
 import net.avdw.todo.render.TodoContextTable;
 import net.avdw.todo.render.TodoDoneStatusbar;
 import net.avdw.todo.render.TodoProjectTable;
+import net.avdw.todo.theme.ThemeApplicator;
 import org.pmw.tinylog.Logger;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ParentCommand;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-
-import static net.avdw.todo.render.ConsoleFormatting.*;
 
 @Command(name = "status", description = "Display repository information")
 public class TodoStatus implements Runnable {
@@ -36,75 +30,59 @@ public class TodoStatus implements Runnable {
     private Todo todo;
 
     @Inject
-    @GlobalTodo
-    private Path globalPath;
-
-    @Inject
-    @LocalTodo
-    private Path localPath;
-
-    @Inject
     @GlobalProperty
     private Properties properties;
-
     @Inject
     @GlobalProperty
     private Path propertyPath;
 
     @Inject
     private TodoFileReader todoFileReader;
-
     @Inject
     private TodoDoneStatusbar todoDoneStatusbar;
-
     @Inject
     private TodoProjectTable todoProjectTable;
 
     @Inject
     private TodoContextTable todoContextTable;
+    @Inject
+    private ThemeApplicator themeApplicator;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        h1("todo:status");
-        Logger.info(String.format("Local   : %s", Files.exists(localPath) ? localPath.toAbsolutePath() : "todo init"));
-        Logger.info(String.format("Global  : %s", Files.exists(globalPath) ? globalPath.toAbsolutePath() : "todo --global init"));
-        Path defaultPath = todo.findDirectory();
-        Logger.info(String.format("Default : %s%s%s", Ansi.YELLOW, defaultPath.toAbsolutePath(), Ansi.RESET));
-
-        h2("status:paths");
-        if (properties.containsKey(PropertyModule.TODO_PATHS)) {
-            String todoPaths = properties.getProperty(PropertyModule.TODO_PATHS);
+        System.out.println(themeApplicator.h1("todo:status"));
+        Path resolvedPath = todo.resolveTodoPath().toAbsolutePath();
+        properties.computeIfPresent(PropertyModule.TODO_PATHS, (key, value) -> {
+            String paths = (String) value;
             List<String> pathsToRemove = new ArrayList<>();
-            Arrays.stream(todoPaths.split(";")).forEach(path -> {
+            Arrays.stream(paths.split(";")).forEach(path -> {
                 try {
                     Path currentPath = Paths.get(path);
                     List<TodoItem> allTodoItemList = todoFileReader.readAll(currentPath.resolve("todo.txt"));
-                    if (defaultPath.toAbsolutePath().equals(currentPath.toAbsolutePath())) {
-                        Logger.info(String.format("%s%s%s", Ansi.YELLOW, path, Ansi.RESET));
+                    if (currentPath.equals(resolvedPath)) {
+                        System.out.println(themeApplicator.a(path));
+                        todoProjectTable.printProjectSummaryTable(allTodoItemList);
+                        todoContextTable.printContextSummaryTable(allTodoItemList);
                     } else {
-                        Logger.info(String.format("%s", path));
+                        System.out.println(themeApplicator.txt(path));
                     }
-                    Logger.info(String.format("Progress: %s", todoDoneStatusbar.createPercentageBar(allTodoItemList)));
-
-                    todoProjectTable.printProjectSummaryTable(allTodoItemList);
-                    todoContextTable.printContextSummaryTable(allTodoItemList);
+                    System.out.println(todoDoneStatusbar.createPercentageBar(allTodoItemList));
                 } catch (Exception e) {
                     Logger.error(String.format("Cannot read path '%s'", path));
                     Logger.info("Removing path from property file");
                     pathsToRemove.add(path);
                 }
-                hr();
             });
 
             if (!pathsToRemove.isEmpty()) {
                 for (String path : pathsToRemove) {
-                    todoPaths = todoPaths.replace(path, "");
-                    todoPaths = todoPaths.replaceAll(";;", ";");
+                    paths = paths.replace(path, "");
+                    paths = paths.replaceAll(";;", ";");
                 }
-                properties.setProperty(PropertyModule.TODO_PATHS, todoPaths);
+                properties.setProperty(PropertyModule.TODO_PATHS, paths);
                 try {
                     properties.store(new FileWriter(propertyPath.toFile()), "Todo Properties");
                 } catch (IOException e) {
@@ -113,13 +91,8 @@ public class TodoStatus implements Runnable {
                 }
                 Logger.info("Wrote new property file");
             }
-        } else {
-            Logger.info("No paths found");
-        }
-
-        if (!Files.exists(localPath) || !Files.exists(globalPath)) {
-            hr();
-            CommandLine.usage(TodoInit.class, System.out);
-        }
+            return value;
+        });
+        System.out.println(themeApplicator.hr());
     }
 }

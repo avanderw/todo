@@ -120,4 +120,18 @@ public class ColorConverter {
             return c;
         }
     }
+
+    /**
+     * Convert a hex value to an RGB object.
+     *
+     * @param hex integer color value
+     * @return rgb with values in range [0..1]
+     */
+    public RGB hexToRGB(final int hex) {
+        int r = (hex >> 16) & 0xFF;
+        int g = (hex >> 8) & 0xFF;
+        int b = hex & 0xFF;
+
+        return new RGB(r / 255., g / 255., b / 255.);
+    }
 }

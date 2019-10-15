@@ -1,12 +1,13 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Ansi;
+import net.avdw.todo.AnsiColor;
 import net.avdw.todo.Todo;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.render.TodoContextTable;
 import net.avdw.todo.render.TodoProjectTable;
+import net.avdw.todo.theme.ThemeApplicator;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -17,9 +18,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static net.avdw.todo.render.ConsoleFormatting.h1;
-import static net.avdw.todo.render.ConsoleFormatting.hr;
 
 
 @Command(name = "ls", description = "List the items in todo.txt")
@@ -54,13 +52,15 @@ public class TodoList implements Runnable {
 
     @Inject
     private TodoFileReader todoFileReader;
+    @Inject
+    private ThemeApplicator themeApplicator;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        h1("todo:list");
+        System.out.println(themeApplicator.h1("todo:list"));
         List<TodoItem> allTodoItems = todoFileReader.readAll(todo.getTodoFile());
         List<TodoItem> filteredTodoItems = filterTodoItems(allTodoItems, filters);
 
@@ -85,12 +85,12 @@ public class TodoList implements Runnable {
             Logger.info(String.format("%s", item));
         }
 
-        hr();
+        System.out.println(themeApplicator.hr());
         long completed = allTodoItems.stream().filter(TodoItem::isComplete).count();
         Logger.info(String.format("[%s%2s%s] of %s (%s%s done%s) todo items shown",
-                Ansi.BLUE, filteredTodoItems.size(), Ansi.RESET,
+                AnsiColor.BLUE, filteredTodoItems.size(), AnsiColor.RESET,
                 allTodoItems.size(),
-                Ansi.GREEN, completed, Ansi.RESET));
+                AnsiColor.GREEN, completed, AnsiColor.RESET));
 
         if (displayContexts) {
             todoContextTable.printContextTable(filteredTodoItems);

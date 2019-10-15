@@ -8,6 +8,7 @@ import net.avdw.todo.action.TodoAdd;
 import net.avdw.todo.action.TodoRemove;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.theme.ThemeApplicator;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
@@ -15,9 +16,6 @@ import picocli.CommandLine.ParentCommand;
 
 import java.nio.file.Path;
 import java.util.List;
-
-import static net.avdw.todo.render.ConsoleFormatting.h1;
-import static net.avdw.todo.render.ConsoleFormatting.hr;
 
 @Command(name = "migrate", description = "Move todo between local and global")
 public class TodoMigrate implements Runnable {
@@ -43,13 +41,15 @@ public class TodoMigrate implements Runnable {
     @Inject
     @LocalTodo
     private Path localPath;
+    @Inject
+    private ThemeApplicator themeApplicator;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        h1("todo:migrate");
+        System.out.println(themeApplicator.h1("todo:migrate"));
         Path fromDirectory = todo.isGlobal() ? globalPath : localPath;
         Path toDirectory = todo.isGlobal() ? localPath : globalPath;
         Path fromFile = fromDirectory.resolve("todo.txt");
@@ -68,6 +68,6 @@ public class TodoMigrate implements Runnable {
         Logger.info(String.format("Migrate: %s", todoItem));
         todoRemove.remove(fromFile, idx);
         todoAdd.add(toFile, todoItem.rawValue());
-        hr();
+        System.out.println(themeApplicator.hr());
     }
 }

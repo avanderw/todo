@@ -4,7 +4,9 @@ import com.google.inject.*;
 import net.avdw.todo.config.LoggingSetup;
 import net.avdw.todo.config.ProfilingModule;
 import net.avdw.todo.item.TodoItemModule;
+import net.avdw.todo.number.NumberModule;
 import net.avdw.todo.property.PropertyModule;
+import net.avdw.todo.theme.ThemeModule;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine;
 
@@ -40,6 +42,9 @@ public final class Main {
                 bind(List.class).to(LinkedList.class);
 
                 install(new PropertyModule());
+                install(new NumberModule());
+                install(new ThemeModule());
+
                 bind(LoggingSetup.class).asEagerSingleton();
 
                 install(new ProfilingModule());

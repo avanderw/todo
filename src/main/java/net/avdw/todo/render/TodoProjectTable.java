@@ -1,26 +1,27 @@
 package net.avdw.todo.render;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Ansi;
+import net.avdw.todo.AnsiColor;
 import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.theme.ThemeApplicator;
 import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.Logger;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static net.avdw.todo.render.ConsoleFormatting.hr;
-
 public class TodoProjectTable {
     private static final double PERCENTAGE = 100.;
     private static final double UPPER_BOUND = 75.;
     private static final int NEW_LINE_COUNT_BREAK = 4;
 
-    private TodoDoneStatusbar todoDoneStatusbar;
+    private final TodoDoneStatusbar todoDoneStatusbar;
+    private final ThemeApplicator themeApplicator;
 
     @Inject
-    TodoProjectTable(final TodoDoneStatusbar todoDoneStatusbar) {
+    TodoProjectTable(final TodoDoneStatusbar todoDoneStatusbar, final ThemeApplicator themeApplicator) {
         this.todoDoneStatusbar = todoDoneStatusbar;
+        this.themeApplicator = themeApplicator;
     }
 
     /**
@@ -37,12 +38,12 @@ public class TodoProjectTable {
             double percentage = done * PERCENTAGE / value.size();
 
             Logger.info(String.format("%s%16s%s ( %s%3.0f%%%s ): %s",
-                    Ansi.PROJECT_COLOR, key, Ansi.RESET,
-                    percentage > UPPER_BOUND ? Ansi.GREEN : "", percentage, Ansi.RESET,
+                    AnsiColor.PROJECT_COLOR, key, AnsiColor.RESET,
+                    percentage > UPPER_BOUND ? AnsiColor.GREEN : "", percentage, AnsiColor.RESET,
                     todoDoneStatusbar.createBar(value)));
         });
 
-        hr();
+        System.out.println(themeApplicator.hr());
         long withProjects = todoItemList.stream().filter(TodoItem::hasProjects).count();
         Logger.info(String.format("%s projects, %s todo items", projects.size(), withProjects));
     }
@@ -71,10 +72,10 @@ public class TodoProjectTable {
             long completed = entry.getValue().stream().filter(TodoItem::isComplete).count();
             double percentage = completed * PERCENTAGE / entry.getValue().size();
             String percent = String.format("%3.0f%%", percentage);
-            stringBuilder.append(Ansi.PROJECT_COLOR);
+            stringBuilder.append(AnsiColor.PROJECT_COLOR);
             stringBuilder.append(String.format("%12s", entry.getKey()));
-            stringBuilder.append(Ansi.RESET);
-            stringBuilder.append(String.format("( %s%s%s )", Ansi.GREEN, percent, Ansi.RESET));
+            stringBuilder.append(AnsiColor.RESET);
+            stringBuilder.append(String.format("( %s%s%s )", AnsiColor.GREEN, percent, AnsiColor.RESET));
         }
         Logger.info(stringBuilder.toString());
     }

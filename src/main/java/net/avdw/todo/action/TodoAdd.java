@@ -1,7 +1,7 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Ansi;
+import net.avdw.todo.AnsiColor;
 import net.avdw.todo.Todo;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.file.TodoFileWriter;
@@ -9,6 +9,7 @@ import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.item.TodoItemFactory;
 import net.avdw.todo.property.PropertyKey;
 import net.avdw.todo.property.PropertyResolver;
+import net.avdw.todo.theme.ThemeApplicator;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -20,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static net.avdw.todo.render.ConsoleFormatting.h1;
 
 @Command(name = "add", description = "Add an item to todo.txt")
 public class TodoAdd implements Runnable {
@@ -43,13 +43,15 @@ public class TodoAdd implements Runnable {
     private TodoFileWriter todoFileWriter;
     @Inject
     private TodoItemFactory todoItemFactory;
+    @Inject
+    private ThemeApplicator themeApplicator;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        h1("todo:add");
+        themeApplicator.h1("todo:add");
         if (date || Boolean.parseBoolean(propertyResolver.resolve(PropertyKey.TODO_ADD_AUTO_DATE))) {
             addition = String.format("%s %s", simpleDateFormat.format(new Date()), addition);
         }
@@ -74,7 +76,7 @@ public class TodoAdd implements Runnable {
         } else {
             allTodoItems.add(additionalTodoItem);
             todoFileWriter.write(allTodoItems, toFile);
-            Logger.info(String.format("%sAdded%s: %s", Ansi.GREEN, Ansi.RESET, additionalTodoItem));
+            Logger.info(String.format("%sAdded%s: %s", AnsiColor.GREEN, AnsiColor.RESET, additionalTodoItem));
         }
         return additionalTodoItem;
     }

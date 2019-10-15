@@ -15,6 +15,6 @@
     <suppress checks="HiddenField"/>
     <suppress checks="EmptyBlock" files="Interpolation"/>
     <suppress checks="MagicNumber"
-              files="Ansi|Interpolation|RandomGenerator|ColorConverter|HSLColorGenerator|HSVColorGenerator|PercentageRenderer"/>
-    <suppress checks="DesignForExtension" files="TodoItem|TodoItemV1|.*Module"/>
+              files="AnsiColor|Interpolation|.*Module|ColorConverter|.*Generator|PercentageRenderer|.*Palette"/>
+    <suppress checks="DesignForExtension" files="TodoItem|.*Palette|.*Theme|.*Module|AnsiColor"/>
 </suppressions>

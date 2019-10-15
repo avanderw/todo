@@ -2,7 +2,7 @@ package net.avdw.todo.config;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.matcher.AbstractMatcher;
-import net.avdw.todo.Ansi;
+import net.avdw.todo.AnsiColor;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.item.TodoItemTokenIdentifier;
 import org.pmw.tinylog.Logger;
@@ -26,19 +26,19 @@ public final class ProfilingModule extends AbstractModule {
                     long start = System.currentTimeMillis();
                     try {
                         Logger.trace(String.format("%s-> %s.%s%s",
-                                Ansi.MAGENTA,
+                                AnsiColor.MAGENTA,
                                 methodInvocation.getMethod().getDeclaringClass().getSimpleName(),
                                 methodInvocation.getMethod().getName(),
-                                Ansi.RESET
+                                AnsiColor.RESET
                         ));
                         return methodInvocation.proceed();
                     } finally {
                         Logger.trace(String.format("%s<- %s.%s : %,d ms%s",
-                                Ansi.MAGENTA,
+                                AnsiColor.MAGENTA,
                                 methodInvocation.getMethod().getDeclaringClass().getSimpleName(),
                                 methodInvocation.getMethod().getName(),
                                 System.currentTimeMillis() - start,
-                                Ansi.RESET
+                                AnsiColor.RESET
                         ));
                     }
                 });

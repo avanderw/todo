@@ -7,6 +7,7 @@ import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.file.TodoFileWriter;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.item.TodoItemFactory;
+import net.avdw.todo.theme.ThemeApplicator;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -18,9 +19,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static net.avdw.todo.render.ConsoleFormatting.h1;
-import static net.avdw.todo.render.ConsoleFormatting.hr;
 
 @Command(name = "pri", description = "Prioritize a todo item")
 public class TodoPriority implements Runnable {
@@ -53,13 +51,15 @@ public class TodoPriority implements Runnable {
     private TodoItemFactory todoItemFactory;
     @Inject
     private TodoList todoList;
+    @Inject
+    private ThemeApplicator themeApplicator;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        h1("todo:priority");
+        System.out.println(themeApplicator.h1("todo:priority"));
         if (shiftUp) {
             shiftUpPriorities(todo.getTodoFile());
             todoList.listPriorities(todo.getTodoFile());
@@ -108,7 +108,7 @@ public class TodoPriority implements Runnable {
                 replace(todoItem.rawValue(), newLine, todo.getTodoFile());
 
                 Logger.info(String.format("%s", todoItem));
-                hr();
+                System.out.println(themeApplicator.hr());
                 Logger.info(String.format("%s", todoItemFactory.create(todoItem.getIdx(), newLine)));
             }
         }
