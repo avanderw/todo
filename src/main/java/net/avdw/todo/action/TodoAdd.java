@@ -15,10 +15,6 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -57,18 +53,8 @@ public class TodoAdd implements Runnable {
         if (date || Boolean.parseBoolean(propertyResolver.resolve(PropertyKey.TODO_ADD_AUTO_DATE))) {
             addition = String.format("%s %s", simpleDateFormat.format(new Date()), addition);
         }
-        List<TodoItem> allTodoItems = todoFileReader.readAll(todo.getTodoFile());
 
-        TodoItem additionalTodoItem = todoItemFactory.create(allTodoItems.size() + 1, addition);
-        if (allTodoItems.stream().filter(TodoItem::isIncomplete).anyMatch(todoItem -> todoItem.rawValue().equals(addition))) {
-            Logger.info(additionalTodoItem);
-            Logger.warn("The todo item will not be added");
-            Logger.info("Adding will create a duplicate");
-        } else {
-            allTodoItems.add(additionalTodoItem);
-            todoFileWriter.write(allTodoItems, todo.getTodoFile());
-            Logger.info(String.format("%sAdded%s: %s", Ansi.GREEN, Ansi.RESET, additionalTodoItem));
-        }
+        add(todo.getTodoFile(), addition);
     }
 
     /**
@@ -76,16 +62,20 @@ public class TodoAdd implements Runnable {
      * The intention is to append a new todo in the file.
      *
      * @param toFile   the file to append to
-     * @param rawValue the text value to append
+     * @param rawValue the todo item to append
      */
-    public void add(final Path toFile, final String rawValue) {
-        try (FileWriter fw = new FileWriter(toFile.toFile(), true);
-             BufferedWriter bw = new BufferedWriter(fw);
-             PrintWriter out = new PrintWriter(bw)) {
-            out.println(rawValue);
-        } catch (IOException e) {
-            Logger.error(String.format("Could not add `%s` to `%s`", rawValue, toFile));
-            Logger.debug(e);
+    public TodoItem add(final Path toFile, final String rawValue) {
+        List<TodoItem> allTodoItems = todoFileReader.readAll(toFile);
+        TodoItem additionalTodoItem = todoItemFactory.create(allTodoItems.size() + 1, rawValue);
+        if (allTodoItems.stream().filter(TodoItem::isIncomplete).anyMatch(todoItem -> todoItem.rawValue().equals(rawValue))) {
+            Logger.info(additionalTodoItem);
+            Logger.warn("The todo item will not be added");
+            Logger.info("Adding will create a duplicate");
+        } else {
+            allTodoItems.add(additionalTodoItem);
+            todoFileWriter.write(allTodoItems, toFile);
+            Logger.info(String.format("%sAdded%s: %s", Ansi.GREEN, Ansi.RESET, additionalTodoItem));
         }
+        return additionalTodoItem;
     }
 }

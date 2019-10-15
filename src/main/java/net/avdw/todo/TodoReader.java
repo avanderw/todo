@@ -2,6 +2,8 @@ package net.avdw.todo;
 
 import com.google.inject.Inject;
 import net.avdw.todo.action.TodoPriority;
+import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.item.TodoItemFactory;
 import org.pmw.tinylog.Logger;
 
 import java.io.IOException;
@@ -10,47 +12,11 @@ import java.util.*;
 
 public class TodoReader {
 
-    private Todo todo;
+    private TodoItemFactory todoItemFactory;
 
     @Inject
-    public TodoReader(final Todo todo) {
-        this.todo = todo;
-    }
-
-    /**
-     * Find the todo item in the todo.txt file.
-     * Take into account the visibility of items configured when determining the index.
-     * Currently this method does not take into account filters.
-     *
-     * @param todoFile the file to search through
-     * @param idx      the index in the file to find
-     * @return the todo item that was found
-     */
-    public Optional<TodoItemV1> readLine(final Path todoFile, final int idx) {
-        TodoItemV1 readLine = null;
-        try (Scanner scanner = new Scanner(todoFile)) {
-            int lineNum = 0;
-            while (scanner.hasNext()) {
-                String line = scanner.nextLine();
-                TodoItemV1 item = new TodoItemV1(line);
-                if (item.isNotDone() || todo.showAll()) {
-                    lineNum++;
-                    if (lineNum == idx) {
-                        readLine = item;
-                        break;
-                    }
-                }
-            }
-        } catch (IOException e) {
-            Logger.error(String.format("Error reading `%s`", todoFile));
-            Logger.debug(e);
-        }
-
-        if (readLine != null) {
-            return Optional.of(readLine);
-        } else {
-            return Optional.empty();
-        }
+    public TodoReader(final TodoItemFactory todoItemFactory) {
+        this.todoItemFactory = todoItemFactory;
     }
 
     /**
@@ -87,10 +53,12 @@ public class TodoReader {
 
     private List<TodoPriority.Priority> getAvailablePriorities(final Path todoFile) {
         List<TodoPriority.Priority> priorities = new ArrayList<>(Arrays.asList(TodoPriority.Priority.values()));
+        int count = 0;
         try (Scanner scanner = new Scanner(todoFile)) {
             while (scanner.hasNext()) {
+                count++;
                 String line = scanner.nextLine();
-                TodoItemV1 item = new TodoItemV1(line);
+                TodoItem item = todoItemFactory.create(count, line);
                 if (item.hasPriority()) {
                     item.getPriority().ifPresent(priorities::remove);
                 }

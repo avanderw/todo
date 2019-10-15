@@ -1,18 +1,23 @@
 package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
-import net.avdw.todo.*;
+import net.avdw.todo.GlobalTodo;
+import net.avdw.todo.LocalTodo;
+import net.avdw.todo.Todo;
 import net.avdw.todo.action.TodoAdd;
 import net.avdw.todo.action.TodoRemove;
+import net.avdw.todo.file.TodoFileReader;
+import net.avdw.todo.item.TodoItem;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
 import java.nio.file.Path;
-import java.util.Optional;
+import java.util.List;
 
 import static net.avdw.todo.render.ConsoleFormatting.h1;
+import static net.avdw.todo.render.ConsoleFormatting.hr;
 
 @Command(name = "migrate", description = "Move todo between local and global")
 public class TodoMigrate implements Runnable {
@@ -24,13 +29,12 @@ public class TodoMigrate implements Runnable {
     private int idx;
 
     @Inject
-    private TodoReader reader;
-
-    @Inject
     private TodoAdd todoAdd;
 
     @Inject
     private TodoRemove todoRemove;
+    @Inject
+    private TodoFileReader todoFileReader;
 
     @Inject
     @GlobalTodo
@@ -51,13 +55,19 @@ public class TodoMigrate implements Runnable {
         Path fromFile = fromDirectory.resolve("todo.txt");
         Path toFile = toDirectory.resolve("todo.txt");
 
-        Optional<TodoItemV1> line = reader.readLine(fromFile, idx);
-        if (line.isPresent()) {
-            todoAdd.add(toFile, line.get().rawValue());
-            todoRemove.remove(fromFile, idx);
-            Logger.info(String.format("Migrated line `%s` from `%s` to `%s`", line.get(), fromDirectory, toDirectory));
-        } else {
-            Logger.warn(String.format("Could not find index `%s` in `%s`", idx, fromDirectory));
+        List<TodoItem> allTodoItems = todoFileReader.readAll(fromFile);
+        if (idx > allTodoItems.size()) {
+            Logger.warn(String.format("There are only '%s' items in the todo file and idx '%s' is too high", allTodoItems.size(), idx));
+            return;
+        } else if (idx <= 0) {
+            Logger.warn(String.format("The idx '%s' cannot be negative", idx));
+            return;
         }
+
+        TodoItem todoItem = allTodoItems.get(idx - 1);
+        Logger.info(String.format("Migrate: %s", todoItem));
+        todoRemove.remove(fromFile, idx);
+        todoAdd.add(toFile, todoItem.rawValue());
+        hr();
     }
 }

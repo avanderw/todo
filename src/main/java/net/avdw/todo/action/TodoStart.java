@@ -1,17 +1,20 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.*;
+import net.avdw.todo.Todo;
+import net.avdw.todo.TodoReader;
+import net.avdw.todo.file.TodoFileReader;
+import net.avdw.todo.file.TodoFileWriter;
+import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.item.TodoItemFactory;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Optional;
+import java.util.List;
 
 import static net.avdw.todo.render.ConsoleFormatting.h1;
 import static net.avdw.todo.render.ConsoleFormatting.hr;
@@ -28,46 +31,52 @@ public class TodoStart implements Runnable {
     @Inject
     private TodoReader reader;
 
+    @Inject
+    private TodoFileReader todoFileReader;
+    @Inject
+    private TodoFileWriter todoFileWriter;
+    @Inject
+    private TodoItemFactory todoItemFactory;
+    @Inject
+    private SimpleDateFormat simpleDateFormat;
+
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
         h1("todo:start");
-        Optional<TodoItemV1> line = reader.readLine(todo.getTodoFile(), idx);
-        if (line.isPresent() && line.get().isNotDone()) {
-            try {
-                if (line.get().isStarted()) {
-                    Logger.info(String.format("[%s%s%s] %s",
-                            Ansi.BLUE, idx, Ansi.RESET,
-                            line.get().rawValue()));
-                    hr();
-                    Logger.warn("Item is already started");
-                } else {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    String startedLine = String.format("%s start:%s", line.get().rawValue(), sdf.format(new Date()));
-                    if (!line.get().hasPriority()) {
-                        startedLine = String.format("(%s) %s", reader.readHighestFreePriority(todo.getTodoFile()).name(), startedLine);
-                    }
-                    String contents = new String(Files.readAllBytes(todo.getTodoFile()));
-                    Files.write(todo.getTodoFile(), contents.replace(line.get().rawValue(), startedLine).getBytes());
 
-                    Logger.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, line.get()));
-                    hr();
-                    Logger.info(String.format("[%s%s%s]: %s", Ansi.BLUE, idx, Ansi.RESET, new TodoItemV1(startedLine)));
-                }
-            } catch (IOException e) {
-                Logger.error(String.format("Error writing `%s`", todo.getTodoFile()));
-                Logger.debug(e);
-            }
-        } else if (line.isPresent() && line.get().isDone()) {
-            Logger.info(String.format("[%s%s%s] %s",
-                    Ansi.BLUE, idx, Ansi.RESET,
-                    line));
-            hr();
-            Logger.warn("Item is already marked as done");
-        } else {
-            Logger.warn(String.format("Could not find index (%s)", idx));
+        List<TodoItem> allTodoItems = todoFileReader.readAll(todo.getTodoFile());
+        if (idx > allTodoItems.size()) {
+            Logger.warn(String.format("There are only '%s' items in the todo file and idx '%s' is too high", allTodoItems.size(), idx));
+            return;
+        } else if (idx <= 0) {
+            Logger.warn(String.format("The idx '%s' cannot be negative", idx));
+            return;
         }
+
+        TodoItem todoItem = allTodoItems.get(idx - 1);
+        Logger.info(String.format("Found  : %s", todoItem));
+
+        if (todoItem.isComplete()) {
+            Logger.warn("Item is already marked as done");
+            return;
+        }
+
+        if (todoItem.isStarted()) {
+            Logger.warn("Item is already started");
+        }
+
+        String changedRawValue = String.format("%s start:%s", todoItem.rawValue(), simpleDateFormat.format(new Date()));
+        if (!todoItem.hasPriority()) {
+            changedRawValue = String.format("(%s) %s", reader.readHighestFreePriority(todo.getTodoFile()).name(), changedRawValue);
+        }
+
+        TodoItem changedTodoItem = todoItemFactory.create(todoItem.getIdx(), changedRawValue);
+        allTodoItems.set(idx - 1, changedTodoItem);
+        todoFileWriter.write(allTodoItems, todo.getTodoFile());
+        Logger.info(String.format("Started: %s", changedTodoItem));
+        hr();
     }
 }

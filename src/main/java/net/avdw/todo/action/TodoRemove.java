@@ -34,11 +34,7 @@ public class TodoRemove implements Runnable {
     @Override
     public void run() {
         h1("todo:remove");
-        Optional<TodoItem> line = remove(todo.getTodoFile(), idx);
-
-        line.ifPresent(s -> Logger.info(String.format("%sRemoved:%s %s",
-                Ansi.RED, Ansi.RESET,
-                s)));
+        remove(todo.getTodoFile(), idx);
     }
 
     /**
@@ -60,9 +56,11 @@ public class TodoRemove implements Runnable {
         }
 
         TodoItem todoItem = allTodoItems.get(idx - 1);
-        Logger.info(todoItem);
         allTodoItems.remove(idx - 1);
         todoFileWriter.write(allTodoItems, fromFile);
+        Logger.info(String.format("%sRemoved%s: %s",
+                Ansi.RED, Ansi.RESET,
+                todoItem));
         return Optional.of(todoItem);
     }
 }

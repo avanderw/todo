@@ -1,4 +1,4 @@
-x 2019-10-14 2019-10-14 @Fix +repeat as it is completely broken
+x 2019-10-15 2019-10-15 @Refactor TodoItemV1 to TodoItem
 (B) 2019-07-26 @Add +consolodate functionality to view all aware todo directories
 2019-07-09 @Add admin +archive
 2019-07-09 @Add auto +archive +properties
@@ -100,3 +100,4 @@ x 2019-10-11 2019-10-11 @Change default 'pri' command to list priorities start:2
 x 2019-10-11 2019-10-11 @Fix inconsistencies between ls and pri
 x 2019-10-11 2019-10-11 @Fix inconsistencies between ls and rm
 x 2019-10-11 2019-10-11 @Fix inconsitencies between ls and @Add
+x 2019-10-14 2019-10-14 @Fix +repeat as it is completely broken
