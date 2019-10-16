@@ -6,9 +6,9 @@ import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.property.GlobalProperty;
 import net.avdw.todo.property.PropertyModule;
-import net.avdw.todo.render.TodoContextTable;
+import net.avdw.todo.render.TodoContextRenderer;
 import net.avdw.todo.render.TodoDoneStatusbar;
-import net.avdw.todo.render.TodoProjectTable;
+import net.avdw.todo.render.TodoProjectRenderer;
 import net.avdw.todo.theme.ThemeApplicator;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
@@ -41,10 +41,9 @@ public class TodoStatus implements Runnable {
     @Inject
     private TodoDoneStatusbar todoDoneStatusbar;
     @Inject
-    private TodoProjectTable todoProjectTable;
-
+    private TodoProjectRenderer projectRenderer;
     @Inject
-    private TodoContextTable todoContextTable;
+    private TodoContextRenderer contextRenderer;
     @Inject
     private ThemeApplicator themeApplicator;
 
@@ -62,14 +61,22 @@ public class TodoStatus implements Runnable {
                 try {
                     Path currentPath = Paths.get(path);
                     List<TodoItem> allTodoItemList = todoFileReader.readAll(currentPath.resolve("todo.txt"));
+                    long incomplete = allTodoItemList.stream().filter(TodoItem::isIncomplete).count();
+                    long complete = allTodoItemList.stream().filter(TodoItem::isComplete).count();
+                    String bar = String.format("[%3s/%-3s] %s", complete, allTodoItemList.size(), todoDoneStatusbar.createPercentageBar(allTodoItemList));
                     if (currentPath.equals(resolvedPath)) {
-                        System.out.println(themeApplicator.a(path));
-                        todoProjectTable.printProjectSummaryTable(allTodoItemList);
-                        todoContextTable.printContextSummaryTable(allTodoItemList);
+                        System.out.println(String.format("[%3s] %s %s", incomplete, bar, themeApplicator.a(path)));
                     } else {
-                        System.out.println(themeApplicator.txt(path));
+                        System.out.println(String.format("[%3s] %s %s", incomplete, bar, themeApplicator.txt(path)));
                     }
-                    System.out.println(todoDoneStatusbar.createPercentageBar(allTodoItemList));
+                    System.out.println(String.format("%s, %s",
+                            projectRenderer.renderOneLineSummary(allTodoItemList),
+                            contextRenderer.renderOneLineSummary(allTodoItemList)));
+                    if (currentPath.equals(resolvedPath)) {
+                        projectRenderer.renderSummaryTable(allTodoItemList);
+                        contextRenderer.renderSummaryTable(allTodoItemList);
+                    }
+                    System.out.println(themeApplicator.hr());
                 } catch (Exception e) {
                     Logger.error(String.format("Cannot read path '%s'", path));
                     Logger.info("Removing path from property file");
@@ -93,6 +100,5 @@ public class TodoStatus implements Runnable {
             }
             return value;
         });
-        System.out.println(themeApplicator.hr());
     }
 }

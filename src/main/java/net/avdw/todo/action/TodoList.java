@@ -5,8 +5,8 @@ import net.avdw.todo.AnsiColor;
 import net.avdw.todo.Todo;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
-import net.avdw.todo.render.TodoContextTable;
-import net.avdw.todo.render.TodoProjectTable;
+import net.avdw.todo.render.TodoContextRenderer;
+import net.avdw.todo.render.TodoProjectRenderer;
 import net.avdw.todo.theme.ThemeApplicator;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
@@ -45,10 +45,10 @@ public class TodoList implements Runnable {
     private int limit = Integer.MAX_VALUE;
 
     @Inject
-    private TodoContextTable todoContextTable;
+    private TodoContextRenderer todoContextRenderer;
 
     @Inject
-    private TodoProjectTable todoProjectTable;
+    private TodoProjectRenderer todoProjectRenderer;
 
     @Inject
     private TodoFileReader todoFileReader;
@@ -93,10 +93,10 @@ public class TodoList implements Runnable {
                 AnsiColor.GREEN, completed, AnsiColor.RESET));
 
         if (displayContexts) {
-            todoContextTable.printContextTable(filteredTodoItems);
+            todoContextRenderer.printContextTable(filteredTodoItems);
         }
         if (displayProjects) {
-            todoProjectTable.printProjectTable(filteredTodoItems);
+            todoProjectRenderer.printProjectTable(filteredTodoItems);
         }
     }
 

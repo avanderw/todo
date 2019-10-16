@@ -10,7 +10,7 @@ import org.pmw.tinylog.Logger;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TodoContextTable {
+public class TodoContextRenderer {
     private static final double PERCENTAGE = 100.;
     private static final double UPPER_BOUND = 75.;
     private static final int NEW_LINE_COUNT_BREAK = 4;
@@ -19,7 +19,7 @@ public class TodoContextTable {
     private final ThemeApplicator themeApplicator;
 
     @Inject
-    TodoContextTable(final TodoDoneStatusbar todoDoneStatusbar, final ThemeApplicator themeApplicator) {
+    TodoContextRenderer(final TodoDoneStatusbar todoDoneStatusbar, final ThemeApplicator themeApplicator) {
         this.todoDoneStatusbar = todoDoneStatusbar;
         this.themeApplicator = themeApplicator;
     }
@@ -52,7 +52,7 @@ public class TodoContextTable {
      *
      * @param todoItemList the list of todo items to collect context information from
      */
-    public void printContextSummaryTable(final List<TodoItem> todoItemList) {
+    public void renderSummaryTable(final List<TodoItem> todoItemList) {
         Map<String, List<TodoItem>> contexts = collectContextListMap(todoItemList);
         StringBuilder stringBuilder = new StringBuilder("Contexts: ");
 
@@ -89,4 +89,13 @@ public class TodoContextTable {
         return contexts;
     }
 
+    /**
+     * Render a one line summary of the contexts.
+     * @param todoItemList the todo list to provide the summary for
+     * @return a string render of the summary
+     */
+    public String renderOneLineSummary(final List<TodoItem> todoItemList) {
+        Map<String, List<TodoItem>> contextListMap = collectContextListMap(todoItemList);
+        return String.format("%s contexts", contextListMap.size());
+    }
 }

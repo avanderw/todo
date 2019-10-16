@@ -10,18 +10,20 @@ import org.pmw.tinylog.Logger;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TodoProjectTable {
+public class TodoProjectRenderer {
     private static final double PERCENTAGE = 100.;
     private static final double UPPER_BOUND = 75.;
     private static final int NEW_LINE_COUNT_BREAK = 4;
 
     private final TodoDoneStatusbar todoDoneStatusbar;
     private final ThemeApplicator themeApplicator;
+    private final PercentageRenderer percentageRenderer;
 
     @Inject
-    TodoProjectTable(final TodoDoneStatusbar todoDoneStatusbar, final ThemeApplicator themeApplicator) {
+    TodoProjectRenderer(final TodoDoneStatusbar todoDoneStatusbar, final ThemeApplicator themeApplicator, final PercentageRenderer percentageRenderer) {
         this.todoDoneStatusbar = todoDoneStatusbar;
         this.themeApplicator = themeApplicator;
+        this.percentageRenderer = percentageRenderer;
     }
 
     /**
@@ -53,15 +55,15 @@ public class TodoProjectTable {
      *
      * @param todoItemList the list of todo items to collect project information from
      */
-    public void printProjectSummaryTable(final List<TodoItem> todoItemList) {
+    public void renderSummaryTable(final List<TodoItem> todoItemList) {
         Map<String, List<TodoItem>> projects = collectProjectTokenListMap(todoItemList);
         StringBuilder stringBuilder = new StringBuilder("Projects: ");
 
         int newLineCount = 0;
         for (Map.Entry<String, List<TodoItem>> entry : projects.entrySet().stream()
                 .sorted(Comparator.comparing(projectListEntry -> {
-                    long completed = projectListEntry.getValue().stream().filter(TodoItem::isComplete).count();
-                    return completed * PERCENTAGE / projectListEntry.getValue().size();
+                    double completed = projectListEntry.getValue().stream().filter(TodoItem::isComplete).count();
+                    return completed / projectListEntry.getValue().size();
                 }))
                 .collect(Collectors.toList())) {
             if (newLineCount++ > NEW_LINE_COUNT_BREAK) {
@@ -69,15 +71,14 @@ public class TodoProjectTable {
                 newLineCount = 1;
             }
 
-            long completed = entry.getValue().stream().filter(TodoItem::isComplete).count();
-            double percentage = completed * PERCENTAGE / entry.getValue().size();
-            String percent = String.format("%3.0f%%", percentage);
+            double completed = entry.getValue().stream().filter(TodoItem::isComplete).count();
+            double percentage = completed / entry.getValue().size();
             stringBuilder.append(AnsiColor.PROJECT_COLOR);
             stringBuilder.append(String.format("%12s", entry.getKey()));
             stringBuilder.append(AnsiColor.RESET);
-            stringBuilder.append(String.format("( %s%s%s )", AnsiColor.GREEN, percent, AnsiColor.RESET));
+            stringBuilder.append(String.format("( %s )", percentageRenderer.renderText(percentage)));
         }
-        Logger.info(stringBuilder.toString());
+        System.out.println(stringBuilder.toString());
     }
 
     private Map<String, List<TodoItem>> collectProjectTokenListMap(final List<TodoItem> todoItemList) {
@@ -88,5 +89,16 @@ public class TodoProjectTable {
             projects.get(project).add(todoItem);
         }));
         return projects;
+    }
+
+    /**
+     * Provide a one-line summary of the projects.
+     *
+     * @param todoItemList the todo list to summarise
+     * @return a string render of the summary
+     */
+    public String renderOneLineSummary(final List<TodoItem> todoItemList) {
+        Map<String, List<TodoItem>> projectListMap = collectProjectTokenListMap(todoItemList);
+        return String.format("%s projects", projectListMap.size());
     }
 }
