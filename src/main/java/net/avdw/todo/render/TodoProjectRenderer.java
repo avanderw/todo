@@ -73,9 +73,7 @@ public class TodoProjectRenderer {
 
             double completed = entry.getValue().stream().filter(TodoItem::isComplete).count();
             double percentage = completed / entry.getValue().size();
-            stringBuilder.append(AnsiColor.PROJECT_COLOR);
-            stringBuilder.append(String.format("%12s", entry.getKey()));
-            stringBuilder.append(AnsiColor.RESET);
+            stringBuilder.append(themeApplicator.project(String.format("%12s", entry.getKey())));
             stringBuilder.append(String.format("( %s )", percentageRenderer.renderText(percentage)));
         }
         System.out.println(stringBuilder.toString());

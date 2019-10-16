@@ -14,8 +14,8 @@ public class DefaultColorTheme implements ColorTheme {
     }
 
     @Override
-    public String em() {
-        return ansiColor.getForegroundColor(colorPalette.primaryTint(), false);
+    public String selected() {
+        return ansiColor.getForegroundColor(colorPalette.accentTone(), false);
     }
 
     @Override
@@ -31,5 +31,15 @@ public class DefaultColorTheme implements ColorTheme {
     @Override
     public String blockIncomplete() {
         return ansiColor.getBackgroundColor(colorPalette.primaryShade());
+    }
+
+    @Override
+    public String context() {
+        return ansiColor.getForegroundColor(colorPalette.secondaryTone(), false);
+    }
+
+    @Override
+    public String project() {
+        return ansiColor.getForegroundColor(colorPalette.primaryTint(), false);
     }
 }

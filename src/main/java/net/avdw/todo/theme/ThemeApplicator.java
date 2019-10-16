@@ -27,8 +27,8 @@ public class ThemeApplicator {
         return StringUtils.repeat("-", lineLength);
     }
 
-    public String a(final String text) {
-        return String.format("%s%s%s", colorTheme.em(), text, colorTheme.txt());
+    public String selected(final String text) {
+        return String.format("%s%s%s", colorTheme.selected(), text, colorTheme.txt());
     }
 
     public String txt(final String text) {
@@ -41,5 +41,12 @@ public class ThemeApplicator {
 
     public String blockIncomplete() {
         return String.format("%s %s", colorTheme.blockIncomplete(), colorTheme.txt());
+    }
+
+    public String context(final String context) {
+        return String.format("%s%s%s", colorTheme.context(), context, colorTheme.txt());
+    }
+    public String project(final String context) {
+        return String.format("%s%s%s", colorTheme.project(), context, colorTheme.txt());
     }
 }

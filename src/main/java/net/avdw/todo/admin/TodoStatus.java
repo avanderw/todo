@@ -65,7 +65,7 @@ public class TodoStatus implements Runnable {
                     long complete = allTodoItemList.stream().filter(TodoItem::isComplete).count();
                     String bar = String.format("[%3s/%-3s] %s", complete, allTodoItemList.size(), todoDoneStatusbar.createPercentageBar(allTodoItemList));
                     if (currentPath.equals(resolvedPath)) {
-                        System.out.println(String.format("[%3s] %s %s", incomplete, bar, themeApplicator.a(path)));
+                        System.out.println(String.format("[%3s] %s %s", incomplete, bar, themeApplicator.selected(path)));
                     } else {
                         System.out.println(String.format("[%3s] %s %s", incomplete, bar, themeApplicator.txt(path)));
                     }

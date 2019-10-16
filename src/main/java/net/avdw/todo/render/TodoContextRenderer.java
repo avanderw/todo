@@ -17,11 +17,13 @@ public class TodoContextRenderer {
 
     private final TodoDoneStatusbar todoDoneStatusbar;
     private final ThemeApplicator themeApplicator;
+    private PercentageRenderer percentageRenderer;
 
     @Inject
-    TodoContextRenderer(final TodoDoneStatusbar todoDoneStatusbar, final ThemeApplicator themeApplicator) {
+    TodoContextRenderer(final TodoDoneStatusbar todoDoneStatusbar, final ThemeApplicator themeApplicator, final PercentageRenderer percentageRenderer) {
         this.todoDoneStatusbar = todoDoneStatusbar;
         this.themeApplicator = themeApplicator;
+        this.percentageRenderer = percentageRenderer;
     }
 
     /**
@@ -69,14 +71,11 @@ public class TodoContextRenderer {
             }
 
             long completed = entry.getValue().stream().filter(TodoItem::isComplete).count();
-            double percentage = completed * PERCENTAGE / entry.getValue().size();
-            String percent = String.format("%3.0f%%", percentage);
-            stringBuilder.append(AnsiColor.CONTEXT_COLOR);
-            stringBuilder.append(String.format("%12s", entry.getKey()));
-            stringBuilder.append(AnsiColor.RESET);
-            stringBuilder.append(String.format("( %s%s%s )", AnsiColor.GREEN, percent, AnsiColor.RESET));
+            double percentage = completed / entry.getValue().size();
+            stringBuilder.append(themeApplicator.context(String.format("%12s", entry.getKey())));
+            stringBuilder.append(String.format("( %s )", percentageRenderer.renderText(percentage)));
         }
-        Logger.info(stringBuilder.toString());
+        System.out.println(stringBuilder.toString());
     }
 
     private Map<String, List<TodoItem>> collectContextListMap(final List<TodoItem> todoItemList) {
