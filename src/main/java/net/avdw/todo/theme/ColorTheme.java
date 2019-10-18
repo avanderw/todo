@@ -12,4 +12,8 @@ public interface ColorTheme {
     String context();
 
     String project();
+
+    int progressStart();
+
+    int progressEnd();
 }

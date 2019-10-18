@@ -17,13 +17,11 @@ public class TodoContextRenderer {
 
     private final TodoDoneStatusbar todoDoneStatusbar;
     private final ThemeApplicator themeApplicator;
-    private PercentageRenderer percentageRenderer;
 
     @Inject
-    TodoContextRenderer(final TodoDoneStatusbar todoDoneStatusbar, final ThemeApplicator themeApplicator, final PercentageRenderer percentageRenderer) {
+    TodoContextRenderer(final TodoDoneStatusbar todoDoneStatusbar, final ThemeApplicator themeApplicator) {
         this.todoDoneStatusbar = todoDoneStatusbar;
         this.themeApplicator = themeApplicator;
-        this.percentageRenderer = percentageRenderer;
     }
 
     /**
@@ -71,9 +69,11 @@ public class TodoContextRenderer {
             }
 
             long completed = entry.getValue().stream().filter(TodoItem::isComplete).count();
-            double percentage = completed / entry.getValue().size();
+            double progress = completed / entry.getValue().size();
             stringBuilder.append(themeApplicator.context(String.format("%12s", entry.getKey())));
-            stringBuilder.append(String.format("( %s )", percentageRenderer.renderText(percentage)));
+
+            String percentage = String.format("%3.0f%%", progress * PERCENTAGE);
+            stringBuilder.append(String.format("( %s )", themeApplicator.progress(percentage, progress)));
         }
         System.out.println(stringBuilder.toString());
     }
@@ -90,6 +90,7 @@ public class TodoContextRenderer {
 
     /**
      * Render a one line summary of the contexts.
+     *
      * @param todoItemList the todo list to provide the summary for
      * @return a string render of the summary
      */

@@ -17,13 +17,11 @@ public class TodoProjectRenderer {
 
     private final TodoDoneStatusbar todoDoneStatusbar;
     private final ThemeApplicator themeApplicator;
-    private final PercentageRenderer percentageRenderer;
 
     @Inject
-    TodoProjectRenderer(final TodoDoneStatusbar todoDoneStatusbar, final ThemeApplicator themeApplicator, final PercentageRenderer percentageRenderer) {
+    TodoProjectRenderer(final TodoDoneStatusbar todoDoneStatusbar, final ThemeApplicator themeApplicator) {
         this.todoDoneStatusbar = todoDoneStatusbar;
         this.themeApplicator = themeApplicator;
-        this.percentageRenderer = percentageRenderer;
     }
 
     /**
@@ -72,9 +70,10 @@ public class TodoProjectRenderer {
             }
 
             double completed = entry.getValue().stream().filter(TodoItem::isComplete).count();
-            double percentage = completed / entry.getValue().size();
+            double progress = completed / entry.getValue().size();
             stringBuilder.append(themeApplicator.project(String.format("%12s", entry.getKey())));
-            stringBuilder.append(String.format("( %s )", percentageRenderer.renderText(percentage)));
+            String percentage = String.format("%3.0f%%", progress * PERCENTAGE);
+            stringBuilder.append(String.format("( %s )", themeApplicator.progress(percentage, progress)));
         }
         System.out.println(stringBuilder.toString());
     }

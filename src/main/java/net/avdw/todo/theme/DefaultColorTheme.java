@@ -1,45 +1,55 @@
 package net.avdw.todo.theme;
 
 import com.google.inject.Inject;
-import net.avdw.todo.AnsiColor;
+import net.avdw.todo.color.ColorConverter;
 
 public class DefaultColorTheme implements ColorTheme {
     private final ColorPalette colorPalette;
-    private final AnsiColor ansiColor;
+    private final ColorConverter colorConverter;
 
     @Inject
-    DefaultColorTheme(final ColorPalette colorPalette, final AnsiColor ansiColor) {
+    DefaultColorTheme(final ColorPalette colorPalette, final ColorConverter colorConverter) {
         this.colorPalette = colorPalette;
-        this.ansiColor = ansiColor;
+        this.colorConverter = colorConverter;
     }
 
     @Override
     public String selected() {
-        return ansiColor.getForegroundColor(colorPalette.accentTone(), false);
+        return colorConverter.hexToAnsiFg(colorPalette.accentTone(), false);
     }
 
     @Override
     public String txt() {
-        return ansiColor.getForegroundColor(colorPalette.primaryTone(), false);
+        return colorConverter.hexToAnsiFg(colorPalette.primaryTone(), false);
     }
 
     @Override
     public String blockComplete() {
-        return ansiColor.getBackgroundColor(colorPalette.primaryTint());
+        return colorConverter.hexToAnsiBg(colorPalette.primaryTint());
     }
 
     @Override
     public String blockIncomplete() {
-        return ansiColor.getBackgroundColor(colorPalette.primaryShade());
+        return colorConverter.hexToAnsiBg(colorPalette.primaryShade());
     }
 
     @Override
     public String context() {
-        return ansiColor.getForegroundColor(colorPalette.secondaryTone(), false);
+        return colorConverter.hexToAnsiFg(colorPalette.secondaryTone(), false);
     }
 
     @Override
     public String project() {
-        return ansiColor.getForegroundColor(colorPalette.primaryTint(), false);
+        return colorConverter.hexToAnsiFg(colorPalette.primaryTint(), false);
+    }
+
+    @Override
+    public int progressStart() {
+        return colorPalette.primaryShade();
+    }
+
+    @Override
+    public int progressEnd() {
+        return colorPalette.primaryTint();
     }
 }

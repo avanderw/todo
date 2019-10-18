@@ -9,12 +9,11 @@ import java.util.Comparator;
 import java.util.List;
 
 public class TodoDoneStatusbar {
-    private final PercentageRenderer percentageRenderer;
     private final ThemeApplicator themeApplicator;
+    private static final double PERCENTAGE = 100.;
 
     @Inject
-    TodoDoneStatusbar(final PercentageRenderer percentageRenderer, final ThemeApplicator themeApplicator) {
-        this.percentageRenderer = percentageRenderer;
+    TodoDoneStatusbar(final ThemeApplicator themeApplicator) {
         this.themeApplicator = themeApplicator;
     }
 
@@ -44,6 +43,8 @@ public class TodoDoneStatusbar {
     public String createPercentageBar(final List<TodoItem> todoItemList) {
         String bar = createBar(todoItemList);
         double complete = todoItemList.stream().filter(TodoItem::isComplete).count() * 1.;
-        return String.format("%s %s", percentageRenderer.renderText(complete / todoItemList.size()), bar);
+        double progress = complete / todoItemList.size();
+        String percentage = String.format("%3.0f%%", progress * PERCENTAGE);
+        return String.format("%s %s", themeApplicator.progress(percentage, progress), bar);
     }
 }

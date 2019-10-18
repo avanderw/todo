@@ -22,7 +22,7 @@ public class RGB {
      * Get the R value in the range [0..1].
      * @return r value
      */
-    public double getR() {
+    public double r() {
         return r;
     }
 
@@ -30,7 +30,7 @@ public class RGB {
      * Get the G value in the range [0..1].
      * @return g value
      */
-    public double getG() {
+    public double g() {
         return g;
     }
 
@@ -38,7 +38,7 @@ public class RGB {
      * Get the B value in the range [0..1].
      * @return b value
      */
-    public double getB() {
+    public double b() {
         return b;
     }
 }

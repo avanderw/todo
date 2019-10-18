@@ -1,6 +1,5 @@
 package net.avdw.todo;
 
-import com.google.inject.Inject;
 import net.avdw.todo.color.ColorConverter;
 import net.avdw.todo.color.RGB;
 import net.avdw.todo.color.generator.HSLColorGenerator;
@@ -10,7 +9,10 @@ import net.avdw.todo.number.generator.ConstantNumberGenerator;
 import net.avdw.todo.number.generator.IteratingNumberGenerator;
 
 // http://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html#16-colors
-public class AnsiColor {
+public final class AnsiColor {
+    private AnsiColor() {
+    }
+
     public static final String BLACK = "\u001b[30;1m";
     public static final String RED = "\u001b[31;1m";
     public static final String GREEN = "\u001b[32;1m";
@@ -23,10 +25,8 @@ public class AnsiColor {
 
     public static final String PROJECT_COLOR = MAGENTA;
     public static final String CONTEXT_COLOR = CYAN;
-    private ColorConverter colorConverter;
 
     public static void main(final String[] args) {
-        AnsiColor ansiColor = new AnsiColor(new ColorConverter());
         int sampleCount = 60;
         int sampleCountDiv4 = sampleCount / 4;
         NumberInterpolater interpolater = new NumberInterpolater();
@@ -36,7 +36,8 @@ public class AnsiColor {
         HSLColorGenerator colorGenerator = new HSLColorGenerator(numberGenerator, new ConstantNumberGenerator(.75), new ConstantNumberGenerator(.5), colorConverter);
         for (int i = 0; i < sampleCount; i++) {
             RGB rgb = colorGenerator.generateRGB();
-            System.out.print(String.format("%s \u001b[0m", ansiColor.getBackgroundColor(rgb)));
+            int color = colorConverter.rgbToHex(rgb.r(), rgb.g(), rgb.b());
+            System.out.print(String.format("%s \u001b[0m", colorConverter.hexToAnsiBg(color)));
         }
         System.out.println();
         for (int i = 0; i < sampleCount; i++) {
@@ -44,31 +45,9 @@ public class AnsiColor {
                 System.out.println();
             }
             RGB rgb = colorGenerator.generateRGB();
-            System.out.print(String.format("%s %3s\u001b[0m", ansiColor.getForegroundColor(rgb, true), colorConverter.rgbToHue(rgb.getR(), rgb.getG(), rgb.getB())));
+            int color = colorConverter.rgbToHex(rgb.r(), rgb.g(), rgb.b());
+            System.out.print(String.format("%s %3s\u001b[0m", colorConverter.hexToAnsiFg(color, true), colorConverter.rgbToHue(rgb.r(), rgb.g(), rgb.b())));
         }
-    }
-
-    @Inject
-    public AnsiColor(final ColorConverter colorConverter) {
-        this.colorConverter = colorConverter;
-    }
-
-    public String getForegroundColor(final int hex, final boolean bold) {
-        return getForegroundColor(colorConverter.hexToRGB(hex), bold);
-    }
-
-    public String getForegroundColor(final RGB color, final boolean bold) {
-        return bold
-                ? String.format("\u001b[1;38;2;%s;%s;%sm", (int) (color.getR() * 255), (int) (color.getG() * 255), (int) (color.getB() * 255))
-                : String.format("\u001b[0;38;2;%s;%s;%sm", (int) (color.getR() * 255), (int) (color.getG() * 255), (int) (color.getB() * 255));
-    }
-
-    public String getBackgroundColor(final int hex) {
-        return getBackgroundColor(colorConverter.hexToRGB(hex));
-    }
-
-    public String getBackgroundColor(final RGB color) {
-        return String.format("\u001b[48;2;%s;%s;%sm", (int) (color.getR() * 255), (int) (color.getG() * 255), (int) (color.getB() * 255));
     }
 
 }

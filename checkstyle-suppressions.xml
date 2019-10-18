@@ -13,6 +13,7 @@
     <suppress checks="LineLength"/>
     <suppress checks="AvoidStarImport"/>
     <suppress checks="HiddenField"/>
+    <suppress checks="NewlineAtEndOfFile"/>
     <suppress checks="EmptyBlock" files="Interpolation"/>
     <suppress checks="MagicNumber"
               files="AnsiColor|Interpolation|.*Module|ColorConverter|.*Generator|PercentageRenderer|.*Palette"/>

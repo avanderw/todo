@@ -134,4 +134,51 @@ public class ColorConverter {
 
         return new RGB(r / 255., g / 255., b / 255.);
     }
+
+    /**
+     * Convert r, g, b into a hex value.
+     *
+     * @param r red with values in range [0..1]
+     * @param g green with values in range [0..1]
+     * @param b blue with values in range [0..1]
+     * @return hex value representing the color
+     */
+    public int rgbToHex(final double r, final double g, final double b) {
+        int hexR = (int) (r * 0xFF) << 16;
+        int hexG = (int) (g * 0xFF) << 8;
+        int hexB = (int) (b * 0xFF);
+
+        return hexR | hexG | hexB;
+    }
+
+    /**
+     * Convert hex to ansi foreground string.
+     *
+     * @param hex  hex color to convert
+     * @param bold whether to bold the text
+     * @return the ansi string
+     */
+    public String hexToAnsiFg(final int hex, final boolean bold) {
+        int r = (hex >> 16) & 0xFF;
+        int g = (hex >> 8) & 0xFF;
+        int b = hex & 0xFF;
+
+        return bold
+                ? String.format("\u001b[1;38;2;%s;%s;%sm", r, g, b)
+                : String.format("\u001b[0;38;2;%s;%s;%sm", r, g, b);
+    }
+
+    /**
+     * Convert hex to ansi background string.
+     *
+     * @param hex the color to convert
+     * @return the ansi string
+     */
+    public String hexToAnsiBg(final int hex) {
+        int r = (hex >> 16) & 0xFF;
+        int g = (hex >> 8) & 0xFF;
+        int b = hex & 0xFF;
+
+        return String.format("\u001b[48;2;%s;%s;%sm", r, g, b);
+    }
 }
