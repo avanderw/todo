@@ -45,7 +45,7 @@ public class TodoStart implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println(themeApplicator.h1("todo:start"));
+        System.out.println(themeApplicator.header("todo:start"));
 
         List<TodoItem> allTodoItems = todoFileReader.readAll(todo.getTodoFile());
         if (idx > allTodoItems.size()) {

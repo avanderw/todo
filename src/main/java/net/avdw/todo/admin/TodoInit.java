@@ -33,7 +33,7 @@ public class TodoInit implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println(themeApplicator.h1("todo:init"));
+        System.out.println(themeApplicator.header("todo:init"));
         Path path = todo.isGlobal() ? globalPath : localPath;
 
         if (Files.exists(path)) {

@@ -1,0 +1,24 @@
+{{#theme.header}}todo:status{{/theme.header}}
+
+{{#model}}
+{{#knownPathList}}
+[{{#theme.progress}}{{progress}}{{/theme.progress}}] {{#selected}}{{#theme.selected}}{{path}}{{/theme.selected}}{{/selected}}{{^selected}}{{path}}{{/selected}}
+{{/knownPathList}}
+
+{{#selected}}
+{{#theme.subHeader}}{{path}}{{/theme.subHeader}}
+
+  Complete [{{#theme.count}}{{completeItems.size}}{{/theme.count}}: {{#theme.completeBg}}{{#theme.bar}}{{completeItems.size}}{{/theme.bar}}{{/theme.completeBg}}]
+Incomplete [{{#theme.count}}{{incompleteItems.size}}{{/theme.count}}: {{#theme.incompleteBg}}{{#theme.bar}}{{incompleteItems.size}}{{/theme.bar}}{{/theme.incompleteBg}}]
+
+{{#theme.heading}}Projects{{/theme.heading}}
+{{#formattedProjects}}
+{{.}}
+{{/formattedProjects}}
+{{#theme.secondary}}{{#theme.rightFooter}}[{{#theme.count}}{{projectCount}}{{/theme.count}} projects]{{/theme.rightFooter}}{{/theme.secondary}}
+{{#theme.heading}}Contexts{{/theme.heading}}
+{{#formattedContexts}}
+{{.}}
+{{/formattedContexts}}
+{{#theme.secondary}}{{#theme.rightFooter}}[{{#theme.count}}{{contextCount}}{{/theme.count}} contexts]{{/theme.rightFooter}}{{/theme.secondary}}
+{{/selected}}{{/model}}

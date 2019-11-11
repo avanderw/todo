@@ -29,7 +29,7 @@ public class TodoSort implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println(themeApplicator.h1("todo:sort"));
+        System.out.println(themeApplicator.header("todo:sort"));
         List<String> todos = new ArrayList<>();
         try (Scanner scanner = new Scanner(todo.getTodoFile())) {
             while (scanner.hasNext()) {

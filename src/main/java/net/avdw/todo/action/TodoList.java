@@ -1,7 +1,8 @@
 package net.avdw.todo.action;
 
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
 import com.google.inject.Inject;
-import net.avdw.todo.AnsiColor;
 import net.avdw.todo.Todo;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
@@ -14,9 +15,12 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
+import java.io.StringWriter;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -42,7 +46,7 @@ public class TodoList implements Runnable {
     private boolean filterPriority;
 
     @Option(names = "--limit", description = "Limit the amount of items shown")
-    private int limit = Integer.MAX_VALUE;
+    private int limit = 0;
 
     @Inject
     private TodoContextRenderer todoContextRenderer;
@@ -60,7 +64,6 @@ public class TodoList implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println(themeApplicator.h1("todo:list"));
         List<TodoItem> allTodoItems = todoFileReader.readAll(todo.getTodoFile());
         List<TodoItem> filteredTodoItems = filterTodoItems(allTodoItems, filters);
 
@@ -76,21 +79,13 @@ public class TodoList implements Runnable {
             filteredTodoItems = filterPriorityItems(filteredTodoItems);
         }
 
+        if (limit != 0) {
+            filteredTodoItems = filteredTodoItems.subList(0, limit);
+        }
+
         if (filteredTodoItems.isEmpty()) {
             Logger.info("The list is empty");
         }
-
-        for (int i = 0; i < filteredTodoItems.size() && i < limit; i++) {
-            TodoItem item = filteredTodoItems.get(i);
-            Logger.info(String.format("%s", item));
-        }
-
-        System.out.println(themeApplicator.hr());
-        long completed = allTodoItems.stream().filter(TodoItem::isComplete).count();
-        Logger.info(String.format("[%s%2s%s] of %s (%s%s done%s) todo items shown",
-                AnsiColor.BLUE, filteredTodoItems.size(), AnsiColor.RESET,
-                allTodoItems.size(),
-                AnsiColor.GREEN, completed, AnsiColor.RESET));
 
         if (displayContexts) {
             todoContextRenderer.printContextTable(filteredTodoItems);
@@ -98,6 +93,20 @@ public class TodoList implements Runnable {
         if (displayProjects) {
             todoProjectRenderer.printProjectTable(filteredTodoItems);
         }
+
+        ListModel model = new ListModel();
+        Map<String, Object> context = new HashMap<>();
+        context.put("theme", themeApplicator);
+        context.put("model", model);
+
+        model.filteredTodoItems = filteredTodoItems;
+        model.allTodoItems = allTodoItems;
+        model.completedTodoItems = allTodoItems.stream().filter(TodoItem::isComplete).collect(Collectors.toList());
+
+        Mustache m = new DefaultMustacheFactory().compile("todo-list.mustache");
+        StringWriter writer = new StringWriter();
+        m.execute(writer, context);
+        System.out.println(writer.toString());
     }
 
     private List<TodoItem> filterPriorityItems(final List<TodoItem> todoItemList) {
@@ -150,6 +159,37 @@ public class TodoList implements Runnable {
     public void listPriorities(final Path todoFile) {
         List<TodoItem> allTodoItems = todoFileReader.readAll(todoFile);
         List<TodoItem> filteredTodoItems = filterPriorityItems(allTodoItems);
-        filteredTodoItems.forEach(Logger::info);
+
+        ListModel model = new ListModel();
+        Map<String, Object> context = new HashMap<>();
+        context.put("theme", themeApplicator);
+        context.put("model", model);
+
+        model.filteredTodoItems = filteredTodoItems;
+        model.allTodoItems = allTodoItems;
+        model.completedTodoItems = allTodoItems.stream().filter(TodoItem::isComplete).collect(Collectors.toList());
+
+        Mustache m = new DefaultMustacheFactory().compile("todo-priority.mustache");
+        StringWriter writer = new StringWriter();
+        m.execute(writer, context);
+        System.out.println(writer.toString());
+    }
+
+    private static class ListModel {
+        private List<TodoItem> completedTodoItems;
+        private List<TodoItem> allTodoItems;
+        private List<TodoItem> filteredTodoItems;
+
+        public List<TodoItem> getFilteredTodoItems() {
+            return filteredTodoItems;
+        }
+
+        public List<TodoItem> getAllTodoItems() {
+            return allTodoItems;
+        }
+
+        public List<TodoItem> getCompletedTodoItems() {
+            return completedTodoItems;
+        }
     }
 }

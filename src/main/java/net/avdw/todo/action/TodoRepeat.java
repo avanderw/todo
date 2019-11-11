@@ -48,7 +48,7 @@ public class TodoRepeat implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println(themeApplicator.h1("todo:repeat"));
+        System.out.println(themeApplicator.header("todo:repeat"));
         List<TodoItem> allTodoItems = todoFileReader.readAll(todo.getTodoFile());
         if (idx > allTodoItems.size()) {
             Logger.warn(String.format("There are only '%s' items in the todo file and idx '%s' is too high", allTodoItems.size(), idx));

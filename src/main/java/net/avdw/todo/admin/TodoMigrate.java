@@ -49,7 +49,7 @@ public class TodoMigrate implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println(themeApplicator.h1("todo:migrate"));
+        System.out.println(themeApplicator.header("todo:migrate"));
         Path fromDirectory = todo.isGlobal() ? globalPath : localPath;
         Path toDirectory = todo.isGlobal() ? localPath : globalPath;
         Path fromFile = fromDirectory.resolve("todo.txt");

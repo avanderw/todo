@@ -59,7 +59,6 @@ public class TodoPriority implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println(themeApplicator.h1("todo:priority"));
         if (shiftUp) {
             shiftUpPriorities(todo.getTodoFile());
             todoList.listPriorities(todo.getTodoFile());

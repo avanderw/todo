@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import net.avdw.todo.AnsiColor;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.theme.ThemeApplicator;
-import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.Logger;
 
 import java.util.*;
@@ -13,7 +12,6 @@ import java.util.stream.Collectors;
 public class TodoProjectRenderer {
     private static final double PERCENTAGE = 100.;
     private static final double UPPER_BOUND = 75.;
-    private static final int NEW_LINE_COUNT_BREAK = 4;
 
     private final TodoDoneStatusbar todoDoneStatusbar;
     private final ThemeApplicator themeApplicator;
@@ -53,29 +51,23 @@ public class TodoProjectRenderer {
      *
      * @param todoItemList the list of todo items to collect project information from
      */
-    public void renderSummaryTable(final List<TodoItem> todoItemList) {
+    public String renderAllDetails(final List<TodoItem> todoItemList) {
         Map<String, List<TodoItem>> projects = collectProjectTokenListMap(todoItemList);
-        StringBuilder stringBuilder = new StringBuilder("Projects: ");
+        StringBuilder stringBuilder = new StringBuilder();
 
-        int newLineCount = 0;
         for (Map.Entry<String, List<TodoItem>> entry : projects.entrySet().stream()
                 .sorted(Comparator.comparing(projectListEntry -> {
                     double completed = projectListEntry.getValue().stream().filter(TodoItem::isComplete).count();
                     return completed / projectListEntry.getValue().size();
                 }))
                 .collect(Collectors.toList())) {
-            if (newLineCount++ > NEW_LINE_COUNT_BREAK) {
-                stringBuilder.append(String.format("%n%s", StringUtils.repeat(" ", "Projects: ".length())));
-                newLineCount = 1;
-            }
 
             double completed = entry.getValue().stream().filter(TodoItem::isComplete).count();
             double progress = completed / entry.getValue().size();
-            stringBuilder.append(themeApplicator.project(String.format("%12s", entry.getKey())));
             String percentage = String.format("%3.0f%%", progress * PERCENTAGE);
-            stringBuilder.append(String.format("( %s )", themeApplicator.progress(percentage, progress)));
+            stringBuilder.append(themeApplicator.progress(String.format("%16s: %s", entry.getKey(), percentage), progress));
         }
-        System.out.println(stringBuilder.toString());
+        return stringBuilder.toString();
     }
 
     private Map<String, List<TodoItem>> collectProjectTokenListMap(final List<TodoItem> todoItemList) {
@@ -96,6 +88,6 @@ public class TodoProjectRenderer {
      */
     public String renderOneLineSummary(final List<TodoItem> todoItemList) {
         Map<String, List<TodoItem>> projectListMap = collectProjectTokenListMap(todoItemList);
-        return String.format("%s projects", projectListMap.size());
+        return String.format("%s projects, across %s items", projectListMap.size(), todoItemList.size());
     }
 }

@@ -14,8 +14,7 @@
     <suppress checks="AvoidStarImport"/>
     <suppress checks="HiddenField"/>
     <suppress checks="NewlineAtEndOfFile"/>
+    <suppress checks="MagicNumber"/>
     <suppress checks="EmptyBlock" files="Interpolation"/>
-    <suppress checks="MagicNumber"
-              files="AnsiColor|Interpolation|.*Module|ColorConverter|.*Generator|PercentageRenderer|.*Palette"/>
-    <suppress checks="DesignForExtension" files="TodoItem|.*Palette|.*Theme|.*Module|AnsiColor"/>
+    <suppress checks="DesignForExtension" files="TodoItem|.*Palette|.*Theme|.*Module|.*Model|AnsiColor"/>
 </suppressions>

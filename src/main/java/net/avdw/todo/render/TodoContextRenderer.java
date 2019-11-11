@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import net.avdw.todo.AnsiColor;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.theme.ThemeApplicator;
-import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.Logger;
 
 import java.util.*;
@@ -51,10 +50,11 @@ public class TodoContextRenderer {
      * Print a summary table of the context tags.
      *
      * @param todoItemList the list of todo items to collect context information from
+     * @return
      */
-    public void renderSummaryTable(final List<TodoItem> todoItemList) {
+    public String renderAllDetails(final List<TodoItem> todoItemList) {
         Map<String, List<TodoItem>> contexts = collectContextListMap(todoItemList);
-        StringBuilder stringBuilder = new StringBuilder("Contexts: ");
+        StringBuilder stringBuilder = new StringBuilder();
 
         int newLineCount = 0;
         for (Map.Entry<String, List<TodoItem>> entry : contexts.entrySet().stream()
@@ -64,7 +64,7 @@ public class TodoContextRenderer {
                 }))
                 .collect(Collectors.toList())) {
             if (newLineCount++ > NEW_LINE_COUNT_BREAK) {
-                stringBuilder.append(String.format("%n%s", StringUtils.repeat(" ", "Contexts: ".length())));
+                stringBuilder.append(String.format("%n"));
                 newLineCount = 1;
             }
 
@@ -75,7 +75,7 @@ public class TodoContextRenderer {
             String percentage = String.format("%3.0f%%", progress * PERCENTAGE);
             stringBuilder.append(String.format("( %s )", themeApplicator.progress(percentage, progress)));
         }
-        System.out.println(stringBuilder.toString());
+        return stringBuilder.toString();
     }
 
     private Map<String, List<TodoItem>> collectContextListMap(final List<TodoItem> todoItemList) {

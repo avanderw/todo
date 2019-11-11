@@ -24,7 +24,7 @@ public class TodoRestore implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println(themeApplicator.h1("todo:restore"));
+        System.out.println(themeApplicator.header("todo:restore"));
         try {
             Files.copy(todo.getBackupFile(), todo.getTodoFile(), StandardCopyOption.REPLACE_EXISTING);
             Logger.info(String.format("Replaced `%s` with `%s`", todo.getTodoFile(), todo.getBackupFile()));

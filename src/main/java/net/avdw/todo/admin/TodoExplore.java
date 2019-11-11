@@ -24,7 +24,7 @@ public class TodoExplore implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println(themeApplicator.h1("todo:explore"));
+        System.out.println(themeApplicator.header("todo:explore"));
         Path directory = todo.resolveTodoPath();
 
         if (Files.exists(directory)) {

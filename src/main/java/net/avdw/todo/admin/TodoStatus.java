@@ -1,14 +1,15 @@
 package net.avdw.todo.admin;
 
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import net.avdw.todo.Todo;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.property.GlobalProperty;
 import net.avdw.todo.property.PropertyModule;
-import net.avdw.todo.render.TodoContextRenderer;
-import net.avdw.todo.render.TodoDoneStatusbar;
-import net.avdw.todo.render.TodoProjectRenderer;
+import net.avdw.todo.render.TodoBarRenderer;
 import net.avdw.todo.theme.ThemeApplicator;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
@@ -16,12 +17,11 @@ import picocli.CommandLine.ParentCommand;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Command(name = "status", description = "Display repository information")
 public class TodoStatus implements Runnable {
@@ -39,20 +39,20 @@ public class TodoStatus implements Runnable {
     @Inject
     private TodoFileReader todoFileReader;
     @Inject
-    private TodoDoneStatusbar todoDoneStatusbar;
-    @Inject
-    private TodoProjectRenderer projectRenderer;
-    @Inject
-    private TodoContextRenderer contextRenderer;
-    @Inject
     private ThemeApplicator themeApplicator;
+    @Inject
+    private TodoFileModelProvider todoFileModelProvider;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        System.out.println(themeApplicator.h1("todo:status"));
+        StatusModel model = new StatusModel();
+        Map<String, Object> context = new HashMap<>();
+        context.put("theme", themeApplicator);
+        context.put("model", model);
+
         Path resolvedPath = todo.resolveTodoPath().toAbsolutePath();
         properties.computeIfPresent(PropertyModule.TODO_PATHS, (key, value) -> {
             String paths = (String) value;
@@ -60,25 +60,18 @@ public class TodoStatus implements Runnable {
             Arrays.stream(paths.split(";")).forEach(path -> {
                 try {
                     Path currentPath = Paths.get(path);
-                    List<TodoItem> allTodoItemList = todoFileReader.readAll(currentPath.resolve("todo.txt"));
-                    long incomplete = allTodoItemList.stream().filter(TodoItem::isIncomplete).count();
-                    long complete = allTodoItemList.stream().filter(TodoItem::isComplete).count();
-                    String bar = String.format("[%3s/%-3s] %s", complete, allTodoItemList.size(), todoDoneStatusbar.createPercentageBar(allTodoItemList));
+                    StatusFileModel statusFileModel = todoFileModelProvider.get();
+                    statusFileModel.setPath(currentPath);
+                    statusFileModel.setTodoItemList(todoFileReader.readAll(currentPath.resolve("todo.txt")));
+
                     if (currentPath.equals(resolvedPath)) {
-                        System.out.println(String.format("[%3s] %s %s", incomplete, bar, themeApplicator.selected(path)));
-                    } else {
-                        System.out.println(String.format("[%3s] %s %s", incomplete, bar, themeApplicator.txt(path)));
+                        model.selected = statusFileModel;
+                        statusFileModel.selected = true;
                     }
-                    System.out.println(String.format("%s, %s",
-                            projectRenderer.renderOneLineSummary(allTodoItemList),
-                            contextRenderer.renderOneLineSummary(allTodoItemList)));
-                    if (currentPath.equals(resolvedPath)) {
-                        projectRenderer.renderSummaryTable(allTodoItemList);
-                        contextRenderer.renderSummaryTable(allTodoItemList);
-                    }
-                    System.out.println(themeApplicator.hr());
+                    model.knownPathList.add(statusFileModel);
                 } catch (Exception e) {
                     Logger.error(String.format("Cannot read path '%s'", path));
+                    Logger.debug(e);
                     Logger.info("Removing path from property file");
                     pathsToRemove.add(path);
                 }
@@ -100,5 +93,147 @@ public class TodoStatus implements Runnable {
             }
             return value;
         });
+
+        Mustache m = new DefaultMustacheFactory().compile("todo-status.mustache");
+        StringWriter writer = new StringWriter();
+        m.execute(writer, context);
+        System.out.println(writer.toString());
     }
+
+    static class StatusModel {
+        private final List<StatusFileModel> knownPathList = new ArrayList<>();
+        private StatusFileModel selected;
+
+        public List<StatusFileModel> getKnownPathList() {
+            return knownPathList;
+        }
+
+        public StatusFileModel getSelected() {
+            return selected;
+        }
+    }
+
+    static class StatusFileModel {
+
+        private boolean selected = false;
+        private Path path;
+        private List<TodoItem> todoItemList = new ArrayList<>();
+        private final TodoBarRenderer todoBarRenderer;
+        private final ThemeApplicator themeApplicator;
+
+        @Inject
+        StatusFileModel(final TodoBarRenderer todoBarRenderer, final ThemeApplicator themeApplicator) {
+            this.todoBarRenderer = todoBarRenderer;
+            this.themeApplicator = themeApplicator;
+        }
+
+        public Path getPath() {
+            return path;
+        }
+
+        public void setPath(final Path path) {
+            this.path = path;
+        }
+
+        public List<TodoItem> getTodoItemList() {
+            return todoItemList;
+        }
+
+        public void setTodoItemList(final List<TodoItem> todoItemList) {
+            this.todoItemList = todoItemList;
+        }
+
+        public List<TodoItem> getIncompleteItems() {
+            return todoItemList.stream().filter(TodoItem::isIncomplete).collect(Collectors.toList());
+        }
+
+        public List<TodoItem> getCompleteItems() {
+            return todoItemList.stream().filter(TodoItem::isComplete).collect(Collectors.toList());
+        }
+
+        public double getProgress() {
+            return (double) getCompleteItems().size() / todoItemList.size();
+        }
+
+
+        private Map<String, List<TodoItem>> getProjects() {
+            Map<String, List<TodoItem>> projects = new HashMap<>();
+            todoItemList.forEach(todoItem -> todoItem.getProjects().forEach(project -> {
+                projects.putIfAbsent(project, new ArrayList<>());
+                projects.get(project).add(todoItem);
+            }));
+            return projects;
+        }
+
+        private Map<String, List<TodoItem>> getContexts() {
+            Map<String, List<TodoItem>> contexts = new HashMap<>();
+            todoItemList.forEach(todoItem -> todoItem.getContexts().forEach(context -> {
+                contexts.putIfAbsent(context, new ArrayList<>());
+                contexts.get(context).add(todoItem);
+            }));
+            return contexts;
+        }
+
+        public long getProjectCount() {
+            return getProjects().size();
+        }
+
+        public long getContextCount() {
+            return getContexts().size();
+        }
+
+        private List<String> formatTable(final Map<String, List<TodoItem>> items) {
+            List<String> formatted = new ArrayList<>();
+            int count = 0;
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Map.Entry<String, List<TodoItem>> entry : items.entrySet().stream()
+                    .sorted(Comparator.comparing(contextListEntry -> {
+                        double completed = contextListEntry.getValue().stream().filter(TodoItem::isComplete).count();
+                        return completed / contextListEntry.getValue().size();
+                    }))
+                    .collect(Collectors.toList())) {
+
+                if (count++ % 4 == 0 && stringBuilder.length() != 0) {
+                    formatted.add(stringBuilder.toString());
+                    stringBuilder.delete(0, stringBuilder.length());
+                }
+
+                double completed = entry.getValue().stream().filter(TodoItem::isComplete).count();
+                double progress = completed / entry.getValue().size();
+                String percentage = String.format("%3.0f%%", progress * 100);
+                stringBuilder.append(themeApplicator.progress(String.format("%15s [%2s] %s", entry.getKey(), entry.getValue().size(), percentage), 1 - progress));
+            }
+            formatted.add(stringBuilder.toString());
+            return formatted;
+        }
+
+        public List<String> getFormattedContexts() {
+            return formatTable(getContexts());
+        }
+
+        public List<String> getFormattedProjects() {
+            return formatTable(getProjects());
+        }
+
+        public boolean isSelected() {
+            return selected;
+        }
+    }
+
+    static class TodoFileModelProvider implements Provider<StatusFileModel> {
+        private final TodoBarRenderer todoBarRenderer;
+        private final ThemeApplicator themeApplicator;
+
+        @Inject
+        TodoFileModelProvider(final TodoBarRenderer todoBarRenderer, final ThemeApplicator themeApplicator) {
+            this.todoBarRenderer = todoBarRenderer;
+            this.themeApplicator = themeApplicator;
+        }
+
+        @Override
+        public StatusFileModel get() {
+            return new StatusFileModel(todoBarRenderer, themeApplicator);
+        }
+    }
+
 }

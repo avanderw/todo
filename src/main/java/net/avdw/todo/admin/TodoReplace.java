@@ -33,7 +33,7 @@ public class TodoReplace implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println(themeApplicator.h1("todo:replace"));
+        System.out.println(themeApplicator.header("todo:replace"));
         todo.backup();
         try {
             String contents = new String(Files.readAllBytes(todo.getTodoFile()));

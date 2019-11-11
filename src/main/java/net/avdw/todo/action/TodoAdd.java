@@ -51,7 +51,7 @@ public class TodoAdd implements Runnable {
      */
     @Override
     public void run() {
-        themeApplicator.h1("todo:add");
+        themeApplicator.header("todo:add");
         if (date || Boolean.parseBoolean(propertyResolver.resolve(PropertyKey.TODO_ADD_AUTO_DATE))) {
             addition = String.format("%s %s", simpleDateFormat.format(new Date()), addition);
         }

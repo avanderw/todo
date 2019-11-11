@@ -28,7 +28,7 @@ public class TodoEdit implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println(themeApplicator.h1("todo:edit"));
+        System.out.println(themeApplicator.header("todo:edit"));
         Path file = todo.getTodoFile();
 
         if (Files.exists(file)) {

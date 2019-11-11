@@ -25,7 +25,7 @@ public class TodoBackup implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println(themeApplicator.h1("todo:backup"));
+        System.out.println(themeApplicator.header("todo:backup"));
         backup(todo.getTodoFile(), todo.getBackupFile());
     }
 

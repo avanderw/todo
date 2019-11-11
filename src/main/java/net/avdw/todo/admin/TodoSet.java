@@ -34,7 +34,7 @@ public class TodoSet implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println(themeApplicator.h1("todo:set"));
+        System.out.println(themeApplicator.header("todo:set"));
         if (autoDateAdd != null) {
             properties.setProperty(PropertyKey.TODO_ADD_AUTO_DATE, autoDateAdd.toString());
             Logger.info(String.format("Setting %s=%s", PropertyKey.TODO_ADD_AUTO_DATE, autoDateAdd));
