@@ -1,5 +1,7 @@
-{{#theme.header}}todo:add{{/theme.header}}
-
 {{#model}}
+{{#theme.header}}{{view}}{{/theme.header}}
+{{#filteredTodoItems}}
 Added: {{>todo-item}}
+{{/filteredTodoItems}}
+{{>list-footer}}
 {{/model}}

@@ -34,7 +34,6 @@ public class TodoReplace implements Runnable {
     @Override
     public void run() {
         System.out.println(themeApplicator.header("todo:replace"));
-        todo.backup();
         try {
             String contents = new String(Files.readAllBytes(todo.getTodoFile()));
             Files.write(todo.getTodoFile(), contents.replaceAll(from, to).getBytes(), StandardOpenOption.TRUNCATE_EXISTING);

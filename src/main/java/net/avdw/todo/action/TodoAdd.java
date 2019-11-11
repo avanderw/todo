@@ -1,7 +1,6 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.AnsiColor;
 import net.avdw.todo.Todo;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.file.TodoFileWriter;
@@ -9,7 +8,8 @@ import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.item.TodoItemFactory;
 import net.avdw.todo.property.PropertyKey;
 import net.avdw.todo.property.PropertyResolver;
-import net.avdw.todo.theme.ThemeApplicator;
+import net.avdw.todo.template.TemplateExecutor;
+import net.avdw.todo.template.TemplateViewModel;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -18,6 +18,7 @@ import picocli.CommandLine.ParentCommand;
 
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,14 +45,13 @@ public class TodoAdd implements Runnable {
     @Inject
     private TodoItemFactory todoItemFactory;
     @Inject
-    private ThemeApplicator themeApplicator;
+    private TemplateExecutor templateExecutor;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        themeApplicator.header("todo:add");
         if (date || Boolean.parseBoolean(propertyResolver.resolve(PropertyKey.TODO_ADD_AUTO_DATE))) {
             addition = String.format("%s %s", simpleDateFormat.format(new Date()), addition);
         }
@@ -67,6 +67,7 @@ public class TodoAdd implements Runnable {
      * @param rawValue the todo item to append
      */
     public TodoItem add(final Path toFile, final String rawValue) {
+        List<TodoItem> filteredTodoItems = new ArrayList<>();
         List<TodoItem> allTodoItems = todoFileReader.readAll(toFile);
         TodoItem additionalTodoItem = todoItemFactory.create(allTodoItems.size() + 1, rawValue);
         if (allTodoItems.stream().filter(TodoItem::isIncomplete).anyMatch(todoItem -> todoItem.rawValue().equals(rawValue))) {
@@ -74,10 +75,15 @@ public class TodoAdd implements Runnable {
             Logger.warn("The todo item will not be added");
             Logger.info("Adding will create a duplicate");
         } else {
+            filteredTodoItems.add(additionalTodoItem);
             allTodoItems.add(additionalTodoItem);
             todoFileWriter.write(allTodoItems, toFile);
-            Logger.info(String.format("%sAdded%s: %s", AnsiColor.GREEN, AnsiColor.RESET, additionalTodoItem));
         }
+
+        TemplateViewModel templateViewModel = new TemplateViewModel("todo.add");
+        templateViewModel.setFilteredTodoItems(filteredTodoItems);
+        templateViewModel.setAllTodoItems(allTodoItems);
+        System.out.println(templateExecutor.executor(templateViewModel));
         return additionalTodoItem;
     }
 }

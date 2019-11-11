@@ -56,8 +56,12 @@ public class ThemeApplicator {
         return (obj) -> StringUtils.center(String.format("[ %s ]", obj), lineLength, "-");
     }
 
-    public Function<Object, Object> rightFooter() {
+    public Function<Object, Object> rightJustify() {
         return (obj) -> StringUtils.leftPad(obj.toString(), lineLength, " ");
+    }
+
+    public Function<Object, Object> center() {
+        return (obj) -> StringUtils.center(obj.toString(), lineLength);
     }
 
     public Function<Object, Object> secondary() {
@@ -82,6 +86,10 @@ public class ThemeApplicator {
 
     public Function<Object, Object> warn() {
         return (obj) -> String.format("%s%s%s", colorTheme.warn(), obj, colorTheme.txt());
+    }
+
+    public Function<Object, Object> action() {
+        return (obj) -> String.format("%s! %s%s", colorTheme.good(), obj, colorTheme.txt());
     }
 
     public Function<Object, Object> bar() {

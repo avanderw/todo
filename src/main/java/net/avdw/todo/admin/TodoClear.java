@@ -25,7 +25,6 @@ public class TodoClear implements Runnable {
     @Override
     public void run() {
         System.out.println(themeApplicator.header("todo:clear"));
-        todo.backup();
         try {
             Files.write(todo.getTodoFile(), "".getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {

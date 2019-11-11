@@ -3,6 +3,7 @@ package net.avdw.todo;
 import com.google.inject.*;
 import net.avdw.todo.config.LoggingSetup;
 import net.avdw.todo.config.ProfilingModule;
+import net.avdw.todo.file.TodoFileModule;
 import net.avdw.todo.item.TodoItemModule;
 import net.avdw.todo.number.NumberModule;
 import net.avdw.todo.property.PropertyModule;
@@ -55,6 +56,7 @@ public final class Main {
                 bind(SimpleDateFormat.class).toInstance(new SimpleDateFormat("yyyy-MM-dd"));
 
                 install(new TodoItemModule());
+                install(new TodoFileModule());
             }
 
             @Provides

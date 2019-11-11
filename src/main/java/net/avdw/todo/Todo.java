@@ -53,9 +53,6 @@ public class Todo implements Runnable {
     @Option(names = {"-a", "--all"}, description = "Show completed items")
     private boolean showAll;
 
-    @Option(names = {"-b", "--backup"}, description = "Backup before command is executed")
-    private boolean backup;
-
     @Inject
     @GlobalTodo
     private Path globalTodoPath;
@@ -71,6 +68,7 @@ public class Todo implements Runnable {
     @Inject
     @GlobalProperty
     private Path globalPropertyPath;
+
 
     /**
      * Entry point for picocli.
@@ -89,6 +87,7 @@ public class Todo implements Runnable {
 
     /**
      * Return the local path unless overridden with the global flag.
+     *
      * @return the path that resolved
      */
     public Path resolveTodoPath() {
@@ -136,6 +135,7 @@ public class Todo implements Runnable {
 
     /**
      * Wrapper to protect the naming of the backup file.
+     *
      * @return the path to the backup file
      */
     public Path getBackupFile() {
@@ -144,6 +144,7 @@ public class Todo implements Runnable {
 
     /**
      * Whether complete todos should be shown.
+     *
      * @return whether to include complete todos
      */
     public boolean showAll() {
@@ -151,18 +152,8 @@ public class Todo implements Runnable {
     }
 
     /**
-     * Wrapper to backup if the flag is set.
-     * The intention is for this to be used with state changing sub-commands.
-     */
-    public void backup() {
-        if (backup) {
-            TodoBackup todoBackup = new TodoBackup();
-            todoBackup.backup(getTodoFile(), getBackupFile());
-        }
-    }
-
-    /**
      * Is the global todo path targeted.
+     *
      * @return whether the global flag was set
      */
     public boolean isGlobal() {

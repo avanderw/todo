@@ -16,5 +16,5 @@
     <suppress checks="NewlineAtEndOfFile"/>
     <suppress checks="MagicNumber"/>
     <suppress checks="EmptyBlock" files="Interpolation"/>
-    <suppress checks="DesignForExtension" files="TodoItem|.*Palette|.*Theme|.*Module|.*Model|AnsiColor"/>
+    <suppress checks="DesignForExtension"/>
 </suppressions>

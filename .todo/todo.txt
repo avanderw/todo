@@ -97,3 +97,4 @@ x 2019-10-15 2019-10-11 @Fix inconsistency between +start and list
 x 2019-10-15 2019-10-15 @Refactor TodoItemV1 to TodoItem
 x 2019-10-21 2019-10-11 @Change status to show +status for the current repository start:2019-10-15
 x 2019-10-21 2019-10-11 @Refactor colors to a TodoColor class
+2019-11-11 Create a property for style selection
