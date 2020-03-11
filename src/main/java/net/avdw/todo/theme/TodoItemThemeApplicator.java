@@ -23,7 +23,7 @@ public class TodoItemThemeApplicator {
 
     public String applyThemeTo(final TodoItem todoItem) {
         StringBuilder sb = new StringBuilder();
-        Scanner scanner = new Scanner(todoItem.rawValue());
+        Scanner scanner = new Scanner(todoItem.getRawValue());
         boolean startDate = false;
 
         while (scanner.hasNext()) {

@@ -31,7 +31,7 @@ public class TodoItemCompletor {
 
         String completedRawValue = String.format("x %s %s",
                 simpleDateFormat.format(new Date()),
-                todoItem.rawValue().replaceFirst("\\([A-Z]\\) ", ""));
+                todoItem.getRawValue().replaceFirst("\\([A-Z]\\) ", ""));
         return todoItemFactory.create(todoItem.getIdx(), completedRawValue);
     }
 }

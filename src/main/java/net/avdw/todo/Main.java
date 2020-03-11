@@ -40,6 +40,7 @@ public final class Main {
         static class GuiceModule extends AbstractModule {
             @Override
             protected void configure() {
+                bind(RunningStats.class).toInstance(new RunningStats());
                 bind(List.class).to(LinkedList.class);
 
                 install(new PropertyModule());

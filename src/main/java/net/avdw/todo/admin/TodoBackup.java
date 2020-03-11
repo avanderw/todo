@@ -1,7 +1,6 @@
 package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
-import net.avdw.todo.RunningStats;
 import net.avdw.todo.Todo;
 import net.avdw.todo.file.TodoFile;
 import net.avdw.todo.file.TodoFileFactory;
@@ -14,6 +13,7 @@ import picocli.CommandLine.ParentCommand;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 
 @Command(name = "backup", description = "Write todo.txt.bak")
 public class TodoBackup implements Runnable {
@@ -22,37 +22,26 @@ public class TodoBackup implements Runnable {
 
     @Inject
     private TemplateExecutor templateExecutor;
-
     @Inject
     private TodoFileFactory todoFileFactory;
-
-    @Inject
-    private RunningStats runningStats;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        backup(todoFileFactory.create(todo.getTodoFile()));
-    }
+        TodoFile fileBefore = todoFileFactory.create(todo.getTodoFile());
 
-    /**
-     * Copy a file from one location to another.
-     */
-    public void backup(final TodoFile todoFile) {
-        runningStats.start();
         try {
-            Files.copy(todoFile.getPath(), todoFile.getBackupPath(), StandardCopyOption.REPLACE_EXISTING);
-            Logger.debug(String.format("Replaced '%s' with '%s'", todoFile.getPath(), todoFile.getBackupPath()));
+            Files.copy(fileBefore.getPath(), fileBefore.getBackupPath(), StandardCopyOption.REPLACE_EXISTING);
+            Logger.debug(String.format("Replaced '%s' with '%s'", fileBefore.getBackupPath(), fileBefore.getPath()));
         } catch (IOException e) {
-            Logger.error(String.format("Error writing '%s'", todoFile.getPath()));
+            Logger.error(String.format("Error writing '%s'", fileBefore.getBackupPath()));
             Logger.debug(e);
         }
-        runningStats.finish();
 
-        TemplateViewModel templateViewModel = new TemplateViewModel("todo-backup");
-        templateViewModel.setWorkingFile(todoFile);
+        TemplateViewModel templateViewModel = new TemplateViewModel("backup", new ArrayList<>(), fileBefore, todoFileFactory.create(fileBefore.getBackupPath()));
         System.out.println(templateExecutor.executor(templateViewModel));
     }
+
 }

@@ -1,0 +1,5 @@
+{{#theme.header}}add{{/theme.header}}
+{{#model.todoItemList.all}}
+[{{#theme.count}}{{idx}}{{/theme.count}}] {{.}}
+{{/model.todoItemList.all}}
+{{>component/runtime}}

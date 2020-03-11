@@ -12,14 +12,16 @@ import java.util.function.Function;
 public class ThemeApplicator {
 
     private final int lineLength;
+    private final int progressBarLength;
     private final ColorTheme colorTheme;
     private final ColorConverter colorConverter;
     private final ColorInterpolator colorInterpolator;
     private final TodoBarRenderer todoBarRenderer;
 
     @Inject
-    ThemeApplicator(@LineLength final int lineLength, final ColorTheme colorTheme, final ColorConverter colorConverter, final ColorInterpolator colorInterpolator, final TodoBarRenderer todoBarRenderer) {
+    ThemeApplicator(@LineLength final int lineLength, @ProgressBarLength final int progressBarLength, final ColorTheme colorTheme, final ColorConverter colorConverter, final ColorInterpolator colorInterpolator, final TodoBarRenderer todoBarRenderer) {
         this.lineLength = lineLength;
+        this.progressBarLength = progressBarLength;
         this.colorTheme = colorTheme;
         this.colorConverter = colorConverter;
         this.colorInterpolator = colorInterpolator;
@@ -54,6 +56,10 @@ public class ThemeApplicator {
 
     public Function<Object, Object> subHeader() {
         return (obj) -> StringUtils.center(String.format("[ %s ]", obj), lineLength, "-");
+    }
+
+    public Function<Object, Object> rightDivider() {
+        return (obj) -> StringUtils.leftPad(String.format("< %s >--", obj), lineLength, "-");
     }
 
     public Function<Object, Object> rightJustify() {
@@ -94,6 +100,13 @@ public class ThemeApplicator {
 
     public Function<Object, Object> bar() {
         return (obj) -> todoBarRenderer.createBar(Integer.parseInt(obj.toString()));
+    }
+
+    public Function<Object, Object> progressBar() {
+        return (obj) -> {
+            int progressBarCount = Integer.parseInt(obj.toString()) * progressBarLength / 100;
+            return StringUtils.rightPad(todoBarRenderer.createBar(progressBarCount), progressBarLength, " ");
+        };
     }
 
     public Function<Object, Object> complete() {

@@ -2,51 +2,37 @@ package net.avdw.todo.template;
 
 import net.avdw.todo.file.TodoFile;
 import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.item.list.TodoItemList;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TemplateViewModel {
     private final String view;
-    private List<TodoItem> filteredTodoItems;
-    private List<TodoItem> allTodoItems;
-    private List<TodoItem> completedTodoItems;
-    private TodoFile workingFile;
+    private final TodoItemList todoItemList;
+    private final TodoFile fileAfter;
+    private final TodoFile fileBefore;
 
-    public TemplateViewModel(final String view) {
+    public TemplateViewModel(final String view, final List<TodoItem> todoItemList, final TodoFile fileBefore, final TodoFile fileAfter) {
         this.view = view;
+        this.todoItemList = new TodoItemList(todoItemList);
+        this.fileBefore = fileBefore;
+        this.fileAfter = fileAfter;
     }
 
     public String getView() {
         return view;
     }
 
-    public List<TodoItem> getFilteredTodoItems() {
-        return filteredTodoItems;
+    public TodoItemList getTodoItemList() {
+        return todoItemList;
     }
 
-    public void setFilteredTodoItems(final List<TodoItem> filteredTodoItems) {
-        this.filteredTodoItems = filteredTodoItems;
+    public TodoFile getFileAfter() {
+        return fileAfter;
     }
 
-    public void setAllTodoItems(final List<TodoItem> allTodoItems) {
-        this.allTodoItems = allTodoItems;
-        completedTodoItems = allTodoItems.stream().filter(TodoItem::isComplete).collect(Collectors.toList());
+    public TodoFile getFileBefore() {
+        return fileBefore;
     }
 
-    public List<TodoItem> getAllTodoItems() {
-        return allTodoItems;
-    }
-
-    public List<TodoItem> getCompletedTodoItems() {
-        return completedTodoItems;
-    }
-
-    public TodoFile getWorkingFile() {
-        return workingFile;
-    }
-
-    public void setWorkingFile(final TodoFile workingFile) {
-        this.workingFile = workingFile;
-    }
 }

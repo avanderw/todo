@@ -7,27 +7,18 @@ import java.util.Date;
 
 @Singleton
 public class RunningStats {
-    private static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
-    private long startedMs;
-    private long finishedMs;
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("HH:mm:ss.SSS");
+    private final long startedMs;
 
-    public String getStarted() {
-        return sdf.format(new Date(startedMs));
-    }
-
-    public String getFinished() {
-        return sdf.format(new Date(finishedMs));
-    }
-
-    public String getDuration() {
-        return String.format("%,dms", finishedMs - startedMs);
-    }
-
-    public void start() {
+    RunningStats() {
         startedMs = System.currentTimeMillis();
     }
 
-    public void finish() {
-        finishedMs = System.currentTimeMillis();
+    public String getStarted() {
+        return SIMPLE_DATE_FORMAT.format(new Date(startedMs));
+    }
+
+    public String getDuration() {
+        return String.format("%,dms", System.currentTimeMillis() - startedMs);
     }
 }

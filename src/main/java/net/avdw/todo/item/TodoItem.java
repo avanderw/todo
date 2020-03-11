@@ -46,7 +46,7 @@ public class TodoItem {
         return todoItemThemeApplicator.applyThemeTo(this);
     }
 
-    public String rawValue() {
+    public String getRawValue() {
         return line;
     }
 

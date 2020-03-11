@@ -3,42 +3,51 @@ package net.avdw.todo.file;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.item.list.TodoItemList;
 
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TodoFile {
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private final Path path;
-    private final List<TodoItem> allTodoItemList;
-    private final List<TodoItem> completeTodoItemList;
-    private final List<TodoItem> incompleteTodoItemList;
+    private final TodoItemList todoItemList;
 
     @Inject
-    TodoFile(@Assisted final Path path, final TodoFileReader todoFileReader) {
+    public TodoFile(@Assisted final Path path, final TodoFileReader todoFileReader) {
         this.path = path;
-        this.allTodoItemList = todoFileReader.readAll(path);
-        this.completeTodoItemList = allTodoItemList.stream().filter(TodoItem::isComplete).collect(Collectors.toList());
-        this.incompleteTodoItemList = allTodoItemList.stream().filter(TodoItem::isIncomplete).collect(Collectors.toList());
+        todoItemList = new TodoItemList(todoFileReader.readAll(path));
     }
 
-    public List<TodoItem> getAllTodoItemList() {
-        return allTodoItemList;
-    }
-
-    public List<TodoItem> getCompleteTodoItemList() {
-        return completeTodoItemList;
-    }
-
-    public List<TodoItem> getIncompleteTodoItemList() {
-        return incompleteTodoItemList;
+    public TodoFile(final Path path, final List<TodoItem> todoItemList) {
+        this.path = path;
+        this.todoItemList = new TodoItemList(todoItemList);
     }
 
     public Path getPath() {
         return path;
     }
 
+    public TodoItemList getTodoItemList() {
+        return todoItemList;
+    }
+
+
+    public String getPathLastModified() {
+        return SIMPLE_DATE_FORMAT.format(new Date(getPath().toFile().lastModified()));
+    }
+
+    public String getCompletePercent() {
+        return "" + (todoItemList.getComplete().size() * 100 / todoItemList.getAll().size());
+    }
+
     public Path getBackupPath() {
         return path.getParent().resolve(String.format("%s.bak", path.getFileName()));
+    }
+
+    public String getBackupPathLastModified() {
+        return SIMPLE_DATE_FORMAT.format(new Date(getBackupPath().toFile().lastModified()));
     }
 }

@@ -3,7 +3,8 @@ package net.avdw.todo.action;
 import com.google.inject.Inject;
 import net.avdw.todo.Todo;
 import net.avdw.todo.TodoReader;
-import net.avdw.todo.file.TodoFileReader;
+import net.avdw.todo.file.TodoFile;
+import net.avdw.todo.file.TodoFileFactory;
 import net.avdw.todo.file.TodoFileWriter;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.item.TodoItemFactory;
@@ -15,7 +16,6 @@ import picocli.CommandLine.ParentCommand;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 @Command(name = "start", description = "Start a todo item")
 public class TodoStart implements Runnable {
@@ -30,7 +30,7 @@ public class TodoStart implements Runnable {
     private TodoReader reader;
 
     @Inject
-    private TodoFileReader todoFileReader;
+    private TodoFileFactory todoFileFactory;
     @Inject
     private TodoFileWriter todoFileWriter;
     @Inject
@@ -47,16 +47,16 @@ public class TodoStart implements Runnable {
     public void run() {
         System.out.println(themeApplicator.header("todo:start"));
 
-        List<TodoItem> allTodoItems = todoFileReader.readAll(todo.getTodoFile());
-        if (idx > allTodoItems.size()) {
-            Logger.warn(String.format("There are only '%s' items in the todo file and idx '%s' is too high", allTodoItems.size(), idx));
+        TodoFile todoFile = todoFileFactory.create(todo.getTodoFile());
+        if (idx > todoFile.getTodoItemList().getAll().size()) {
+            Logger.warn(String.format("There are only '%s' items in the todo file and idx '%s' is too high", todoFile.getTodoItemList().getAll().size(), idx));
             return;
         } else if (idx <= 0) {
             Logger.warn(String.format("The idx '%s' cannot be negative", idx));
             return;
         }
 
-        TodoItem todoItem = allTodoItems.get(idx - 1);
+        TodoItem todoItem = todoFile.getTodoItemList().getAll().get(idx - 1);
         Logger.info(String.format("Found  : %s", todoItem));
 
         if (todoItem.isComplete()) {
@@ -68,14 +68,14 @@ public class TodoStart implements Runnable {
             Logger.warn("Item is already started");
         }
 
-        String changedRawValue = String.format("%s start:%s", todoItem.rawValue(), simpleDateFormat.format(new Date()));
+        String changedRawValue = String.format("%s start:%s", todoItem.getRawValue(), simpleDateFormat.format(new Date()));
         if (!todoItem.hasPriority()) {
             changedRawValue = String.format("(%s) %s", reader.readHighestFreePriority(todo.getTodoFile()).name(), changedRawValue);
         }
 
         TodoItem changedTodoItem = todoItemFactory.create(todoItem.getIdx(), changedRawValue);
-        allTodoItems.set(idx - 1, changedTodoItem);
-        todoFileWriter.write(allTodoItems, todo.getTodoFile());
+        todoFile.getTodoItemList().getAll().set(idx - 1, changedTodoItem);
+        todoFileWriter.write(todoFile);
         Logger.info(String.format("Started: %s", changedTodoItem));
         System.out.println(themeApplicator.hr());
     }

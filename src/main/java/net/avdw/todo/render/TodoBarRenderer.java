@@ -16,6 +16,6 @@ public class TodoBarRenderer {
      * @return the ANSI colour coded bar
      */
     public String createBar(final int size) {
-        return StringUtils.repeat(" ", size);
+        return StringUtils.repeat("#", size);
     }
 }

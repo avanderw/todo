@@ -1,24 +1,21 @@
 package net.avdw.todo.action;
 
-import com.github.mustachejava.DefaultMustacheFactory;
-import com.github.mustachejava.Mustache;
 import com.google.inject.Inject;
 import net.avdw.todo.Todo;
-import net.avdw.todo.file.TodoFileReader;
+import net.avdw.todo.file.TodoFile;
+import net.avdw.todo.file.TodoFileFactory;
 import net.avdw.todo.file.TodoFileWriter;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.item.TodoItemCompletor;
-import net.avdw.todo.theme.ThemeApplicator;
+import net.avdw.todo.template.TemplateExecutor;
+import net.avdw.todo.template.TemplateViewModel;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
-import java.io.StringWriter;
-import java.nio.file.Path;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Command(name = "do", description = "Complete a todo item")
 public class TodoDone implements Runnable {
@@ -29,76 +26,39 @@ public class TodoDone implements Runnable {
     private int idx;
 
     @Inject
-    private TodoFileReader todoFileReader;
-
+    private TodoFileFactory todoFileFactory;
     @Inject
     private TodoFileWriter todoFileWriter;
-
     @Inject
     private TodoItemCompletor todoItemCompletor;
     @Inject
-    private ThemeApplicator themeApplicator;
+    private TemplateExecutor templateExecutor;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        complete(todo.getTodoFile(), idx);
-    }
+        List<TodoItem> filteredTodoItemList = new ArrayList<>();
+        TodoFile fileBefore = todoFileFactory.create(todo.getTodoFile());
+        TodoFile fileAfter;
 
-    /**
-     * Find and mark an entry in a file at idx as done.
-     *
-     * @param todoFile the file to search
-     * @param idx      the entry in the file to complete
-     * @return the original line that was marked as done
-     */
-    void complete(final Path todoFile, final int idx) {
-        List<TodoItem> allTodoItems = todoFileReader.readAll(todoFile);
-        if (idx > allTodoItems.size()) {
-            Logger.warn(String.format("There are only '%s' items in the todo file and idx '%s' is too high", allTodoItems.size(), idx));
-            return;
-        } else if (idx <= 0) {
-            Logger.warn(String.format("The idx '%s' cannot be negative", idx));
-            return;
-        }
-
-        TodoItem todoItem = allTodoItems.get(idx - 1);
+        TodoItem todoItem = fileBefore.getTodoItemList().getAll().get(idx - 1);
+        filteredTodoItemList.add(todoItem);
         if (todoItem.isComplete()) {
             Logger.warn("Item is already marked as done");
+            fileAfter = fileBefore;
         } else {
+            fileAfter = new TodoFile(fileBefore.getPath(), fileBefore.getTodoItemList().getAll());
             TodoItem completeItem = todoItemCompletor.complete(todoItem);
+            filteredTodoItemList.add(completeItem);
 
-            allTodoItems.set(idx - 1, completeItem);
-            todoFileWriter.write(allTodoItems, todoFile);
-
-            DoneModel model = new DoneModel();
-            Map<String, Object> context = new HashMap<>();
-            context.put("theme", themeApplicator);
-            context.put("model", model);
-
-            model.foundItem = todoItem;
-            model.doneItem = completeItem;
-
-            Mustache m = new DefaultMustacheFactory().compile("todo-done.mustache");
-            StringWriter writer = new StringWriter();
-            m.execute(writer, context);
-            System.out.println(writer.toString());
-        }
-    }
-
-    static class DoneModel {
-
-        private TodoItem doneItem;
-        private TodoItem foundItem;
-
-        public TodoItem getDoneItem() {
-            return doneItem;
+            fileAfter.getTodoItemList().getAll().set(idx - 1, completeItem);
+            todoFileWriter.write(fileAfter);
         }
 
-        public TodoItem getFoundItem() {
-            return foundItem;
-        }
+        TemplateViewModel templateViewModel = new TemplateViewModel("done", filteredTodoItemList, fileBefore, fileAfter);
+        System.out.println(templateExecutor.executor(templateViewModel));
+
     }
 }

@@ -2,17 +2,19 @@ package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
 import net.avdw.todo.Todo;
-import net.avdw.todo.action.TodoList;
-import net.avdw.todo.theme.ThemeApplicator;
-import org.pmw.tinylog.Logger;
+import net.avdw.todo.file.TodoFile;
+import net.avdw.todo.file.TodoFileFactory;
+import net.avdw.todo.file.TodoFileWriter;
+import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.item.TodoItemFactory;
+import net.avdw.todo.template.TemplateExecutor;
+import net.avdw.todo.template.TemplateViewModel;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ParentCommand;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Scanner;
+import java.util.stream.Collectors;
 
 @Command(name = "sort", description = "Sort todo.txt")
 public class TodoSort implements Runnable {
@@ -20,38 +22,29 @@ public class TodoSort implements Runnable {
     private Todo todo;
 
     @Inject
-    private TodoList list;
+    private TodoFileWriter todoFileWriter;
     @Inject
-    private ThemeApplicator themeApplicator;
+    private TodoFileFactory todoFileFactory;
+    @Inject
+    private TodoItemFactory todoItemFactory;
+    @Inject
+    private TemplateExecutor templateExecutor;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        System.out.println(themeApplicator.header("todo:sort"));
-        List<String> todos = new ArrayList<>();
-        try (Scanner scanner = new Scanner(todo.getTodoFile())) {
-            while (scanner.hasNext()) {
-                String line = scanner.nextLine();
-                if (!line.trim().isEmpty()) {
-                    todos.add(line);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        TodoFile fileBefore = todoFileFactory.create(todo.getTodoFile());
+        TodoFile fileAfter = new TodoFile(fileBefore.getPath(), fileBefore.getTodoItemList().getAll().stream().sorted(Comparator.comparing(TodoItem::getRawValue)).collect(Collectors.toList()));
+        todoFileWriter.write(fileAfter);
+
+        List<TodoItem> sortedList = fileAfter.getTodoItemList().getIncomplete();
+        for (int i = 1; i <= sortedList.size(); i++) {
+            sortedList.set(i - 1, todoItemFactory.create(i, sortedList.get(i - 1).getRawValue()));
         }
 
-        String contents = todos.stream().sorted().reduce("", (orig, item) -> orig + item + "\n");
-        try {
-            Files.write(todo.getTodoFile(), contents.getBytes());
-            Logger.info("Sorted items");
-            Logger.info(String.format("Wrote %s", todo.getTodoFile()));
-            Logger.info("---");
-            list.run();
-        } catch (IOException e) {
-            Logger.error(String.format("Error sorting todo %s because %s", todo.getTodoFile(), e.getMessage()));
-            Logger.debug(e);
-        }
+        TemplateViewModel templateViewModel = new TemplateViewModel("sort", sortedList, fileBefore, fileAfter);
+        System.out.println(templateExecutor.executor(templateViewModel));
     }
 }

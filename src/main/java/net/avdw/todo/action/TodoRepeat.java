@@ -1,72 +1,81 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.AnsiColor;
 import net.avdw.todo.Todo;
-import net.avdw.todo.file.TodoFileReader;
+import net.avdw.todo.file.TodoFile;
+import net.avdw.todo.file.TodoFileFactory;
+import net.avdw.todo.file.TodoFileWriter;
 import net.avdw.todo.item.TodoItem;
-import net.avdw.todo.item.TodoItemFactory;
-import net.avdw.todo.theme.ThemeApplicator;
-import org.pmw.tinylog.Logger;
+import net.avdw.todo.item.TodoItemModifier;
+import net.avdw.todo.item.list.TodoItemListFilter;
+import net.avdw.todo.template.TemplateExecutor;
+import net.avdw.todo.template.TemplateViewModel;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Command(name = "repeat", description = "Do and add an entry to todo.txt")
 public class TodoRepeat implements Runnable {
-
     @ParentCommand
     private Todo todo;
 
-    @Parameters(description = "Index of the entry to remove", arity = "1", index = "0")
-    private int idx;
+    @Parameters(description = "Index of the entry to remove", arity = "1..*")
+    private List<Integer> idxList;
 
-    @Parameters(description = "Due date to add with the new entry", arity = "1", index = "1")
+    @Option(names = "--date", required = true, description = "Due date to add with the new entry")
     private Date dueDate;
 
     @Inject
-    private TodoDone todoDone;
-
+    private TodoFileFactory todoFileFactory;
     @Inject
-    private TodoAdd todoAdd;
-
+    private TodoItemListFilter todoItemListFilter;
     @Inject
-    private SimpleDateFormat simpleDateFormat;
+    private TodoFileWriter todoFileWriter;
     @Inject
-    private TodoItemFactory todoItemFactory;
+    private TodoItemModifier todoItemModifier;
     @Inject
-    private TodoFileReader todoFileReader;
-    @Inject
-    private ThemeApplicator themeApplicator;
+    private TemplateExecutor templateExecutor;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        System.out.println(themeApplicator.header("todo:repeat"));
-        List<TodoItem> allTodoItems = todoFileReader.readAll(todo.getTodoFile());
-        if (idx > allTodoItems.size()) {
-            Logger.warn(String.format("There are only '%s' items in the todo file and idx '%s' is too high", allTodoItems.size(), idx));
-            return;
-        } else if (idx <= 0) {
-            Logger.warn(String.format("The idx '%s' cannot be negative", idx));
-            return;
-        }
+        TodoFile fileBefore = todoFileFactory.create(todo.getTodoFile());
+        List<TodoItem> filteredTodoItemList = todoItemListFilter.filterByIdx(fileBefore, idxList);
 
-        todoDone.complete(todo.getTodoFile(), idx);
+        List<TodoItem> completedTodoItemList = filteredTodoItemList.stream()
+                .map(todoItem -> todoItemModifier.complete(todoItem)).collect(Collectors.toList());
 
-        TodoItem toCompleteTodoItem = allTodoItems.get(idx - 1);
-        String rawValue = toCompleteTodoItem.rawValue().replaceFirst("^x \\d\\d\\d\\d-\\d\\d-\\d\\d\\s", "");
-        rawValue = rawValue.replaceFirst("^\\([A-Z]\\)\\s", "");
-        rawValue = rawValue.replaceFirst("^\\d\\d\\d\\d-\\d\\d-\\d\\d\\s", "");
-        rawValue = rawValue.replaceAll("due:\\d\\d\\d\\d-\\d\\d-\\d\\d", String.format("due:%s", simpleDateFormat.format(dueDate)));
-        rawValue = String.format("%s %s", simpleDateFormat.format(new Date()), rawValue);
-        todoAdd.add(todo.getTodoFile(), rawValue);
-        Logger.info(String.format("%sAdded%s: %s", AnsiColor.GREEN, AnsiColor.RESET, todoItemFactory.create(allTodoItems.size() + 1, rawValue)));
+        AtomicInteger total = new AtomicInteger(fileBefore.getTodoItemList().getAll().size() + 1);
+        List<TodoItem> additionalTodoItemList = filteredTodoItemList.stream().map(todoItem -> {
+            TodoItem modifiedTodoItem = todoItemModifier.stripCompletionDate(todoItem);
+            modifiedTodoItem = todoItemModifier.stripPriority(modifiedTodoItem);
+            modifiedTodoItem = todoItemModifier.stripStartDate(modifiedTodoItem);
+            modifiedTodoItem = todoItemModifier.changeDueDate(modifiedTodoItem, dueDate);
+            modifiedTodoItem = todoItemModifier.addStartDate(modifiedTodoItem);
+            modifiedTodoItem = todoItemModifier.changeIdx(modifiedTodoItem, total.getAndIncrement());
+            return modifiedTodoItem;
+        }).collect(Collectors.toList());
+
+        List<TodoItem> modifiedTodoItemList = new ArrayList<>(fileBefore.getTodoItemList().getAll());
+        completedTodoItemList.forEach(todoItem -> {
+            modifiedTodoItemList.set(todoItem.getIdx() - 1, todoItem);
+        });
+        modifiedTodoItemList.addAll(additionalTodoItemList);
+
+        TodoFile fileAfter = new TodoFile(fileBefore.getPath(), modifiedTodoItemList);
+        todoFileWriter.write(fileAfter);
+
+        TemplateViewModel templateViewModel = new TemplateViewModel("repeat", modifiedTodoItemList, fileBefore, fileAfter);
+        System.out.println(templateExecutor.executor(templateViewModel));
     }
+
 }
