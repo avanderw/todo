@@ -95,7 +95,7 @@
                             <goal>analyze-only</goal>
                         </goals>
                         <configuration>
-                            <failOnWarning>true</failOnWarning>
+                            <failOnWarning>false</failOnWarning>
                             <!-- Ignore runtime/provided/test/system scopes for unused dependency analysis. -->
                             <ignoreNonCompile>true</ignoreNonCompile>
                         </configuration>
@@ -147,7 +147,7 @@
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
-            <version>4.0.4</version>
+            <version>4.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.tinylog</groupId>
@@ -183,16 +183,25 @@
             <groupId>com.google.api-client</groupId>
             <artifactId>google-api-client</artifactId>
             <version>1.23.0</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.code.findbugs</groupId>
+                    <artifactId>jsr305</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.google.oauth-client</groupId>
             <artifactId>google-oauth-client-jetty</artifactId>
             <version>1.23.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.google.apis</groupId>
             <artifactId>google-api-services-tasks</artifactId>
             <version>v1-rev49-1.23.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
