@@ -1,7 +1,7 @@
 package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
-import net.avdw.todo.GlobalTodo;
+import net.avdw.todo.Global;
 import net.avdw.todo.LocalTodo;
 import net.avdw.todo.Todo;
 import net.avdw.todo.theme.ThemeApplicator;
@@ -19,7 +19,7 @@ public class TodoInit implements Runnable {
     private Todo todo;
 
     @Inject
-    @GlobalTodo
+    @Global
     private Path globalPath;
 
     @Inject

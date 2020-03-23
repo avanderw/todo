@@ -112,4 +112,24 @@ public class TodoItem {
     public boolean hasProjects() {
         return !getProjects().isEmpty();
     }
+
+    public String getMetaValueFor(String key) {
+        String metaValue;
+        String formatKey = String.format("%s:", key);
+        int metaKeyIdx = line.indexOf(formatKey);
+        if (metaKeyIdx == -1) {
+            Logger.debug("Cannot find meta key: {}");
+            throw new UnsupportedOperationException();
+        }
+
+        String value = line.substring(metaKeyIdx);
+        value = value.substring(formatKey.length());
+        int spaceIdx = value.indexOf(" ");
+        if (spaceIdx == -1) {
+            metaValue = value;
+        } else {
+            metaValue = value.substring(0, spaceIdx);
+        }
+        return metaValue;
+    }
 }

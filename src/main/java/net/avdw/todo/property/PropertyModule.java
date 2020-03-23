@@ -3,7 +3,7 @@ package net.avdw.todo.property;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import net.avdw.todo.GlobalTodo;
+import net.avdw.todo.Global;
 import net.avdw.todo.LocalTodo;
 import org.pmw.tinylog.Logger;
 
@@ -22,7 +22,7 @@ public final class PropertyModule extends AbstractModule {
     @Provides
     @Singleton
     @GlobalProperty
-    Path globalPropertiesPath(final @GlobalTodo Path globalTodoPath) {
+    Path globalPropertiesPath(final @Global Path globalTodoPath) {
         Logger.debug(String.format("Global properties path: %s", globalTodoPath.resolve(PROPERTY_FILE)));
         return globalTodoPath.resolve(PROPERTY_FILE);
     }
