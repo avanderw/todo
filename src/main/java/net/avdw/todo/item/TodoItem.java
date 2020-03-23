@@ -118,7 +118,7 @@ public class TodoItem {
         String formatKey = String.format("%s:", key);
         int metaKeyIdx = line.indexOf(formatKey);
         if (metaKeyIdx == -1) {
-            Logger.debug("Cannot find meta key: {}");
+            Logger.trace("Cannot find meta key: {}", key);
             throw new UnsupportedOperationException();
         }
 

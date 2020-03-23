@@ -19,7 +19,7 @@ public class ChartCli implements Runnable {
     private String firstKey;
     @CommandLine.Parameters(description = "Second key to extract", arity = "0..1", index = "1")
     private String secondKey;
-    @CommandLine.Parameters(description = "Second key to extract", arity = "0..1", index = "2")
+    @CommandLine.Parameters(description = "Third key to extract", arity = "0..1", index = "2")
     private String thirdKey;
 
     @Inject
