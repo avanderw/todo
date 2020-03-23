@@ -7,5 +7,5 @@ import java.lang.annotation.RetentionPolicy;
 
 @BindingAnnotation
 @Retention(RetentionPolicy.RUNTIME)
-public @interface GlobalTodo {
+public @interface Working {
 }

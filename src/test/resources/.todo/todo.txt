@@ -1,0 +1,74 @@
+2019-10-07 +Access_Facility @iBank transfers, enquiries start:2020-01-27 analyst:tselane assigned:johan 2020-02-24:testing
+2019-12-05 Electrum @ECS IDP integration assigned:karl 2020-02-24:releasing end:2020-03-16 
+2020-02-04 @USSD mobile PIN for balance enquiries start:2020-02-05 end:2020-03-10 2020-02-24:development assigned:karl
+2020-02-05 +Access_Facility @USSD assigned:karl end:2020-03-10 analyst:tselane start:2020-02-10 2020-02-24:releasing
+2020-02-25 BSLP metrics + kibana @USSD assigned:karl 2020-02-24:development
+2020-03-02 Electrum Java upgrades and VM replacements assigned:karl start:2020-03-02
+2020-02-04 @USSD card stop and tap to pay rework assigned:karl start:2020-03-16
+2020-03-10 Align +Access_Facility with ATM start:2020-03-10 2020-03-16:development assigned:karl analyst:tselane
+2019-06-25 Extended family +Funeral_Cover start:2019-06-25 end:2020-03-10 assigned:joseph analyst:cassim 2019-07-29:development 2019-08-19:testing 2019-09-09:releasing 2019-10-14:releasing 2020-02-24:testing
+2020-02-24 +Funeral_Cover benefits start:2020-02-24 assigned:joseph analyst:cassim
+2019-10-29 +ROB liveness and selfie start:2019-08-29 assigned:baldwin analyst:karen 2019-09-03:development 2019-09-16:development 2019-09-30:development 2019-11-19:testing
+2019-10-29 +ROB confidence index start:2019-11-18 analyst:karen 2020-02-25:development assigned:baldwin
+2019-10-29 +ROB AML and CIF analyst:karen assigned:andre
+2019-10-29 +ROB ID scan start:2019-11-08 assigned:baldwin 2020-02-25:testing
+2020-03-12 Release whitelisting assigned:karen start:2020-03-12
+2019-10-29 +ROB DHA consent 2019-11-19:testing 2020-02-25:releasing assigned:andre
+2019-02-19 +Unbundling_CSL barometer service @POC assigned:jaco start:2019-04-01 2019-05-15:development 2019-06-25:development 2019-07-29:development 2019-08-19:development 2019-09-09:development 2019-11-19:releasing 2019-10-14:releasing
+2019-08-08 +ROB Service to automatically activate track 2 with pay to cell active assigned:marius start:2020-03-02
+2020-02-05 Client preferences in @iBankAdmin assigned:marius 2020-02-24:releasing start:2020-02-05
+2019-04-25 Track2 notice in @Track1 with image assigned:jaco start:2019-07-29 2019-08-19:releasing 2019-09-09:releasing 2019-10-14:releasing 2019-11-19:releasing 2020-02-24:releasing
+2020-02-05 Use support endpoint to retrieve +Send_Cash voucher detail assigned:rentius ref:AL-1512 start:2020-01-13 end:2020-03-03 2020-02-24:releasing
+2020-03-01 @Track1 @iBank @USSD fee increases to be updated on agreements assigned:shane end:2020-03-03
+2020-11-28 @iBankAdmin +Send_Cash roll back and roll forward to be made available assigned:rentius end:2020-03-03 target:22020-03-07
+2020-01-05 @CNP bugfixes and 30s failover assigned:shane end:2020-03-03 2020-02-24:releasing
+2020-03-01 Address on all letterheads to be changed to head office assigned:shane target:2020-04-01 start:2020-03-01
+2019-09-09 +Funeral_Cover claims summary assigned:rentius end:2020-03-12 2019-10-14:backlog 2020-02-24:releasing
+2020-03-10 +Send_Cash wording changes assigned:shane start:2020-03-10
+2020-02-14 +Send_Cash agreement changes assigned:shane end:2020-03-03
+2020-01-01 +Access_Facility credit estimate @Track1 start:2020-03-10 assigned:shane
+2020-02-24 Tap to pay card service v5 @Track1 @CNP assigned:shane start:2020-03-10
+2020-02-10 Logging and security in Fuse fix start:2020-02-17 2020-02-24:development assigned:etienne
+2020-07-18 +ROB prove that data was on the device at a point in time assigned:Leedert start:2019-07-29 2019-08-19:development 2019-09-09:development 2019-10-14:testing 2019-11-19:testing 2020-02-24:development
+2019-09-09 @Track2 +Funeral_Cover service start:2019-09-09 assigned:etienne 2019-10-14:development 2019-11-19:development 2020-02-24:testing
+2019-11-05 Correlation ID in logs assigned:etienne start:2020-03-10
+2020-01-23 Fix activation data to identify Track2 vs Track1 activations start:2020-01-23 2020-02-24:releasing assigned:etienne
+2020-01-23 +Live_Better for @USSD | opt in/out | view balances | transfer | email statement | init roundup analyst:unnassigned importance:1 urgency:3
+2020-01-23 +Live_Better for @iBank | view account | view transaction history | transfer analyst:unnassigned importance:1 urgency:2
+2019-08-23 Build @USSD DR importance:1 urgency:1
+2019-10-11 @NI_USSD enforce timeouts per MNO importance:2 urgency:1
+2019-10-11 @NI_USSD improve reporting on failures per MNO importance:2 urgency:1
+2019-10-11 @NI_USSD early abort and retry from our side importance:2 urgency:1
+2019-09-19 Fix INT-HRD importance:3 urgency:21
+2019-01-15 Rebuild DEV importance:3 urgency:13
+2020-03-10 Step up authentication on @USSD analyst:unnassigned importance:3 urgency:8
+2019-12-11 Remove reason from stop cards "Suspected fraud" @USSD @Track1 @iBank analyst:unnassigned importance:3 urgency:5
+2019-03-12 Soft freeze card on @Track1 and @USSD analyst:unnassigned importance:3 urgency:5
+2019-08-19 Enable encryption for emailing of statements analyst:unnassigned importance:3 urgency:3
+2019-08-16 Enable retrieving of cell phone status | cifNumber | phone status | cell # importance:3 urgency:2
+2019-07-26 Update marketing communications to better reflect opt-in vs opt-out analyst:unnassigned importance:3 urgency:1
+2019-12-04 Purpose lending vehicle finance analyst:cassim ref:CPORT-22 importance:2 urgency:8
+2019-05-23 Upgrade bamboo importance:2 urgency:5
+2019-10-16 Beneficiary payments on @USSD and RTC analyst:unnassigned ref:BO-4183 importance:2 urgency:5
+2019-01-25 Resetting remote pin 4 branch support importance:2 urgency:2
+2019-10-21 Start tracking changelogs in every repository importance:2 urgency:1
+2020-02-12 Refactor Hikari for all services importance:5 urgency:13
+2020-03-10 Refactor contract / agreement / fees changes to be purely operational analyst:unnassigned importance:5 urgency:8
+2020-02-05 @iBank once off payments analyst:unnassigned importance:5 urgency:8
+2018-07-29 Refactor message sender to remove transaction history dependency importance:5 urgency:5
+2019-10-17 Refactor download service to remove capitec app dependency importance5: urgency:3
+2018-11-13 Secure live @USSD traffic importance:5 urgency:2
+2018-11-14 @NI_USSD sim check importance:5 urgency:1
+2019-02-07 Digital authorisation service analyst:dollie importance:8 urgency:21
+2020-02-05 +Funeral_Cover relationship descriptions importance:8 urgency:13 analyst:cassim
+2020-03-13 Increase PIN retries for @APP to around 5/6 importance:8 urgency:5
+2019-11-18 +ROB evidence retrieval system importance:8 urgency:5 analyst:karen
+2018-10-23 Refactor services to have versioned endpoints importance:8 urgency:5
+2018-11-15 Refactor services to make use of the IDP importance:8 urgency:1
+2020-03-10 +Funeral_Cover compliance analyst:Julias importance:13 urgency:21
+2020-03-10 Service to provide fraud confidence on transactions importance:13 urgency:13
+2019-10-03 Refactor services to use LinkerD importance:13 urgency:8
+2019-05-26 Refactor @iBank to use card service importance:13 urgency:5
+2019-10-03 Apply the enforcer plugin for dependency management importance:13 urgency:5
+2020-03-10 Upgrade Java to use the latest redhat openJDK LTS importance:13 urgency:3
+2020-03-13 Refactor @USSD menu to be toggled via feature toggle importance:13 urgency:2

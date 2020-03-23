@@ -3,6 +3,7 @@ package net.avdw.todo;
 import com.google.inject.Inject;
 import net.avdw.todo.action.*;
 import net.avdw.todo.admin.*;
+import net.avdw.todo.chart.ChartCli;
 import net.avdw.todo.property.GlobalProperty;
 import net.avdw.todo.property.PropertyModule;
 import org.pmw.tinylog.Logger;
@@ -39,6 +40,7 @@ import java.util.stream.Collectors;
                 TodoReplace.class,
                 TodoClear.class,
                 TodoList.class,
+                ChartCli.class,
                 TodoAdd.class,
                 TodoStart.class,
                 TodoPriority.class,
@@ -54,7 +56,7 @@ public class Todo implements Runnable {
     private boolean showAll;
 
     @Inject
-    @GlobalTodo
+    @Global
     private Path globalTodoPath;
 
     @Inject
