@@ -113,7 +113,7 @@ public class TodoItem {
         return !getProjects().isEmpty();
     }
 
-    public String getMetaValueFor(String key) {
+    public String getMetaValueFor(final String key) {
         String metaValue;
         String formatKey = String.format("%s:", key);
         int metaKeyIdx = line.indexOf(formatKey);

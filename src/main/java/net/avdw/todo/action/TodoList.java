@@ -2,8 +2,10 @@ package net.avdw.todo.action;
 
 import com.google.inject.Inject;
 import net.avdw.todo.Todo;
+import net.avdw.todo.Working;
 import net.avdw.todo.file.TodoFile;
 import net.avdw.todo.file.TodoFileFactory;
+import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.item.list.TodoItemListFilter;
 import net.avdw.todo.render.TodoContextRenderer;
@@ -16,9 +18,9 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Command(name = "ls", description = "List the items in todo.txt")
@@ -27,7 +29,7 @@ public class TodoList implements Runnable {
     @ParentCommand
     private Todo todo;
 
-    @Parameters(description = "One or more filters to apply")
+    @Parameters(description = "Include items that contain these Strings")
     private List<String> filters = new ArrayList<>();
 
     @Option(names = "--projects", description = "Display projects")
@@ -45,6 +47,13 @@ public class TodoList implements Runnable {
     @Option(names = "--limit", description = "Limit the amount of items shown")
     private int limit = 0;
 
+    @Option(names = "--not", description = "Exclude items with this String")
+    private List<String> notStringList = new ArrayList<>();
+    @Option(names = "--and", description = "Include items that contain this String with the filter")
+    private List<String> andStringList = new ArrayList<>();
+    @Option(names = "--or", description = "Include items that also has this String")
+    private List<String> orStringList = new ArrayList<>();
+
     @Inject
     private TodoContextRenderer todoContextRenderer;
 
@@ -57,14 +66,34 @@ public class TodoList implements Runnable {
     private TodoFileFactory todoFileFactory;
     @Inject
     private TodoItemListFilter todoItemListFilter;
+    @Inject
+    private TodoFileReader todoFileReader;
+    @Inject
+    @Working
+    private Path todoPath;
 
     /**
      * Entry point for picocli.
      */
     @Override
     public void run() {
-        TodoFile fileBefore = todoFileFactory.create(todo.getTodoFile());
-        List<TodoItem> filteredTodoItemList = filterTodoItems(fileBefore.getTodoItemList().getAll(), filters);
+        andStringList.addAll(filters);
+        List<TodoItem> todoItemList = todoFileReader.readAll(todoPath);
+        List<TodoItem> filteredTodoItemList = new ArrayList<>();
+        List<TodoItem> finalFilteredTodoItemList = filteredTodoItemList;
+        todoItemList.forEach(item -> {
+            String rawValue = item.getRawValue().toLowerCase();
+            boolean include = andStringList.isEmpty() || andStringList.stream().allMatch(rawValue::contains);
+            if (!include && !orStringList.isEmpty()) {
+                include = orStringList.stream().anyMatch(rawValue::contains);
+            }
+            if (include && !notStringList.isEmpty()) {
+                include = notStringList.stream().noneMatch(rawValue::contains);
+            }
+            if (include) {
+                finalFilteredTodoItemList.add(item);
+            }
+        });
 
         if (!todo.showAll()) {
             filteredTodoItemList = todoItemListFilter.filterIncompleteItems(filteredTodoItemList);
@@ -93,23 +122,8 @@ public class TodoList implements Runnable {
             todoProjectRenderer.printProjectTable(filteredTodoItemList);
         }
 
+        TodoFile fileBefore = todoFileFactory.create(todo.getTodoFile());
         TemplateViewModel templateViewModel = new TemplateViewModel("list", filteredTodoItemList, fileBefore, fileBefore);
         System.out.println(templateExecutor.executor(templateViewModel));
-    }
-
-    private List<TodoItem> filterTodoItems(final List<TodoItem> todoItemList, final List<String> filters) {
-        Logger.debug(String.format("Filtering '%s' todo items with filters '%s'", todoItemList.size(), filters));
-        if (filters.isEmpty()) {
-            Logger.debug("No filters defined, returning original list");
-            return new ArrayList<>(todoItemList);
-        } else {
-            List<TodoItem> filteredTodoItems = todoItemList.stream()
-                    .filter(item -> filters.stream()
-                            .map(String::toLowerCase)
-                            .allMatch(item.getRawValue().toLowerCase()::contains))
-                    .collect(Collectors.toList());
-            Logger.debug(String.format("Filtered list contains '%s' todo items", filteredTodoItems.size()));
-            return filteredTodoItems;
-        }
     }
 }

@@ -59,11 +59,11 @@ public class ChartCli implements Runnable {
                 .collect(Collectors.toList());
 
         List<String> rowValueList = filteredTodoItemList.stream()
-                .map(item-> item.getMetaValueFor(firstKey))
+                .map(item -> item.getMetaValueFor(firstKey))
                 .sorted()
                 .collect(Collectors.toList());
         List<String> colValueList = filteredTodoItemList.stream()
-                .map(item->item.getMetaValueFor(secondKey))
+                .map(item -> item.getMetaValueFor(secondKey))
                 .sorted()
                 .collect(Collectors.toList());
 
