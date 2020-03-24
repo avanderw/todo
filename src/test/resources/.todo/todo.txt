@@ -1,3 +1,42 @@
+2020-03-10 +Funeral_Cover compliance analyst:Julias importance:13 urgency:21
+2019-02-07 Digital authorisation service analyst:dollie importance:8 urgency:21
+2020-03-10 Service to provide fraud confidence on transactions importance:13 urgency:13
+2019-09-19 Fix INT-HRD importance:3 urgency:21
+2020-02-05 +Funeral_Cover relationship descriptions importance:8 urgency:13 analyst:cassim
+2019-10-03 Refactor services to use LinkerD importance:13 urgency:8
+2020-02-12 Refactor Hikari for all services importance:5 urgency:13
+2019-05-26 Refactor @iBank to use card service importance:13 urgency:5
+2019-10-03 Apply the enforcer plugin for dependency management importance:13 urgency:5
+2019-01-15 Rebuild DEV importance:3 urgency:13
+2020-03-10 Upgrade Java to use the latest redhat openJDK LTS importance:13 urgency:3
+2020-03-13 Refactor @USSD menu to be toggled via feature toggle importance:13 urgency:2
+2020-03-10 Refactor contract / agreement / fees changes to be purely operational analyst:unnassigned importance:5 urgency:8
+2020-02-05 @iBank once off payments analyst:unnassigned importance:5 urgency:8
+2020-03-13 Increase PIN retries for @APP to around 5/6 importance:8 urgency:5
+2019-11-18 +ROB evidence retrieval system importance:8 urgency:5 analyst:karen
+2018-10-23 Refactor services to have versioned endpoints importance:8 urgency:5
+2020-03-10 Step up authentication on @USSD analyst:unnassigned importance:3 urgency:8
+2019-12-04 Purpose lending vehicle finance analyst:cassim ref:CPORT-22 importance:2 urgency:8
+2018-07-29 Refactor message sender to remove transaction history dependency importance:5 urgency:5
+2018-11-15 Refactor services to make use of the IDP importance:8 urgency:1
+2019-12-11 Remove reason from stop cards "Suspected fraud" @USSD @Track1 @iBank analyst:unnassigned importance:3 urgency:5
+2019-03-12 Soft freeze card on @Track1 and @USSD analyst:unnassigned importance:3 urgency:5
+2019-05-23 Upgrade bamboo importance:2 urgency:5
+2019-10-16 Beneficiary payments on @USSD and RTC analyst:unnassigned ref:BO-4183 importance:2 urgency:5
+2018-11-13 Secure live @USSD traffic importance:5 urgency:2
+2019-08-19 Enable encryption for emailing of statements analyst:unnassigned importance:3 urgency:3
+2018-11-14 @NI_USSD sim check importance:5 urgency:1
+2019-08-16 Enable retrieving of cell phone status | cifNumber | phone status | cell # importance:3 urgency:2
+2020-01-23 +Live_Better for @USSD | opt in/out | view balances | transfer | email statement | init roundup analyst:unnassigned importance:1 urgency:3
+2019-07-26 Update marketing communications to better reflect opt-in vs opt-out analyst:unnassigned importance:3 urgency:1
+2019-01-25 Resetting remote pin 4 branch support importance:2 urgency:2
+2020-01-23 +Live_Better for @iBank | view account | view transaction history | transfer analyst:unnassigned importance:1 urgency:2
+2019-10-11 @NI_USSD enforce timeouts per MNO importance:2 urgency:1
+2019-10-11 @NI_USSD improve reporting on failures per MNO importance:2 urgency:1
+2019-10-11 @NI_USSD early abort and retry from our side importance:2 urgency:1
+2019-10-21 Start tracking changelogs in every repository importance:2 urgency:1
+2019-10-17 Refactor download service to remove capitec app dependency importance5: urgency:3
+2019-08-23 Build @USSD DR importance:1 urgency:1
 2019-10-07 +Access_Facility @iBank transfers, enquiries start:2020-01-27 analyst:tselane assigned:johan 2020-02-24:testing
 2019-12-05 Electrum @ECS IDP integration assigned:karl 2020-02-24:releasing end:2020-03-16 
 2020-02-04 @USSD mobile PIN for balance enquiries start:2020-02-05 end:2020-03-10 2020-02-24:development assigned:karl
@@ -33,42 +72,3 @@
 2019-09-09 @Track2 +Funeral_Cover service start:2019-09-09 assigned:etienne 2019-10-14:development 2019-11-19:development 2020-02-24:testing
 2019-11-05 Correlation ID in logs assigned:etienne start:2020-03-10
 2020-01-23 Fix activation data to identify Track2 vs Track1 activations start:2020-01-23 2020-02-24:releasing assigned:etienne
-2020-01-23 +Live_Better for @USSD | opt in/out | view balances | transfer | email statement | init roundup analyst:unnassigned importance:1 urgency:3
-2020-01-23 +Live_Better for @iBank | view account | view transaction history | transfer analyst:unnassigned importance:1 urgency:2
-2019-08-23 Build @USSD DR importance:1 urgency:1
-2019-10-11 @NI_USSD enforce timeouts per MNO importance:2 urgency:1
-2019-10-11 @NI_USSD improve reporting on failures per MNO importance:2 urgency:1
-2019-10-11 @NI_USSD early abort and retry from our side importance:2 urgency:1
-2019-09-19 Fix INT-HRD importance:3 urgency:21
-2019-01-15 Rebuild DEV importance:3 urgency:13
-2020-03-10 Step up authentication on @USSD analyst:unnassigned importance:3 urgency:8
-2019-12-11 Remove reason from stop cards "Suspected fraud" @USSD @Track1 @iBank analyst:unnassigned importance:3 urgency:5
-2019-03-12 Soft freeze card on @Track1 and @USSD analyst:unnassigned importance:3 urgency:5
-2019-08-19 Enable encryption for emailing of statements analyst:unnassigned importance:3 urgency:3
-2019-08-16 Enable retrieving of cell phone status | cifNumber | phone status | cell # importance:3 urgency:2
-2019-07-26 Update marketing communications to better reflect opt-in vs opt-out analyst:unnassigned importance:3 urgency:1
-2019-12-04 Purpose lending vehicle finance analyst:cassim ref:CPORT-22 importance:2 urgency:8
-2019-05-23 Upgrade bamboo importance:2 urgency:5
-2019-10-16 Beneficiary payments on @USSD and RTC analyst:unnassigned ref:BO-4183 importance:2 urgency:5
-2019-01-25 Resetting remote pin 4 branch support importance:2 urgency:2
-2019-10-21 Start tracking changelogs in every repository importance:2 urgency:1
-2020-02-12 Refactor Hikari for all services importance:5 urgency:13
-2020-03-10 Refactor contract / agreement / fees changes to be purely operational analyst:unnassigned importance:5 urgency:8
-2020-02-05 @iBank once off payments analyst:unnassigned importance:5 urgency:8
-2018-07-29 Refactor message sender to remove transaction history dependency importance:5 urgency:5
-2019-10-17 Refactor download service to remove capitec app dependency importance5: urgency:3
-2018-11-13 Secure live @USSD traffic importance:5 urgency:2
-2018-11-14 @NI_USSD sim check importance:5 urgency:1
-2019-02-07 Digital authorisation service analyst:dollie importance:8 urgency:21
-2020-02-05 +Funeral_Cover relationship descriptions importance:8 urgency:13 analyst:cassim
-2020-03-13 Increase PIN retries for @APP to around 5/6 importance:8 urgency:5
-2019-11-18 +ROB evidence retrieval system importance:8 urgency:5 analyst:karen
-2018-10-23 Refactor services to have versioned endpoints importance:8 urgency:5
-2018-11-15 Refactor services to make use of the IDP importance:8 urgency:1
-2020-03-10 +Funeral_Cover compliance analyst:Julias importance:13 urgency:21
-2020-03-10 Service to provide fraud confidence on transactions importance:13 urgency:13
-2019-10-03 Refactor services to use LinkerD importance:13 urgency:8
-2019-05-26 Refactor @iBank to use card service importance:13 urgency:5
-2019-10-03 Apply the enforcer plugin for dependency management importance:13 urgency:5
-2020-03-10 Upgrade Java to use the latest redhat openJDK LTS importance:13 urgency:3
-2020-03-13 Refactor @USSD menu to be toggled via feature toggle importance:13 urgency:2
