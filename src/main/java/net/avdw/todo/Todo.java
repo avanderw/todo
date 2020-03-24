@@ -7,7 +7,6 @@ import net.avdw.todo.chart.ChartCli;
 import net.avdw.todo.property.GlobalProperty;
 import net.avdw.todo.property.PropertyModule;
 import org.pmw.tinylog.Logger;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.HelpCommand;
 import picocli.CommandLine.Option;
@@ -71,20 +70,16 @@ public class Todo implements Runnable {
     @GlobalProperty
     private Path globalPropertyPath;
 
+    @Inject
+    private TodoList todoList;
+
 
     /**
      * Entry point for picocli.
      */
     public void run() {
-        Path directory = resolveTodoPath();
-
-        if (Files.exists(directory)) {
-            Logger.info(String.format("Directory: %s", directory));
-            CommandLine.usage(Todo.class, System.out);
-        } else {
-            Logger.warn("No directory found (or any of the parent directories)");
-            CommandLine.usage(TodoInit.class, System.out);
-        }
+        todoList.run();
+//            CommandLine.usage(Todo.class, System.out);
     }
 
     /**
