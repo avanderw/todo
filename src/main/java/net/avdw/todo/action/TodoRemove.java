@@ -15,18 +15,18 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Command(name = "rm", description = "Remove a todo item")
 public class TodoRemove implements Runnable {
     @ParentCommand
     private Todo todo;
-    @Parameters(description = "Index to remove", arity = "1")
-    private int idx;
+    @Parameters(description = "Indexes to remove", arity = "1..*")
+    private List<Integer> idxList;
 
     @Inject
     private TodoFileFactory todoFileFactory;
@@ -48,14 +48,15 @@ public class TodoRemove implements Runnable {
      */
     @Override
     public void run() {
-        List<TodoItem> filteredList = new ArrayList<>();
-        TodoFile fileBefore = todoFileFactory.create(todo.getTodoFile());
-
+        List<TodoItem> changedTodoItemList = new ArrayList<>();
         List<TodoItem> todoItemList = todoFileReader.readAll(todoFilePath);
-        TodoItem removeItem = todoItemList.remove(idx - 1);
-        filteredList.add(removeItem);
-        TodoFile fileAfter = new TodoFile(fileBefore.getPath(), todoItemList);
-        todoFileWriter.write(fileAfter);
+
+        idxList.stream().sorted(Comparator.reverseOrder())
+                .forEachOrdered(idx -> {
+                    TodoItem removeItem = todoItemList.remove(idx - 1);
+                    changedTodoItemList.add(removeItem);
+                });
+        todoFileWriter.write(todoFilePath, todoItemList);
 
         List<TodoItem> removedTodoItemList;
         if (Files.exists(removedFilePath)) {
@@ -63,10 +64,11 @@ public class TodoRemove implements Runnable {
         } else {
             removedTodoItemList = new ArrayList<>();
         }
-        removedTodoItemList.add(removeItem);
+        removedTodoItemList.addAll(changedTodoItemList);
         todoFileWriter.write(removedFilePath, removedTodoItemList);
 
-        TemplateViewModel templateViewModel = new TemplateViewModel("remove", filteredList, fileBefore, fileAfter);
+        TodoFile fileBefore = todoFileFactory.create(todo.getTodoFile());
+        TemplateViewModel templateViewModel = new TemplateViewModel("remove", changedTodoItemList, fileBefore, fileBefore);
         System.out.println(templateExecutor.executor(templateViewModel));
     }
 }
