@@ -1,0 +1,7 @@
+2019-08-14 @Add proxy for when todo push is used instead of git push
+2019-08-12 @Enhance +clean to move todos into a stale.txt
+2019-07-26 @Add auto +priority +properties for +start functionality
+2019-07-30 @Enhance +migrate functionality logging to be friendlier
+2019-07-24 @Add +backup option to state changing operations
+2019-08-12 @Enhance +list -w to show empty results when nothing is in progress
+2020-03-20 @Refactor TodoItemList.class
