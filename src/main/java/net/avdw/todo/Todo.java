@@ -28,24 +28,19 @@ import java.util.stream.Collectors;
         subcommands = {
                 HelpCommand.class,
                 TodoInit.class,
-                TodoSet.class,
                 TodoStatus.class,
                 TodoBackup.class,
                 TodoRestore.class,
                 TodoSort.class,
                 TodoEdit.class,
                 TodoExplore.class,
-                TodoMigrate.class,
                 TodoReplace.class,
-                TodoClear.class,
                 TodoList.class,
                 ChartCli.class,
                 TodoAdd.class,
-                TodoStart.class,
                 TodoPriority.class,
                 TodoDone.class,
-                TodoRemove.class,
-                TodoRepeat.class
+                TodoRemove.class
         })
 public class Todo implements Runnable {
     @Option(names = {"-g", "--global"}, description = "Use the global directory")
