@@ -1,28 +1,48 @@
 package net.avdw.todo.theme;
 
-public class GrayscaleColorPalette implements ColorPalette {
+public class GrayscaleColorPalette implements ColorPalette<Integer> {
     @Override
-    public int primaryTint() {
-        return 0xCCCCCC;
+    public Integer primaryTint() {
+        return 0xBBBBBB;
     }
 
     @Override
-    public int primaryTone() {
+    public Integer primaryTone() {
         return 0x999999;
     }
 
     @Override
-    public int primaryShade() {
-        return 0x666666;
+    public Integer primaryShade() {
+        return 0x777777;
     }
 
     @Override
-    public int secondaryTone() {
+    public Integer secondaryTint() {
+        return 0x555555;
+    }
+
+    @Override
+    public Integer secondaryTone() {
         return 0x333333;
     }
 
     @Override
-    public int accentTone() {
+    public Integer secondaryShade() {
+        return 0x111111;
+    }
+
+    @Override
+    public Integer accentTint() {
         return 0xFFFFFF;
+    }
+
+    @Override
+    public Integer accentTone() {
+        return 0xEEEEEE;
+    }
+
+    @Override
+    public Integer accentShade() {
+        return 0xDDDDDD;
     }
 }

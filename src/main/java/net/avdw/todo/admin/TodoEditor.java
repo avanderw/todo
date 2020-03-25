@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-@Command(name = "edit", description = "Open the configured editor for todo.txt")
-public class TodoEdit implements Runnable {
+@Command(name = "editor", description = "Open the configured editor for todo.txt")
+public class TodoEditor implements Runnable {
     @ParentCommand
     private Todo todo;
 

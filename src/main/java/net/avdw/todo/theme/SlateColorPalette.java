@@ -1,28 +1,48 @@
 package net.avdw.todo.theme;
 
-public class SlateColorPalette implements ColorPalette {
+public class SlateColorPalette implements ColorPalette<Integer> {
     @Override
-    public int primaryTint() {
-        return 0x9FB1BC;
+    public Integer primaryTint() {
+        return 0x9BADB8;
     }
 
     @Override
-    public int primaryTone() {
+    public Integer primaryTone() {
         return 0x6E8898;
     }
 
     @Override
-    public int primaryShade() {
-        return 0x2E5266;
+    public Integer primaryShade() {
+        return 0x4B6C80;
     }
 
     @Override
-    public int secondaryTone() {
+    public Integer secondaryTint() {
+        return 0xFFFDFB;
+    }
+
+    @Override
+    public Integer secondaryTone() {
         return 0xD3D0CB;
     }
 
     @Override
-    public int accentTone() {
+    public Integer secondaryShade() {
+        return 0xFFFDFB;
+    }
+
+    @Override
+    public Integer accentTint() {
+        return 0xFEDF6E;
+    }
+
+    @Override
+    public Integer accentTone() {
         return 0xE2C044;
+    }
+
+    @Override
+    public Integer accentShade() {
+        return 0xC8A41F;
     }
 }

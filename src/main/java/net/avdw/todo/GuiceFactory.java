@@ -1,6 +1,7 @@
 package net.avdw.todo;
 
-import com.google.inject.*;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import picocli.CommandLine;
 
 public final class GuiceFactory implements CommandLine.IFactory {

@@ -92,6 +92,7 @@ class GuiceModule extends AbstractModule {
         }
         return workingPath;
     }
+
     private Path resolveLocalTodoFilePath(final Path currentFilePath) {
         Logger.debug("Resolving local todo file path [currentFilePath={}]", currentFilePath.toAbsolutePath());
         Path localFilePath;

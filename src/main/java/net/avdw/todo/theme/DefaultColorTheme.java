@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import net.avdw.todo.color.ColorConverter;
 
 public class DefaultColorTheme implements ColorTheme {
-    private final ColorPalette colorPalette;
+    private final ColorPalette<Integer> colorPalette;
     private final String ansiPrimaryTintFg;
     private final String ansiPrimaryToneFg;
     private final String ansiPrimaryShadeFg;
@@ -14,7 +14,7 @@ public class DefaultColorTheme implements ColorTheme {
     private final String ansiPrimaryShadeBg;
 
     @Inject
-    DefaultColorTheme(final ColorPalette colorPalette, final ColorConverter colorConverter) {
+    DefaultColorTheme(final ColorPalette<Integer> colorPalette, final ColorConverter colorConverter) {
         this.colorPalette = colorPalette;
 
         ansiPrimaryTintFg = colorConverter.hexToAnsiFg(colorPalette.primaryTint(), false);
