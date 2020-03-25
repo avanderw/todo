@@ -83,12 +83,12 @@ public class TodoList implements Runnable {
         List<TodoItem> finalFilteredTodoItemList = filteredTodoItemList;
         todoItemList.forEach(item -> {
             String rawValue = item.getRawValue().toLowerCase();
-            boolean include = andStringList.isEmpty() || andStringList.stream().allMatch(rawValue::contains);
+            boolean include = andStringList.isEmpty() || andStringList.stream().map(String::toLowerCase).allMatch(rawValue::contains);
             if (!include && !orStringList.isEmpty()) {
-                include = orStringList.stream().anyMatch(rawValue::contains);
+                include = orStringList.stream().map(String::toLowerCase).anyMatch(rawValue::contains);
             }
             if (include && !notStringList.isEmpty()) {
-                include = notStringList.stream().noneMatch(rawValue::contains);
+                include = notStringList.stream().map(String::toLowerCase).noneMatch(rawValue::contains);
             }
             if (include) {
                 finalFilteredTodoItemList.add(item);

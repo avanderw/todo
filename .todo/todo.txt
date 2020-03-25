@@ -5,7 +5,6 @@
 2019-07-23 @Fix bug when global repository does not exist
 x 2020-03-25 2019-07-24 @Add +tag functionality to append text
 2019-07-25 @Fix bug when +add with tilde is used in command prompt
-2019-07-26 @Add +clean feature which will remove blank lines
 2019-07-26 @Add reporting on todo, in-progress and done for previous months +report
 2019-07-30 @Fix +list to fail when targeting non-existing global with existing local
 2019-08-12 @Add google sync support
@@ -16,7 +15,6 @@ x 2020-03-25 2019-07-24 @Add +tag functionality to append text
 2019-08-12 @Enhance +report to show lead and cycle time
 2019-08-12 @Fix +rename when using + on term to replace with
 2019-08-12 @Fix bug when resolving parent directory in nested directories
-2019-08-13 @Add +tag functionality
 2019-08-13 @Add +top command to list top x todos
 2019-08-13 @Enhance +explore to be OS independant
 2019-08-14 @Add +report in the style of github contribution graph

@@ -10,7 +10,7 @@ public class ThemeModule extends AbstractModule {
         bind(Theme.class).to(DefaultTheme.class);
 
         bind(new TypeLiteral<ColorPalette<Integer>>() {
-        }).to(GrayscaleColorPalette.class);
+        }).to(SlateColorPalette.class);
         bind(new TypeLiteral<ColorPalette<String>>() {
         }).to(AnsiFgColorPaletteCache.class);
 

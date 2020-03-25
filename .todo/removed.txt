@@ -5,3 +5,5 @@
 2019-07-24 @Add +backup option to state changing operations
 2019-08-12 @Enhance +list -w to show empty results when nothing is in progress
 2020-03-20 @Refactor TodoItemList.class
+2019-08-13 @Add +tag functionality
+2019-07-26 @Add +clean feature which will remove blank lines
