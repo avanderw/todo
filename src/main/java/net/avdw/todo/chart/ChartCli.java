@@ -1,15 +1,23 @@
 package net.avdw.todo.chart;
 
 
+import com.github.freva.asciitable.AsciiTable;
+import com.github.freva.asciitable.Column;
+import com.github.freva.asciitable.HorizontalAlign;
 import com.google.inject.Inject;
 import net.avdw.todo.Working;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.render.TodoItemPrinter;
+import net.avdw.todo.theme.ColorPalette;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.stat.Frequency;
 import picocli.CommandLine;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +30,8 @@ public class ChartCli implements Runnable {
     @CommandLine.Parameters(description = "Third key to extract", arity = "0..1", index = "2")
     private String thirdKey;
 
+    @Inject
+    private ColorPalette<String> colorPalette;
     @Inject
     private TodoFileReader todoFileReader;
     @Inject
@@ -90,6 +100,34 @@ public class ChartCli implements Runnable {
                 })
                 .forEach(frequency::addValue);
 
-        System.out.println(frequency);
+
+        List<MetaDataValueFrequency> data = new ArrayList<>();
+        frequency.valuesIterator().forEachRemaining(value -> {
+            data.add(new MetaDataValueFrequency(value.toString(), frequency.getCount(value)));
+        });
+
+        try {
+            data.sort(Comparator.comparing(struct -> Integer.parseInt(struct.value)));
+        } catch (RuntimeException e) {
+            data.sort(Comparator.comparing(struct -> struct.value));
+        }
+
+        Character[] borderStyles = AsciiTable.BASIC_ASCII_NO_DATA_SEPARATORS_NO_OUTSIDE_BORDER;
+        System.out.print(colorPalette.primaryTone());
+        System.out.println(AsciiTable.getTable(borderStyles, data, Arrays.asList(
+                new Column().headerAlign(HorizontalAlign.CENTER).header(firstKey).with(struct -> struct.value),
+                new Column().header("frequency").dataAlign(HorizontalAlign.CENTER).with(struct -> String.valueOf(struct.count)),
+                new Column().dataAlign(HorizontalAlign.LEFT).with(struct -> StringUtils.repeat("#", Math.toIntExact(struct.count)))
+        )));
+    }
+
+    private static class MetaDataValueFrequency {
+        private final String value;
+        private final long count;
+
+        MetaDataValueFrequency(final String value, final long count) {
+            this.value = value;
+            this.count = count;
+        }
     }
 }
