@@ -3,7 +3,7 @@ package net.avdw.todo;
 import com.google.inject.Inject;
 import net.avdw.todo.action.*;
 import net.avdw.todo.admin.*;
-import net.avdw.todo.chart.ChartCli;
+import net.avdw.todo.chart.TodoChart;
 import net.avdw.todo.property.GlobalProperty;
 import net.avdw.todo.property.PropertyModule;
 import org.pmw.tinylog.Logger;
@@ -36,7 +36,8 @@ import java.util.stream.Collectors;
                 TodoExplore.class,
                 TodoReplace.class,
                 TodoList.class,
-                ChartCli.class,
+                TodoTop.class,
+                TodoChart.class,
                 TodoAdd.class,
                 TodoEdit.class,
                 TodoPriority.class,

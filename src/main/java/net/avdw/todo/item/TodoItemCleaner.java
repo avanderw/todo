@@ -13,7 +13,9 @@ public class TodoItemCleaner {
     public TodoItem clean(final TodoItem todoItem) {
         String cleanTodoItem = todoItem.getRawValue();
         cleanTodoItem = cleanTodoItem.replaceAll("\\s\\S*:\\S*", "");
+        cleanTodoItem = cleanTodoItem.replaceFirst("^x \\d\\d\\d\\d-\\d\\d-\\d\\d\\s", "");
         cleanTodoItem = cleanTodoItem.replaceFirst("^\\d\\d\\d\\d-\\d\\d-\\d\\d\\s", "");
+        cleanTodoItem = cleanTodoItem.replaceFirst("^\\([A-Z]\\) \\d\\d\\d\\d-\\d\\d-\\d\\d\\s", "");
         return todoItemFactory.create(todoItem.getIdx(), cleanTodoItem);
     }
 }

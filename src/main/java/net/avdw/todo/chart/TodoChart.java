@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @CommandLine.Command(name = "chart", description = "Chart a pivot of data")
-public class ChartCli implements Runnable {
+public class TodoChart implements Runnable {
     @CommandLine.Parameters(description = "First key to extract", arity = "1", index = "0")
     private String firstKey;
     @CommandLine.Parameters(description = "Second key to extract", arity = "0..1", index = "1")

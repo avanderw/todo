@@ -1,12 +1,9 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Todo;
 import net.avdw.todo.Working;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
-import net.avdw.todo.item.TodoItemCleaner;
-import net.avdw.todo.item.list.TodoItemListFilter;
 import net.avdw.todo.render.TodoContextRenderer;
 import net.avdw.todo.render.TodoProjectRenderer;
 import net.avdw.todo.theme.Theme;
@@ -14,7 +11,6 @@ import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
-import picocli.CommandLine.ParentCommand;
 
 import java.nio.file.Path;
 import java.text.ParseException;
@@ -28,10 +24,6 @@ import java.util.stream.Collectors;
 @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
 @Command(name = "ls", description = "List the items in todo.txt")
 public class TodoList implements Runnable {
-    @Inject
-    @ParentCommand
-    private Todo todo;
-
     @Parameters(description = "Include items that contain these Strings")
     private List<String> filters = new ArrayList<>();
 
@@ -51,17 +43,15 @@ public class TodoList implements Runnable {
     private boolean cleanMeta = false;
     @Option(names = "--greater-than", description = "List items greater than meta:value | yyyy-MM-dd")
     private String greaterThan;
+    @Option(names = "--all", description = "Show completed items")
+    private boolean showCompleted = false;
 
     @Inject
     private TodoContextRenderer todoContextRenderer;
     @Inject
     private TodoProjectRenderer todoProjectRenderer;
     @Inject
-    private TodoItemListFilter todoItemListFilter;
-    @Inject
     private TodoFileReader todoFileReader;
-    @Inject
-    private TodoItemCleaner todoItemCleaner;
     @Inject
     @Working
     private Path todoPath;
@@ -120,8 +110,8 @@ public class TodoList implements Runnable {
             }
         });
 
-        if (!todo.showAll()) {
-            filteredTodoItemList = todoItemListFilter.filterIncompleteItems(filteredTodoItemList);
+        if (!showCompleted) {
+            filteredTodoItemList = filteredTodoItemList.stream().filter(TodoItem::isIncomplete).collect(Collectors.toList());
         }
 
         if (filteredTodoItemList.isEmpty()) {
@@ -137,8 +127,7 @@ public class TodoList implements Runnable {
 
         theme.printHeader("list");
         if (cleanMeta) {
-            List<TodoItem> cleanTodoItemList = filteredTodoItemList.stream().map(todoItemCleaner::clean).collect(Collectors.toList());
-            cleanTodoItemList.forEach(theme::printCleanTodoItemWithoutIdx);
+            filteredTodoItemList.forEach(theme::printCleanTodoItemWithoutIdx);
         } else {
             filteredTodoItemList.forEach(theme::printFullTodoItemWithIdx);
         }

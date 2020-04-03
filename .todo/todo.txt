@@ -1,7 +1,7 @@
 x 2020-04-03 2020-03-31 @Enhance ls to have a clean option which does not display meta data
 x 2020-04-03 2020-03-31 @Add todo ls --greater-than meta:value | x yyyy-MM-dd | yyyy-MM-dd
 (C) 2020-03-31 @Add todo ls --group-by meta | context | project
-(C) 2020-04-01 @Add todo top command to list top x items
+x 2020-04-03 2020-04-01 @Add todo top command to list top x items
 (D) 2020-03-31 @Add todo ls --deleted to show deleted items
 (E) 2020-03-31 @Add todo ls --parked to show parked items
 (F) 2020-03-31 @Add todo stats --group-by meta | context | project

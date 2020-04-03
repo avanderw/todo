@@ -3,6 +3,7 @@ package net.avdw.todo.theme;
 import com.google.inject.Inject;
 import net.avdw.todo.RunningStats;
 import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.item.TodoItemCleaner;
 import org.apache.commons.lang3.StringUtils;
 import org.pmw.tinylog.Logger;
 
@@ -16,12 +17,14 @@ public class DefaultTheme implements Theme {
     private int lineLength;
     private RunningStats runningStats;
     private ColorPalette<String> colorPalette;
+    private TodoItemCleaner todoItemCleaner;
 
     @Inject
-    DefaultTheme(@LineLength final int lineLength, final RunningStats runningStats, final ColorPalette<String> colorPalette) {
+    DefaultTheme(@LineLength final int lineLength, final RunningStats runningStats, final ColorPalette<String> colorPalette, final TodoItemCleaner todoItemCleaner) {
         this.lineLength = lineLength;
         this.runningStats = runningStats;
         this.colorPalette = colorPalette;
+        this.todoItemCleaner = todoItemCleaner;
     }
 
     @Override
@@ -40,7 +43,7 @@ public class DefaultTheme implements Theme {
 
     @Override
     public void printCleanTodoItemWithoutIdx(final TodoItem todoItem) {
-        System.out.println(themeTodoItem(todoItem));
+        System.out.println(themeTodoItem(todoItemCleaner.clean(todoItem)));
     }
 
     @Override
