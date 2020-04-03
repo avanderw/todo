@@ -6,27 +6,27 @@ import net.avdw.todo.action.TodoPriority;
 import net.avdw.todo.theme.TodoItemThemeApplicator;
 import org.pmw.tinylog.Logger;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Scanner;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class TodoItem {
     private final int idx;
     private final String line;
     private final TodoItemTokenIdentifier todoItemTokenIdentifier;
     private final TodoItemThemeApplicator todoItemThemeApplicator;
-
     private final Set<String> contexts = new HashSet<>();
     private final Set<String> projects = new HashSet<>();
+    private SimpleDateFormat simpleDateFormat;
     private boolean tokensHaveBeenCached = false;
 
     @Inject
-    public TodoItem(@Assisted final int idx, @Assisted final String line, final TodoItemTokenIdentifier todoItemTokenIdentifier, final TodoItemThemeApplicator todoItemThemeApplicator) {
+    public TodoItem(@Assisted final int idx, @Assisted final String line, final TodoItemTokenIdentifier todoItemTokenIdentifier, final TodoItemThemeApplicator todoItemThemeApplicator, final SimpleDateFormat simpleDateFormat) {
         this.idx = idx;
         this.line = line;
         this.todoItemTokenIdentifier = todoItemTokenIdentifier;
         this.todoItemThemeApplicator = todoItemThemeApplicator;
+        this.simpleDateFormat = simpleDateFormat;
     }
 
     public boolean isIncomplete() {
@@ -131,5 +131,23 @@ public class TodoItem {
             metaValue = value.substring(0, spaceIdx);
         }
         return metaValue;
+    }
+
+    public Date getCreatedDate() {
+        String cleanLine;
+        if (line.startsWith("x")) {
+            cleanLine = line.replaceFirst("x \\d\\d\\d\\d-\\d\\d-\\d\\d ", "");
+        } else if (line.startsWith("(")) {
+            cleanLine = line.replaceFirst("\\([A-Z]\\) ", "");
+        } else {
+            cleanLine = line;
+        }
+
+        String createdDate = cleanLine.substring(0, cleanLine.indexOf(" "));
+        try {
+            return simpleDateFormat.parse(createdDate);
+        } catch (ParseException e) {
+            return new Date();
+        }
     }
 }
