@@ -9,7 +9,6 @@ import org.pmw.tinylog.Logger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
 
 public class DefaultTheme implements Theme {
@@ -40,11 +39,19 @@ public class DefaultTheme implements Theme {
     }
 
     @Override
-    public void printTodoItemList(final List<TodoItem> todoItemList) {
+    public void printCleanTodoItemWithoutIdx(final TodoItem todoItem) {
+        System.out.println(themeTodoItem(todoItem));
+    }
+
+    @Override
+    public void printFullTodoItemWithIdx(final TodoItem todoItem) {
+        System.out.println(String.format("[%3s] %s", todoItem.getIdx(), themeTodoItem(todoItem)));
+    }
+
+    @Override
+    public void printDisplaySummary(final int showingSize, final int totalSize) {
         System.out.print(colorPalette.primaryTone());
-        for (TodoItem todoItem : todoItemList) {
-            System.out.println(String.format("[%3s] %s", todoItem.getIdx(), themeTodoItem(todoItem)));
-        }
+        System.out.println(String.format("Showing [%3s] of [%3s] items", showingSize, totalSize));
         System.out.print(colorPalette.primaryTone());
     }
 

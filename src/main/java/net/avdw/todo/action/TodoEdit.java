@@ -61,7 +61,7 @@ public class TodoEdit implements Runnable {
         todoFileWriter.write(todoPath, todoItemList);
 
         theme.printHeader("edit");
-        theme.printTodoItemList(changedTodoItemList);
+        changedTodoItemList.forEach(theme::printFullTodoItemWithIdx);
         theme.printDuration();
     }
 }

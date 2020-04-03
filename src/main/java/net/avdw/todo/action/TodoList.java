@@ -3,15 +3,13 @@ package net.avdw.todo.action;
 import com.google.inject.Inject;
 import net.avdw.todo.Todo;
 import net.avdw.todo.Working;
-import net.avdw.todo.file.TodoFile;
-import net.avdw.todo.file.TodoFileFactory;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
+import net.avdw.todo.item.TodoItemCleaner;
 import net.avdw.todo.item.list.TodoItemListFilter;
 import net.avdw.todo.render.TodoContextRenderer;
 import net.avdw.todo.render.TodoProjectRenderer;
-import net.avdw.todo.template.TemplateExecutor;
-import net.avdw.todo.template.TemplateViewModel;
+import net.avdw.todo.theme.Theme;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -21,6 +19,7 @@ import picocli.CommandLine.ParentCommand;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Command(name = "ls", description = "List the items in todo.txt")
@@ -34,18 +33,8 @@ public class TodoList implements Runnable {
 
     @Option(names = "--projects", description = "Display projects")
     private boolean displayProjects;
-
     @Option(names = "--contexts", description = "Display contexts")
     private boolean displayContexts;
-
-    @Option(names = "--in-progress", description = "Filter in-progress items")
-    private boolean filterInProgress;
-
-    @Option(names = "--priority", description = "Filter priority items")
-    private boolean filterPriority;
-
-    @Option(names = "--limit", description = "Limit the amount of items shown")
-    private int limit = 0;
 
     @Option(names = "--not", description = "Exclude items with this String")
     private List<String> notStringList = new ArrayList<>();
@@ -54,23 +43,24 @@ public class TodoList implements Runnable {
     @Option(names = "--or", description = "Include items that also has this String")
     private List<String> orStringList = new ArrayList<>();
 
+    @Option(names = "--clean", description = "Print todo item without meta tags and index")
+    private boolean cleanMeta = false;
+
     @Inject
     private TodoContextRenderer todoContextRenderer;
-
     @Inject
     private TodoProjectRenderer todoProjectRenderer;
-
-    @Inject
-    private TemplateExecutor templateExecutor;
-    @Inject
-    private TodoFileFactory todoFileFactory;
     @Inject
     private TodoItemListFilter todoItemListFilter;
     @Inject
     private TodoFileReader todoFileReader;
     @Inject
+    private TodoItemCleaner todoItemCleaner;
+    @Inject
     @Working
     private Path todoPath;
+    @Inject
+    private Theme theme;
 
     /**
      * Entry point for picocli.
@@ -99,18 +89,6 @@ public class TodoList implements Runnable {
             filteredTodoItemList = todoItemListFilter.filterIncompleteItems(filteredTodoItemList);
         }
 
-        if (filterInProgress) {
-            filteredTodoItemList = todoItemListFilter.filterInProgressTodoItems(filteredTodoItemList);
-        }
-
-        if (filterPriority) {
-            filteredTodoItemList = todoItemListFilter.filterPriorityItems(filteredTodoItemList);
-        }
-
-        if (limit != 0) {
-            filteredTodoItemList = filteredTodoItemList.subList(0, limit);
-        }
-
         if (filteredTodoItemList.isEmpty()) {
             Logger.info("The list is empty");
         }
@@ -122,8 +100,14 @@ public class TodoList implements Runnable {
             todoProjectRenderer.printProjectTable(filteredTodoItemList);
         }
 
-        TodoFile fileBefore = todoFileFactory.create(todo.getTodoFile());
-        TemplateViewModel templateViewModel = new TemplateViewModel("list", filteredTodoItemList, fileBefore, fileBefore);
-        System.out.println(templateExecutor.executor(templateViewModel));
+        theme.printHeader("list");
+        if (cleanMeta) {
+            List<TodoItem> cleanTodoItemList = filteredTodoItemList.stream().map(todoItemCleaner::clean).collect(Collectors.toList());
+            cleanTodoItemList.forEach(theme::printCleanTodoItemWithoutIdx);
+        } else {
+            filteredTodoItemList.forEach(theme::printFullTodoItemWithIdx);
+        }
+        theme.printDuration();
+        theme.printDisplaySummary(filteredTodoItemList.size(), todoItemList.size());
     }
 }
