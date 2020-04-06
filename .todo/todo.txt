@@ -1,7 +1,7 @@
 (A) 2020-03-31 @Add todo ls --group-by meta | context | project
 x 2020-04-06 2020-03-31 @Add todo ls --deleted to show deleted items
 x 2020-04-06 2020-03-31 @Add todo park command which will park a todo for later
-(C) 2020-03-31 @Add todo ls --parked to show parked items
+x 2020-04-06 2020-03-31 @Add todo ls --parked to show parked items
 (D) 2020-03-31 @Add todo stats --group-by meta | context | project
 (E) 2019-07-09 @Add admin +archive
 2019-07-23 @Add default show all +properties

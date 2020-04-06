@@ -1,6 +1,7 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
+import net.avdw.todo.Parked;
 import net.avdw.todo.Removed;
 import net.avdw.todo.Working;
 import net.avdw.todo.file.TodoFileReader;
@@ -44,6 +45,8 @@ public class TodoList implements Runnable {
     private boolean cleanMeta = false;
     @Option(names = "--removed", description = "List todo items from the removed.txt file")
     private boolean listRemoved;
+    @Option(names = "--parked", description = "List todo items from the parked.txt file")
+    private boolean listParked;
     @Option(names = "--greater-than", description = "List items greater than meta:value | yyyy-MM-dd")
     private String greaterThan;
     @Option(names = "--all", description = "Show completed items")
@@ -62,6 +65,9 @@ public class TodoList implements Runnable {
     @Removed
     private Path removedPath;
     @Inject
+    @Parked
+    private Path parkedPath;
+    @Inject
     private Theme theme;
     @Inject
     private SimpleDateFormat simpleDateFormat;
@@ -72,15 +78,27 @@ public class TodoList implements Runnable {
     @Override
     public void run() {
         andStringList.addAll(filters);
-        List<TodoItem> todoItemList;
-        if (listRemoved) {
-            todoItemList = todoFileReader.readAll(removedPath);
+        List<TodoItem> workingTodoItemList;
+        List<TodoItem> removedTodoItemList;
+        List<TodoItem> parkedTodoItemList;
+        if (listParked && listRemoved) {
+            removedTodoItemList = todoFileReader.readAll(removedPath);
+            parkedTodoItemList = todoFileReader.readAll(parkedPath);
+            workingTodoItemList = new ArrayList<>(removedTodoItemList);
+            workingTodoItemList.addAll(parkedTodoItemList);
+        } else if (listParked) {
+            parkedTodoItemList = todoFileReader.readAll(parkedPath);
+            workingTodoItemList = new ArrayList<>(parkedTodoItemList);
+        } else if (listRemoved) {
+            removedTodoItemList = todoFileReader.readAll(removedPath);
+            workingTodoItemList = new ArrayList<>(removedTodoItemList);
         } else {
-            todoItemList = todoFileReader.readAll(todoPath);
+            workingTodoItemList = todoFileReader.readAll(todoPath);
         }
+
         List<TodoItem> filteredTodoItemList = new ArrayList<>();
         List<TodoItem> finalFilteredTodoItemList = filteredTodoItemList;
-        todoItemList.forEach(item -> {
+        workingTodoItemList.forEach(item -> {
             String rawValue = item.getRawValue().toLowerCase();
             boolean include = andStringList.isEmpty() || andStringList.stream().map(String::toLowerCase).allMatch(rawValue::contains);
             if (!include && !orStringList.isEmpty()) {
@@ -136,7 +154,11 @@ public class TodoList implements Runnable {
             todoProjectRenderer.printProjectTable(filteredTodoItemList);
         }
 
-        if (listRemoved) {
+        if (listRemoved && listParked) {
+            theme.printHeader("list:removed+parked");
+        } else if (listParked) {
+            theme.printHeader("list:parked");
+        } else if (listRemoved) {
             theme.printHeader("list:removed");
         } else {
             theme.printHeader("list:todo");
@@ -147,6 +169,6 @@ public class TodoList implements Runnable {
             filteredTodoItemList.forEach(theme::printFullTodoItemWithIdx);
         }
         theme.printDuration();
-        theme.printDisplaySummary(filteredTodoItemList.size(), todoItemList.size());
+        theme.printDisplaySummary(filteredTodoItemList.size(), workingTodoItemList.size());
     }
 }
