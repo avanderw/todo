@@ -1,6 +1,7 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
+import net.avdw.todo.Removed;
 import net.avdw.todo.Working;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
@@ -41,6 +42,8 @@ public class TodoList implements Runnable {
 
     @Option(names = "--clean", description = "Print todo item without meta tags and index")
     private boolean cleanMeta = false;
+    @Option(names = "--removed", description = "List todo items from the removed.txt file")
+    private boolean listRemoved;
     @Option(names = "--greater-than", description = "List items greater than meta:value | yyyy-MM-dd")
     private String greaterThan;
     @Option(names = "--all", description = "Show completed items")
@@ -56,6 +59,9 @@ public class TodoList implements Runnable {
     @Working
     private Path todoPath;
     @Inject
+    @Removed
+    private Path removedPath;
+    @Inject
     private Theme theme;
     @Inject
     private SimpleDateFormat simpleDateFormat;
@@ -66,7 +72,12 @@ public class TodoList implements Runnable {
     @Override
     public void run() {
         andStringList.addAll(filters);
-        List<TodoItem> todoItemList = todoFileReader.readAll(todoPath);
+        List<TodoItem> todoItemList;
+        if (listRemoved) {
+            todoItemList = todoFileReader.readAll(removedPath);
+        } else {
+            todoItemList = todoFileReader.readAll(todoPath);
+        }
         List<TodoItem> filteredTodoItemList = new ArrayList<>();
         List<TodoItem> finalFilteredTodoItemList = filteredTodoItemList;
         todoItemList.forEach(item -> {
@@ -125,7 +136,11 @@ public class TodoList implements Runnable {
             todoProjectRenderer.printProjectTable(filteredTodoItemList);
         }
 
-        theme.printHeader("list");
+        if (listRemoved) {
+            theme.printHeader("list:removed");
+        } else {
+            theme.printHeader("list:todo");
+        }
         if (cleanMeta) {
             filteredTodoItemList.forEach(theme::printCleanTodoItemWithoutIdx);
         } else {
