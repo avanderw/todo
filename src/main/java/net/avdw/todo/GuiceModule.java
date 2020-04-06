@@ -64,6 +64,13 @@ class GuiceModule extends AbstractModule {
         return workingTodoFilePath.getParent().resolve("removed.txt");
     }
 
+    @Provides
+    @Singleton
+    @Parked
+    Path parkedTodoFilePath(@Working final Path workingTodoFilePath) {
+        return workingTodoFilePath.getParent().resolve("parked.txt");
+    }
+
     Path resolveWorkingTodoFilePath(final Path globalFilePath) {
         Logger.debug("Resolving working todo path");
         Path workingPath;

@@ -42,7 +42,8 @@ import java.util.stream.Collectors;
                 TodoEdit.class,
                 TodoPriority.class,
                 TodoDone.class,
-                TodoRemove.class
+                TodoRemove.class,
+                TodoPark.class
         })
 public class Todo implements Runnable {
     @Option(names = {"-g", "--global"}, description = "Use the global directory")
