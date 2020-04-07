@@ -18,7 +18,7 @@ import java.util.List;
 
 @Command(name = "park", description = "Park a todo item for later review")
 public class TodoPark implements Runnable {
-    @Parameters(description = "Indexes to park", arity = "1..*")
+    @Parameters(description = "Indexes to park", arity = "0..*")
     private List<Integer> idxList;
 
     @Inject
@@ -39,27 +39,31 @@ public class TodoPark implements Runnable {
      */
     @Override
     public void run() {
-        List<TodoItem> changedTodoItemList = new ArrayList<>();
-        List<TodoItem> todoItemList = todoFileReader.readAll(todoFilePath);
-
-        idxList.stream().sorted(Comparator.reverseOrder())
-                .forEachOrdered(idx -> {
-                    TodoItem parkedItem = todoItemList.remove(idx - 1);
-                    changedTodoItemList.add(parkedItem);
-                });
-        todoFileWriter.write(todoFilePath, todoItemList);
-
-        List<TodoItem> parkedTodoItemList;
-        if (Files.exists(parkedFilePath)) {
-            parkedTodoItemList = todoFileReader.readAll(parkedFilePath);
+        List<TodoItem> viewableTodoItemList = new ArrayList<>();
+        if (idxList == null || idxList.isEmpty()) {
+            viewableTodoItemList.addAll(todoFileReader.readAll(parkedFilePath));
         } else {
-            parkedTodoItemList = new ArrayList<>();
+            List<TodoItem> todoItemList = todoFileReader.readAll(todoFilePath);
+
+            idxList.stream().sorted(Comparator.reverseOrder())
+                    .forEachOrdered(idx -> {
+                        TodoItem parkedItem = todoItemList.remove(idx - 1);
+                        viewableTodoItemList.add(parkedItem);
+                    });
+            todoFileWriter.write(todoFilePath, todoItemList);
+
+            List<TodoItem> parkedTodoItemList;
+            if (Files.exists(parkedFilePath)) {
+                parkedTodoItemList = todoFileReader.readAll(parkedFilePath);
+            } else {
+                parkedTodoItemList = new ArrayList<>();
+            }
+            parkedTodoItemList.addAll(viewableTodoItemList);
+            todoFileWriter.write(parkedFilePath, parkedTodoItemList);
         }
-        parkedTodoItemList.addAll(changedTodoItemList);
-        todoFileWriter.write(parkedFilePath, parkedTodoItemList);
 
         theme.printHeader("park");
-        changedTodoItemList.forEach(theme::printFullTodoItemWithIdx);
+        viewableTodoItemList.forEach(theme::printFullTodoItemWithIdx);
         theme.printDuration();
     }
 }
