@@ -10,8 +10,7 @@ import net.avdw.todo.item.TodoItemFactory;
 import net.avdw.todo.item.TodoItemModifier;
 import net.avdw.todo.item.list.TodoItemList;
 import net.avdw.todo.item.list.TodoItemListQuery;
-import net.avdw.todo.template.TemplateExecutor;
-import net.avdw.todo.template.TemplateViewModel;
+import net.avdw.todo.theme.Theme;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -53,7 +52,7 @@ public class TodoPriority implements Runnable {
     @Inject
     private TodoItemListQuery todoItemListQuery;
     @Inject
-    private TemplateExecutor templateExecutor;
+    private Theme theme;
 
     /**
      * Entry point for picocli.
@@ -79,8 +78,10 @@ public class TodoPriority implements Runnable {
             changedTodoItemList = changePriority(fileBefore, idx, priority);
         }
 
-        TemplateViewModel templateViewModel = new TemplateViewModel("prioritise", changedTodoItemList, fileBefore, fileBefore);
-        System.out.println(templateExecutor.executor(templateViewModel));
+        theme.printHeader("priority");
+        changedTodoItemList.forEach(theme::printFullTodoItemWithIdx);
+        theme.printDuration();
+        theme.printDisplaySummary(changedTodoItemList.size(), fileBefore.getTodoItemList().getAll().size());
     }
 
     private List<TodoItem> changePriority(final TodoFile fileBefore, final int index, final Priority priority) {

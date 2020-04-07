@@ -1,9 +1,10 @@
+
 (A) 2020-03-31 @Add todo ls --group-by meta | context | project
-x 2020-04-06 2020-03-31 @Add todo ls --deleted to show deleted items
-x 2020-04-06 2020-03-31 @Add todo park command which will park a todo for later
-x 2020-04-06 2020-03-31 @Add todo ls --parked to show parked items
-(D) 2020-03-31 @Add todo stats --group-by meta | context | project
+(B) 2020-04-06 Default 'todo rm' to list removed
+(C) 2020-04-06 Default 'todo park' to list parked
+(D) 2020-04-07 @Add 'todo ls --completed' command to only show completed items
 (E) 2019-07-09 @Add admin +archive
+(F) 2020-04-07 @Update --greater-than to handle x yyyy-MM-dd
 2019-07-23 @Add default show all +properties
 2019-07-23 @Add reporting for duration +report
 2019-07-23 @Fix bug when global repository does not exist
@@ -98,3 +99,6 @@ x 2020-03-25 2019-07-24 @Add +tag functionality to append text
 x 2020-04-03 2020-03-31 @Add todo ls --greater-than meta:value | x yyyy-MM-dd | yyyy-MM-dd
 x 2020-04-03 2020-03-31 @Enhance ls to have a clean option which does not display meta data
 x 2020-04-03 2020-04-01 @Add todo top command to list top x items
+x 2020-04-06 2020-03-31 @Add todo ls --deleted to show deleted items
+x 2020-04-06 2020-03-31 @Add todo ls --parked to show parked items
+x 2020-04-06 2020-03-31 @Add todo park command which will park a todo for later
