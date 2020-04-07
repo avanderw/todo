@@ -1,6 +1,7 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
+import net.avdw.todo.Done;
 import net.avdw.todo.Parked;
 import net.avdw.todo.Removed;
 import net.avdw.todo.Working;
@@ -49,8 +50,10 @@ public class TodoList implements Runnable {
     private boolean listParked;
     @Option(names = "--greater-than", description = "List items greater than meta:value | yyyy-MM-dd")
     private String greaterThan;
-    @Option(names = "--all", description = "Show completed items")
-    private boolean showCompleted = false;
+    @Option(names = "--all", description = "Show all items in todo.txt")
+    private boolean showAll = false;
+    @Option(names = "--done", description = "Show completed items in todo.txt and done.txt")
+    private boolean listDone = false;
 
     @Inject
     private TodoContextRenderer todoContextRenderer;
@@ -68,6 +71,9 @@ public class TodoList implements Runnable {
     @Parked
     private Path parkedPath;
     @Inject
+    @Done
+    private Path donePath;
+    @Inject
     private Theme theme;
     @Inject
     private SimpleDateFormat simpleDateFormat;
@@ -79,19 +85,24 @@ public class TodoList implements Runnable {
     public void run() {
         andStringList.addAll(filters);
         List<TodoItem> workingTodoItemList;
-        List<TodoItem> removedTodoItemList;
-        List<TodoItem> parkedTodoItemList;
-        if (listParked && listRemoved) {
-            removedTodoItemList = todoFileReader.readAll(removedPath);
-            parkedTodoItemList = todoFileReader.readAll(parkedPath);
-            workingTodoItemList = new ArrayList<>(removedTodoItemList);
-            workingTodoItemList.addAll(parkedTodoItemList);
+        boolean notImplemented = listDone && listParked && listRemoved;
+        notImplemented = notImplemented || listDone && listParked;
+        notImplemented = notImplemented || listDone && listRemoved;
+        notImplemented = notImplemented || listRemoved && listParked;
+        if (notImplemented) {
+            throw new UnsupportedOperationException();
         } else if (listParked) {
-            parkedTodoItemList = todoFileReader.readAll(parkedPath);
+            List<TodoItem> parkedTodoItemList = todoFileReader.readAll(parkedPath);
             workingTodoItemList = new ArrayList<>(parkedTodoItemList);
         } else if (listRemoved) {
-            removedTodoItemList = todoFileReader.readAll(removedPath);
+            List<TodoItem> removedTodoItemList = todoFileReader.readAll(removedPath);
             workingTodoItemList = new ArrayList<>(removedTodoItemList);
+        } else if (listDone) {
+            List<TodoItem> doneTodoItemList = todoFileReader.readAll(todoPath).stream().filter(TodoItem::isComplete).collect(Collectors.toList());
+            List<TodoItem> completedTodoItemList = todoFileReader.readAll(donePath);
+            workingTodoItemList = new ArrayList<>(completedTodoItemList);
+            workingTodoItemList.addAll(doneTodoItemList);
+            showAll = true;
         } else {
             workingTodoItemList = todoFileReader.readAll(todoPath);
         }
@@ -139,7 +150,7 @@ public class TodoList implements Runnable {
             }
         });
 
-        if (!showCompleted) {
+        if (!showAll) {
             filteredTodoItemList = filteredTodoItemList.stream().filter(TodoItem::isIncomplete).collect(Collectors.toList());
         }
 
@@ -154,12 +165,12 @@ public class TodoList implements Runnable {
             todoProjectRenderer.printProjectTable(filteredTodoItemList);
         }
 
-        if (listRemoved && listParked) {
-            theme.printHeader("list:removed+parked");
-        } else if (listParked) {
+        if (listParked) {
             theme.printHeader("list:parked");
         } else if (listRemoved) {
             theme.printHeader("list:removed");
+        } else if (listDone) {
+            theme.printHeader("list:done");
         } else {
             theme.printHeader("list:todo");
         }
