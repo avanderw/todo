@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
                 HelpCommand.class,
                 TodoInit.class,
                 TodoStatus.class,
+                TodoArchive.class,
                 TodoBackup.class,
                 TodoRestore.class,
                 TodoSort.class,

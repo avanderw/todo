@@ -1,0 +1,77 @@
+x 2020-04-07 2020-04-06 Default 'todo rm' to list removed
+x 2020-04-07 2020-04-06 Default 'todo park' to list parked
+x 2020-04-07 2020-04-07 @Add 'todo ls --completed' command to only show completed items
+x 2020-04-08 2020-04-07 @Update --greater-than to handle x yyyy-MM-dd
+x 2019-07-18 2019-06-19 @Add repository lookup
+x 2019-07-19 2019-07-09 @Add +edit of todo file
+x 2019-07-23 2019-07-23 @Add list filter +list
+x 2019-07-23 2019-07-23 @Add list of contexts +list
+x 2019-07-23 2019-07-23 @Add list of projects +list
+x 2019-07-23 2019-07-23 @Enhance +list to show all items with option
+x 2019-07-23 2019-07-23 @Enhance +list to show not-done items
+x 2019-07-23 2019-07-23 @Fix x of y tasks shown bug on +list
+x 2019-07-24 2019-07-23 @Add @Add +add
+x 2019-07-24 2019-07-23 @Add done +done
+x 2019-07-24 2019-07-24 @Enhance +list of projects and contexts to only show when requested
+x 2019-07-24 2019-07-24 Remove priority when task is +done
+x 2019-07-25 2019-07-09 @Add admin +sort
+x 2019-07-25 2019-07-23 @Add remove +remove
+x 2019-07-25 2019-07-23 @Add versioning command support
+x 2019-07-25 2019-07-24 @Add +clear functionality for stale .todo directories
+x 2019-07-25 2019-07-25 @Add +rename admin functionality
+x 2019-07-30 2019-07-24 @Add +init functionality start:2019-07-25
+x 2019-07-30 2019-07-24 Improve performance of the +add command
+x 2019-07-30 2019-07-30 @Add feature to +migrate items from local to global and visa versa
+x 2019-08-07 2019-07-26 @Add +start feature to indicate when todo was started start:2019-08-07
+x 2019-08-12 2019-07-23 @Add auto startdate +properties start:2019-08-12
+x 2019-08-12 2019-07-23 @Add priority +priority start:2019-08-12
+x 2019-08-12 2019-07-26 @Add in-progress feature to indicate what todos have been started start:2019-08-07
+x 2019-08-12 2019-08-12 @Add all known repositories to +status check start:2019-08-12
+x 2019-08-13 2019-08-12 @Enhance +priority to allow for removal start:2019-08-13
+x 2019-08-13 2019-08-13 @Add +explore command to open directory start:2019-08-13
+x 2019-08-13 2019-08-13 @Add clean +priority option, which will remove all priorities start:2019-08-13
+x 2019-08-13 2019-08-13 @Add listing of only +priority items start:2019-08-13
+x 2019-08-14 2019-07-24 @Enhance +status check to show the amount of items in each repository start:2019-08-14
+x 2019-08-14 2019-08-14 @Fix bug when adding specified +priority start:2019-08-14
+x 2019-09-17 2019-07-26 @Enhance +start feature to update priority to (S) if none is assinged and the option is provided start:2019-09-17
+x 2019-09-17 2019-08-12 @Add +repeat functionality to remove and @Add an item with due date
+x 2019-09-17 2019-08-13 @Enhance empty +priority to choose next available priority start:2019-09-17
+x 2019-09-18 2019-07-24 @Add README to document installation with alias
+x 2019-09-19 2019-07-23 @Refactor +log level to +properties
+x 2019-09-20 2019-07-23 @Add editor +properties
+x 2019-09-25 2019-07-23 @Enhance +list of contexts to contain counts
+x 2019-09-25 2019-07-23 @Enhance +list of projects to contain counts
+x 2019-09-25 2019-07-26 @Add +clean feature which will @Add priority to started items
+x 2019-09-25 2019-08-12 @Enhance +priority to shift todos up or down
+x 2019-09-30 2019-09-27 Update due date to color according to deadline
+x 2019-10-07 2019-07-30 @Fix +remove functionality on LF vs CRLF start:2019-10-07
+x 2019-10-08 2019-08-12 @Add +report graph chain for completed items
+x 2019-10-08 2019-08-12 @Enhance +report for showing percentage complete on projects
+x 2019-10-09 2019-07-24 @Enhance +status to show projects and contexts for each repository
+x 2019-10-09 2019-08-13 @Fix bug when listing projects and there is an empty project
+x 2019-10-09 2019-09-17 @Refactor all console output to use logger
+x 2019-10-09 2019-09-17 Rename feature rename to replace
+x 2019-10-09 2019-10-08 @Fix inconsistencies between +done and list
+x 2019-10-11 2019-06-20 @Add warning when adding duplicates +add
+x 2019-10-11 2019-10-11 @Change default 'pri' command to list priorities start:2019-10-11
+x 2019-10-11 2019-10-11 @Fix inconsistencies between ls and pri
+x 2019-10-11 2019-10-11 @Fix inconsistencies between ls and rm
+x 2019-10-11 2019-10-11 @Fix inconsitencies between ls and @Add
+x 2019-10-14 2019-10-14 @Fix +repeat as it is completely broken
+x 2019-10-15 2019-08-13 @Fix bug in +remove not finding completed items when listing all
+x 2019-10-15 2019-08-13 @Fix cannot find index bug when removing index on completed item from all items
+x 2019-10-15 2019-10-11 @Fix formatting for +sort command
+x 2019-10-15 2019-10-11 @Fix formatting of +start
+x 2019-10-15 2019-10-11 @Fix inconsistency between +start and list
+x 2019-10-15 2019-10-15 @Refactor TodoItemV1 to TodoItem
+x 2019-10-21 2019-10-11 @Change status to show +status for the current repository start:2019-10-15
+x 2019-10-21 2019-10-11 @Refactor colors to a TodoColor class
+x 2019-11-08 2019-07-23 @Refactor task styling to template
+x 2020-03-24 2020-02-06 Configure default action to list all todo items
+x 2020-03-25 2019-07-24 @Add +tag functionality to append text
+x 2020-04-03 2020-03-31 @Add todo ls --greater-than meta:value | x yyyy-MM-dd | yyyy-MM-dd
+x 2020-04-03 2020-03-31 @Enhance ls to have a clean option which does not display meta data
+x 2020-04-03 2020-04-01 @Add todo top command to list top x items
+x 2020-04-06 2020-03-31 @Add todo ls --deleted to show deleted items
+x 2020-04-06 2020-03-31 @Add todo ls --parked to show parked items
+x 2020-04-06 2020-03-31 @Add todo park command which will park a todo for later
