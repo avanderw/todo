@@ -58,12 +58,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). 
 
 ## Todo
-![commit-activity](https://img.shields.io/github/commit-activity/y/avanderw/todo)
-
 Refer to the file [.todo/todo.txt](.todo/todo.txt) for a list of potential future work.
 Here is a [complete primer](https://github.com/todotxt/todo.txt) on the whys and hows of todo.txt.
 
-## Contributing 
+## Contributing
+![commit-activity](https://img.shields.io/github/commit-activity/y/avanderw/todo)
+ 
 We love contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute.
 
 ## License 
