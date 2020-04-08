@@ -18,10 +18,7 @@ import picocli.CommandLine.Parameters;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -84,6 +81,8 @@ public class TodoList implements Runnable {
      */
     @Override
     public void run() {
+        //Map<String, List<TodoItem>> groups = new HashMap<>();
+
         andStringList.addAll(filters);
         List<TodoItem> workingTodoItemList;
         boolean notImplemented = listDone && listParked && listRemoved;

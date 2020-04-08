@@ -18,7 +18,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.2.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -43,7 +43,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.0.0-M2</version>
+                <version>3.0.0-M3</version>
                 <executions>
                     <execution>
                         <id>enforce</id>
@@ -55,6 +55,10 @@
                                 <dependencyConvergence/>
                                 <banDuplicatePomDependencyVersions/>
                                 <reactorModuleConvergence/>
+                                <requireReleaseDeps/>
+                                <requireMavenVersion>
+                                    <version>3.0.5</version>
+                                </requireMavenVersion>
                             </rules>
                         </configuration>
                     </execution>
@@ -64,14 +68,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.12.0</version>
+                <version>3.13.0</version>
                 <configuration>
                     <linkXRef>false</linkXRef>
                 </configuration>
                 <executions>
                     <execution>
                         <id>pmd-check</id>
-                        <phase>process-test-classes</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
@@ -86,7 +89,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.1.2</version>
                 <executions>
                     <execution>
                         <id>analyze</id>
@@ -95,9 +98,11 @@
                             <goal>analyze-only</goal>
                         </goals>
                         <configuration>
-                            <failOnWarning>false</failOnWarning>
+                            <failOnWarning>true</failOnWarning>
                             <!-- Ignore runtime/provided/test/system scopes for unused dependency analysis. -->
                             <ignoreNonCompile>true</ignoreNonCompile>
+                            <ignoredUsedUndeclaredDependencies>com.google.oauth-client,com.google.http-client
+                            </ignoredUsedUndeclaredDependencies>
                         </configuration>
                     </execution>
                 </executions>
@@ -109,7 +114,14 @@
                 <version>2.7</version>
                 <executions>
                     <execution>
-                        <id>dependency-updates</id>
+                        <id>display-plugin-updates</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>display-plugin-updates</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>display-dependency-updates</id>
                         <phase>package</phase>
                         <goals>
                             <goal>display-dependency-updates</goal>
@@ -123,7 +135,6 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <encoding>UTF-8</encoding>
                     <violationSeverity>warning</violationSeverity>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
@@ -133,7 +144,6 @@
                 <executions>
                     <execution>
                         <id>validate</id>
-                        <phase>process-test-classes</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>

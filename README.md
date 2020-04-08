@@ -1,10 +1,7 @@
 # todo - the ultimate procrastination tool
-![language-count](https://img.shields.io/github/languages/count/avanderw/todo)
 ![top-language](https://img.shields.io/github/languages/top/avanderw/todo)
-![code-size](https://img.shields.io/github/languages/code-size/avanderw/todo)
-![repo-size](https://img.shields.io/github/repo-size/avanderw/todo)
 ![license](https://img.shields.io/github/license/avanderw/todo)
-![commit-activity](https://img.shields.io/github/commit-activity/y/avanderw/todo)
+![last-commit](http://img.shields.io/github/last-commit/avanderw/todo/develop)
 
 Do you context switch much?
 Do you have many things you need to keep track of?
@@ -19,9 +16,29 @@ You will be able to let go of that pesky thought that tries to remember somethin
 You will know that it is kept safe in a file somewhere.
 Thus freeing up space in the membrane for something else.
 
-## Getting started
+## Showcase
 
-### Installing
+## Getting started
+What things you need to install the software and how to install them
+
+```
+Give examples
+```
+
+A step by step series of examples that tell you how to get a development env running
+
+Say what the step will be
+```
+Give the example
+```
+
+And repeat
+```
+until finished
+```
+
+End with an example of getting some data out of the system or using it for a little demo
+
 .bash_profile
 
 ```
@@ -29,19 +46,25 @@ alias todo="java -jar /path/to/todo/todo-1.0-SNAPSHOT-jar-with-dependencies.jar"
 source ~/.bash_profile
 ```
 
-### Running
+## Usage
+
+## Support
 
 ## Changelog
+![last-commit](https://img.shields.io/github/last-commit/avanderw/todo)
+ 
+All notable changes to this project will be documented in [CHANGELOG.md](CHANGELOG.md). 
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
+and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). 
 
-## Roadmap
+## Todo
+![commit-activity](https://img.shields.io/github/commit-activity/y/avanderw/todo)
 
-## Contributing
+Refer to the file [.todo/todo.txt](.todo/todo.txt) for a list of potential future work.
+Here is a [complete primer](https://github.com/todotxt/todo.txt) on the whys and hows of todo.txt.
 
-## Built with
-- [picocli](https://github.com/remkop/picocli) - a mighty tiny command line interface
-- [guice](https://github.com/google/guice) - a lightweight dependency injection framework
-- [maven](https://maven.apache.org/) - a software project management and comprehension tool
+## Contributing 
+We love contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute.
 
-## Credits
-
-## License
+## License 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
