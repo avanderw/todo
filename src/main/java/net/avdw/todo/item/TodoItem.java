@@ -135,9 +135,9 @@ public class TodoItem {
 
     public Date getCreatedDate() {
         String cleanLine;
-        if (line.startsWith("x")) {
+        if (isComplete()) {
             cleanLine = line.replaceFirst("x \\d\\d\\d\\d-\\d\\d-\\d\\d ", "");
-        } else if (line.startsWith("(")) {
+        } else if (hasPriority()) {
             cleanLine = line.replaceFirst("\\([A-Z]\\) ", "");
         } else {
             cleanLine = line;
@@ -148,6 +148,20 @@ public class TodoItem {
             return simpleDateFormat.parse(createdDate);
         } catch (ParseException e) {
             return new Date();
+        }
+    }
+
+    public Optional<Date> getDoneDate() {
+        if (isComplete()) {
+            String cleanLine = line.replaceFirst("x ", "");
+            String dateString = cleanLine.substring(0, cleanLine.indexOf(" "));
+            try {
+                return Optional.of(simpleDateFormat.parse(dateString));
+            } catch (ParseException e) {
+                return Optional.empty();
+            }
+        } else {
+            return Optional.empty();
         }
     }
 }

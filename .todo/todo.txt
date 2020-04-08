@@ -3,7 +3,7 @@ x 2020-04-07 2020-04-06 Default 'todo rm' to list removed
 x 2020-04-07 2020-04-06 Default 'todo park' to list parked
 x 2020-04-07 2020-04-07 @Add 'todo ls --completed' command to only show completed items
 (E) 2019-07-09 @Add admin +archive
-(F) 2020-04-07 @Update --greater-than to handle x yyyy-MM-dd
+x 2020-04-08 2020-04-07 @Update --greater-than to handle x yyyy-MM-dd
 2019-07-23 @Add default show all +properties
 2019-07-23 @Add reporting for duration +report
 2019-07-23 @Fix bug when global repository does not exist

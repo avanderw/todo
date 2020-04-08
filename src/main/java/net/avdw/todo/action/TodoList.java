@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -134,6 +135,15 @@ public class TodoList implements Runnable {
                         }
                     } catch (RuntimeException e) {
                         include = false;
+                    }
+                } else if (greaterThan.startsWith("x")) {
+                    showAll = true;
+                    try {
+                        Date greaterThan = simpleDateFormat.parse(this.greaterThan.substring(this.greaterThan.indexOf(" ") + 1));
+                        Optional<Date> doneDate = item.getDoneDate();
+                        include = doneDate.filter(date -> date.after(greaterThan) || date.equals(greaterThan)).isPresent();
+                    } catch (RuntimeException | ParseException e) {
+                        throw new UnsupportedOperationException();
                     }
                 } else {
                     try {
