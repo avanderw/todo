@@ -85,7 +85,14 @@ public class TodoChart implements Runnable {
 
     private void showBarChart() {
         List<TodoItem> todoItemList = todoFileReader.readAll(todoPath);
-        String keySearchTerm = String.format("%s:", firstKey);
+        String keySearchTerm;
+        if (firstKey.equals("+project")) {
+            keySearchTerm = "+";
+        } else if (firstKey.equals("@context")) {
+            keySearchTerm = "@";
+        } else {
+            keySearchTerm = String.format("%s:", firstKey);
+        }
         Frequency frequency = new Frequency();
         todoItemList.stream()
                 .filter((item) -> item.getRawValue().contains(keySearchTerm))
