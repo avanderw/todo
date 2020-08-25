@@ -1,5 +1,6 @@
 package net.avdw.todo.theme;
 
+@Deprecated
 public interface ColorTheme {
     String selected();
 

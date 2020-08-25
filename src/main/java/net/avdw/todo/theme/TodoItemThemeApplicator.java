@@ -9,6 +9,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
+/**
+ * @see net.avdw.todo.style.StyleApplicator
+ */
+@Deprecated
 public class TodoItemThemeApplicator {
     private static final int DATE_LENGTH = 10;
     private static final int PRIORITY_LENGTH = 3;

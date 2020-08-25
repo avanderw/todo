@@ -3,6 +3,10 @@ package net.avdw.todo.theme;
 import com.google.inject.Inject;
 import net.avdw.todo.color.ColorConverter;
 
+/**
+ * @see net.avdw.todo.style.StyleApplicator
+ */
+@Deprecated
 public class DefaultColorTheme implements ColorTheme {
     private final ColorPalette<Integer> colorPalette;
     private final String ansiPrimaryTintFg;

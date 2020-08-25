@@ -10,5 +10,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.PARAMETER})
 @BindingAnnotation
+@Deprecated
 public @interface LineLength {
 }

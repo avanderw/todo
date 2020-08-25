@@ -9,6 +9,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.function.Function;
 
+/**
+ * @see net.avdw.todo.style.StyleApplicator
+ */
+@Deprecated
 public class ThemeApplicator {
 
     private final int lineLength;
