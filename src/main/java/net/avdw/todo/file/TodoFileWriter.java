@@ -1,7 +1,7 @@
 package net.avdw.todo.file;
 
 import net.avdw.todo.item.TodoItem;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 
 import java.io.IOException;
 import java.nio.file.Files;

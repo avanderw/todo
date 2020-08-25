@@ -1,7 +1,7 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Todo;
+import net.avdw.todo.TodoCli;
 import net.avdw.todo.file.TodoFile;
 import net.avdw.todo.file.TodoFileFactory;
 import net.avdw.todo.file.TodoFileWriter;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Command(name = "repeat", description = "Do and add an entry to todo.txt")
 public class TodoRepeat implements Runnable {
     @ParentCommand
-    private Todo todo;
+    private TodoCli todoCli;
 
     @Parameters(description = "Index of the entry to remove", arity = "1..*")
     private List<Integer> idxList;
@@ -48,7 +48,7 @@ public class TodoRepeat implements Runnable {
      */
     @Override
     public void run() {
-        TodoFile fileBefore = todoFileFactory.create(todo.getTodoFile());
+        TodoFile fileBefore = todoFileFactory.create(todoCli.getTodoFile());
         List<TodoItem> filteredTodoItemList = todoItemListFilter.filterByIdx(fileBefore, idxList);
 
         List<TodoItem> completedTodoItemList = filteredTodoItemList.stream()

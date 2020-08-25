@@ -4,14 +4,14 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import net.avdw.todo.Todo;
+import net.avdw.todo.TodoCli;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.property.GlobalProperty;
 import net.avdw.todo.property.PropertyModule;
 import net.avdw.todo.render.TodoBarRenderer;
 import net.avdw.todo.theme.ThemeApplicator;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ParentCommand;
 
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class TodoStatus implements Runnable {
 
     @ParentCommand
-    private Todo todo;
+    private TodoCli todoCli;
 
     @Inject
     @GlobalProperty
@@ -53,7 +53,7 @@ public class TodoStatus implements Runnable {
         context.put("theme", themeApplicator);
         context.put("model", model);
 
-        Path resolvedPath = todo.resolveTodoPath().toAbsolutePath();
+        Path resolvedPath = todoCli.resolveTodoPath().toAbsolutePath();
         properties.computeIfPresent(PropertyModule.TODO_PATHS, (key, value) -> {
             String paths = (String) value;
             List<String> pathsToRemove = new ArrayList<>();

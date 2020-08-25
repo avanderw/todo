@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import net.avdw.todo.action.TodoPriority;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.item.TodoItemFactory;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;

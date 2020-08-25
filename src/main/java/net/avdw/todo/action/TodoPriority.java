@@ -1,7 +1,7 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Todo;
+import net.avdw.todo.TodoCli;
 import net.avdw.todo.file.TodoFile;
 import net.avdw.todo.file.TodoFileFactory;
 import net.avdw.todo.file.TodoFileWriter;
@@ -11,7 +11,7 @@ import net.avdw.todo.item.TodoItemModifier;
 import net.avdw.todo.item.list.TodoItemList;
 import net.avdw.todo.item.list.TodoItemListQuery;
 import net.avdw.todo.theme.Theme;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Command(name = "pri", description = "Prioritize a todo item")
 public class TodoPriority implements Runnable {
     @ParentCommand
-    private Todo todo;
+    private TodoCli todoCli;
 
     @Parameters(description = "Index to prioritize", arity = "0..1", index = "0")
     private int idx = -1;
@@ -59,7 +59,7 @@ public class TodoPriority implements Runnable {
      */
     @Override
     public void run() {
-        TodoFile fileBefore = todoFileFactory.create(todo.getTodoFile());
+        TodoFile fileBefore = todoFileFactory.create(todoCli.getTodoFile());
         List<TodoItem> changedTodoItemList;
         if (shiftUp) {
             changedTodoItemList = shiftUpPriorities(fileBefore);

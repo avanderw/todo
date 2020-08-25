@@ -7,7 +7,7 @@ public final class Main {
     }
 
     public static void main(final String[] args) {
-        CommandLine commandLine = new CommandLine(Todo.class, new GuiceFactory());
+        CommandLine commandLine = new CommandLine(TodoCli.class, new GuiceFactory());
         commandLine.setCaseInsensitiveEnumValuesAllowed(true);
         commandLine.execute(args);
     }

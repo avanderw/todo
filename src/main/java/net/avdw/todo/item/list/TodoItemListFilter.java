@@ -2,7 +2,7 @@ package net.avdw.todo.item.list;
 
 import net.avdw.todo.file.TodoFile;
 import net.avdw.todo.item.TodoItem;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 
 import java.util.List;
 import java.util.stream.Collectors;

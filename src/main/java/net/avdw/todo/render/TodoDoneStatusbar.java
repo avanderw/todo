@@ -1,7 +1,7 @@
 package net.avdw.todo.render;
 
 import com.google.inject.Inject;
-import net.avdw.todo.AnsiColor;
+import net.avdw.todo.color.AnsiColorTest;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.theme.ThemeApplicator;
 
@@ -29,7 +29,7 @@ public class TodoDoneStatusbar {
         todoItemList.stream().sorted(Comparator.comparing(TodoItem::isComplete).reversed()).forEach(todoItem -> {
             stringBuilder.append(todoItem.isComplete() ? themeApplicator.blockComplete() : themeApplicator.blockIncomplete());
         });
-        stringBuilder.append(AnsiColor.RESET);
+        stringBuilder.append(AnsiColorTest.RESET);
 
         return stringBuilder.toString();
     }

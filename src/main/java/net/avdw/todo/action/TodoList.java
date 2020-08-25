@@ -10,7 +10,7 @@ import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.render.TodoContextRenderer;
 import net.avdw.todo.render.TodoProjectRenderer;
 import net.avdw.todo.theme.Theme;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;

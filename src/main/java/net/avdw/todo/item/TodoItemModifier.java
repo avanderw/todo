@@ -2,7 +2,7 @@ package net.avdw.todo.item;
 
 import com.google.inject.Inject;
 import net.avdw.todo.action.TodoPriority;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

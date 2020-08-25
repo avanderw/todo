@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import net.avdw.todo.property.GlobalProperty;
 import net.avdw.todo.property.PropertyKey;
 import net.avdw.todo.theme.ThemeApplicator;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 

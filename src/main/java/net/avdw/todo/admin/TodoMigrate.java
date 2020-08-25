@@ -3,7 +3,7 @@ package net.avdw.todo.admin;
 import com.google.inject.Inject;
 import net.avdw.todo.Global;
 import net.avdw.todo.LocalTodo;
-import net.avdw.todo.Todo;
+import net.avdw.todo.TodoCli;
 import net.avdw.todo.file.TodoFile;
 import net.avdw.todo.file.TodoFileFactory;
 import net.avdw.todo.file.TodoFileWriter;
@@ -22,7 +22,7 @@ import java.util.List;
 public class TodoMigrate implements Runnable {
 
     @ParentCommand
-    private Todo todo;
+    private TodoCli todoCli;
 
     @Parameters(description = "Index to migrate", arity = "1")
     private int idx;
@@ -47,8 +47,8 @@ public class TodoMigrate implements Runnable {
      */
     @Override
     public void run() {
-        Path fromDirectory = todo.isGlobal() ? globalPath : localPath;
-        Path toDirectory = todo.isGlobal() ? localPath : globalPath;
+        Path fromDirectory = todoCli.isGlobal() ? globalPath : localPath;
+        Path toDirectory = todoCli.isGlobal() ? localPath : globalPath;
         TodoFile fromFile = todoFileFactory.create(fromDirectory.resolve("todo.txt"));
         TodoFile toFile = todoFileFactory.create(toDirectory.resolve("todo.txt"));
 

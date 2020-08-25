@@ -5,7 +5,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import net.avdw.todo.Global;
 import net.avdw.todo.LocalTodo;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -40,7 +40,7 @@ public final class PropertyModule extends AbstractModule {
     @EnvironmentProperty
     Properties environmentProperties() {
         Properties properties = new Properties();
-        properties.putAll(java.lang.System.getenv());
+        properties.putAll(System.getenv());
         return properties;
     }
 
@@ -48,7 +48,7 @@ public final class PropertyModule extends AbstractModule {
     @Singleton
     @SystemProperty
     Properties systemProperties() {
-        return java.lang.System.getProperties();
+        return System.getProperties();
     }
 
     @Provides
@@ -56,30 +56,6 @@ public final class PropertyModule extends AbstractModule {
     @GlobalProperty
     Properties globalProperties(final @GlobalProperty Path globalPropertyPath) {
         return getProperties(globalPropertyPath);
-    }
-
-    @Provides
-    @Singleton
-    @LocalProperty
-    Properties localProperties(final @LocalProperty Path localPropertyPath) {
-        return getProperties(localPropertyPath);
-    }
-
-    @Provides
-    @Singleton
-    @DefaultProperty
-    Properties defaultProperties() {
-        Properties properties = new Properties();
-        properties.put(PropertyKey.TODO_ADD_AUTO_DATE, "false");
-        properties.put(PropertyKey.RELEASE_MODE, "true");
-        properties.put(PropertyKey.LOGGING_LEVEL, "INFO");
-        if (System.getProperty("os.name").toLowerCase().contains("win")) {
-            properties.put(PropertyKey.EDITOR_PATH, "notepad.exe");
-        } else {
-            Logger.error(String.format("Unknown OS: %s", System.getProperty("os.name")));
-            throw new UnsupportedOperationException();
-        }
-        return properties;
     }
 
     private Properties getProperties(final Path propertyPath) {
@@ -100,6 +76,29 @@ public final class PropertyModule extends AbstractModule {
             } catch (IOException e) {
                 Logger.error("Could not save property file");
             }
+        }
+        return properties;
+    }
+
+    @Provides
+    @Singleton
+    @LocalProperty
+    Properties localProperties(final @LocalProperty Path localPropertyPath) {
+        return getProperties(localPropertyPath);
+    }
+
+    @Provides
+    @Singleton
+    @DefaultProperty
+    Properties defaultProperties() {
+        Properties properties = new Properties();
+        properties.put(PropertyKey.TODO_ADD_AUTO_DATE, "false");
+        properties.put(PropertyKey.RELEASE_MODE, "true");
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            properties.put(PropertyKey.EDITOR_PATH, "notepad.exe");
+        } else {
+            Logger.error(String.format("Unknown OS: %s", System.getProperty("os.name")));
+            throw new UnsupportedOperationException();
         }
         return properties;
     }

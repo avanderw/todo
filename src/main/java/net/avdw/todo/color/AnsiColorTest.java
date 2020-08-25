@@ -1,4 +1,4 @@
-package net.avdw.todo;
+package net.avdw.todo.color;
 
 import net.avdw.todo.color.ColorConverter;
 import net.avdw.todo.color.RGB;
@@ -9,8 +9,8 @@ import net.avdw.todo.number.generator.ConstantNumberGenerator;
 import net.avdw.todo.number.generator.IteratingNumberGenerator;
 
 // http://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html#16-colors
-public final class AnsiColor {
-    private AnsiColor() {
+public final class AnsiColorTest {
+    private AnsiColorTest() {
     }
 
     public static final String BLACK = "\u001b[30;1m";
@@ -37,7 +37,7 @@ public final class AnsiColor {
         for (int i = 0; i < sampleCount; i++) {
             RGB rgb = colorGenerator.generateRGB();
             int color = colorConverter.rgbToHex(rgb.r(), rgb.g(), rgb.b());
-            System.out.print(String.format("%s \u001b[0m", colorConverter.hexToAnsiBg(color)));
+            System.out.printf("%s \u001b[0m", colorConverter.hexToAnsiBg(color));
         }
         System.out.println();
         for (int i = 0; i < sampleCount; i++) {
@@ -46,7 +46,7 @@ public final class AnsiColor {
             }
             RGB rgb = colorGenerator.generateRGB();
             int color = colorConverter.rgbToHex(rgb.r(), rgb.g(), rgb.b());
-            System.out.print(String.format("%s %3s\u001b[0m", colorConverter.hexToAnsiFg(color, true), colorConverter.rgbToHue(rgb.r(), rgb.g(), rgb.b())));
+            System.out.printf("%s %3s\u001b[0m", colorConverter.hexToAnsiFg(color, true), colorConverter.rgbToHue(rgb.r(), rgb.g(), rgb.b()));
         }
     }
 

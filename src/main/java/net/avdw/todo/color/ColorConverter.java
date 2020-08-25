@@ -91,22 +91,15 @@ public class ColorConverter {
         mu = min + ((max - min) * f);
         md = max - ((max - min) * f);
 
-        switch (n) {
-            case 0:
-                return new RGB(max, mu, min);
-            case 1:
-                return new RGB(md, max, min);
-            case 2:
-                return new RGB(min, max, mu);
-            case 3:
-                return new RGB(min, md, max);
-            case 4:
-                return new RGB(mu, min, max);
-            case 5:
-                return new RGB(max, min, md);
-            default:
-                throw new UnsupportedOperationException();
-        }
+        return switch (n) {
+            case 0 -> new RGB(max, mu, min);
+            case 1 -> new RGB(md, max, min);
+            case 2 -> new RGB(min, max, mu);
+            case 3 -> new RGB(min, md, max);
+            case 4 -> new RGB(mu, min, max);
+            case 5 -> new RGB(max, min, md);
+            default -> throw new UnsupportedOperationException();
+        };
     }
 
     private double middleValue(final double a, final double b, final double c) {
@@ -155,6 +148,16 @@ public class ColorConverter {
      * Convert hex to ansi foreground string.
      *
      * @param hex hex color to convert
+     * @return the ansi string
+     */
+    public String hexToAnsiFg(final int hex) {
+        return hexToAnsiFg(hex, false);
+    }
+
+    /**
+     * Convert hex to ansi foreground string.
+     *
+     * @param hex  hex color to convert
      * @return the ansi string
      */
     public String hexToAnsiFg(final int hex) {

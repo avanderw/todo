@@ -4,12 +4,16 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import net.avdw.todo.action.TodoPriority;
 import net.avdw.todo.theme.TodoItemThemeApplicator;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * @see net.avdw.todo.Todo
+ */
+@Deprecated
 public class TodoItem {
     private final int idx;
     private final String line;

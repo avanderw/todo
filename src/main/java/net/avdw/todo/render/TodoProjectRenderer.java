@@ -1,10 +1,10 @@
 package net.avdw.todo.render;
 
 import com.google.inject.Inject;
-import net.avdw.todo.AnsiColor;
+import net.avdw.todo.color.AnsiColorTest;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.theme.ThemeApplicator;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,8 +36,8 @@ public class TodoProjectRenderer {
             double percentage = done * PERCENTAGE / value.size();
 
             Logger.info(String.format("%s%16s%s ( %s%3.0f%%%s ): %s",
-                    AnsiColor.PROJECT_COLOR, key, AnsiColor.RESET,
-                    percentage > UPPER_BOUND ? AnsiColor.GREEN : "", percentage, AnsiColor.RESET,
+                    AnsiColorTest.PROJECT_COLOR, key, AnsiColorTest.RESET,
+                    percentage > UPPER_BOUND ? AnsiColorTest.GREEN : "", percentage, AnsiColorTest.RESET,
                     todoDoneStatusbar.createBar(value)));
         });
 

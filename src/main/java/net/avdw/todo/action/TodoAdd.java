@@ -1,7 +1,7 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Todo;
+import net.avdw.todo.TodoCli;
 import net.avdw.todo.file.TodoFile;
 import net.avdw.todo.file.TodoFileFactory;
 import net.avdw.todo.file.TodoFileWriter;
@@ -11,7 +11,7 @@ import net.avdw.todo.property.PropertyKey;
 import net.avdw.todo.property.PropertyResolver;
 import net.avdw.todo.template.TemplateExecutor;
 import net.avdw.todo.template.TemplateViewModel;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
@@ -26,7 +26,7 @@ import java.util.List;
 @Command(name = "add", description = "Add an item to todo.txt")
 public class TodoAdd implements Runnable {
     @ParentCommand
-    private Todo todo;
+    private TodoCli todoCli;
 
     @Parameters(description = "Text to add to the todo.txt file on its own line", arity = "1")
     private String addition;
@@ -57,7 +57,7 @@ public class TodoAdd implements Runnable {
         }
 
         List<TodoItem> filteredList = new ArrayList<>();
-        TodoFile fileBefore = todoFileFactory.create(todo.getTodoFile());
+        TodoFile fileBefore = todoFileFactory.create(todoCli.getTodoFile());
         TodoFile fileAfter = fileBefore;
         TodoItem addTodoItem = todoItemFactory.create(fileBefore.getTodoItemList().getAll().size() + 1, addition);
         filteredList.add(addTodoItem);

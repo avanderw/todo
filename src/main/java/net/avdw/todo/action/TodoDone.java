@@ -1,7 +1,7 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.Todo;
+import net.avdw.todo.TodoCli;
 import net.avdw.todo.file.TodoFile;
 import net.avdw.todo.file.TodoFileFactory;
 import net.avdw.todo.file.TodoFileWriter;
@@ -9,7 +9,7 @@ import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.item.TodoItemCompletor;
 import net.avdw.todo.template.TemplateExecutor;
 import net.avdw.todo.template.TemplateViewModel;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
@@ -20,7 +20,7 @@ import java.util.List;
 @Command(name = "do", description = "Complete a todo item")
 public class TodoDone implements Runnable {
     @ParentCommand
-    private Todo todo;
+    private TodoCli todoCli;
 
     @Parameters(description = "Index to complete", arity = "1")
     private int idx;
@@ -40,7 +40,7 @@ public class TodoDone implements Runnable {
     @Override
     public void run() {
         List<TodoItem> filteredTodoItemList = new ArrayList<>();
-        TodoFile fileBefore = todoFileFactory.create(todo.getTodoFile());
+        TodoFile fileBefore = todoFileFactory.create(todoCli.getTodoFile());
         TodoFile fileAfter;
 
         TodoItem todoItem = fileBefore.getTodoItemList().getAll().get(idx - 1);

@@ -3,9 +3,9 @@ package net.avdw.todo.admin;
 import com.google.inject.Inject;
 import net.avdw.todo.Global;
 import net.avdw.todo.LocalTodo;
-import net.avdw.todo.Todo;
+import net.avdw.todo.TodoCli;
 import net.avdw.todo.theme.ThemeApplicator;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ParentCommand;
 
@@ -16,7 +16,7 @@ import java.nio.file.Path;
 @Command(name = "init", description = "Initialize .todo directory")
 public class TodoInit implements Runnable {
     @ParentCommand
-    private Todo todo;
+    private TodoCli todoCli;
 
     @Inject
     @Global
@@ -34,7 +34,7 @@ public class TodoInit implements Runnable {
     @Override
     public void run() {
         System.out.println(themeApplicator.header("todo:init"));
-        Path path = todo.isGlobal() ? globalPath : localPath;
+        Path path = todoCli.isGlobal() ? globalPath : localPath;
 
         if (Files.exists(path)) {
             Logger.warn("Directory `%s` already exists");
