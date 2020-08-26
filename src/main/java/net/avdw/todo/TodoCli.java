@@ -54,7 +54,7 @@ public class TodoCli implements Runnable {
     private boolean showAll;
 
     @Inject
-    @GlobalTodo
+    @Global
     private Path globalTodoPath;
 
     @Inject

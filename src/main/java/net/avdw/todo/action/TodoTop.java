@@ -5,7 +5,7 @@ import net.avdw.todo.Working;
 import net.avdw.todo.file.TodoFileReader;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.theme.Theme;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 import picocli.CommandLine;
 
 import java.nio.file.Path;

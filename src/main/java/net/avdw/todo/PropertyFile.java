@@ -1,10 +1,10 @@
 package net.avdw.todo;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import lombok.SneakyThrows;
 import org.tinylog.Logger;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

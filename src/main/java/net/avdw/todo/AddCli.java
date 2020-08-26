@@ -1,5 +1,6 @@
 package net.avdw.todo;
 
+import com.google.inject.Inject;
 import net.avdw.todo.priority.Priority;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
@@ -9,7 +10,6 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Spec;
 
-import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;

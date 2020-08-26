@@ -5,7 +5,7 @@ import net.avdw.todo.RunningStats;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.item.TodoItemCleaner;
 import org.apache.commons.lang3.StringUtils;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

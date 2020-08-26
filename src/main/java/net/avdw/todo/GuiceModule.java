@@ -3,16 +3,13 @@ package net.avdw.todo;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import net.avdw.todo.config.LoggingSetup;
-import net.avdw.todo.config.ProfilingModule;
 import net.avdw.todo.file.TodoFileModule;
 import net.avdw.todo.item.TodoItemModule;
 import net.avdw.todo.number.NumberModule;
 import net.avdw.todo.property.PropertyModule;
 import net.avdw.todo.theme.ThemeModule;
-import org.pmw.tinylog.Logger;
+import org.tinylog.Logger;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,10 +26,6 @@ class GuiceModule extends AbstractModule {
         install(new PropertyModule());
         install(new NumberModule());
         install(new ThemeModule());
-
-        bind(LoggingSetup.class).asEagerSingleton();
-
-        install(new ProfilingModule());
 
         Path globalPath = Paths.get(System.getProperty("user.home")).resolve(".todo");
         bind(Path.class).annotatedWith(Global.class).toInstance(globalPath);
@@ -78,54 +71,6 @@ class GuiceModule extends AbstractModule {
         return workingTodoFilePath.getParent().resolve("done.txt");
     }
 
-    Path resolveWorkingTodoFilePath(final Path globalFilePath) {
-        Logger.debug("Resolving working todo path");
-        Path workingPath;
-        Path localPath = resolveLocalTodoFilePath(Paths.get("todo.txt"));
-
-        if (Files.exists(localPath)) {
-            Logger.debug("Found local todo path: {}", localPath);
-            workingPath = localPath;
-        } else {
-            Logger.debug("Could not resolve local todo path");
-            if (Files.exists(globalFilePath)) {
-                Logger.debug("Found global todo path: {}", globalFilePath);
-                workingPath = globalFilePath;
-            } else {
-                Logger.debug("Could not resolve global todo path");
-                try {
-                    Files.createDirectories(globalFilePath.getParent());
-                    Files.createFile(globalFilePath);
-                    Logger.debug("Created global todo file");
-                } catch (IOException e) {
-                    Logger.error(e.getMessage());
-                    Logger.debug(e);
-                }
-                workingPath = globalFilePath;
-            }
-        }
-        return workingPath;
-    }
-
-    private Path resolveLocalTodoFilePath(final Path currentFilePath) {
-        Logger.debug("Resolving local todo file path [currentFilePath={}]", currentFilePath.toAbsolutePath());
-        Path localFilePath;
-        if (Files.exists(currentFilePath)) {
-            localFilePath = currentFilePath;
-        } else {
-            Path currentDirectoryPath = currentFilePath.getParent();
-            if (currentDirectoryPath == null) {
-                localFilePath = Paths.get("todo.txt");
-            } else {
-                Path parentDirectoryPath = currentDirectoryPath.getParent();
-                Path parentDirectoryFilePath = parentDirectoryPath.resolve("todo.txt");
-                localFilePath = resolveLocalTodoFilePath(parentDirectoryFilePath);
-            }
-        }
-
-        Logger.debug("Using local todo file path: {}", localFilePath);
-        return localFilePath;
-    }
 
     @Provides
     @Singleton

@@ -147,16 +147,6 @@ public class ColorConverter {
     /**
      * Convert hex to ansi foreground string.
      *
-     * @param hex hex color to convert
-     * @return the ansi string
-     */
-    public String hexToAnsiFg(final int hex) {
-        return hexToAnsiFg(hex, false);
-    }
-
-    /**
-     * Convert hex to ansi foreground string.
-     *
      * @param hex  hex color to convert
      * @return the ansi string
      */
