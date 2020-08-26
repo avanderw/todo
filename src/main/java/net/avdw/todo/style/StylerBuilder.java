@@ -1,7 +1,5 @@
 package net.avdw.todo.style;
 
-import net.avdw.todo.color.ColorConverter;
-import org.fusesource.jansi.Ansi;
 import org.tinylog.Logger;
 
 import java.util.ArrayList;

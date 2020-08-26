@@ -1,7 +1,7 @@
 package net.avdw.todo.item.list;
 
-import net.avdw.todo.action.TodoPriority;
 import net.avdw.todo.file.TodoFile;
+import net.avdw.todo.priority.Priority;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public class TodoItemListQuery {
 
-    public Optional<TodoPriority.Priority> queryHighestFreePriority(final TodoFile todoFile) {
-        List<TodoPriority.Priority> priorityList = queryFreePriorityList(todoFile);
+    public Optional<Priority> queryHighestFreePriority(final TodoFile todoFile) {
+        List<Priority> priorityList = queryFreePriorityList(todoFile);
 
         if (priorityList.isEmpty()) {
             return Optional.empty();
@@ -20,8 +20,8 @@ public class TodoItemListQuery {
         }
     }
 
-    public Optional<TodoPriority.Priority> queryLowestFreePriority(final TodoFile todoFile) {
-        List<TodoPriority.Priority> priorityList = queryFreePriorityList(todoFile);
+    public Optional<Priority> queryLowestFreePriority(final TodoFile todoFile) {
+        List<Priority> priorityList = queryFreePriorityList(todoFile);
 
         if (priorityList.isEmpty()) {
             return Optional.empty();
@@ -30,8 +30,8 @@ public class TodoItemListQuery {
         }
     }
 
-    public List<TodoPriority.Priority> queryFreePriorityList(final TodoFile todoFile) {
-        List<TodoPriority.Priority> priorityList = new ArrayList<>(Arrays.asList(TodoPriority.Priority.values()));
+    public List<Priority> queryFreePriorityList(final TodoFile todoFile) {
+        List<Priority> priorityList = new ArrayList<>(Arrays.asList(Priority.values()));
         todoFile.getTodoItemList().getPriority().stream()
                 .map(todoItem -> todoItem.getPriority().get())
                 .forEach(priorityList::remove);

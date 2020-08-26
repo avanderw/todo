@@ -1,9 +1,9 @@
 package net.avdw.todo;
 
 import com.google.inject.Inject;
-import net.avdw.todo.action.TodoPriority;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.item.TodoItemFactory;
+import net.avdw.todo.priority.Priority;
 import org.tinylog.Logger;
 
 import java.io.IOException;
@@ -25,11 +25,11 @@ public class TodoReader {
      * @param todoFile the file to search for the priority in
      * @return the first available priority or the lowest priority if there is none
      */
-    public TodoPriority.Priority readHighestFreePriority(final Path todoFile) {
-        List<TodoPriority.Priority> priorities = getAvailablePriorities(todoFile);
+    public Priority readHighestFreePriority(final Path todoFile) {
+        List<Priority> priorities = getAvailablePriorities(todoFile);
 
         if (priorities.isEmpty()) {
-            return TodoPriority.Priority.Z;
+            return Priority.Z;
         } else {
             return priorities.get(0);
         }
@@ -41,8 +41,8 @@ public class TodoReader {
      * @param todoFile the file to search for the priority in
      * @return the last available priority or empty if there is none
      */
-    public Optional<TodoPriority.Priority> readLowestFreePriority(final Path todoFile) {
-        List<TodoPriority.Priority> priorities = getAvailablePriorities(todoFile);
+    public Optional<Priority> readLowestFreePriority(final Path todoFile) {
+        List<Priority> priorities = getAvailablePriorities(todoFile);
 
         if (priorities.isEmpty()) {
             return Optional.empty();
@@ -51,8 +51,8 @@ public class TodoReader {
         }
     }
 
-    private List<TodoPriority.Priority> getAvailablePriorities(final Path todoFile) {
-        List<TodoPriority.Priority> priorities = new ArrayList<>(Arrays.asList(TodoPriority.Priority.values()));
+    private List<Priority> getAvailablePriorities(final Path todoFile) {
+        List<Priority> priorities = new ArrayList<>(Arrays.asList(Priority.values()));
         int count = 0;
         try (Scanner scanner = new Scanner(todoFile)) {
             while (scanner.hasNext()) {

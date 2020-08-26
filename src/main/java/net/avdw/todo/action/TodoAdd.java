@@ -22,7 +22,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
+/**
+ * @see net.avdw.todo.AddCli
+ */
+@Deprecated
 @Command(name = "add", description = "Add an item to todo.txt")
 public class TodoAdd implements Runnable {
     @ParentCommand

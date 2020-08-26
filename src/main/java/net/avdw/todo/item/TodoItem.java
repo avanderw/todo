@@ -2,7 +2,7 @@ package net.avdw.todo.item;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-import net.avdw.todo.action.TodoPriority;
+import net.avdw.todo.priority.Priority;
 import net.avdw.todo.theme.TodoItemThemeApplicator;
 import org.tinylog.Logger;
 
@@ -62,12 +62,12 @@ public class TodoItem {
         return line.matches("^\\([A-Z]\\).*");
     }
 
-    public Optional<TodoPriority.Priority> getPriority() {
+    public Optional<Priority> getPriority() {
         if (!hasPriority()) {
             return Optional.empty();
         }
 
-        return Optional.of(TodoPriority.Priority.valueOf(line.substring(line.indexOf("(") + 1, line.indexOf(")"))));
+        return Optional.of(Priority.valueOf(line.substring(line.indexOf("(") + 1, line.indexOf(")"))));
     }
 
     public int getIdx() {

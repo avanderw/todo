@@ -1,7 +1,7 @@
 package net.avdw.todo.item;
 
 import com.google.inject.Inject;
-import net.avdw.todo.action.TodoPriority;
+import net.avdw.todo.priority.Priority;
 import org.tinylog.Logger;
 
 import java.text.SimpleDateFormat;
@@ -50,7 +50,7 @@ public class TodoItemModifier {
         return todoItemFactory.create(idx, modifiedTodoItem.getRawValue());
     }
 
-    public TodoItem changePriority(final TodoItem todoItem, final TodoPriority.Priority priority) {
+    public TodoItem changePriority(final TodoItem todoItem, final Priority priority) {
         return todoItemFactory.create(todoItem.getIdx(), String.format("(%s) %s", priority.name(), stripPriority(todoItem).getRawValue()));
 
     }
