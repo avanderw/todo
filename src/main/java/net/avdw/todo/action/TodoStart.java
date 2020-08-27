@@ -1,7 +1,7 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.TodoCli;
+import net.avdw.todo.MainCli;
 import net.avdw.todo.TodoReader;
 import net.avdw.todo.file.TodoFile;
 import net.avdw.todo.file.TodoFileFactory;
@@ -21,7 +21,7 @@ import java.util.Date;
 public class TodoStart implements Runnable {
 
     @ParentCommand
-    private TodoCli todoCli;
+    private MainCli mainCli;
 
     @Parameters(description = "Index to start", arity = "1")
     private int idx;
@@ -47,7 +47,7 @@ public class TodoStart implements Runnable {
     public void run() {
         System.out.println(themeApplicator.header("todo:start"));
 
-        TodoFile todoFile = todoFileFactory.create(todoCli.getTodoFile());
+        TodoFile todoFile = todoFileFactory.create(mainCli.getTodoFile());
         if (idx > todoFile.getTodoItemList().getAll().size()) {
             Logger.warn(String.format("There are only '%s' items in the todo file and idx '%s' is too high", todoFile.getTodoItemList().getAll().size(), idx));
             return;
@@ -70,7 +70,7 @@ public class TodoStart implements Runnable {
 
         String changedRawValue = String.format("%s start:%s", todoItem.getRawValue(), simpleDateFormat.format(new Date()));
         if (!todoItem.hasPriority()) {
-            changedRawValue = String.format("(%s) %s", reader.readHighestFreePriority(todoCli.getTodoFile()).name(), changedRawValue);
+            changedRawValue = String.format("(%s) %s", reader.readHighestFreePriority(mainCli.getTodoFile()).name(), changedRawValue);
         }
 
         TodoItem changedTodoItem = todoItemFactory.create(todoItem.getIdx(), changedRawValue);

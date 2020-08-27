@@ -5,11 +5,17 @@ import com.google.inject.Injector;
 import picocli.CommandLine;
 
 public final class GuiceFactory implements CommandLine.IFactory {
-    private final Injector injector = Guice.createInjector(new GuiceModule());
+    static final MainModule MAIN_MODULE = new MainModule();
+    static final Injector INJECTOR = Guice.createInjector(MAIN_MODULE);
+    private static final GuiceFactory INSTANCE = new GuiceFactory();
+
+    public static CommandLine.IFactory getInstance() {
+        return INSTANCE;
+    }
 
     @Override
     public <K> K create(final Class<K> aClass) {
-        return injector.getInstance(aClass);
+        return INJECTOR.getInstance(aClass);
     }
 
 }

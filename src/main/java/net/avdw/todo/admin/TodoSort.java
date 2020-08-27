@@ -1,7 +1,7 @@
 package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
-import net.avdw.todo.TodoCli;
+import net.avdw.todo.MainCli;
 import net.avdw.todo.Working;
 import net.avdw.todo.file.TodoFile;
 import net.avdw.todo.file.TodoFileFactory;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Command(name = "sort", description = "Sort todo.txt")
 public class TodoSort implements Runnable {
     @ParentCommand
-    private TodoCli todo;
+    private MainCli todo;
 
     @Inject
     private TodoFileWriter todoFileWriter;

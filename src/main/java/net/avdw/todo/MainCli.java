@@ -1,6 +1,7 @@
 package net.avdw.todo;
 
 import com.google.inject.Inject;
+import lombok.SneakyThrows;
 import net.avdw.todo.action.*;
 import net.avdw.todo.admin.*;
 import net.avdw.todo.property.GlobalProperty;
@@ -9,10 +10,11 @@ import org.tinylog.Logger;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.HelpCommand;
+import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
+import picocli.CommandLine.Spec;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -23,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Command(name = "todo",
         description = "The procrastination tool",
-        version = "1.0",
+        versionProvider = MainVersion.class,
         mixinStandardHelpOptions = true,
         subcommands = {
                 HelpCommand.class,
@@ -46,7 +48,7 @@ import java.util.stream.Collectors;
                 TodoRemove.class,
                 TodoRepeat.class
         })
-public class TodoCli implements Runnable {
+public class MainCli implements Runnable {
     @Option(names = {"-g", "--global"}, description = "Use the global directory")
     private boolean global;
 
@@ -69,19 +71,26 @@ public class TodoCli implements Runnable {
     @GlobalProperty
     private Path globalPropertyPath;
 
+    @Spec
+    private CommandSpec spec;
 
     /**
      * Entry point for picocli.
      */
+    @SneakyThrows
     public void run() {
         Path directory = resolveTodoPath();
 
         if (Files.exists(directory)) {
             Logger.info(String.format("Directory: %s", directory));
-            CommandLine.usage(TodoCli.class, System.out);
+
+            spec.commandLine().usage(spec.commandLine().getOut());
         } else {
             Logger.warn("No directory found (or any of the parent directories)");
-            CommandLine.usage(TodoInit.class, System.out);
+
+            PrintStream stream = new PrintStream(new BufferedOutputStream(new ByteArrayOutputStream()));
+            CommandLine.usage(TodoInit.class, stream);
+            spec.commandLine().getOut().println(stream.toString());
         }
     }
 

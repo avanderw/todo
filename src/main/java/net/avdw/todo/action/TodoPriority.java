@@ -1,7 +1,7 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.TodoCli;
+import net.avdw.todo.MainCli;
 import net.avdw.todo.file.TodoFile;
 import net.avdw.todo.file.TodoFileFactory;
 import net.avdw.todo.file.TodoFileWriter;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Command(name = "pri", description = "Prioritize a todo item")
 public class TodoPriority implements Runnable {
     @ParentCommand
-    private TodoCli todoCli;
+    private MainCli mainCli;
 
     @Parameters(description = "Index to prioritize", arity = "0..1", index = "0")
     private int idx = -1;
@@ -60,7 +60,7 @@ public class TodoPriority implements Runnable {
      */
     @Override
     public void run() {
-        TodoFile fileBefore = todoFileFactory.create(todoCli.getTodoFile());
+        TodoFile fileBefore = todoFileFactory.create(mainCli.getTodoFile());
         List<TodoItem> changedTodoItemList;
         if (shiftUp) {
             changedTodoItemList = shiftUpPriorities(fileBefore);

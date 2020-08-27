@@ -1,7 +1,7 @@
 package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
-import net.avdw.todo.TodoCli;
+import net.avdw.todo.MainCli;
 import net.avdw.todo.theme.ThemeApplicator;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;
@@ -14,7 +14,7 @@ import java.nio.file.StandardOpenOption;
 @Command(name = "clear", description = "Clear the todo.txt file")
 public class TodoClear implements Runnable {
     @ParentCommand
-    private TodoCli todoCli;
+    private MainCli mainCli;
 
     @Inject
     private ThemeApplicator themeApplicator;
@@ -26,10 +26,10 @@ public class TodoClear implements Runnable {
     public void run() {
         System.out.println(themeApplicator.header("todo:clear"));
         try {
-            Files.write(todoCli.getTodoFile(), "".getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
+            Files.write(mainCli.getTodoFile(), "".getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Logger.info(String.format("Cleared file: %s", todoCli.getTodoFile()));
+        Logger.info(String.format("Cleared file: %s", mainCli.getTodoFile()));
     }
 }

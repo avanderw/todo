@@ -1,7 +1,7 @@
 package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
-import net.avdw.todo.TodoCli;
+import net.avdw.todo.MainCli;
 import net.avdw.todo.file.TodoFile;
 import net.avdw.todo.file.TodoFileFactory;
 import net.avdw.todo.template.TemplateExecutor;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 @Command(name = "restore", description = "Replace todo.txt with backup")
 public class TodoRestore implements Runnable {
     @ParentCommand
-    private TodoCli todoCli;
+    private MainCli mainCli;
 
     @Inject
     private TemplateExecutor templateExecutor;
@@ -30,7 +30,7 @@ public class TodoRestore implements Runnable {
      */
     @Override
     public void run() {
-        TodoFile fileBefore = todoFileFactory.create(todoCli.getTodoFile());
+        TodoFile fileBefore = todoFileFactory.create(mainCli.getTodoFile());
 
         try {
             Files.copy(fileBefore.getBackupPath(), fileBefore.getPath(), StandardCopyOption.REPLACE_EXISTING);

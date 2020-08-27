@@ -1,7 +1,7 @@
 package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
-import net.avdw.todo.TodoCli;
+import net.avdw.todo.MainCli;
 import net.avdw.todo.property.PropertyKey;
 import net.avdw.todo.property.PropertyResolver;
 import net.avdw.todo.theme.ThemeApplicator;
@@ -16,7 +16,7 @@ import java.nio.file.Path;
 @Command(name = "editor", description = "Open the configured editor for todo.txt")
 public class TodoEditor implements Runnable {
     @ParentCommand
-    private TodoCli todoCli;
+    private MainCli mainCli;
 
     @Inject
     private PropertyResolver propertyResolver;
@@ -29,7 +29,7 @@ public class TodoEditor implements Runnable {
     @Override
     public void run() {
         System.out.println(themeApplicator.header("todo:edit"));
-        Path file = todoCli.getTodoFile();
+        Path file = mainCli.getTodoFile();
 
         if (Files.exists(file)) {
             Logger.info(String.format("Opening configured editor for %s", file));

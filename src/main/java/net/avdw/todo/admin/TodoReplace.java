@@ -1,7 +1,7 @@
 package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
-import net.avdw.todo.TodoCli;
+import net.avdw.todo.MainCli;
 import net.avdw.todo.theme.ThemeApplicator;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;
@@ -15,7 +15,7 @@ import java.nio.file.StandardOpenOption;
 @Command(name = "replace", description = "Replace one string for another")
 public class TodoReplace implements Runnable {
     @ParentCommand
-    private TodoCli todoCli;
+    private MainCli mainCli;
 
     @Parameters(description = "Regex against which to match",
             arity = "1", index = "0")
@@ -35,8 +35,8 @@ public class TodoReplace implements Runnable {
     public void run() {
         System.out.println(themeApplicator.header("todo:replace"));
         try {
-            String contents = new String(Files.readAllBytes(todoCli.getTodoFile()));
-            Files.write(todoCli.getTodoFile(), contents.replaceAll(from, to).getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
+            String contents = new String(Files.readAllBytes(mainCli.getTodoFile()));
+            Files.write(mainCli.getTodoFile(), contents.replaceAll(from, to).getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
             Logger.info(String.format("Changed %s to %s", from, to));
         } catch (IOException e) {
             Logger.error(String.format("Error writing `%s`", to));

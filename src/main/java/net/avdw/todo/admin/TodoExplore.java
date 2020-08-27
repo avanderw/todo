@@ -1,7 +1,7 @@
 package net.avdw.todo.admin;
 
 import com.google.inject.Inject;
-import net.avdw.todo.TodoCli;
+import net.avdw.todo.MainCli;
 import net.avdw.todo.theme.ThemeApplicator;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;
@@ -14,7 +14,7 @@ import java.nio.file.Path;
 @Command(name = "explore", description = "Open the .todo directory")
 public class TodoExplore implements Runnable {
     @ParentCommand
-    private TodoCli todoCli;
+    private MainCli mainCli;
 
     @Inject
     private ThemeApplicator themeApplicator;
@@ -25,7 +25,7 @@ public class TodoExplore implements Runnable {
     @Override
     public void run() {
         System.out.println(themeApplicator.header("todo:explore"));
-        Path directory = todoCli.resolveTodoPath();
+        Path directory = mainCli.resolveTodoPath();
 
         if (Files.exists(directory)) {
             Logger.info(String.format("Exploring %s", directory));

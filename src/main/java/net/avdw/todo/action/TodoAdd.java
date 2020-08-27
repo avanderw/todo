@@ -1,7 +1,7 @@
 package net.avdw.todo.action;
 
 import com.google.inject.Inject;
-import net.avdw.todo.TodoCli;
+import net.avdw.todo.MainCli;
 import net.avdw.todo.file.TodoFile;
 import net.avdw.todo.file.TodoFileFactory;
 import net.avdw.todo.file.TodoFileWriter;
@@ -29,7 +29,7 @@ import java.util.List;
 @Command(name = "add", description = "Add an item to todo.txt")
 public class TodoAdd implements Runnable {
     @ParentCommand
-    private TodoCli todoCli;
+    private MainCli mainCli;
 
     @Parameters(description = "Text to add to the todo.txt file on its own line", arity = "1")
     private String addition;
@@ -60,7 +60,7 @@ public class TodoAdd implements Runnable {
         }
 
         List<TodoItem> filteredList = new ArrayList<>();
-        TodoFile fileBefore = todoFileFactory.create(todoCli.getTodoFile());
+        TodoFile fileBefore = todoFileFactory.create(mainCli.getTodoFile());
         TodoFile fileAfter = fileBefore;
         TodoItem addTodoItem = todoItemFactory.create(fileBefore.getTodoItemList().getAll().size() + 1, addition);
         filteredList.add(addTodoItem);

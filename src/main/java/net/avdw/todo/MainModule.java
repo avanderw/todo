@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
-class GuiceModule extends AbstractModule {
+class MainModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(RunningStats.class).toInstance(new RunningStats());
