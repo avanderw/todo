@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * @see net.avdw.todo.RemoveCli
+ */
+@Deprecated
 @Command(name = "rm", description = "Remove a todo item")
 public class TodoRemove implements Runnable {
     @Parameters(description = "Indexes to remove", arity = "0..*")
