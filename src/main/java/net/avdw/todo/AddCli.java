@@ -1,6 +1,9 @@
 package net.avdw.todo;
 
 import com.google.inject.Inject;
+import net.avdw.todo.domain.IsContaining;
+import net.avdw.todo.domain.Todo;
+import net.avdw.todo.domain.WithPriority;
 import net.avdw.todo.priority.Priority;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;

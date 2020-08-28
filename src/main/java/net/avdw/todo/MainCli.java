@@ -46,7 +46,8 @@ import java.util.stream.Collectors;
                 TodoPriority.class,
                 TodoDone.class,
                 TodoRemove.class,
-                TodoRepeat.class
+                TodoRepeat.class,
+                TodoTop.class
         })
 public class MainCli implements Runnable {
     @Option(names = {"-g", "--global"}, description = "Use the global directory")

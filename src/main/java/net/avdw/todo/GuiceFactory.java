@@ -2,20 +2,19 @@ package net.avdw.todo;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import picocli.CommandLine;
 
 public final class GuiceFactory implements CommandLine.IFactory {
-    static final MainModule MAIN_MODULE = new MainModule();
-    static final Injector INJECTOR = Guice.createInjector(MAIN_MODULE);
-    private static final GuiceFactory INSTANCE = new GuiceFactory();
+    private final Injector injector;
 
-    public static CommandLine.IFactory getInstance() {
-        return INSTANCE;
+    GuiceFactory(Module module) {
+        injector = Guice.createInjector(module);
     }
 
     @Override
     public <K> K create(final Class<K> aClass) {
-        return INJECTOR.getInstance(aClass);
+        return injector.getInstance(aClass);
     }
 
 }

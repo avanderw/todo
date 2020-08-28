@@ -2,6 +2,7 @@ package net.avdw.todo.item;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
+import net.avdw.todo.domain.Todo;
 import net.avdw.todo.priority.Priority;
 import net.avdw.todo.theme.TodoItemThemeApplicator;
 import org.tinylog.Logger;
@@ -11,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * @see net.avdw.todo.Todo
+ * @see Todo
  */
 @Deprecated
 public class TodoItem {

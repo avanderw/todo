@@ -13,6 +13,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * @see net.avdw.todo.InitCli
+ */
+@Deprecated
 @Command(name = "init", description = "Initialize .todo directory")
 public class TodoInit implements Runnable {
     @ParentCommand
@@ -37,7 +41,7 @@ public class TodoInit implements Runnable {
         Path path = mainCli.isGlobal() ? globalPath : localPath;
 
         if (Files.exists(path)) {
-            Logger.warn("Directory `%s` already exists");
+            Logger.warn("Directory {} already exists", path.toAbsolutePath());
         } else {
             try {
                 Files.createDirectories(path);

@@ -1,4 +1,4 @@
-package net.avdw.todo;
+package net.avdw.todo.domain;
 
 import lombok.Getter;
 import lombok.SneakyThrows;

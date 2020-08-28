@@ -3,6 +3,7 @@ package net.avdw.todo;
 import com.google.inject.AbstractModule;
 import lombok.SneakyThrows;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.tinylog.Logger;
@@ -18,14 +19,21 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
-public class MainCliTest {
-    private static final Path todoPath = Paths.get("src/test/resources/main/.todo/todo.txt");
-
-    private CommandLine commandLine;
+public class InitCliTest {
+    private static final Path todoPath = Paths.get("src/test/resources/init/.todo/todo.txt");
+    private static CommandLine commandLine;
     private StringWriter errWriter;
     private StringWriter outWriter;
+
+    @Test
+    @SneakyThrows
+    public void testNotExists() {
+        Files.deleteIfExists(todoPath);
+        assertSuccess(commandLine.execute("init"));
+    }
 
     private void assertSuccess(final int exitCode) {
         if (!outWriter.toString().isEmpty()) {
@@ -57,23 +65,10 @@ public class MainCliTest {
 
     @Test
     @SneakyThrows
-    public void testEmptyWithTodo() {
+    public void testExists() {
         Files.createDirectories(todoPath.getParent());
         Files.createFile(todoPath);
-        assertSuccess(commandLine.execute());
-        assertTrue("SHOULD output usage help", outWriter.toString().contains("Usage"));
-    }
-
-    @Test
-    public void testEmptyWithoutTodo() {
-        assertSuccess(commandLine.execute());
-        assertTrue("SHOULD output usage help", outWriter.toString().contains("Usage"));
-    }
-
-    @Test
-    public void testVersion() {
-        assertSuccess(commandLine.execute("--version"));
-        assertNotEquals(2, outWriter.toString().length());
+        assertSuccess(commandLine.execute("init"));
     }
 
     static class TestModule extends AbstractModule {
@@ -81,7 +76,7 @@ public class MainCliTest {
         protected void configure() {
             bind(List.class).to(LinkedList.class);
             bind(Path.class).toInstance(todoPath);
-            bind(ResourceBundle.class).toInstance(ResourceBundle.getBundle("messages", Locale.getDefault()));
+            bind(ResourceBundle.class).toInstance(ResourceBundle.getBundle("messages", Locale.ENGLISH));
         }
     }
 
