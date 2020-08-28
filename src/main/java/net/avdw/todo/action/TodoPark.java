@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * @see net.avdw.todo.ParkCli
+ */
+@Deprecated
 @Command(name = "park", description = "Park a todo item for later review")
 public class TodoPark implements Runnable {
     @Parameters(description = "Indexes to park", arity = "0..*")

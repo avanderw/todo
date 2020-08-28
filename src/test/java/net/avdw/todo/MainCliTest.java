@@ -1,7 +1,13 @@
 package net.avdw.todo;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import lombok.SneakyThrows;
+import net.avdw.todo.domain.Todo;
+import net.avdw.todo.domain.TodoBuilder;
+import net.avdw.todo.repository.FileRepository;
+import net.avdw.todo.repository.Repository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +27,7 @@ import java.util.ResourceBundle;
 import static org.junit.Assert.*;
 
 public class MainCliTest {
-    private static final Path todoPath = Paths.get("src/test/resources/main/.todo/todo.txt");
+    private static final Path todoPath = Paths.get("target/test-resources/main/.todo/todo.txt");
 
     private CommandLine commandLine;
     private StringWriter errWriter;
@@ -53,6 +59,7 @@ public class MainCliTest {
     public void afterTest() {
         Files.deleteIfExists(todoPath);
         Files.deleteIfExists(todoPath.getParent());
+        Files.deleteIfExists(todoPath.getParent().getParent());
     }
 
     @Test
@@ -82,6 +89,12 @@ public class MainCliTest {
             bind(List.class).to(LinkedList.class);
             bind(Path.class).toInstance(todoPath);
             bind(ResourceBundle.class).toInstance(ResourceBundle.getBundle("messages", Locale.getDefault()));
+        }
+
+        @Provides
+        @Singleton
+        Repository<Todo> todoRepository(final Path todoPath) {
+            return new FileRepository<>(todoPath, new TodoBuilder());
         }
     }
 

@@ -20,6 +20,7 @@ import java.nio.file.Path;
         mixinStandardHelpOptions = true,
         subcommands = {
                 InitCli.class,
+                ParkCli.class,
         })
 public class RefactoredMainCli implements Runnable {
     @Inject

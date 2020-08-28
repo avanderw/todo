@@ -60,4 +60,8 @@ public class Todo {
             return null;
         }
     }
+
+    public String toString() {
+        return text;
+    }
 }

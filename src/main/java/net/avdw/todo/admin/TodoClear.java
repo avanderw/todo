@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 
+@Deprecated
 @Command(name = "clear", description = "Clear the todo.txt file")
 public class TodoClear implements Runnable {
     @ParentCommand

@@ -1,9 +1,17 @@
 package net.avdw.todo.repository;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface Repository<T> {
-    Collection<T> findAll(Specification<T> specification);
+    void setAutoCommit(boolean autoCommit);
+
+    List<T> findAll(Specification<T> specification);
 
     void add(T item);
+
+    T findById(int id);
+
+    void save(int id, T item);
+
+    void commit();
 }

@@ -3,7 +3,7 @@ package net.avdw.todo;
 import com.google.inject.Inject;
 import net.avdw.todo.domain.IsContaining;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.domain.WithPriority;
+import net.avdw.todo.domain.IsPriority;
 import net.avdw.todo.priority.Priority;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
@@ -45,7 +45,7 @@ class AddCli implements Runnable {
 
         addition = String.format("%s %s", SIMPLE_DATE_FORMAT.format(new Date()), addition);
         if (hasPriority) {
-            Specification<Todo> withPriority = new WithPriority();
+            Specification<Todo> withPriority = new IsPriority();
             List<Priority> usedPriorityList = todoRepository.findAll(withPriority).stream().map(Todo::getPriority).collect(Collectors.toList());
             Priority priority = Arrays.stream(Priority.values()).filter(pri -> !usedPriorityList.contains(pri)).sorted().findFirst().orElse(Priority.Z);
             addition = String.format("%s %s", priority, addition);

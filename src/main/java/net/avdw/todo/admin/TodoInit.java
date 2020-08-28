@@ -21,11 +21,9 @@ import java.nio.file.Path;
 public class TodoInit implements Runnable {
     @ParentCommand
     private MainCli mainCli;
-
     @Inject
     @Global
     private Path globalPath;
-
     @Inject
     @LocalTodo
     private Path localPath;
