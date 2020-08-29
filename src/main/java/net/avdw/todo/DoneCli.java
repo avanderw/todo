@@ -16,10 +16,10 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-@Command(name = "park", description = "${bundle:park}")
-public class ParkCli implements Runnable {
-    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-    @Parameters(description = "${bundle:park.idx.list}", arity = "1..*")
+@Command(name = "do", description = "${bundle:done}")
+public class DoneCli implements Runnable {
+    private final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    @Parameters(description = "${bundle:done.idx.list}", arity = "1..*")
     private Set<Integer> idxList;
     @Inject
     private Path todoPath;
@@ -36,7 +36,7 @@ public class ParkCli implements Runnable {
         todoRepository.setAutoCommit(false);
         idxList.stream().sorted(Comparator.reverseOrder())
                 .forEachOrdered(idx -> {
-                    todoRepository.save(idx - 1, new Todo(String.format("p %s %s",
+                    todoRepository.save(idx - 1, new Todo(String.format("x %s %s",
                             SIMPLE_DATE_FORMAT.format(new Date()),
                             todoRepository.findById(idx - 1).toString().replaceFirst("\\([A-Z]\\) ", ""))));
                     spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,

@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import lombok.SneakyThrows;
-import net.avdw.todo.domain.IsParked;
+import net.avdw.todo.domain.IsDone;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoBuilder;
 import net.avdw.todo.repository.FileRepository;
@@ -17,16 +17,19 @@ import picocli.CommandLine;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class ParkCliTest {
-    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-    private static final Path todoPath = Paths.get("target/test-resources/park/.todo/todo.txt");
+public class DoneCliTest {
+    private static final Path todoPath = Paths.get("target/test-resources/done/.todo/todo.txt");
     private static CommandLine commandLine;
+    private final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private StringWriter errWriter;
     private StringWriter outWriter;
 
@@ -52,7 +55,7 @@ public class ParkCliTest {
 
     @Test
     public void testNoIdx() {
-        assertFailure(commandLine.execute("park"));
+        assertFailure(commandLine.execute("do"));
     }
 
     private void assertFailure(final int exitCode) {
@@ -69,20 +72,11 @@ public class ParkCliTest {
 
     @Test
     public void testRepeatIdx() {
-        assertSuccess(commandLine.execute("park", "5", "5"));
+        assertSuccess(commandLine.execute("do", "5", "5"));
         Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
-        List<Todo> parkedTodoList = todoRepository.findAll(new IsParked());
-        assertEquals(1, parkedTodoList.size());
-        assertFalse(parkedTodoList.get(0).getText().startsWith(String.format("p %s p ", SIMPLE_DATE_FORMAT.format(new Date()))));
-    }
-
-    @Test
-    public void testOneIdx() {
-        assertSuccess(commandLine.execute("park", "2"));
-        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
-        List<Todo> parkedTodoList = todoRepository.findAll(new IsParked());
-        assertEquals(1, parkedTodoList.size());
-        assertTrue(parkedTodoList.get(0).getText().startsWith(String.format("p %s 2019-02-07", SIMPLE_DATE_FORMAT.format(new Date()))));
+        List<Todo> doneTodoList = todoRepository.findAll(new IsDone());
+        assertEquals(1, doneTodoList.size());
+        assertFalse(doneTodoList.get(0).getText().startsWith(String.format("x %s x ", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
 
     private void assertSuccess(final int exitCode) {
@@ -98,11 +92,20 @@ public class ParkCliTest {
     }
 
     @Test
-    public void testTwoIdx() {
-        assertSuccess(commandLine.execute("park", "2", "4"));
+    public void testOneIdx() {
+        assertSuccess(commandLine.execute("do", "2"));
         Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
-        List<Todo> parkedTodoList = todoRepository.findAll(new IsParked());
-        assertEquals(2, parkedTodoList.size());
+        List<Todo> doneTodoList = todoRepository.findAll(new IsDone());
+        assertEquals(1, doneTodoList.size());
+        assertTrue(doneTodoList.get(0).getText().startsWith(String.format("x %s 2019-02-07", SIMPLE_DATE_FORMAT.format(new Date()))));
+    }
+
+    @Test
+    public void testTwoIdx() {
+        assertSuccess(commandLine.execute("do", "2", "4"));
+        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
+        List<Todo> doneTodoList = todoRepository.findAll(new IsDone());
+        assertEquals(2, doneTodoList.size());
     }
 
     static class TestModule extends AbstractModule {

@@ -10,12 +10,15 @@ import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Spec;
 
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
 @Command(name = "rm", description = "${bundle:remove}")
 public class RemoveCli implements Runnable {
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     @Parameters(description = "${bundle:remove.idx.list}", arity = "1..*")
     private Set<Integer> idxList;
     @Inject
@@ -33,7 +36,9 @@ public class RemoveCli implements Runnable {
         todoRepository.setAutoCommit(false);
         idxList.stream().sorted(Comparator.reverseOrder())
                 .forEachOrdered(idx -> {
-                    todoRepository.save(idx - 1, new Todo(String.format("r %s", todoRepository.findById(idx - 1))));
+                    todoRepository.save(idx - 1, new Todo(String.format("r %s %s",
+                            SIMPLE_DATE_FORMAT.format(new Date()),
+                            todoRepository.findById(idx - 1).toString().replaceFirst("\\([A-Z]\\) ", ""))));
                     spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
                             gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", idx, todoRepository.findById(idx - 1)), Map.class)));
                 });

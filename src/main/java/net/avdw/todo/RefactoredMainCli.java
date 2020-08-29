@@ -20,6 +20,7 @@ import java.nio.file.Path;
         mixinStandardHelpOptions = true,
         subcommands = {
                 InitCli.class,
+                DoneCli.class,
                 ParkCli.class,
                 RemoveCli.class,
         })

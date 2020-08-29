@@ -22,11 +22,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.junit.Assert.*;
 
 public class RemoveCliTest {
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final Path todoPath = Paths.get("target/test-resources/remove/.todo/todo.txt");
     private static CommandLine commandLine;
     private StringWriter errWriter;
@@ -75,7 +77,7 @@ public class RemoveCliTest {
         Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
         List<Todo> parkedTodoList = todoRepository.findAll(new IsRemoved());
         assertEquals(1, parkedTodoList.size());
-        assertFalse(parkedTodoList.get(0).getText().startsWith("r r "));
+        assertFalse(parkedTodoList.get(0).getText().startsWith(String.format("r %s r ", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
 
     @Test
@@ -84,6 +86,7 @@ public class RemoveCliTest {
         Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
         List<Todo> parkedTodoList = todoRepository.findAll(new IsRemoved());
         assertEquals(1, parkedTodoList.size());
+        assertTrue(parkedTodoList.get(0).getText().startsWith(String.format("r %s 2019-02-07", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
 
     private void assertSuccess(final int exitCode) {

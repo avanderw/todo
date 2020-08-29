@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+@Deprecated
 @Command(name = "repeat", description = "Do and add an entry to todo.txt")
 public class TodoRepeat implements Runnable {
     @ParentCommand

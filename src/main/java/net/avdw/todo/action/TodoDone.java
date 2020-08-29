@@ -17,6 +17,10 @@ import picocli.CommandLine.ParentCommand;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @see net.avdw.todo.DoneCli
+ */
+@Deprecated
 @Command(name = "do", description = "Complete a todo item")
 public class TodoDone implements Runnable {
     @ParentCommand

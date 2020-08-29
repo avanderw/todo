@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Properties;
 
+@Deprecated
 @Command(name = "set", description = "Set a property")
 public class TodoSet implements Runnable {
 
