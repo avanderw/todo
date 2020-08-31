@@ -6,6 +6,7 @@ import net.avdw.todo.item.list.TodoItemList;
 
 import java.util.List;
 
+@Deprecated
 public class TemplateViewModel {
     private final String view;
     private final TodoItemList todoItemList;

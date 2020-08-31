@@ -1,12 +1,13 @@
 package net.avdw.todo.item;
 
 import com.google.inject.Inject;
-import net.avdw.todo.priority.Priority;
+import net.avdw.todo.Priority;
 import org.tinylog.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Deprecated
 public class TodoItemModifier {
     private final TodoItemFactory todoItemFactory;
     private final SimpleDateFormat simpleDateFormat;

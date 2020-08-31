@@ -7,6 +7,7 @@ import org.tinylog.Logger;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class TodoItemListFilter {
     public List<TodoItem> filterByIdx(final TodoFile todoFile, final List<Integer> idxList) {
         return todoFile.getTodoItemList().getAll().stream().filter(todoItem -> idxList.contains(todoItem.getIdx())).collect(Collectors.toList());

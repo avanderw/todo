@@ -11,7 +11,7 @@ import net.avdw.todo.item.TodoItemModifier;
 import net.avdw.todo.item.list.TodoItemList;
 import net.avdw.todo.item.list.TodoItemListQuery;
 import net.avdw.todo.theme.Theme;
-import net.avdw.todo.priority.Priority;
+import net.avdw.todo.Priority;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;

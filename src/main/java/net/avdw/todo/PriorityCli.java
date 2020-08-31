@@ -3,7 +3,6 @@ package net.avdw.todo;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import net.avdw.todo.domain.*;
-import net.avdw.todo.priority.Priority;
 import net.avdw.todo.repository.Repository;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;

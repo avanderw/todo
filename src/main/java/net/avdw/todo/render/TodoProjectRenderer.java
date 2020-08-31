@@ -9,6 +9,7 @@ import org.tinylog.Logger;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class TodoProjectRenderer {
     private static final double PERCENTAGE = 100.;
     private static final double UPPER_BOUND = 75.;

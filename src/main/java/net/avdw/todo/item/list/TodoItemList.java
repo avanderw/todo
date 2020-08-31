@@ -5,6 +5,7 @@ import net.avdw.todo.item.TodoItem;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class TodoItemList {
     private List<TodoItem> all;
     private List<TodoItem> complete;

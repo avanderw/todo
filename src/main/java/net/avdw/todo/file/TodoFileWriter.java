@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-
+@Deprecated
 public class TodoFileWriter {
     /**
      * Rewrite a list of todo items into the specified file.

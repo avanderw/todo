@@ -3,6 +3,7 @@ package net.avdw.todo.render;
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 
+@Deprecated
 public class TodoBarRenderer {
 
     @Inject

@@ -1,5 +1,6 @@
 package net.avdw.todo.item;
 
+@Deprecated
 public class TodoItemTokenIdentifier {
     /**
      * Given a token identify the type.

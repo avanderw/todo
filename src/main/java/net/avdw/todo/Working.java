@@ -7,5 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 
 @BindingAnnotation
 @Retention(RetentionPolicy.RUNTIME)
+@Deprecated
 public @interface Working {
 }

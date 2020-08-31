@@ -6,6 +6,7 @@ import org.tinylog.Logger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Deprecated
 public class TodoItemCompletor {
 
     private final SimpleDateFormat simpleDateFormat;

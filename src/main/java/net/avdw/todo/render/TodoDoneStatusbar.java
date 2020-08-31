@@ -8,6 +8,7 @@ import net.avdw.todo.theme.ThemeApplicator;
 import java.util.Comparator;
 import java.util.List;
 
+@Deprecated
 public class TodoDoneStatusbar {
     private final ThemeApplicator themeApplicator;
     private static final double PERCENTAGE = 100.;

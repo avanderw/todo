@@ -2,7 +2,7 @@ package net.avdw.todo.file;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
-
+@Deprecated
 public class TodoFileModule extends AbstractModule {
     @Override
     protected void configure() {

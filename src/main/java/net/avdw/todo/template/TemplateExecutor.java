@@ -10,6 +10,7 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Deprecated
 public class TemplateExecutor {
     private final ThemeApplicator themeApplicator;
     private final RunningStats runningStats;

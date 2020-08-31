@@ -1,4 +1,4 @@
-package net.avdw.todo.priority;
+package net.avdw.todo;
 
 import java.util.HashMap;
 

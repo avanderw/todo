@@ -3,7 +3,7 @@ package net.avdw.todo.item;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.priority.Priority;
+import net.avdw.todo.Priority;
 import net.avdw.todo.theme.TodoItemThemeApplicator;
 import org.tinylog.Logger;
 

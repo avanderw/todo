@@ -3,13 +3,13 @@ package net.avdw.todo;
 import com.google.inject.Inject;
 import net.avdw.todo.item.TodoItem;
 import net.avdw.todo.item.TodoItemFactory;
-import net.avdw.todo.priority.Priority;
 import org.tinylog.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 
+@Deprecated
 public class TodoReader {
 
     private TodoItemFactory todoItemFactory;

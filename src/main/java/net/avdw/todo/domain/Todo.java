@@ -3,7 +3,7 @@ package net.avdw.todo.domain;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import net.avdw.todo.priority.Priority;
+import net.avdw.todo.Priority;
 import net.avdw.todo.repository.IdType;
 import org.tinylog.Logger;
 

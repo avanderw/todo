@@ -4,6 +4,7 @@ import net.avdw.todo.item.TodoItem;
 
 import java.util.List;
 
+@Deprecated
 public class TodoFileRenderer {
     /**
      * Render a one line summary for the todo list.
