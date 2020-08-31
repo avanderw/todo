@@ -12,8 +12,7 @@ import java.util.stream.Collectors;
 public class FileRepository<T> implements Repository<T> {
     private final Path path;
     private final List<T> itemList = new ArrayList<>();
-
-    private boolean autoCommit;
+    private boolean autoCommit = true;
 
     @SneakyThrows
     public FileRepository(final Path path, final TypeBuilder<T> builder) {
@@ -38,6 +37,9 @@ public class FileRepository<T> implements Repository<T> {
     @Override
     public void add(final T item) {
         itemList.add(item);
+        if (autoCommit) {
+            commit();
+        }
     }
 
     @Override
@@ -65,6 +67,28 @@ public class FileRepository<T> implements Repository<T> {
     @SneakyThrows
     @Override
     public void commit() {
+        Logger.debug("Writing {}", path);
         Files.write(path, itemList.stream().map(Object::toString).collect(Collectors.toList()));
+    }
+
+    @Override
+    public void addAll(final List<T> addItemList) {
+        itemList.addAll(addItemList);
+        if (autoCommit) {
+            commit();
+        }
+    }
+
+    @Override
+    public void removeAll(final Specification<T> specification) {
+        itemList.removeAll(findAll(specification));
+        if (autoCommit) {
+            commit();
+        }
+    }
+
+    @Override
+    public List<T> findAll() {
+        return itemList;
     }
 }

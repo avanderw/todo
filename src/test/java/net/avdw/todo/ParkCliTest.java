@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import lombok.SneakyThrows;
+import net.avdw.todo.domain.IsDone;
 import net.avdw.todo.domain.IsParked;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoBuilder;
@@ -74,6 +75,15 @@ public class ParkCliTest {
         List<Todo> parkedTodoList = todoRepository.findAll(new IsParked());
         assertEquals(1, parkedTodoList.size());
         assertFalse(parkedTodoList.get(0).getText().startsWith(String.format("p %s p ", SIMPLE_DATE_FORMAT.format(new Date()))));
+    }
+    @Test
+    public void testPriorityRemoval() {
+        assertSuccess(commandLine.execute("pri", "7", "A"));
+        assertSuccess(commandLine.execute("park", "7"));
+        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
+        List<Todo> parkedTodoList = todoRepository.findAll(new IsParked());
+        assertEquals(1, parkedTodoList.size());
+        assertFalse(parkedTodoList.get(1).getText().contains("(A)"));
     }
 
     @Test

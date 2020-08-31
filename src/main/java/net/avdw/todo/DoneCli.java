@@ -21,8 +21,6 @@ public class DoneCli implements Runnable {
     private final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     @Parameters(description = "${bundle:done.idx.list}", arity = "1..*")
     private Set<Integer> idxList;
-    @Inject
-    private Path todoPath;
     @Spec
     private CommandSpec spec;
     @Inject

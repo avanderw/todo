@@ -15,6 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @see net.avdw.todo.ArchiveCli
+ */
+@Deprecated
 @CommandLine.Command(name = "archive", description = "Move done items to done.txt")
 public class TodoArchive implements Runnable {
     @Inject

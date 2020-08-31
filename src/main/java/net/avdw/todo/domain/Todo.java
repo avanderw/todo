@@ -1,5 +1,6 @@
 package net.avdw.todo.domain;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import net.avdw.todo.priority.Priority;
@@ -11,6 +12,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@EqualsAndHashCode
 public class Todo {
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final Pattern COMPLETION_DATE_PATTERN = Pattern.compile("^x (\\d\\d\\d\\d-\\d\\d-\\d\\d)");

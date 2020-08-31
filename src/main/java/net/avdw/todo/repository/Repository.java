@@ -14,4 +14,10 @@ public interface Repository<T> {
     void save(int id, T item);
 
     void commit();
+
+    void addAll(List<T> itemList);
+
+    void removeAll(Specification<T> specification);
+
+    List<T> findAll();
 }

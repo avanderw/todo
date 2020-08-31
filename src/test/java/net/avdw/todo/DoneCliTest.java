@@ -71,6 +71,16 @@ public class DoneCliTest {
     }
 
     @Test
+    public void testPriorityRemoval() {
+        assertSuccess(commandLine.execute("pri", "7", "A"));
+        assertSuccess(commandLine.execute("do", "7"));
+        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
+        List<Todo> doneTodoList = todoRepository.findAll(new IsDone());
+        assertEquals(1, doneTodoList.size());
+        assertFalse(doneTodoList.get(1).getText().contains("(A)"));
+    }
+
+    @Test
     public void testRepeatIdx() {
         assertSuccess(commandLine.execute("do", "5", "5"));
         Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());

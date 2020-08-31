@@ -19,14 +19,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
-public class RemoveCliTest {
-    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-    private static final Path todoPath = Paths.get("target/test-resources/remove/.todo/todo.txt");
+public class ArchiveCliTest {
+    private static final Path todoPath = Paths.get("target/test-resources/archive/.todo/todo.txt");
     private static CommandLine commandLine;
     private StringWriter errWriter;
     private StringWriter outWriter;
@@ -47,13 +46,27 @@ public class RemoveCliTest {
     @SneakyThrows
     public void afterTest() {
         Files.deleteIfExists(todoPath);
+        Files.deleteIfExists(todoPath.getParent().resolve("done.txt"));
+        Files.deleteIfExists(todoPath.getParent().resolve("parked.txt"));
+        Files.deleteIfExists(todoPath.getParent().resolve("removed.txt"));
         Files.deleteIfExists(todoPath.getParent());
         Files.deleteIfExists(todoPath.getParent().getParent());
     }
 
     @Test
-    public void testNoIdx() {
-        assertFailure(commandLine.execute("rm"));
+    public void testBasic() {
+        assertSuccess(commandLine.execute("do", "5"));
+        assertSuccess(commandLine.execute("rm", "3"));
+        assertSuccess(commandLine.execute("park", "2"));
+        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
+        List<Todo> doneParkedOrRemoved = todoRepository.findAll(new IsDone().or(new IsParked()).or(new IsRemoved()));
+        assertEquals(3, doneParkedOrRemoved.size());
+
+        assertSuccess(commandLine.execute("archive"));
+
+        todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
+        doneParkedOrRemoved = todoRepository.findAll(new IsDone().or(new IsParked()).or(new IsRemoved()));
+        assertEquals(0, doneParkedOrRemoved.size());
     }
 
     private void assertFailure(final int exitCode) {
@@ -68,33 +81,6 @@ public class RemoveCliTest {
         assertNotEquals(0, exitCode);
     }
 
-    @Test
-    public void testRepeatIdx() {
-        assertSuccess(commandLine.execute("rm", "5", "5"));
-        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
-        List<Todo> removedTodoList = todoRepository.findAll(new IsRemoved());
-        assertEquals(1, removedTodoList.size());
-        assertFalse(removedTodoList.get(0).getText().startsWith(String.format("r %s r ", SIMPLE_DATE_FORMAT.format(new Date()))));
-    }
-    @Test
-    public void testPriorityRemoval() {
-        assertSuccess(commandLine.execute("pri", "7", "A"));
-        assertSuccess(commandLine.execute("rm", "7"));
-        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
-        List<Todo> removedTodoList = todoRepository.findAll(new IsRemoved());
-        assertEquals(1, removedTodoList.size());
-        assertFalse(removedTodoList.get(1).getText().contains("(A)"));
-    }
-
-    @Test
-    public void testOneIdx() {
-        assertSuccess(commandLine.execute("rm", "2"));
-        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
-        List<Todo> parkedTodoList = todoRepository.findAll(new IsRemoved());
-        assertEquals(1, parkedTodoList.size());
-        assertTrue(parkedTodoList.get(0).getText().startsWith(String.format("r %s 2019-02-07", SIMPLE_DATE_FORMAT.format(new Date()))));
-    }
-
     private void assertSuccess(final int exitCode) {
         if (!outWriter.toString().isEmpty()) {
             Logger.debug("Standard output:\n{}", outWriter.toString());
@@ -105,14 +91,6 @@ public class RemoveCliTest {
         assertEquals("MUST NOT HAVE error output", "", errWriter.toString());
         assertNotEquals("MUST HAVE standard output", "", outWriter.toString().trim());
         assertEquals(0, exitCode);
-    }
-
-    @Test
-    public void testTwoIdx() {
-        assertSuccess(commandLine.execute("rm", "2", "4"));
-        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
-        List<Todo> removedTodoList = todoRepository.findAll(new IsRemoved());
-        assertEquals(2, removedTodoList.size());
     }
 
     static class TestModule extends AbstractModule {
