@@ -6,14 +6,14 @@ package net.avdw.todo.repository;
  * @version 2020-08-26: Basic setup as suggested in the article
  * @see AbstractSpecification
  */
-public interface Specification<T> {
+public interface Specification<I, T extends IdType<I>> {
     boolean isSatisfiedBy(T t);
 
-    Specification<T> and(Specification<T> other);
+    Specification<I, T> and(Specification<I, T> other);
 
-    Specification<T> or(Specification<T> other);
+    Specification<I, T> or(Specification<I, T> other);
 
-    Specification<T> not(Specification<T> other);
+    Specification<I, T> not(Specification<I, T> other);
 
     Class<T> getType();
 }

@@ -2,7 +2,7 @@ package net.avdw.todo.domain;
 
 import net.avdw.todo.repository.AbstractSpecification;
 
-public class IsContaining extends AbstractSpecification<Todo> {
+public class IsContaining extends AbstractSpecification<Integer, Todo> {
     private final String text;
 
     public IsContaining(final String text) {

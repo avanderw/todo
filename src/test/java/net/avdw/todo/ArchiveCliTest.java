@@ -7,9 +7,7 @@ import lombok.SneakyThrows;
 import net.avdw.todo.domain.*;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.tinylog.Logger;
 import picocli.CommandLine;
 
@@ -30,10 +28,18 @@ public class ArchiveCliTest {
     private StringWriter errWriter;
     private StringWriter outWriter;
 
+    @BeforeClass
+    @SneakyThrows
+    public static void warmup() {
+        Files.createDirectories(todoPath.getParent());
+        Files.copy(Paths.get("src/test/resources/.todo/todo.txt"), todoPath, StandardCopyOption.REPLACE_EXISTING);
+        commandLine = new CommandLine(RefactoredMainCli.class, new GuiceFactory(new DoneCliTest.TestModule()));
+        commandLine.execute("");
+    }
+
     @Before
     @SneakyThrows
     public void beforeTest() {
-        Files.createDirectories(todoPath.getParent());
         Files.copy(Paths.get("src/test/resources/.todo/todo.txt"), todoPath, StandardCopyOption.REPLACE_EXISTING);
         commandLine = new CommandLine(RefactoredMainCli.class, new GuiceFactory(new TestModule()));
         errWriter = new StringWriter();
@@ -42,9 +48,9 @@ public class ArchiveCliTest {
         commandLine.setErr(new PrintWriter(errWriter));
     }
 
-    @After
+    @AfterClass
     @SneakyThrows
-    public void afterTest() {
+    public static void afterClass() {
         Files.deleteIfExists(todoPath);
         Files.deleteIfExists(todoPath.getParent().resolve("done.txt"));
         Files.deleteIfExists(todoPath.getParent().resolve("parked.txt"));
@@ -53,18 +59,18 @@ public class ArchiveCliTest {
         Files.deleteIfExists(todoPath.getParent().getParent());
     }
 
-    @Test
+    @Test(timeout = 200)
     public void testBasic() {
         assertSuccess(commandLine.execute("do", "5"));
         assertSuccess(commandLine.execute("rm", "3"));
         assertSuccess(commandLine.execute("park", "2"));
-        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
+        Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneParkedOrRemoved = todoRepository.findAll(new IsDone().or(new IsParked()).or(new IsRemoved()));
         assertEquals(3, doneParkedOrRemoved.size());
 
         assertSuccess(commandLine.execute("archive"));
 
-        todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
+        todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         doneParkedOrRemoved = todoRepository.findAll(new IsDone().or(new IsParked()).or(new IsRemoved()));
         assertEquals(0, doneParkedOrRemoved.size());
     }
@@ -104,8 +110,8 @@ public class ArchiveCliTest {
 
         @Provides
         @Singleton
-        Repository<Todo> todoRepository(final Path todoPath) {
-            return new FileRepository<>(todoPath, new TodoBuilder());
+        Repository<Integer, Todo> todoRepository(final Path todoPath) {
+            return new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         }
     }
 }

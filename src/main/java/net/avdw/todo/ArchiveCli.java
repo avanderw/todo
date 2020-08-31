@@ -14,11 +14,11 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-@Command(name = "archive", description = "Archive done, removed and parked items")
+@Command(name = "archive", resourceBundle = "messages", description = "${bundle:archive}")
 public class ArchiveCli implements Runnable {
 
     @Inject
-    private Repository<Todo> todoRepository;
+    private Repository<Integer, Todo> todoRepository;
     @Inject
     private Path todoPath;
     @Spec
@@ -29,10 +29,10 @@ public class ArchiveCli implements Runnable {
 
     @Override
     public void run() {
-        Specification<Todo> isDone = new IsDone();
-        Specification<Todo> isParked = new IsParked();
-        Specification<Todo> isRemoved = new IsRemoved();
-        Specification<Todo> isArchive = isDone.or(isParked).or(isRemoved);
+        Specification<Integer, Todo> isDone = new IsDone();
+        Specification<Integer, Todo> isParked = new IsParked();
+        Specification<Integer, Todo> isRemoved = new IsRemoved();
+        Specification<Integer, Todo> isArchive = isDone.or(isParked).or(isRemoved);
         List<Todo> allTodoList= todoRepository.findAll();
         for (int i = 0; i < allTodoList.size(); i++) {
             if (isArchive.isSatisfiedBy(allTodoList.get(i))) {
@@ -42,13 +42,13 @@ public class ArchiveCli implements Runnable {
         }
 
         todoRepository.setAutoCommit(false);
-        archive(new FileRepository<>(todoPath.getParent().resolve("done.txt"), new TodoBuilder()), isDone);
-        archive(new FileRepository<>(todoPath.getParent().resolve("parked.txt"), new TodoBuilder()), isParked);
-        archive(new FileRepository<>(todoPath.getParent().resolve("removed.txt"), new TodoBuilder()), isRemoved);
+        archive(new FileRepository<>(todoPath.getParent().resolve("done.txt"), new TodoFileTypeBuilder()), isDone);
+        archive(new FileRepository<>(todoPath.getParent().resolve("parked.txt"), new TodoFileTypeBuilder()), isParked);
+        archive(new FileRepository<>(todoPath.getParent().resolve("removed.txt"), new TodoFileTypeBuilder()), isRemoved);
         todoRepository.commit();
     }
 
-    private void archive(final Repository<Todo> archiveRepository, final Specification<Todo> specification) {
+    private void archive(final Repository<Integer, Todo> archiveRepository, final Specification<Integer, Todo> specification) {
         List<Todo> archiveTodoList = todoRepository.findAll(specification);
         archiveRepository.addAll(archiveTodoList);
         todoRepository.removeAll(specification);

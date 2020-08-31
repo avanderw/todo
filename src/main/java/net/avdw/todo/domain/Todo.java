@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import net.avdw.todo.priority.Priority;
+import net.avdw.todo.repository.IdType;
 import org.tinylog.Logger;
 
 import java.text.SimpleDateFormat;
@@ -13,10 +14,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @EqualsAndHashCode
-public class Todo {
+public class Todo implements IdType<Integer> {
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final Pattern COMPLETION_DATE_PATTERN = Pattern.compile("^x (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
     private static final Pattern ADDITION_DATE_PATTERN = Pattern.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d)|^x .*[\\d-]+.* (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
+    @Getter
+    private final Integer id;
     @Getter
     private final String text;
     @Getter(lazy = true)
@@ -28,8 +31,13 @@ public class Todo {
     @Getter(lazy = true)
     private final Priority priority = priority();
 
-    public Todo(final String text) {
+    public Todo(final Integer id, final String text) {
+        this.id = Objects.requireNonNull(id);
         this.text = Objects.requireNonNull(text);
+    }
+
+    public Integer getIdx() {
+        return id + 1;
     }
 
     private boolean complete() {
@@ -37,7 +45,11 @@ public class Todo {
     }
 
     private Priority priority() {
-        throw new UnsupportedOperationException();
+        if (text.matches("^\\([A-Z]\\).*")) {
+            return Priority.valueOf(text.substring(text.indexOf("(") + 1, text.indexOf(")")));
+        } else {
+            return null;
+        }
     }
 
     @SneakyThrows

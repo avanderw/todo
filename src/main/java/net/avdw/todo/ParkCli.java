@@ -19,14 +19,14 @@ import java.util.Set;
 @Command(name = "park", description = "${bundle:park}")
 public class ParkCli implements Runnable {
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-    @Parameters(description = "${bundle:park.idx.list}", arity = "1..*")
+    @Parameters(description = "${bundle:park.idx.list}", arity = "1", split = ",")
     private Set<Integer> idxList;
     @Inject
     private Path todoPath;
     @Spec
     private CommandSpec spec;
     @Inject
-    private Repository<Todo> todoRepository;
+    private Repository<Integer, Todo> todoRepository;
     @Inject
     private TemplatedResourceBundle templatedResourceBundle;
     private Gson gson = new Gson();
@@ -36,11 +36,12 @@ public class ParkCli implements Runnable {
         todoRepository.setAutoCommit(false);
         idxList.stream().sorted(Comparator.reverseOrder())
                 .forEachOrdered(idx -> {
-                    todoRepository.save(idx - 1, new Todo(String.format("p %s %s",
+                    int id = idx -1;
+                    todoRepository.update(new Todo(id, String.format("p %s %s",
                             SIMPLE_DATE_FORMAT.format(new Date()),
-                            todoRepository.findById(idx - 1).toString().replaceFirst("\\([A-Z]\\) ", ""))));
+                            todoRepository.findById(id).toString().replaceFirst("\\([A-Z]\\) ", ""))));
                     spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                            gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", idx, todoRepository.findById(idx - 1)), Map.class)));
+                            gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", idx, todoRepository.findById(id)), Map.class)));
                 });
         todoRepository.commit();
     }

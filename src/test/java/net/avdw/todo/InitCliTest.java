@@ -5,7 +5,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import lombok.SneakyThrows;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.domain.TodoBuilder;
+import net.avdw.todo.domain.TodoFileTypeBuilder;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import org.junit.After;
@@ -33,7 +33,7 @@ public class InitCliTest {
     private StringWriter errWriter;
     private StringWriter outWriter;
 
-    @Test
+    @Test(timeout = 50)
     @SneakyThrows
     public void testNotExists() {
         Files.deleteIfExists(todoPath);
@@ -69,7 +69,7 @@ public class InitCliTest {
         Files.deleteIfExists(todoPath.getParent().getParent());
     }
 
-    @Test
+    @Test(timeout = 50)
     @SneakyThrows
     public void testExists() {
         Files.createDirectories(todoPath.getParent());
@@ -87,8 +87,8 @@ public class InitCliTest {
 
         @Provides
         @Singleton
-        Repository<Todo> todoRepository(final Path todoPath) {
-            return new FileRepository<>(todoPath, new TodoBuilder());
+        Repository<Integer, Todo> todoRepository(final Path todoPath) {
+            return new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         }
     }
 

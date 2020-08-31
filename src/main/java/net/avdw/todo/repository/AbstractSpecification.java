@@ -2,24 +2,24 @@ package net.avdw.todo.repository;
 
 import java.lang.reflect.ParameterizedType;
 
-abstract public class AbstractSpecification<T> implements Specification<T> {
+abstract public class AbstractSpecification<I, T extends IdType<I>> implements Specification<I, T> {
     @Override
     public boolean isSatisfiedBy(final T t) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Specification<T> and(final Specification<T> other) {
+    public Specification<I, T> and(final Specification<I, T> other) {
         return new AndSpecification<>(this, other);
     }
 
     @Override
-    public Specification<T> or(final Specification<T> other) {
+    public Specification<I, T> or(final Specification<I, T> other) {
         return new OrSpecification<>(this, other);
     }
 
     @Override
-    public Specification<T> not(final Specification<T> other) {
+    public Specification<I, T> not(final Specification<I, T> other) {
         return new NotSpecification<>(this, other);
     }
 

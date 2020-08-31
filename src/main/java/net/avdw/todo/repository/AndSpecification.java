@@ -1,10 +1,10 @@
 package net.avdw.todo.repository;
 
-public class AndSpecification<T> extends AbstractSpecification<T> {
-    private final Specification<T> first;
-    private final Specification<T> second;
+public class AndSpecification<I, T extends IdType<I>> extends AbstractSpecification<I, T> {
+    private final Specification<I, T> first;
+    private final Specification<I, T> second;
 
-    public AndSpecification(final Specification<T> first, final Specification<T> second) {
+    public AndSpecification(final Specification<I, T> first, final Specification<I, T> second) {
         this.first = first;
         this.second = second;
     }

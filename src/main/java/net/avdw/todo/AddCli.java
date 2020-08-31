@@ -30,14 +30,14 @@ class AddCli implements Runnable {
     private boolean hasPriority = false;
 
     @Inject
-    private Repository<Todo> todoRepository;
+    private Repository<Integer, Todo> todoRepository;
 
     @Spec
     private CommandSpec spec;
 
     @Override
     public void run() {
-        Specification<Todo> containingAddition = new IsContaining(addition);
+        Specification<Integer, Todo> containingAddition = new IsContaining(addition);
         if (!todoRepository.findAll(containingAddition).isEmpty()) {
             spec.commandLine().getOut().println("duplicate");
             throw new UnsupportedOperationException();
@@ -45,12 +45,12 @@ class AddCli implements Runnable {
 
         addition = String.format("%s %s", SIMPLE_DATE_FORMAT.format(new Date()), addition);
         if (hasPriority) {
-            Specification<Todo> withPriority = new IsPriority();
+            Specification<Integer, Todo> withPriority = new IsPriority();
             List<Priority> usedPriorityList = todoRepository.findAll(withPriority).stream().map(Todo::getPriority).collect(Collectors.toList());
             Priority priority = Arrays.stream(Priority.values()).filter(pri -> !usedPriorityList.contains(pri)).sorted().findFirst().orElse(Priority.Z);
             addition = String.format("%s %s", priority, addition);
         }
 
-        todoRepository.add(new Todo(addition));
+        todoRepository.add(new Todo(todoRepository.size(), addition));
     }
 }

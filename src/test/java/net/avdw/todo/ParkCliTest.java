@@ -4,10 +4,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import lombok.SneakyThrows;
-import net.avdw.todo.domain.IsDone;
 import net.avdw.todo.domain.IsParked;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.domain.TodoBuilder;
+import net.avdw.todo.domain.TodoFileTypeBuilder;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import org.junit.After;
@@ -51,7 +50,7 @@ public class ParkCliTest {
         Files.deleteIfExists(todoPath.getParent().getParent());
     }
 
-    @Test
+    @Test(timeout = 50)
     public void testNoIdx() {
         assertFailure(commandLine.execute("park"));
     }
@@ -68,28 +67,36 @@ public class ParkCliTest {
         assertNotEquals(0, exitCode);
     }
 
-    @Test
+    @Test(timeout = 50)
     public void testRepeatIdx() {
-        assertSuccess(commandLine.execute("park", "5", "5"));
-        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
+        assertSuccess(commandLine.execute("park 5,5".split(" ")));
+        Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> parkedTodoList = todoRepository.findAll(new IsParked());
         assertEquals(1, parkedTodoList.size());
         assertFalse(parkedTodoList.get(0).getText().startsWith(String.format("p %s p ", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
-    @Test
+    @Test(timeout = 50)
     public void testPriorityRemoval() {
-        assertSuccess(commandLine.execute("pri", "7", "A"));
-        assertSuccess(commandLine.execute("park", "7"));
-        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
+        assertSuccess(commandLine.execute("pri 7 A".split(" ")));
+        resetOutput();
+        assertSuccess(commandLine.execute("park 7".split(" ")));
+        Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> parkedTodoList = todoRepository.findAll(new IsParked());
         assertEquals(1, parkedTodoList.size());
-        assertFalse(parkedTodoList.get(1).getText().contains("(A)"));
+        assertFalse(parkedTodoList.get(0).getText().contains("(A)"));
+    }
+    private void resetOutput() {
+        errWriter = new StringWriter();
+        outWriter = new StringWriter();
+        commandLine.setOut(new PrintWriter(outWriter));
+        commandLine.setErr(new PrintWriter(errWriter));
     }
 
-    @Test
+
+    @Test(timeout = 50)
     public void testOneIdx() {
-        assertSuccess(commandLine.execute("park", "2"));
-        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
+        assertSuccess(commandLine.execute("park 2".split(" ")));
+        Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> parkedTodoList = todoRepository.findAll(new IsParked());
         assertEquals(1, parkedTodoList.size());
         assertTrue(parkedTodoList.get(0).getText().startsWith(String.format("p %s 2019-02-07", SIMPLE_DATE_FORMAT.format(new Date()))));
@@ -107,10 +114,10 @@ public class ParkCliTest {
         assertEquals(0, exitCode);
     }
 
-    @Test
+    @Test(timeout = 50)
     public void testTwoIdx() {
-        assertSuccess(commandLine.execute("park", "2", "4"));
-        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
+        assertSuccess(commandLine.execute("park 2,4".split(" ")));
+        Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> parkedTodoList = todoRepository.findAll(new IsParked());
         assertEquals(2, parkedTodoList.size());
     }
@@ -126,8 +133,8 @@ public class ParkCliTest {
 
         @Provides
         @Singleton
-        Repository<Todo> todoRepository(final Path todoPath) {
-            return new FileRepository<>(todoPath, new TodoBuilder());
+        Repository<Integer, Todo> todoRepository(final Path todoPath) {
+            return new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         }
     }
 }

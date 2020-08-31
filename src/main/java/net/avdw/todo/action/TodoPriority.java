@@ -21,6 +21,10 @@ import picocli.CommandLine.ParentCommand;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * @see net.avdw.todo.PriorityCli
+ */
+@Deprecated
 @Command(name = "pri", description = "Prioritize a todo item")
 public class TodoPriority implements Runnable {
     @ParentCommand

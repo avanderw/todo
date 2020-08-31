@@ -9,16 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FileRepository<T> implements Repository<T> {
+public class FileRepository<T extends IdType<Integer>> implements Repository<Integer, T> {
     private final Path path;
     private final List<T> itemList = new ArrayList<>();
     private boolean autoCommit = true;
 
     @SneakyThrows
-    public FileRepository(final Path path, final TypeBuilder<T> builder) {
+    public FileRepository(final Path path, final FileTypeBuilder<T> builder) {
         this.path = path;
         if (Files.exists(path)) {
-            Files.readAllLines(path).forEach(line -> itemList.add(builder.build(line)));
+            List<String> readAllLines = Files.readAllLines(path);
+            for (int i = 0; i < readAllLines.size(); i++) {
+                String line = readAllLines.get(i);
+                itemList.add(builder.build(i, line));
+            }
         } else {
             Logger.debug("Path does not exist {}", path.toUri());
         }
@@ -30,7 +34,7 @@ public class FileRepository<T> implements Repository<T> {
     }
 
     @Override
-    public List<T> findAll(final Specification<T> specification) {
+    public List<T> findAll(final Specification<Integer, T> specification) {
         return itemList.stream().filter(specification::isSatisfiedBy).collect(Collectors.toList());
     }
 
@@ -53,14 +57,14 @@ public class FileRepository<T> implements Repository<T> {
     }
 
     @Override
-    public void save(final int id, final T item) {
-        if (id < itemList.size()) {
-            itemList.set(id, item);
+    public void update(final T item) {
+        if (item.getId() < itemList.size()) {
+            itemList.set(item.getId(), item);
             if (autoCommit) {
                 commit();
             }
         } else {
-            Logger.debug("Line ({}) not found in repository", id);
+            Logger.debug("Line ({}) not found in repository", item.getId());
         }
     }
 
@@ -80,7 +84,7 @@ public class FileRepository<T> implements Repository<T> {
     }
 
     @Override
-    public void removeAll(final Specification<T> specification) {
+    public void removeAll(final Specification<Integer, T> specification) {
         itemList.removeAll(findAll(specification));
         if (autoCommit) {
             commit();
@@ -90,5 +94,10 @@ public class FileRepository<T> implements Repository<T> {
     @Override
     public List<T> findAll() {
         return itemList;
+    }
+
+    @Override
+    public int size() {
+        return itemList.size();
     }
 }

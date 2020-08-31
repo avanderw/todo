@@ -1,10 +1,10 @@
 package net.avdw.todo.repository;
 
-public class OrSpecification<T> extends AbstractSpecification<T> {
-    private final Specification<T> first;
-    private final Specification<T> second;
+public class OrSpecification<I, T extends IdType<I>> extends AbstractSpecification<I, T> {
+    private final Specification<I, T> first;
+    private final Specification<I, T> second;
 
-    public OrSpecification(final Specification<T> first, final Specification<T> second) {
+    public OrSpecification(final Specification<I, T> first, final Specification<I, T> second) {
         this.first = first;
         this.second = second;
     }

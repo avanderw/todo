@@ -5,7 +5,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import lombok.SneakyThrows;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.domain.TodoBuilder;
+import net.avdw.todo.domain.TodoFileTypeBuilder;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import org.junit.After;
@@ -62,7 +62,7 @@ public class MainCliTest {
         Files.deleteIfExists(todoPath.getParent().getParent());
     }
 
-    @Test
+    @Test(timeout = 50)
     @SneakyThrows
     public void testEmptyWithTodo() {
         Files.createDirectories(todoPath.getParent());
@@ -71,13 +71,13 @@ public class MainCliTest {
         assertTrue("SHOULD output usage help", outWriter.toString().contains("Usage"));
     }
 
-    @Test
+    @Test(timeout = 50)
     public void testEmptyWithoutTodo() {
         assertSuccess(commandLine.execute());
         assertTrue("SHOULD output usage help", outWriter.toString().contains("Usage"));
     }
 
-    @Test
+    @Test(timeout = 50)
     public void testVersion() {
         assertSuccess(commandLine.execute("--version"));
         assertNotEquals(2, outWriter.toString().length());
@@ -93,8 +93,8 @@ public class MainCliTest {
 
         @Provides
         @Singleton
-        Repository<Todo> todoRepository(final Path todoPath) {
-            return new FileRepository<>(todoPath, new TodoBuilder());
+        Repository<Integer, Todo> todoRepository(final Path todoPath) {
+            return new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         }
     }
 

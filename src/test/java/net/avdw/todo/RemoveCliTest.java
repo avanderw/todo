@@ -4,7 +4,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import lombok.SneakyThrows;
-import net.avdw.todo.domain.*;
+import net.avdw.todo.domain.IsRemoved;
+import net.avdw.todo.domain.Todo;
+import net.avdw.todo.domain.TodoFileTypeBuilder;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import org.junit.After;
@@ -51,7 +53,7 @@ public class RemoveCliTest {
         Files.deleteIfExists(todoPath.getParent().getParent());
     }
 
-    @Test
+    @Test(timeout = 50)
     public void testNoIdx() {
         assertFailure(commandLine.execute("rm"));
     }
@@ -68,31 +70,13 @@ public class RemoveCliTest {
         assertNotEquals(0, exitCode);
     }
 
-    @Test
+    @Test(timeout = 50)
     public void testRepeatIdx() {
-        assertSuccess(commandLine.execute("rm", "5", "5"));
-        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
+        assertSuccess(commandLine.execute("rm 5,5".split(" ")));
+        Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> removedTodoList = todoRepository.findAll(new IsRemoved());
         assertEquals(1, removedTodoList.size());
         assertFalse(removedTodoList.get(0).getText().startsWith(String.format("r %s r ", SIMPLE_DATE_FORMAT.format(new Date()))));
-    }
-    @Test
-    public void testPriorityRemoval() {
-        assertSuccess(commandLine.execute("pri", "7", "A"));
-        assertSuccess(commandLine.execute("rm", "7"));
-        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
-        List<Todo> removedTodoList = todoRepository.findAll(new IsRemoved());
-        assertEquals(1, removedTodoList.size());
-        assertFalse(removedTodoList.get(1).getText().contains("(A)"));
-    }
-
-    @Test
-    public void testOneIdx() {
-        assertSuccess(commandLine.execute("rm", "2"));
-        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
-        List<Todo> parkedTodoList = todoRepository.findAll(new IsRemoved());
-        assertEquals(1, parkedTodoList.size());
-        assertTrue(parkedTodoList.get(0).getText().startsWith(String.format("r %s 2019-02-07", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
 
     private void assertSuccess(final int exitCode) {
@@ -107,10 +91,37 @@ public class RemoveCliTest {
         assertEquals(0, exitCode);
     }
 
-    @Test
+    @Test(timeout = 50)
+    public void testPriorityRemoval() {
+        assertSuccess(commandLine.execute("pri 7 A".split(" ")));
+        resetOutput();
+        assertSuccess(commandLine.execute("rm 7".split(" ")));
+        Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
+        List<Todo> removedTodoList = todoRepository.findAll(new IsRemoved());
+        assertEquals(1, removedTodoList.size());
+        assertFalse(removedTodoList.get(0).getText().contains("(A)"));
+    }
+
+    private void resetOutput() {
+        errWriter = new StringWriter();
+        outWriter = new StringWriter();
+        commandLine.setOut(new PrintWriter(outWriter));
+        commandLine.setErr(new PrintWriter(errWriter));
+    }
+
+    @Test(timeout = 50)
+    public void testOneIdx() {
+        assertSuccess(commandLine.execute("rm 2".split(" ")));
+        Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
+        List<Todo> parkedTodoList = todoRepository.findAll(new IsRemoved());
+        assertEquals(1, parkedTodoList.size());
+        assertTrue(parkedTodoList.get(0).getText().startsWith(String.format("r %s 2019-02-07", SIMPLE_DATE_FORMAT.format(new Date()))));
+    }
+
+    @Test(timeout = 50)
     public void testTwoIdx() {
-        assertSuccess(commandLine.execute("rm", "2", "4"));
-        Repository<Todo> todoRepository = new FileRepository<>(todoPath, new TodoBuilder());
+        assertSuccess(commandLine.execute("rm 2,4".split(" ")));
+        Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> removedTodoList = todoRepository.findAll(new IsRemoved());
         assertEquals(2, removedTodoList.size());
     }
@@ -126,8 +137,8 @@ public class RemoveCliTest {
 
         @Provides
         @Singleton
-        Repository<Todo> todoRepository(final Path todoPath) {
-            return new FileRepository<>(todoPath, new TodoBuilder());
+        Repository<Integer, Todo> todoRepository(final Path todoPath) {
+            return new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         }
     }
 }

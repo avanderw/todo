@@ -1,10 +1,10 @@
 package net.avdw.todo.repository;
 
-public class NotSpecification<T> extends AbstractSpecification<T> {
-    private final Specification<T> first;
-    private final Specification<T> second;
+public class NotSpecification<I, T extends IdType<I>> extends AbstractSpecification<I, T> {
+    private final Specification<I, T> first;
+    private final Specification<I, T> second;
 
-    public NotSpecification(final Specification<T> first, final Specification<T> second) {
+    public NotSpecification(final Specification<I, T> first, final Specification<I, T> second) {
         this.first = first;
         this.second = second;
     }
