@@ -1,5 +1,7 @@
 package net.avdw.todo;
 
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.tinylog.Logger;
 import picocli.CommandLine;
 
@@ -22,6 +24,15 @@ public class MainVersion implements CommandLine.IVersionProvider {
                     Properties properties = new Properties();
                     properties.load(fileReader);
                     return new String[]{properties.getProperty("version")};
+                }
+            }
+
+            Path pomPath = Paths.get("pom.xml");
+            if (Files.exists(pomPath)) {
+                MavenXpp3Reader mavenXpp3Reader = new MavenXpp3Reader();
+                try (FileReader fileReader = new FileReader("pom.xml", StandardCharsets.UTF_8)) {
+                    Model model = mavenXpp3Reader.read(fileReader);
+                    return new String[]{model.getVersion()};
                 }
             }
 
