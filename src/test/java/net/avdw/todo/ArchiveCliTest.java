@@ -28,26 +28,6 @@ public class ArchiveCliTest {
     private StringWriter errWriter;
     private StringWriter outWriter;
 
-    @BeforeClass
-    @SneakyThrows
-    public static void warmup() {
-        Files.createDirectories(todoPath.getParent());
-        Files.copy(Paths.get("src/test/resources/.todo/todo.txt"), todoPath, StandardCopyOption.REPLACE_EXISTING);
-        commandLine = new CommandLine(RefactoredMainCli.class, new GuiceFactory(new DoneCliTest.TestModule()));
-        commandLine.execute("");
-    }
-
-    @Before
-    @SneakyThrows
-    public void beforeTest() {
-        Files.copy(Paths.get("src/test/resources/.todo/todo.txt"), todoPath, StandardCopyOption.REPLACE_EXISTING);
-        commandLine = new CommandLine(RefactoredMainCli.class, new GuiceFactory(new TestModule()));
-        errWriter = new StringWriter();
-        outWriter = new StringWriter();
-        commandLine.setOut(new PrintWriter(outWriter));
-        commandLine.setErr(new PrintWriter(errWriter));
-    }
-
     @AfterClass
     @SneakyThrows
     public static void afterClass() {
@@ -59,20 +39,13 @@ public class ArchiveCliTest {
         Files.deleteIfExists(todoPath.getParent().getParent());
     }
 
-    @Test(timeout = 200)
-    public void testBasic() {
-        assertSuccess(commandLine.execute("do", "5"));
-        assertSuccess(commandLine.execute("rm", "3"));
-        assertSuccess(commandLine.execute("park", "2"));
-        Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
-        List<Todo> doneParkedOrRemoved = todoRepository.findAll(new IsDone().or(new IsParked()).or(new IsRemoved()));
-        assertEquals(3, doneParkedOrRemoved.size());
-
-        assertSuccess(commandLine.execute("archive"));
-
-        todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
-        doneParkedOrRemoved = todoRepository.findAll(new IsDone().or(new IsParked()).or(new IsRemoved()));
-        assertEquals(0, doneParkedOrRemoved.size());
+    @BeforeClass
+    @SneakyThrows
+    public static void warmup() {
+        Files.createDirectories(todoPath.getParent());
+        Files.copy(Paths.get("src/test/resources/.todo/todo.txt"), todoPath, StandardCopyOption.REPLACE_EXISTING);
+        commandLine = new CommandLine(RefactoredMainCli.class, new GuiceFactory(new DoneCliTest.TestModule()));
+        commandLine.execute("");
     }
 
     private void assertFailure(final int exitCode) {
@@ -97,6 +70,33 @@ public class ArchiveCliTest {
         assertEquals("MUST NOT HAVE error output", "", errWriter.toString());
         assertNotEquals("MUST HAVE standard output", "", outWriter.toString().trim());
         assertEquals(0, exitCode);
+    }
+
+    @Before
+    @SneakyThrows
+    public void beforeTest() {
+        Files.copy(Paths.get("src/test/resources/.todo/todo.txt"), todoPath, StandardCopyOption.REPLACE_EXISTING);
+        commandLine = new CommandLine(RefactoredMainCli.class, new GuiceFactory(new TestModule()));
+        errWriter = new StringWriter();
+        outWriter = new StringWriter();
+        commandLine.setOut(new PrintWriter(outWriter));
+        commandLine.setErr(new PrintWriter(errWriter));
+    }
+
+    @Test(timeout = 200)
+    public void testBasic() {
+        assertSuccess(commandLine.execute("do", "5"));
+        assertSuccess(commandLine.execute("rm", "3"));
+        assertSuccess(commandLine.execute("park", "2"));
+        Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
+        List<Todo> doneParkedOrRemoved = todoRepository.findAll(new IsDone().or(new IsParked()).or(new IsRemoved()));
+        assertEquals(3, doneParkedOrRemoved.size());
+
+        assertSuccess(commandLine.execute("archive"));
+
+        todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
+        doneParkedOrRemoved = todoRepository.findAll(new IsDone().or(new IsParked()).or(new IsRemoved()));
+        assertEquals(0, doneParkedOrRemoved.size());
     }
 
     static class TestModule extends AbstractModule {

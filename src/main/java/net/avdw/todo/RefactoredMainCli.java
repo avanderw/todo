@@ -25,6 +25,7 @@ import java.nio.file.Path;
                 ParkCli.class,
                 RemoveCli.class,
                 ArchiveCli.class,
+                BackupCli.class,
         })
 public class RefactoredMainCli implements Runnable {
     @Inject

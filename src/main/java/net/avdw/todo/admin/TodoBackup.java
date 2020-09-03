@@ -15,6 +15,10 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
+/**
+ * @see net.avdw.todo.BackupCli
+ */
+@Deprecated
 @Command(name = "backup", description = "Write todo.txt.bak")
 public class TodoBackup implements Runnable {
     @ParentCommand
