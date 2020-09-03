@@ -11,6 +11,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * @see net.avdw.todo.ExploreCli
+ */
+@Deprecated
 @Command(name = "explore", description = "Open the .todo directory")
 public class TodoExplore implements Runnable {
     @ParentCommand

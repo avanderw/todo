@@ -17,6 +17,7 @@ import picocli.CommandLine.ParentCommand;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Deprecated
 @Command(name = "start", description = "Start a todo item")
 public class TodoStart implements Runnable {
 
