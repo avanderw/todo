@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FileRepository<T extends IdType<Integer>> implements Repository<Integer, T> {
-    private final Path path;
     private final List<T> itemList = new ArrayList<>();
+    private final Path path;
     private boolean autoCommit = true;
 
     @SneakyThrows
@@ -29,21 +29,36 @@ public class FileRepository<T extends IdType<Integer>> implements Repository<Int
     }
 
     @Override
-    public void setAutoCommit(final boolean autoCommit) {
-        this.autoCommit = autoCommit;
+    public void add(final T item) {
+        item.setId(itemList.size());
+        itemList.add(item);
+        if (autoCommit) {
+            commit();
+        }
+    }
+
+    @Override
+    public void addAll(final List<T> addItemList) {
+        addItemList.forEach(item -> {
+            item.setId(itemList.size());
+            itemList.add(item);
+        });
+
+        if (autoCommit) {
+            commit();
+        }
+    }
+
+    @SneakyThrows
+    @Override
+    public void commit() {
+        Logger.debug("Writing {}", path);
+        Files.write(path, itemList.stream().map(Object::toString).collect(Collectors.toList()));
     }
 
     @Override
     public List<T> findAll(final Specification<Integer, T> specification) {
         return itemList.stream().filter(specification::isSatisfiedBy).collect(Collectors.toList());
-    }
-
-    @Override
-    public void add(final T item) {
-        itemList.add(item);
-        if (autoCommit) {
-            commit();
-        }
     }
 
     @Override
@@ -57,6 +72,24 @@ public class FileRepository<T extends IdType<Integer>> implements Repository<Int
     }
 
     @Override
+    public void removeAll(final Specification<Integer, T> specification) {
+        itemList.removeAll(findAll(specification));
+        if (autoCommit) {
+            commit();
+        }
+    }
+
+    @Override
+    public void setAutoCommit(final boolean autoCommit) {
+        this.autoCommit = autoCommit;
+    }
+
+    @Override
+    public int size() {
+        return itemList.size();
+    }
+
+    @Override
     public void update(final T item) {
         if (item.getId() < itemList.size()) {
             itemList.set(item.getId(), item);
@@ -66,38 +99,5 @@ public class FileRepository<T extends IdType<Integer>> implements Repository<Int
         } else {
             Logger.debug("Line ({}) not found in repository", item.getId());
         }
-    }
-
-    @SneakyThrows
-    @Override
-    public void commit() {
-        Logger.debug("Writing {}", path);
-        Files.write(path, itemList.stream().map(Object::toString).collect(Collectors.toList()));
-    }
-
-    @Override
-    public void addAll(final List<T> addItemList) {
-        itemList.addAll(addItemList);
-        if (autoCommit) {
-            commit();
-        }
-    }
-
-    @Override
-    public void removeAll(final Specification<Integer, T> specification) {
-        itemList.removeAll(findAll(specification));
-        if (autoCommit) {
-            commit();
-        }
-    }
-
-    @Override
-    public List<T> findAll() {
-        return itemList;
-    }
-
-    @Override
-    public int size() {
-        return itemList.size();
     }
 }

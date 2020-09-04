@@ -3,6 +3,7 @@ package net.avdw.todo;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import net.avdw.todo.domain.*;
+import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
@@ -33,7 +34,7 @@ public class ArchiveCli implements Runnable {
         Specification<Integer, Todo> isParked = new IsParked();
         Specification<Integer, Todo> isRemoved = new IsRemoved();
         Specification<Integer, Todo> isArchive = isDone.or(isParked).or(isRemoved);
-        List<Todo> allTodoList= todoRepository.findAll();
+        List<Todo> allTodoList= todoRepository.findAll(new Any());
         for (int i = 0; i < allTodoList.size(); i++) {
             if (isArchive.isSatisfiedBy(allTodoList.get(i))) {
                 spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,

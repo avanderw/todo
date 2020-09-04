@@ -24,6 +24,7 @@ import java.nio.file.Path;
                 DoneCli.class,
                 ParkCli.class,
                 RemoveCli.class,
+                SortCli.class,
                 ArchiveCli.class,
                 BackupCli.class,
                 ExploreCli.class,

@@ -21,6 +21,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @see net.avdw.todo.SortCli
+ */
+@Deprecated
 @Command(name = "sort", description = "Sort todo.txt")
 public class TodoSort implements Runnable {
     @ParentCommand

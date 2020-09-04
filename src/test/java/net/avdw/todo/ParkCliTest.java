@@ -17,7 +17,10 @@ import picocli.CommandLine;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -75,6 +78,13 @@ public class ParkCliTest {
         assertEquals(1, parkedTodoList.size());
         assertFalse(parkedTodoList.get(0).getText().startsWith(String.format("p %s p ", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
+    private void resetOutput() {
+        errWriter = new StringWriter();
+        outWriter = new StringWriter();
+        commandLine.setOut(new PrintWriter(outWriter));
+        commandLine.setErr(new PrintWriter(errWriter));
+    }
+
     @Test(timeout = 50)
     public void testPriorityRemoval() {
         assertSuccess(commandLine.execute("pri 7 A".split(" ")));
@@ -84,12 +94,6 @@ public class ParkCliTest {
         List<Todo> parkedTodoList = todoRepository.findAll(new IsParked());
         assertEquals(1, parkedTodoList.size());
         assertFalse(parkedTodoList.get(0).getText().contains("(A)"));
-    }
-    private void resetOutput() {
-        errWriter = new StringWriter();
-        outWriter = new StringWriter();
-        commandLine.setOut(new PrintWriter(outWriter));
-        commandLine.setErr(new PrintWriter(errWriter));
     }
 
 
