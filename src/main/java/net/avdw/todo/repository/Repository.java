@@ -1,6 +1,7 @@
 package net.avdw.todo.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface Repository<I, T extends IdType<I>> {
     void add(T item);
@@ -11,7 +12,7 @@ public interface Repository<I, T extends IdType<I>> {
 
     List<T> findAll(Specification<I, T> specification);
 
-    T findById(int id);
+    Optional<T> findById(int id);
 
     void removeAll(Specification<I, T> specification);
 

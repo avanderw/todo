@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class FileRepository<T extends IdType<Integer>> implements Repository<Integer, T> {
@@ -25,6 +26,10 @@ public class FileRepository<T extends IdType<Integer>> implements Repository<Int
             }
         } else {
             Logger.debug("Path does not exist {}", path.toUri());
+        }
+
+        if (itemList.isEmpty()) {
+            Logger.debug("Repository is empty {}", path.toUri());
         }
     }
 
@@ -62,13 +67,13 @@ public class FileRepository<T extends IdType<Integer>> implements Repository<Int
     }
 
     @Override
-    public T findById(final int id) {
+    public Optional<T> findById(final int id) {
         if (id < itemList.size()) {
-            return itemList.get(id);
+            return Optional.of(itemList.get(id));
         }
 
-        Logger.debug("Line ({}) not found in repository", id);
-        return null;
+        Logger.debug("Line ({}) not found in repository {}", id, path.toUri());
+        return Optional.empty();
     }
 
     @Override

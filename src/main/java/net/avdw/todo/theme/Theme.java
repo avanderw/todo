@@ -2,6 +2,7 @@ package net.avdw.todo.theme;
 
 import net.avdw.todo.item.TodoItem;
 
+@Deprecated
 public interface Theme {
     void printHeader(String text);
 

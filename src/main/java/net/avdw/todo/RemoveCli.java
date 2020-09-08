@@ -39,9 +39,9 @@ public class RemoveCli implements Runnable {
                     int id = idx - 1;
                     todoRepository.update(new Todo(id, String.format("r %s %s",
                             SIMPLE_DATE_FORMAT.format(new Date()),
-                            todoRepository.findById(id).toString().replaceFirst("\\([A-Z]\\) ", ""))));
+                            todoRepository.findById(id).orElseThrow().toString().replaceFirst("\\([A-Z]\\) ", ""))));
                     spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                            gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", idx, todoRepository.findById(id)), Map.class)));
+                            gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", idx, todoRepository.findById(id).orElseThrow()), Map.class)));
                 });
         todoRepository.commit();
     }

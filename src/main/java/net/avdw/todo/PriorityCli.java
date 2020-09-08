@@ -100,7 +100,7 @@ public class PriorityCli implements Runnable {
                 todoRepository.setAutoCommit(false);
                 idxList.forEach(idx -> {
                     int id = idx - 1;
-                    Todo todoById = todoRepository.findById(id);
+                    Todo todoById = todoRepository.findById(id).orElseThrow();
                     Todo removePriorityTodo = new Todo(todoById.getId(), todoById.getText().replaceFirst("\\([A-Z]\\) ", ""));
                     todoRepository.update(removePriorityTodo);
                     spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
@@ -125,7 +125,7 @@ public class PriorityCli implements Runnable {
             todoRepository.setAutoCommit(false);
             idxList.forEach(idx -> {
                 int id = idx - 1;
-                Todo todoById = todoRepository.findById(id);
+                Todo todoById = todoRepository.findById(id).orElseThrow();
                 if (new IsDone().isSatisfiedBy(todoById)) {
                     spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.PRIORITY_NOT_ALLOWED_DONE));
                 } else if (new IsRemoved().isSatisfiedBy(todoById)) {

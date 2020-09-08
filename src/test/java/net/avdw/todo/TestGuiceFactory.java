@@ -5,10 +5,17 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import picocli.CommandLine;
 
-public final class GuiceFactory implements CommandLine.IFactory {
-    private final Injector injector;
+public final class TestGuiceFactory implements CommandLine.IFactory {
+    private final Module module;
+    private Injector injector;
 
-    GuiceFactory(final Module module) {
+    TestGuiceFactory(final Module module) {
+        this.module = module;
+
+        reset();
+    }
+
+    public void reset() {
         injector = Guice.createInjector(module);
     }
 
