@@ -13,6 +13,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @see net.avdw.todo.EditCli
+ */
+@Deprecated
 @CommandLine.Command(name = "edit", description = "Edit an item at an index")
 public class TodoEdit implements Runnable {
     @CommandLine.Parameters(description = "The index list to edit", arity = "1..*")

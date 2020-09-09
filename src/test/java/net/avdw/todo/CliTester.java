@@ -5,6 +5,8 @@ import picocli.CommandLine;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.Assert.*;
 
@@ -18,6 +20,13 @@ public class CliTester {
     public CliTester(final Class<?> cliClass, final TestGuiceFactory guiceFactory) {
         this.cliClass = cliClass;
         this.guiceFactory = guiceFactory;
+    }
+
+    public CliTester count(final String text, final int count) {
+        Pattern pattern= Pattern.compile(text);
+        Matcher matcher = pattern.matcher(out.toString());
+        assertEquals(count, matcher.results().count());
+        return this;
     }
 
     public CliTester execute() {
@@ -85,6 +94,7 @@ public class CliTester {
 
     public CliTester notContains(final String text) {
         assertFalse(String.format("Output MUST NOT contain '%s'", text), out.toString().contains(text));
+        assertFalse(String.format("Output MUST NOT contain '%s'", text), err.toString().contains(text));
         return this;
     }
 }
