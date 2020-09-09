@@ -11,15 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Command(name = "edit", description = "${bundle:edit}")
+@Command(name = "edit", resourceBundle = "messages", description = "${bundle:edit}")
 public class EditCli implements Runnable, IExitCodeGenerator {
     private final Gson gson = new Gson();
-    @Option(names = {"-a", "--add"}, description = "${bundle:edit.add}")
+    @Option(names = {"-a", "--add"}, descriptionKey = "edit.add")
     private List<String> addStringList = new ArrayList<>();
     private int exitCode = 0;
-    @Parameters(description = "${bundle:edit.idx.list}", arity = "1", split = ",")
+    @Parameters(descriptionKey = "edit.idx.list", arity = "1", split = ",")
     private List<Integer> idxList;
-    @Option(names = {"-r", "--remove"}, description = "${bundle:edit.remove}")
+    @Option(names = {"-r", "--remove"}, descriptionKey = "edit.remove")
     private List<String> removeStringList = new ArrayList<>();
     @Spec
     private CommandSpec spec;

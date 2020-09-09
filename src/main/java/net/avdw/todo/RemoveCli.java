@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-@Command(name = "rm", description = "${bundle:remove}")
+@Command(name = "rm", resourceBundle = "messages", description = "${bundle:remove}")
 public class RemoveCli implements Runnable {
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     @Parameters(description = "${bundle:remove.idx.list}", arity = "1", split = ",")

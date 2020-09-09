@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-@Command(name = "do", description = "${bundle:done}")
+@Command(name = "do", resourceBundle = "messages", description = "${bundle:done}")
 public class DoneCli implements Runnable {
     private final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     @Parameters(description = "${bundle:done.idx.list}", arity = "1", split = ",")
