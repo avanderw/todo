@@ -9,9 +9,7 @@ import net.avdw.todo.repository.IdType;
 import org.tinylog.Logger;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,18 +19,19 @@ public class Todo implements IdType<Integer> {
     private static final Pattern COMPLETION_DATE_PATTERN = Pattern.compile("^x (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     @Getter
-    @Setter
-    private Integer id;
-    @Getter
     private final String text;
     @Getter(lazy = true)
     private final boolean complete = complete();
     @Getter(lazy = true)
     private final Date additionDate = additionDate();
     @Getter(lazy = true)
-    private final Date completionDate = completionDate();
+    private final Date doneDate = doneDate();
     @Getter(lazy = true)
     private final Priority priority = priority();
+    @Getter
+    @Setter
+    private Integer id;
+    private Map<String, List<String>> tagValueListMap = new HashMap<>();
 
     public Todo(final Integer id, final String text) {
         this.id = Objects.requireNonNull(id);
@@ -44,7 +43,6 @@ public class Todo implements IdType<Integer> {
         Matcher matcher = ADDITION_DATE_PATTERN.matcher(text);
         if (matcher.find()) {
             String group = matcher.group(1) == null ? matcher.group(2) : matcher.group(1);
-            Logger.trace("Addition date pattern={}, group={}", ADDITION_DATE_PATTERN.pattern(), group);
             return SIMPLE_DATE_FORMAT.parse(group);
         } else {
             return null;
@@ -56,10 +54,9 @@ public class Todo implements IdType<Integer> {
     }
 
     @SneakyThrows
-    private Date completionDate() {
+    private Date doneDate() {
         Matcher matcher = COMPLETION_DATE_PATTERN.matcher(text);
         if (matcher.find()) {
-            Logger.trace("Completion date pattern={}, group={}", COMPLETION_DATE_PATTERN.pattern(), matcher.group(1));
             return SIMPLE_DATE_FORMAT.parse(matcher.group(1));
         } else {
             return null;
@@ -80,6 +77,21 @@ public class Todo implements IdType<Integer> {
         int valueBoundIdx = text.indexOf(" ", valueStart);
         int valueEnd = valueBoundIdx == -1 ? text.length() : valueBoundIdx;
         return Optional.of(text.substring(valueStart, valueEnd));
+    }
+
+    public List<String> getTagValueList(final String tag) {
+        if (tagValueListMap.containsKey(tag)) {
+            return tagValueListMap.get(tag);
+        }
+
+        List<String> tagValueList = new ArrayList<>();
+        Pattern pattern = Pattern.compile(String.format("\\s%s:(\\S+)\\s?", tag));
+        Matcher matcher = pattern.matcher(text);
+        while (matcher.find()) {
+            tagValueList.add(matcher.group(1));
+        }
+        tagValueListMap.putIfAbsent(tag, tagValueList);
+        return tagValueList;
     }
 
     private Priority priority() {

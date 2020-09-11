@@ -23,7 +23,7 @@
 2019-03-12 Soft freeze card on @Track1 and @USSD analyst:unnassigned importance:3 urgency:5
 2019-05-23 Upgrade bamboo importance:2 urgency:5
 2019-10-16 Beneficiary payments on @USSD and RTC analyst:unnassigned ref:BO-4183 importance:2 urgency:5
-2018-11-13 Secure live @USSD traffic importance:5 urgency:2
+2018-11-13 Secure live @USSD traffic importance:5 urgency:2 avanderw@gmail.com @test-input
 2019-08-19 Enable encryption for emailing of statements analyst:unnassigned importance:3 urgency:3
 2018-11-14 @NI_USSD sim check importance:5 urgency:1
 2019-08-16 Enable retrieving of cell phone status | cifNumber | phone status | cell # importance:3 urgency:2

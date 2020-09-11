@@ -18,4 +18,9 @@ public class OrSpecification<I, T extends IdType<I>> extends AbstractSpecificati
     public Class<T> getType() {
         return first.getType();
     }
+
+    @Override
+    public String toString() {
+        return String.format("(%s) || (%s)", first, second);
+    }
 }

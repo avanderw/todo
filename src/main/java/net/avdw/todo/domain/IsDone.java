@@ -8,4 +8,8 @@ public class IsDone extends AbstractSpecification<Integer, Todo> {
         return todo.getText().startsWith("x ");
     }
 
+    @Override
+    public String toString() {
+        return "isDone";
+    }
 }

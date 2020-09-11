@@ -19,7 +19,7 @@ import java.util.Set;
 @Command(name = "park", resourceBundle = "messages", description = "${bundle:park}")
 public class ParkCli implements Runnable {
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-    @Parameters(description = "${bundle:park.idx.list}", arity = "1", split = ",")
+    @Parameters(descriptionKey = "park.idx.list", arity = "1", split = ",")
     private Set<Integer> idxList;
     @Inject
     private Path todoPath;

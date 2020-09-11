@@ -4,14 +4,25 @@ import net.avdw.todo.repository.AbstractSpecification;
 
 public class IsContaining extends AbstractSpecification<Integer, Todo> {
     private final String text;
+    private final boolean caseSensitive;
 
     public IsContaining(final String text) {
         this.text = text;
+        caseSensitive = false;
+    }
+
+    public IsContaining(final String text, final boolean caseSensitive) {
+        this.text = text;
+        this.caseSensitive = caseSensitive;
     }
 
     @Override
     public boolean isSatisfiedBy(final Todo todo) {
-        return todo.getText().contains(text);
+        return caseSensitive ? todo.getText().contains(text) : todo.getText().toLowerCase().contains(text.toLowerCase());
     }
 
+    @Override
+    public String toString() {
+        return String.format("isContaining('%s', caseSensitive='%s')", text, caseSensitive);
+    }
 }

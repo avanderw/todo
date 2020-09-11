@@ -21,9 +21,12 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
+/**
+ * @see net.avdw.todo.ListCli
+ */
+@Deprecated
 @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-@Command(name = "ls", description = "List the items in todo.txt")
+@Command(name = "list", description = "List the items in todo.txt")
 public class TodoList implements Runnable {
     @Parameters(description = "Include items that contain these Strings")
     private List<String> filters = new ArrayList<>();

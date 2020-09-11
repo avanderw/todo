@@ -20,6 +20,7 @@ import java.nio.file.Path;
         mixinStandardHelpOptions = true,
         subcommands = {
                 InitCli.class,
+                ListCli.class,
                 PriorityCli.class,
                 DoneCli.class,
                 ParkCli.class,

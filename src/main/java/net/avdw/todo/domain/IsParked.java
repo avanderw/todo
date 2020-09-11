@@ -8,4 +8,8 @@ public class IsParked extends AbstractSpecification<Integer, Todo> {
         return todo.getText().startsWith("p ");
     }
 
+    @Override
+    public String toString() {
+        return "isParked";
+    }
 }

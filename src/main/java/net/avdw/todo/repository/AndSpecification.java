@@ -18,4 +18,9 @@ public class AndSpecification<I, T extends IdType<I>> extends AbstractSpecificat
     public Class<T> getType() {
         return first.getType();
     }
+
+    @Override
+    public String toString() {
+        return String.format("(%s) && (%s)", first, second);
+    }
 }

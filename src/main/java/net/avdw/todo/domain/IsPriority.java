@@ -7,4 +7,9 @@ public class IsPriority extends AbstractSpecification<Integer, Todo> {
     public boolean isSatisfiedBy(final Todo todo) {
         return todo.getPriority() != null;
     }
+
+    @Override
+    public String toString() {
+        return "isPriority";
+    }
 }

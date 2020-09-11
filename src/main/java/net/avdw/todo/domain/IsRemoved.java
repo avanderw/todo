@@ -8,4 +8,8 @@ public class IsRemoved extends AbstractSpecification<Integer, Todo> {
         return todo.getText().startsWith("r ");
     }
 
+    @Override
+    public String toString() {
+        return "isRemoved";
+    }
 }
