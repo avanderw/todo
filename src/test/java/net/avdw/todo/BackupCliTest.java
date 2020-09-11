@@ -4,7 +4,6 @@ import lombok.SneakyThrows;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import picocli.CommandLine;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,7 +30,7 @@ public class BackupCliTest {
     @BeforeClass
     public static void beforeClass() {
         setup(todoPath);
-        cliTester = new CliTester(RefactoredMainCli.class, new TestGuiceFactory(new TestModule(todoPath)));
+        cliTester = new CliTester(MainCli.class, new TestGuiceFactory(new TestModule(todoPath)));
         warmup(cliTester);
     }
 

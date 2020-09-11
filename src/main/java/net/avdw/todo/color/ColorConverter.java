@@ -11,17 +11,18 @@ public class ColorConverter {
      * @return hue angel in range [0..360]
      */
     public int rgbToHue(final double r, final double g, final double b) {
-        double f, min, mid, max, n;
-        max = Math.max(r, Math.max(g, b));
-        min = Math.min(r, Math.min(g, b));
+        double f;
+        double max = Math.max(r, Math.max(g, b));
+        double min = Math.min(r, Math.min(g, b));
 
         // achromatic case
         if (max - min == 0) {
             return 0;
         }
 
-        mid = middleValue(r, g, b);
+        double mid = middleValue(r, g, b);
 
+        double n;
         if (r == max) {
             n = (b == min) ? 0 : 5;
         } else if (g == max) {
@@ -78,18 +79,19 @@ public class ColorConverter {
      */
     public RGB hueToRgb(final double min, final double max, final int hue) {
         final int maxHue = 360;
-        int n, h = hue;
-        double mu, md, f;
+        int n;
+        int h = hue;
+        double mu;
         while (h < 0) {
             h += maxHue;
         }
 
         n = (int) Math.floor(h / 60.);
-        f = (h - n * 60.) / 60.;
+        double f = (h - n * 60.) / 60.;
         n %= 6;
 
         mu = min + ((max - min) * f);
-        md = max - ((max - min) * f);
+        double md = max - ((max - min) * f);
 
         return switch (n) {
             case 0 -> new RGB(max, mu, min);
@@ -147,7 +149,7 @@ public class ColorConverter {
     /**
      * Convert hex to ansi foreground string.
      *
-     * @param hex  hex color to convert
+     * @param hex hex color to convert
      * @return the ansi string
      */
     public String hexToAnsiFg(final int hex) {

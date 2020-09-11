@@ -1,11 +1,14 @@
 package net.avdw.todo;
 
+import org.fusesource.jansi.AnsiConsole;
 import org.tinylog.Logger;
 import picocli.CommandLine;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Arrays;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,9 +17,9 @@ import static org.junit.Assert.*;
 public class CliTester {
     private final Class<?> cliClass;
     private final TestGuiceFactory guiceFactory;
-    private StringWriter err;
+    private ByteArrayOutputStream err;
     private int exitCode;
-    private StringWriter out;
+    private ByteArrayOutputStream out;
 
     public CliTester(final Class<?> cliClass, final TestGuiceFactory guiceFactory) {
         this.cliClass = cliClass;
@@ -36,6 +39,7 @@ public class CliTester {
     }
 
     private void assertSuccess(final int exitCode) {
+        Logger.debug(new String(out.toByteArray(), StandardCharsets.UTF_8));
         if (!out.toString().isEmpty()) {
             Logger.debug("Standard output:\n{}", out.toString());
         }
@@ -63,13 +67,13 @@ public class CliTester {
         return execute(null);
     }
 
-    public CliTester execute(final String command, final String ...arguments) {
-        err = new StringWriter();
-        out = new StringWriter();
+    public CliTester execute(final String command, final String... arguments) {
+        err = new ByteArrayOutputStream();
+        out = new ByteArrayOutputStream();
         guiceFactory.reset();
         CommandLine commandLine = new CommandLine(cliClass, guiceFactory);
-        commandLine.setOut(new PrintWriter(out));
-        commandLine.setErr(new PrintWriter(err));
+        commandLine.setOut(new PrintWriter(AnsiConsole.wrapOutputStream(out), true, StandardCharsets.UTF_8));
+        commandLine.setErr(new PrintWriter(AnsiConsole.wrapOutputStream(err), true, StandardCharsets.UTF_8));
         if (command == null) {
             exitCode = commandLine.execute();
         } else {

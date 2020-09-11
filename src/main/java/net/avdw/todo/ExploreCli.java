@@ -14,6 +14,8 @@ public class ExploreCli implements Runnable {
 
     @Override
     @SneakyThrows
+    @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
+            justification = "Google Guice does not allow for null injection (todoPath)")
     public void run() {
         if (Files.exists(todoPath)) {
             ProcessBuilder pb = new ProcessBuilder("explorer.exe", todoPath.getParent().toString());

@@ -8,7 +8,7 @@ public class IsBeforeAddedDate extends AbstractSpecification<Integer, Todo> {
     private final Date date;
 
     public IsBeforeAddedDate(final Date date) {
-        this.date = date;
+        this.date = new Date(date.getTime());
     }
 
     @Override

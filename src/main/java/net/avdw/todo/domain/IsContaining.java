@@ -2,6 +2,8 @@ package net.avdw.todo.domain;
 
 import net.avdw.todo.repository.AbstractSpecification;
 
+import java.util.Locale;
+
 public class IsContaining extends AbstractSpecification<Integer, Todo> {
     private final String text;
     private final boolean caseSensitive;
@@ -18,7 +20,7 @@ public class IsContaining extends AbstractSpecification<Integer, Todo> {
 
     @Override
     public boolean isSatisfiedBy(final Todo todo) {
-        return caseSensitive ? todo.getText().contains(text) : todo.getText().toLowerCase().contains(text.toLowerCase());
+        return caseSensitive ? todo.getText().contains(text) : todo.getText().toLowerCase(Locale.ENGLISH).contains(text.toLowerCase(Locale.ENGLISH));
     }
 
     @Override

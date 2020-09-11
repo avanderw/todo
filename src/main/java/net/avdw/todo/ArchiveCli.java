@@ -7,6 +7,7 @@ import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
+import net.avdw.todo.style.StyleApplicator;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;
@@ -27,18 +28,23 @@ public class ArchiveCli implements Runnable {
     @Inject
     private TemplatedResourceBundle templatedResourceBundle;
     private Gson gson = new Gson();
+    @Inject
+    private StyleApplicator styleApplicator;
 
     @Override
+    @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
+            justification = "Google Guice does not allow for null injection (todoPath)")
     public void run() {
+
         Specification<Integer, Todo> isDone = new IsDone();
         Specification<Integer, Todo> isParked = new IsParked();
         Specification<Integer, Todo> isRemoved = new IsRemoved();
         Specification<Integer, Todo> isArchive = isDone.or(isParked).or(isRemoved);
-        List<Todo> allTodoList= todoRepository.findAll(new Any());
+        List<Todo> allTodoList = todoRepository.findAll(new Any<>());
         for (int i = 0; i < allTodoList.size(); i++) {
             if (isArchive.isSatisfiedBy(allTodoList.get(i))) {
                 spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                        gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", i + 1, allTodoList.get(i)), Map.class)));
+                        gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", i + 1, styleApplicator.apply(allTodoList.get(i).getText())), Map.class)));
             }
         }
 

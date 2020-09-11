@@ -35,7 +35,7 @@ public class DoneCliTest {
     @BeforeClass
     public static void beforeClass() {
         setup(todoPath);
-        cliTester = new CliTester(RefactoredMainCli.class, new TestGuiceFactory(new TestModule(todoPath)));
+        cliTester = new CliTester(MainCli.class, new TestGuiceFactory(new TestModule(todoPath)));
         warmup(cliTester);
     }
 
@@ -50,7 +50,7 @@ public class DoneCliTest {
         cliTester.execute("do").failure();
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 150)
     public void testPriorityRemoval() {
         cliTester.execute("pri 7 A").success();
         cliTester.execute("do 7").success();

@@ -7,6 +7,8 @@ import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
+import net.avdw.todo.style.StyleModule;
+import org.fusesource.jansi.AnsiConsole;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -24,6 +26,7 @@ public class TestModule extends AbstractModule {
         bind(Set.class).to(HashSet.class);
         bind(Path.class).toInstance(todoPath);
         bind(ResourceBundle.class).toInstance(ResourceBundle.getBundle("messages", Locale.getDefault()));
+        install(new StyleModule());
     }
 
     @Provides

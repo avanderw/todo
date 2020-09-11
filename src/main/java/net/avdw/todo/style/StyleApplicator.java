@@ -1,5 +1,6 @@
 package net.avdw.todo.style;
 
+import com.google.inject.Inject;
 import net.avdw.todo.PropertyFile;
 import net.avdw.todo.color.ColorConverter;
 import org.fusesource.jansi.Ansi;
@@ -12,6 +13,7 @@ public class StyleApplicator {
     private final String defaultColor;
     private final List<IStyler> stylerList;
 
+    @Inject
     StyleApplicator(final String defaultColor, final List<IStyler> stylerList) {
         this.defaultColor = defaultColor;
         this.stylerList = stylerList;

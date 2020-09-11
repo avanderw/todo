@@ -32,7 +32,7 @@ public class SortCliTest {
     @BeforeClass
     public static void beforeClass() {
         setup(todoPath);
-        cliTester = new CliTester(RefactoredMainCli.class, new TestGuiceFactory(new net.avdw.todo.TestModule(todoPath)));
+        cliTester = new CliTester(MainCli.class, new TestGuiceFactory(new net.avdw.todo.TestModule(todoPath)));
         warmup(cliTester);
     }
 

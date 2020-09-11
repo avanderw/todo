@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Singleton
 public class RunningStats {
-    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("HH:mm:ss.SSS");
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
     private final long startedMs;
 
     RunningStats() {
@@ -15,7 +15,7 @@ public class RunningStats {
     }
 
     public String getStarted() {
-        return SIMPLE_DATE_FORMAT.format(new Date(startedMs));
+        return simpleDateFormat.format(new Date(startedMs));
     }
 
     public String getDuration() {

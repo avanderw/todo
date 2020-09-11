@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import net.avdw.todo.Priority;
+import net.avdw.todo.SuppressFBWarnings;
 import net.avdw.todo.repository.IdType;
-import org.tinylog.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -14,10 +14,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @EqualsAndHashCode
+@SuppressFBWarnings(value = "JLM_JSR166_UTILCONCURRENT_MONITORENTER",
+        justification = "Lombok notation does not bring in the confusion as it is hidden by generation")
 public class Todo implements IdType<Integer> {
     private static final Pattern ADDITION_DATE_PATTERN = Pattern.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d)|^x .*[\\d-]+.* (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
     private static final Pattern COMPLETION_DATE_PATTERN = Pattern.compile("^x (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
-    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
     @Getter
     private final String text;
     @Getter(lazy = true)
@@ -43,7 +46,7 @@ public class Todo implements IdType<Integer> {
         Matcher matcher = ADDITION_DATE_PATTERN.matcher(text);
         if (matcher.find()) {
             String group = matcher.group(1) == null ? matcher.group(2) : matcher.group(1);
-            return SIMPLE_DATE_FORMAT.parse(group);
+            return simpleDateFormat.parse(group);
         } else {
             return null;
         }
@@ -57,7 +60,7 @@ public class Todo implements IdType<Integer> {
     private Date doneDate() {
         Matcher matcher = COMPLETION_DATE_PATTERN.matcher(text);
         if (matcher.find()) {
-            return SIMPLE_DATE_FORMAT.parse(matcher.group(1));
+            return simpleDateFormat.parse(matcher.group(1));
         } else {
             return null;
         }

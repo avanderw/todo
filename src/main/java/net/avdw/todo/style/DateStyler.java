@@ -13,7 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DateStyler implements IStyler {
-    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static final Pattern ARGUMENT_REGEX = Pattern.compile("(-?\\d+)([dmy])([+-]?)");
     private static final ColorConverter COLOR_CONVERTER = new ColorConverter();
     private final String tag;
@@ -61,10 +61,10 @@ public class DateStyler implements IStyler {
             Date value;
             String replace;
             try {
-                value = SIMPLE_DATE_FORMAT.parse(matcher.group(1));
+                value = simpleDateFormat.parse(matcher.group(1));
                 replace = matcher.group(1);
             } catch (Exception e) {
-                value = SIMPLE_DATE_FORMAT.parse(matcher.group(2));
+                value = simpleDateFormat.parse(matcher.group(2));
                 replace = "add".equals(tag) ? matcher.group(2) : matcher.group(1);
             }
             if (exact) {

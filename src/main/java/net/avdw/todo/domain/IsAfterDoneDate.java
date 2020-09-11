@@ -8,7 +8,7 @@ public class IsAfterDoneDate extends AbstractSpecification<Integer, Todo> {
     private final Date date;
 
     public IsAfterDoneDate(final Date date) {
-        this.date = date;
+        this.date = new Date(date.getTime());
     }
 
     @Override

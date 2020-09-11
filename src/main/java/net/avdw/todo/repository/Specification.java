@@ -1,6 +1,7 @@
 package net.avdw.todo.repository;
 
 /**
+ * Lightweight repository pattern.
  * https://dzone.com/articles/java-using-specification
  *
  * @version 2020-08-26: Basic setup as suggested in the article

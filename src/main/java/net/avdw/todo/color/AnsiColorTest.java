@@ -19,6 +19,7 @@ public final class AnsiColorTest {
     public static final String RESET = "\u001b[0m";
     public static final String PROJECT_COLOR = MAGENTA;
     public static final String CONTEXT_COLOR = CYAN;
+
     private AnsiColorTest() {
     }
 

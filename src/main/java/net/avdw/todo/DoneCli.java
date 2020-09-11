@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
+import net.avdw.todo.style.StyleApplicator;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Parameters;
@@ -17,7 +18,7 @@ import java.util.Set;
 
 @Command(name = "do", resourceBundle = "messages", description = "${bundle:done}")
 public class DoneCli implements Runnable {
-    private final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     @Parameters(description = "${bundle:done.idx.list}", arity = "1", split = ",")
     private Set<Integer> idxList;
     @Spec
@@ -27,6 +28,8 @@ public class DoneCli implements Runnable {
     @Inject
     private TemplatedResourceBundle templatedResourceBundle;
     private Gson gson = new Gson();
+    @Inject
+    private StyleApplicator styleApplicator;
 
     @Override
     public void run() {
@@ -35,10 +38,10 @@ public class DoneCli implements Runnable {
                 .forEachOrdered(idx -> {
                     int id = idx - 1;
                     todoRepository.update(new Todo(id, String.format("x %s %s",
-                            SIMPLE_DATE_FORMAT.format(new Date()),
+                            simpleDateFormat.format(new Date()),
                             todoRepository.findById(id).orElseThrow().toString().replaceFirst("\\([A-Z]\\) ", ""))));
                     spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                            gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", idx, todoRepository.findById(id).orElseThrow()), Map.class)));
+                            gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", idx, styleApplicator.apply(todoRepository.findById(id).orElseThrow().getText())), Map.class)));
                 });
         todoRepository.commit();
     }

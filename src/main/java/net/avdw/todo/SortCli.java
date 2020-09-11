@@ -2,12 +2,13 @@ package net.avdw.todo;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
-import net.avdw.todo.repository.Any;
 import net.avdw.todo.domain.IsPriority;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
+import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
+import net.avdw.todo.style.StyleApplicator;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Parameters;
@@ -32,6 +33,8 @@ public class SortCli implements Runnable {
     private Path todoPath;
     @Inject
     private Repository<Integer, Todo> todoRepository;
+    @Inject
+    private StyleApplicator styleApplicator;
 
     @Override
     public void run() {
@@ -56,7 +59,7 @@ public class SortCli implements Runnable {
 
         sortedRepository.findAll(new Any<>()).forEach(todo ->
                 spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                        gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", todo.getIdx(), todo), Map.class)))
+                        gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", todo.getIdx(), styleApplicator.apply(todo.getText())), Map.class)))
         );
     }
 }

@@ -7,21 +7,23 @@ import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
+import net.avdw.todo.style.StyleApplicator;
 import org.tinylog.Logger;
-import picocli.CommandLine.*;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
+import picocli.CommandLine.Parameters;
+import picocli.CommandLine.ArgGroup;
+import picocli.CommandLine.Spec;
 import picocli.CommandLine.Model.CommandSpec;
 
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Command(name = "ls", resourceBundle = "messages", description = "${bundle:ls}")
 public class ListCli implements Runnable {
-    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private final Gson gson = new Gson();
     @Option(names = "--added-after", descriptionKey = "ls.after.added.desc")
     private Date afterAddedDate;
@@ -55,6 +57,8 @@ public class ListCli implements Runnable {
     private Repository<Integer, Todo> todoRepository;
     @Inject
     private TodoTextCleaner todoTextCleaner;
+    @Inject
+    private StyleApplicator styleApplicator;
 
     private void list(final Repository<Integer, Todo> repository) {
         Specification<Integer, Todo> specification = new Any<>();
@@ -76,7 +80,7 @@ public class ListCli implements Runnable {
             specification = specification.and(new IsBeforeAddedDate(beforeAddedDate));
         }
         if (afterDoneDate != null) {
-            specification = specification.and((new IsAfterDoneDate(afterDoneDate)));
+            specification = specification.and(new IsAfterDoneDate(afterDoneDate));
         }
         if (beforeDoneDate != null) {
             specification = specification.and(new IsBeforeDoneDate(beforeDoneDate));
@@ -87,7 +91,7 @@ public class ListCli implements Runnable {
                 String tag = afterTagSplit[0];
                 Date date;
                 try {
-                    date = SIMPLE_DATE_FORMAT.parse(afterTagSplit[1]);
+                    date = simpleDateFormat.parse(afterTagSplit[1]);
                 } catch (ParseException e) {
                     Logger.debug(e);
                     spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.INVALID_DATE_FORMAT,
@@ -107,7 +111,7 @@ public class ListCli implements Runnable {
                 String tag = beforeTagSplit[0];
                 Date date;
                 try {
-                    date = SIMPLE_DATE_FORMAT.parse(beforeTagSplit[1]);
+                    date = simpleDateFormat.parse(beforeTagSplit[1]);
                 } catch (ParseException e) {
                     Logger.debug(e);
                     spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.INVALID_DATE_FORMAT,
@@ -141,11 +145,13 @@ public class ListCli implements Runnable {
         todoList.forEach(todo -> {
             String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                    gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", todo.getIdx(), todoText), Map.class)));
+                    gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", todo.getIdx(), styleApplicator.apply(todoText)), Map.class)));
         });
     }
 
     @Override
+    @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
+            justification = "Google Guice does not allow for null injection (todoPath)")
     public void run() {
         list(todoRepository);
 

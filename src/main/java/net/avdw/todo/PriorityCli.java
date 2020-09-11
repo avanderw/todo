@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 import net.avdw.todo.domain.*;
 import net.avdw.todo.repository.Repository;
+import net.avdw.todo.style.StyleApplicator;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
@@ -33,6 +34,8 @@ public class PriorityCli implements Runnable {
     private Repository<Integer, Todo> todoRepository;
     @Inject
     private TemplatedResourceBundle templatedResourceBundle;
+    @Inject
+    private StyleApplicator styleApplicator;
 
     @Override
     public void run() {
@@ -62,7 +65,7 @@ public class PriorityCli implements Runnable {
                     Todo updatedTodo = new Todo(todo.getId(), todo.getText().replaceFirst(String.format("\\(%s\\)", pri.name()), String.format("(%s)", mapping.get(pri))));
                     todoRepository.update(updatedTodo);
                     spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                            gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", updatedTodo.getIdx(), updatedTodo.getText()), Map.class)));
+                            gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", updatedTodo.getIdx(), styleApplicator.apply(updatedTodo.getText())), Map.class)));
                 });
                 todoRepository.commit();
             }
@@ -77,7 +80,7 @@ public class PriorityCli implements Runnable {
                 Todo updatedTodo = new Todo(todo.getId(), todo.getText().replaceFirst("\\([A-Z]\\) ", ""));
                 todoRepository.update(updatedTodo);
                 spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                        gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", updatedTodo.getIdx(), updatedTodo.getText()), Map.class)));
+                        gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", updatedTodo.getIdx(), styleApplicator.apply(updatedTodo.getText())), Map.class)));
             });
             todoRepository.commit();
             return;
@@ -91,7 +94,7 @@ public class PriorityCli implements Runnable {
             } else {
                 priorityTodoList.forEach(todo -> spec.commandLine().getOut().println(templatedResourceBundle.getString(
                         ResourceBundleKey.TODO_LINE_ITEM,
-                        gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", todo.getIdx(), todo), Map.class))));
+                        gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", todo.getIdx(), styleApplicator.apply(todo.getText())), Map.class))));
 
             }
         } else {
@@ -104,7 +107,7 @@ public class PriorityCli implements Runnable {
                     Todo removePriorityTodo = new Todo(todoById.getId(), todoById.getText().replaceFirst("\\([A-Z]\\) ", ""));
                     todoRepository.update(removePriorityTodo);
                     spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                            gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", removePriorityTodo.getIdx(), removePriorityTodo.getText()), Map.class)));
+                            gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", removePriorityTodo.getIdx(), styleApplicator.apply(removePriorityTodo.getText())), Map.class)));
                 });
                 todoRepository.commit();
                 return;
@@ -143,7 +146,7 @@ public class PriorityCli implements Runnable {
                     Todo priorityTodo = new Todo(id, String.format("(%s) %s", nextPriority(availablePriorityList), priorityTodoText));
                     todoRepository.update(priorityTodo);
                     spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                            gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", idx, priorityTodo), Map.class)));
+                            gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", idx, styleApplicator.apply(priorityTodo.getText())), Map.class)));
                 }
             });
             todoRepository.commit();

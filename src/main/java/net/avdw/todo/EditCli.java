@@ -4,7 +4,12 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
-import picocli.CommandLine.*;
+import net.avdw.todo.style.StyleApplicator;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
+import picocli.CommandLine.Parameters;
+import picocli.CommandLine.IExitCodeGenerator;
+import picocli.CommandLine.Spec;
 import picocli.CommandLine.Model.CommandSpec;
 
 import java.util.ArrayList;
@@ -27,6 +32,8 @@ public class EditCli implements Runnable, IExitCodeGenerator {
     private TemplatedResourceBundle templatedResourceBundle;
     @Inject
     private Repository<Integer, Todo> todoRepository;
+    @Inject
+    private StyleApplicator styleApplicator;
 
     @Override
     public int getExitCode() {
@@ -56,7 +63,7 @@ public class EditCli implements Runnable, IExitCodeGenerator {
             Todo todo = new Todo(id, todoText);
             todoRepository.update(todo);
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                    gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", idx, todo), Map.class)));
+                    gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", idx, styleApplicator.apply(todo.getText())), Map.class)));
         });
     }
 }

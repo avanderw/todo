@@ -17,7 +17,7 @@ public class MainCliTest {
 
     @BeforeClass
     public static void beforeClass() {
-        cliTester = new CliTester(RefactoredMainCli.class, new TestGuiceFactory(new TestModule(todoPath)));
+        cliTester = new CliTester(MainCli.class, new TestGuiceFactory(new TestModule(todoPath)));
         warmup(cliTester);
     }
 

@@ -2,7 +2,7 @@ package net.avdw.todo.repository;
 
 import java.lang.reflect.ParameterizedType;
 
-abstract public class AbstractSpecification<I, T extends IdType<I>> implements Specification<I, T> {
+public abstract class AbstractSpecification<I, T extends IdType<I>> implements Specification<I, T> {
     @Override
     public boolean isSatisfiedBy(final T t) {
         throw new UnsupportedOperationException();
