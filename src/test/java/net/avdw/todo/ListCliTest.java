@@ -108,6 +108,18 @@ public class ListCliTest {
         cliTester.execute("ls --added-after 2020-03-10").success().count("\\[", 3);
     }
 
+    @Test(timeout = 150)
+    public void testAfterTagFailure() {
+        cliTester.execute("ls --after start:20200310").startsWith("[  1]");
+        cliTester.execute("ls --after start:").startsWith("[  1]");
+    }
+
+    @Test(timeout = 150)
+    public void testBeforeTagFailure() {
+        cliTester.execute("ls --before start:20200310").startsWith("[  1]");
+        cliTester.execute("ls --before start:").startsWith("[  1]");
+    }
+
     @Test(timeout = 50)
     public void testBeforeTag() {
         cliTester.execute("ls --before start:2020-01-01").success().count("\\[", 5);

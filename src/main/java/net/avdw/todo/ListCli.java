@@ -9,6 +9,7 @@ import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
 import net.avdw.todo.style.StyleApplicator;
 import org.tinylog.Logger;
+import picocli.CommandLine.IExitCodeGenerator;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
@@ -22,7 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Command(name = "ls", resourceBundle = "messages", description = "${bundle:ls}")
-public class ListCli implements Runnable {
+public class ListCli implements Runnable, IExitCodeGenerator {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private final Gson gson = new Gson();
     @Option(names = "--added-after", descriptionKey = "ls.after.added.desc")
@@ -60,6 +61,12 @@ public class ListCli implements Runnable {
     @Inject
     private StyleApplicator styleApplicator;
 
+    private int exitCode = 0;
+    @Override
+    public int getExitCode() {
+        return exitCode;
+    }
+
     private void list(final Repository<Integer, Todo> repository) {
         Specification<Integer, Todo> specification = new Any<>();
 
@@ -94,14 +101,15 @@ public class ListCli implements Runnable {
                     date = simpleDateFormat.parse(afterTagSplit[1]);
                 } catch (ParseException e) {
                     Logger.debug(e);
-                    spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.INVALID_DATE_FORMAT,
+                    exitCode = 1;
+                    spec.commandLine().getErr().println(templatedResourceBundle.getString(ResourceBundleKey.INVALID_DATE_FORMAT,
                             gson.fromJson(String.format("{date:'%s'}", afterTagSplit[1]), Map.class)));
                     continue;
                 }
                 specification = specification.and(new IsAfterTagDate(tag, date));
             } else {
                 Logger.debug("Unknown after tag ({}) should be tag:value");
-                spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.INVALID_TAG_FORMAT,
+                spec.commandLine().getErr().println(templatedResourceBundle.getString(ResourceBundleKey.INVALID_TAG_FORMAT,
                         gson.fromJson(String.format("{tag:'%s'}", afterTag), Map.class)));
             }
         }
@@ -114,15 +122,16 @@ public class ListCli implements Runnable {
                     date = simpleDateFormat.parse(beforeTagSplit[1]);
                 } catch (ParseException e) {
                     Logger.debug(e);
-                    spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.INVALID_DATE_FORMAT,
+                    exitCode = 1;
+                    spec.commandLine().getErr().println(templatedResourceBundle.getString(ResourceBundleKey.INVALID_DATE_FORMAT,
                             gson.fromJson(String.format("{date:'%s'}", beforeTagSplit[1]), Map.class)));
                     continue;
                 }
                 specification = specification.and(new IsBeforeTagDate(tag, date));
             } else {
                 Logger.debug("Unknown before tag ({}) should be tag:value");
-                spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.INVALID_TAG_FORMAT,
-                        gson.fromJson(String.format("{tag:%s}", beforeTag), Map.class)));
+                spec.commandLine().getErr().println(templatedResourceBundle.getString(ResourceBundleKey.INVALID_TAG_FORMAT,
+                        gson.fromJson(String.format("{tag:'%s'}", beforeTag), Map.class)));
             }
         }
 
