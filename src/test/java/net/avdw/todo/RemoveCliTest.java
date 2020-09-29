@@ -55,7 +55,7 @@ public class RemoveCliTest {
         cliTester.execute("rm 5,5").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> removedTodoList = todoRepository.findAll(new IsRemoved());
-        assertEquals(1, removedTodoList.size());
+        assertEquals(2, removedTodoList.size());
         assertFalse(removedTodoList.get(0).getText().startsWith(String.format("r %s r ", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
 
@@ -65,7 +65,7 @@ public class RemoveCliTest {
         cliTester.execute("rm 7").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> removedTodoList = todoRepository.findAll(new IsRemoved());
-        assertEquals(1, removedTodoList.size());
+        assertEquals(2, removedTodoList.size());
         assertFalse(removedTodoList.get(0).getText().contains("(A)"));
     }
 
@@ -74,7 +74,7 @@ public class RemoveCliTest {
         cliTester.execute("rm 2").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> parkedTodoList = todoRepository.findAll(new IsRemoved());
-        assertEquals(1, parkedTodoList.size());
+        assertEquals(2, parkedTodoList.size());
         assertTrue(parkedTodoList.get(0).getText().startsWith(String.format("r %s 2019-02-07", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
 
@@ -83,6 +83,6 @@ public class RemoveCliTest {
         cliTester.execute("rm 2,4").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> removedTodoList = todoRepository.findAll(new IsRemoved());
-        assertEquals(2, removedTodoList.size());
+        assertEquals(3, removedTodoList.size());
     }
 }

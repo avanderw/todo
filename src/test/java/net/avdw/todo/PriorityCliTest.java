@@ -65,7 +65,7 @@ public class PriorityCliTest {
         cliTester.execute("pri 4 F").success().contains("[  4] (F) ");
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> priorityTodoList = todoRepository.findAll(new IsPriority());
-        assertEquals(1, priorityTodoList.size());
+        assertEquals(2, priorityTodoList.size());
         priorityTodoList.forEach(todo -> assertTrue(priorityTodoList.get(0).getText().startsWith("(F) ")));
     }
 
@@ -74,7 +74,7 @@ public class PriorityCliTest {
         cliTester.execute("pri 1,2,3 F").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> priorityTodoList = todoRepository.findAll(new IsPriority());
-        assertEquals(3, priorityTodoList.size());
+        assertEquals(4, priorityTodoList.size());
         priorityTodoList.forEach(todo -> assertTrue(priorityTodoList.get(0).getText().startsWith("(F) ")));
     }
 
@@ -95,7 +95,7 @@ public class PriorityCliTest {
         cliTester.execute("pri 1,2 -r").success().notContains("[  2] (F)");
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> priorityTodoList = todoRepository.findAll(new IsPriority());
-        assertEquals(1, priorityTodoList.size());
+        assertEquals(2, priorityTodoList.size());
     }
 
     @Test(timeout = 100)
@@ -119,7 +119,7 @@ public class PriorityCliTest {
         cliTester.execute("pri 1 A").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> priorityTodoList = todoRepository.findAll(new IsPriority());
-        assertEquals(0, priorityTodoList.size());
+        assertEquals(1, priorityTodoList.size());
     }
 
     @Test(timeout = 50)
@@ -128,7 +128,7 @@ public class PriorityCliTest {
         cliTester.execute("pri 1 A").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> priorityTodoList = todoRepository.findAll(new IsPriority());
-        assertEquals(0, priorityTodoList.size());
+        assertEquals(1, priorityTodoList.size());
     }
 
     @Test(timeout = 50)
@@ -137,7 +137,7 @@ public class PriorityCliTest {
         cliTester.execute("pri 1 A").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> priorityTodoList = todoRepository.findAll(new IsPriority());
-        assertEquals(0, priorityTodoList.size());
+        assertEquals(1, priorityTodoList.size());
     }
 
     @Test(timeout = 50)

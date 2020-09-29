@@ -28,13 +28,13 @@ public class InitCli implements Runnable {
     public void run() {
         if (Files.exists(todoPath)) {
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.INIT_FILE_EXISTS,
-                    gson.fromJson(String.format("{path:'%s'}", todoPath.toUri()), Map.class)));
+                    String.format("{path:'%s'}", todoPath.toUri())));
             return;
         }
 
         Files.createDirectories(todoPath.getParent());
         Files.createFile(todoPath);
         spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.INIT_FILE_CREATED,
-                gson.fromJson(String.format("{path:'%s',usage:'%s'}", todoPath.toUri(), spec.commandLine().getParent().getUsageMessage()), Map.class)));
+                String.format("{path:'%s',usage:'%s'}", todoPath.toUri(), spec.commandLine().getParent().getUsageMessage())));
     }
 }

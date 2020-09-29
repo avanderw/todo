@@ -59,7 +59,7 @@ public class SortCli implements Runnable {
 
         sortedRepository.findAll(new Any<>()).forEach(todo ->
                 spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                        gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", todo.getIdx(), styleApplicator.apply(todo.getText())), Map.class)))
+                        String.format("{idx:'%3s',todo:'%s'}", todo.getIdx(), styleApplicator.apply(todo.getText()))))
         );
     }
 }

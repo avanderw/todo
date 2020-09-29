@@ -41,22 +41,22 @@ public class BackupCli implements Runnable {
 
         Files.copy(todoPath, todoBackup, StandardCopyOption.REPLACE_EXISTING);
         spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.BACKUP_COMPLETE,
-                gson.fromJson(String.format("{path:'%s'}", todoBackup.toUri()), Map.class)));
+                String.format("{path:'%s'}", todoBackup.toUri())));
 
         if (Files.exists(donePath)) {
             Files.copy(donePath, doneBackup, StandardCopyOption.REPLACE_EXISTING);
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.BACKUP_COMPLETE,
-                    gson.fromJson(String.format("{path:'%s'}", doneBackup.toUri()), Map.class)));
+                    String.format("{path:'%s'}", doneBackup.toUri())));
         }
         if (Files.exists(parkedPath)) {
             Files.copy(parkedPath, parkedBackup, StandardCopyOption.REPLACE_EXISTING);
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.BACKUP_COMPLETE,
-                    gson.fromJson(String.format("{path:'%s'}", parkedBackup.toUri()), Map.class)));
+                    String.format("{path:'%s'}", parkedBackup.toUri())));
         }
         if (Files.exists(removedPath)) {
             Files.copy(removedPath, removedBackup, StandardCopyOption.REPLACE_EXISTING);
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.BACKUP_COMPLETE,
-                    gson.fromJson(String.format("{path:'%s'}", removedBackup.toUri()), Map.class)));
+                    String.format("{path:'%s'}", removedBackup.toUri())));
         }
 
     }

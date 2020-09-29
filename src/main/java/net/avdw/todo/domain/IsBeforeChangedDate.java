@@ -4,24 +4,24 @@ import net.avdw.todo.repository.AbstractSpecification;
 
 import java.util.Date;
 
-public class IsBeforeAddedDate extends AbstractSpecification<Integer, Todo> {
+public class IsBeforeChangedDate extends AbstractSpecification<Integer, Todo> {
     private final Date date;
 
-    public IsBeforeAddedDate(final Date date) {
+    public IsBeforeChangedDate(final Date date) {
         this.date = new Date(date.getTime());
     }
 
     @Override
     public boolean isSatisfiedBy(final Todo todo) {
-        if (todo.getAdditionDate() == null) {
+        if (todo.getLastChangeDate() == null) {
             return false;
         }
 
-        return todo.getAdditionDate().before(date);
+        return todo.getLastChangeDate().before(date);
     }
 
     @Override
     public String toString() {
-        return String.format("isBeforeAddedDate('%tF')", date);
+        return String.format("isBeforeChangedDate('%tF')", date);
     }
 }

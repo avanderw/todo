@@ -55,7 +55,7 @@ public class ParkCliTest {
         cliTester.execute("park 5,5").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> parkedTodoList = todoRepository.findAll(new IsParked());
-        assertEquals(1, parkedTodoList.size());
+        assertEquals(2, parkedTodoList.size());
         assertFalse(parkedTodoList.get(0).getText().startsWith(String.format("p %s p ", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
 
@@ -65,7 +65,7 @@ public class ParkCliTest {
         cliTester.execute("park 7").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> parkedTodoList = todoRepository.findAll(new IsParked());
-        assertEquals(1, parkedTodoList.size());
+        assertEquals(2, parkedTodoList.size());
         assertFalse(parkedTodoList.get(0).getText().contains("(A)"));
     }
 
@@ -75,7 +75,7 @@ public class ParkCliTest {
         cliTester.execute("park 2").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> parkedTodoList = todoRepository.findAll(new IsParked());
-        assertEquals(1, parkedTodoList.size());
+        assertEquals(2, parkedTodoList.size());
         assertTrue(parkedTodoList.get(0).getText().startsWith(String.format("p %s 2019-02-07", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
 
@@ -84,6 +84,6 @@ public class ParkCliTest {
         cliTester.execute("park 2,4").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> parkedTodoList = todoRepository.findAll(new IsParked());
-        assertEquals(2, parkedTodoList.size());
+        assertEquals(3, parkedTodoList.size());
     }
 }

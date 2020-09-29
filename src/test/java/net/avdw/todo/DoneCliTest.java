@@ -56,7 +56,7 @@ public class DoneCliTest {
         cliTester.execute("do 7").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneTodoList = todoRepository.findAll(new IsDone());
-        assertEquals(1, doneTodoList.size());
+        assertEquals(3, doneTodoList.size());
         assertFalse(doneTodoList.get(0).getText().contains("(A)"));
     }
 
@@ -65,7 +65,7 @@ public class DoneCliTest {
         cliTester.execute("do 5,5").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneTodoList = todoRepository.findAll(new IsDone());
-        assertEquals(1, doneTodoList.size());
+        assertEquals(3, doneTodoList.size());
         assertFalse(doneTodoList.get(0).getText().startsWith(String.format("x %s x ", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
 
@@ -74,7 +74,7 @@ public class DoneCliTest {
         cliTester.execute("do 2").success().startsWith("[  2] x ");
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneTodoList = todoRepository.findAll(new IsDone());
-        assertEquals(1, doneTodoList.size());
+        assertEquals(3, doneTodoList.size());
         assertTrue(doneTodoList.get(0).getText().startsWith(String.format("x %s 2019-02-07", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
 
@@ -83,6 +83,6 @@ public class DoneCliTest {
         cliTester.execute("do 2,4").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneTodoList = todoRepository.findAll(new IsDone());
-        assertEquals(2, doneTodoList.size());
+        assertEquals(4, doneTodoList.size());
     }
 }

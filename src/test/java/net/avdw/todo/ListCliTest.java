@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import static net.avdw.todo.TodoCliTestBootstrapper.*;
-import static org.junit.Assert.fail;
 
 public class ListCliTest {
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -42,6 +41,38 @@ public class ListCliTest {
     }
 
     @Test(timeout = 50)
+    public void testAfterAdd() {
+        cliTester.execute("ls --added-after 2020-03-10").success().count("\\[", 3);
+    }
+
+    @Test(timeout = 50)
+    public void testAfterChange() {
+        cliTester.execute("ls --changed-after 2019-12-31").success().count("\\[", 35);
+    }
+
+    @Test(timeout = 100)
+    public void testAfterDone() {
+        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.setTime(new Date());
+        gregorianCalendar.add(Calendar.DAY_OF_MONTH, -1);
+        String now = SIMPLE_DATE_FORMAT.format(gregorianCalendar.getTime());
+        cliTester.execute(String.format("ls --done-after %s", now)).success().count("\\[", 0);
+        cliTester.execute("do 5").success();
+        cliTester.execute(String.format("ls --done-after %s", now)).success().count("\\[", 1);
+    }
+
+    @Test(timeout = 50)
+    public void testAfterTag() {
+        cliTester.execute("ls --after-tag started:2020-03-01").success().count("\\[", 9);
+    }
+
+    @Test(timeout = 150)
+    public void testAfterTagFailure() {
+        cliTester.execute("ls --after-tag start:20200310").failure();
+        cliTester.execute("ls --after-tag start:").failure();
+    }
+
+    @Test(timeout = 50)
     public void testAndOrNotFilter() {
         cliTester.execute("ls service refactor --or relationship,enforcer --not card").success().count("\\[", 7);
     }
@@ -59,85 +90,41 @@ public class ListCliTest {
         cliTester.execute("ls service,refactor").success().startsWith("[  6]").count("\\[", 6);
     }
 
-    @Test(timeout = 150)
-    public void testDone() {
-        cliTester.execute("do 1,2,3,4,5,6,7,8,9").success();
-        cliTester.execute("archive").success();
-        cliTester.execute("do 1").success();
-        cliTester.execute("ls --done").success().startsWith("[  1]");
-    }
-
-    @Test(timeout = 150)
-    public void testRemoved() {
-        cliTester.execute("rm 1,2,3,4,5,6,7,8,9").success();
-        cliTester.execute("archive").success();
-        cliTester.execute("rm 1").success();
-        cliTester.execute("ls --removed").success().startsWith("[  1]");
-    }
-
-    @Test(timeout = 150)
-    public void testParked() {
-        cliTester.execute("park 1,2,3,4,5,6,7,8,9").success();
-        cliTester.execute("archive").success();
-        cliTester.execute("park 1").success();
-        cliTester.execute("ls --parked").success().startsWith("[  1]");
-    }
-
-    @Test(timeout = 100)
-    public void testExclusive() {
-        cliTester.execute("ls --done --parked --removed").failure();
+    @Test(timeout = 50)
+    public void testBeforeAdd() {
+        cliTester.execute("ls --added-before 2019-03-01").success().count("\\[", 7);
     }
 
     @Test(timeout = 50)
-    public void testAfterTag() {
-        cliTester.execute("ls --after start:2020-03-01").success().count("\\[", 9);
-    }
-
-    @Test(timeout = 100)
-    public void testAfterDone() {
-        cliTester.execute("ls --done-after 2020-01-01").success().count("\\[", 0);
-        cliTester.execute("do 5").success();
-        GregorianCalendar gregorianCalendar = new GregorianCalendar();
-        gregorianCalendar.setTime(new Date());
-        gregorianCalendar.add(Calendar.DAY_OF_MONTH, -1);
-        cliTester.execute(String.format("ls --done-after %s", SIMPLE_DATE_FORMAT.format(gregorianCalendar.getTime()))).success().count("\\[", 1);
+    public void testBeforeAfterChange() {
+        cliTester.execute("ls --changed-before 2019-12-31 --changed-after 2019-12-03").success().count("\\[", 3);
     }
 
     @Test(timeout = 50)
-    public void testAfterAdd() {
-        cliTester.execute("ls --added-after 2020-03-10").success().count("\\[", 3);
-    }
-
-    @Test(timeout = 150)
-    public void testAfterTagFailure() {
-        cliTester.execute("ls --after start:20200310").startsWith("[  1]");
-        cliTester.execute("ls --after start:").startsWith("[  1]");
-    }
-
-    @Test(timeout = 150)
-    public void testBeforeTagFailure() {
-        cliTester.execute("ls --before start:20200310").startsWith("[  1]");
-        cliTester.execute("ls --before start:").startsWith("[  1]");
-    }
-
-    @Test(timeout = 50)
-    public void testBeforeTag() {
-        cliTester.execute("ls --before start:2020-01-01").success().count("\\[", 5);
+    public void testBeforeChange() {
+        cliTester.execute("ls --changed-before 2019-12-31").success().count("\\[", 36);
     }
 
     @Test(timeout = 100)
     public void testBeforeDone() {
-        cliTester.execute("ls --done-before 2020-01-01").success().count("\\[", 0);
-        cliTester.execute("do 2").success();
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
         gregorianCalendar.setTime(new Date());
         gregorianCalendar.add(Calendar.DAY_OF_MONTH, 1);
-        cliTester.execute(String.format("ls --done-before %s", SIMPLE_DATE_FORMAT.format(gregorianCalendar.getTime()))).success().count("\\[", 1);
+        String now = SIMPLE_DATE_FORMAT.format(gregorianCalendar.getTime());
+        cliTester.execute(String.format("ls --done-before %s", now)).success().count("\\[", 2);
+        cliTester.execute("do 2").success();
+        cliTester.execute(String.format("ls --done-before %s", now)).success().count("\\[", 3);
     }
 
     @Test(timeout = 50)
-    public void testBeforeAdd() {
-        cliTester.execute("ls --added-before 2019-03-01").success().count("\\[", 8);
+    public void testBeforeTag() {
+        cliTester.execute("ls --before-tag started:2020-01-01").success().count("\\[", 5);
+    }
+
+    @Test(timeout = 150)
+    public void testBeforeTagFailure() {
+        cliTester.execute("ls --before-tag start:20200310").failure();
+        cliTester.execute("ls --before-tag start:").failure();
     }
 
     @Test(timeout = 150)
@@ -147,7 +134,20 @@ public class ListCliTest {
         cliTester.execute("ls --clean").success()
                 .notContains("importance:").notContains("(A) ").notContains("2020-03-10").notContains("x 2")
                 .notContains("@iBank").notContains("+Live_Better").notContains("iBankAdmin").notContains("Funeral_Cover")
-                .contains("avanderwgmail.com");
+                .contains("avanderwgmail.com").notContains("p 2018-11-14").notContains("r 2019-08-19");
+    }
+
+    @Test(timeout = 150)
+    public void testDone() {
+        cliTester.execute("do 1,2,3,4,5,6,7,8,9").success();
+        cliTester.execute("archive").success();
+        cliTester.execute("do 1").success();
+        cliTester.execute("ls --done").success().startsWith("[  1]");
+    }
+
+    @Test(timeout = 100)
+    public void testExclusive() {
+        cliTester.execute("ls --done --parked --removed").failure();
     }
 
     @Test(timeout = 100)
@@ -160,6 +160,22 @@ public class ListCliTest {
     public void testOrFilter() {
         cliTester.execute("ls service,refactor --or relationship --or enforcer").success().startsWith("[  5]").count("\\[", 8);
         cliTester.execute("ls service,refactor --or relationship,enforcer").success().startsWith("[  5]").count("\\[", 8);
+    }
+
+    @Test(timeout = 150)
+    public void testParked() {
+        cliTester.execute("park 1,2,3,4,5,6,7,8,9").success();
+        cliTester.execute("archive").success();
+        cliTester.execute("park 1").success();
+        cliTester.execute("ls --parked").success().startsWith("[  1]");
+    }
+
+    @Test(timeout = 150)
+    public void testRemoved() {
+        cliTester.execute("rm 1,2,3,4,5,6,7,8,9").success();
+        cliTester.execute("archive").success();
+        cliTester.execute("rm 1").success();
+        cliTester.execute("ls --removed").success().startsWith("[  1]");
     }
 
 }

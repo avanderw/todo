@@ -63,7 +63,7 @@ public class EditCli implements Runnable, IExitCodeGenerator {
             Todo todo = new Todo(id, todoText);
             todoRepository.update(todo);
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                    gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", idx, styleApplicator.apply(todo.getText())), Map.class)));
+                    String.format("{idx:'%3s',todo:'%s'}", idx, styleApplicator.apply(todo.getText()))));
         });
     }
 }

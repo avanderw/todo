@@ -23,6 +23,7 @@ import java.nio.file.Path;
                 RemoveCli.class,
                 SortCli.class,
                 EditCli.class,
+                ChangelogCli.class,
                 ArchiveCli.class,
                 BackupCli.class,
                 ExploreCli.class,

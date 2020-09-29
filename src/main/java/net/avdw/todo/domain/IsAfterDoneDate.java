@@ -13,7 +13,7 @@ public class IsAfterDoneDate extends AbstractSpecification<Integer, Todo> {
 
     @Override
     public boolean isSatisfiedBy(final Todo todo) {
-        if (todo.isComplete()) {
+        if (todo.isDone()) {
             return todo.getDoneDate().after(date);
         } else {
             return false;

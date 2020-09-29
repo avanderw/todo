@@ -44,7 +44,7 @@ public class ArchiveCli implements Runnable {
         for (int i = 0; i < allTodoList.size(); i++) {
             if (isArchive.isSatisfiedBy(allTodoList.get(i))) {
                 spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                        gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", i + 1, styleApplicator.apply(allTodoList.get(i).getText())), Map.class)));
+                        String.format("{idx:'%3s',todo:'%s'}", i + 1, styleApplicator.apply(allTodoList.get(i).getText()))));
             }
         }
 

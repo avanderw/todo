@@ -9,6 +9,8 @@ public class TodoTextCleaner {
 
         cleanText = cleanText.replaceFirst("^\\([A-Z]\\)\\s", "");
         cleanText = cleanText.replaceFirst("^x \\d\\d\\d\\d-\\d\\d-\\d\\d\\s", "");
+        cleanText = cleanText.replaceFirst("^r \\d\\d\\d\\d-\\d\\d-\\d\\d\\s", "");
+        cleanText = cleanText.replaceFirst("^p \\d\\d\\d\\d-\\d\\d-\\d\\d\\s", "");
         cleanText = cleanText.replaceFirst("^\\d\\d\\d\\d-\\d\\d-\\d\\d\\s", "");
         cleanText = cleanText.replaceAll("\\s\\S*:\\S*", "");
         cleanText = cleanText.replaceAll("(\\s?)(@)(\\S+\\s?)", "$1$3");

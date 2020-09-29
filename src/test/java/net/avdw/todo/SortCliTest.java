@@ -49,7 +49,7 @@ public class SortCliTest {
         cliTester.execute("sort").success().startsWith("[  1]");
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneTodoList = todoRepository.findAll(new Any<>());
-        assertTrue(doneTodoList.get(0).getText().startsWith("2018-07-29"));
+        assertTrue(doneTodoList.get(0).getText().startsWith("(J) 2020-01-23"));
     }
 
     @Test(timeout = 50)
@@ -58,17 +58,19 @@ public class SortCliTest {
         cliTester.execute("sort importance,urgency").success().startsWith("[  1]");
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneTodoList = todoRepository.findAll(new Any<>());
-        assertTrue(doneTodoList.get(0).getText().startsWith("2020-03-10"));
+        assertTrue(doneTodoList.get(0).getText().startsWith("(J) 2020-01-23"));
+        assertTrue(doneTodoList.get(1).getText().startsWith("2020-03-10"));
     }
 
     @Test(timeout = 50)
     public void testKeysPriority() {
         cliTester.execute("pri 5 A");
-        cliTester.execute("sort importance,urgency").startsWith("[  1]");
+        cliTester.execute("sort importance,urgency").success().startsWith("[  1]");
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneTodoList = todoRepository.findAll(new Any<>());
         assertTrue(doneTodoList.get(0).getText().startsWith("(A)"));
-        assertTrue(doneTodoList.get(1).getText().startsWith("2020-03-10"));
+        assertTrue(doneTodoList.get(1).getText().startsWith("(J) 2020-01-23"));
+        assertTrue(doneTodoList.get(2).getText().startsWith("2020-03-10"));
     }
 
     @Test(timeout = 50)

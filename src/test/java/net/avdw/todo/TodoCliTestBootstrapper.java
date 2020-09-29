@@ -40,5 +40,6 @@ public final class TodoCliTestBootstrapper {
         cliTester.execute();
         cliTester.execute("--help");
         cliTester.execute("--version");
+        cliTester.execute("ls");
     }
 }

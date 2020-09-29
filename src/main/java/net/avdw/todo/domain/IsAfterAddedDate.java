@@ -13,6 +13,9 @@ public class IsAfterAddedDate extends AbstractSpecification<Integer, Todo> {
 
     @Override
     public boolean isSatisfiedBy(final Todo todo) {
+        if (todo.getAdditionDate() == null) {
+            return false;
+        }
         return todo.getAdditionDate().after(date);
     }
 

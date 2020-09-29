@@ -39,7 +39,6 @@ public class CliTester {
     }
 
     private void assertSuccess(final int exitCode) {
-        Logger.debug(new String(out.toByteArray(), StandardCharsets.UTF_8));
         if (!out.toString().isEmpty()) {
             Logger.debug("Standard output:\n{}", out.toString());
         }
@@ -59,7 +58,7 @@ public class CliTester {
     public CliTester count(final String regex, final int count) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(out.toString());
-        assertEquals(count, matcher.results().count());
+        assertEquals(regex, count, matcher.results().count());
         return this;
     }
 

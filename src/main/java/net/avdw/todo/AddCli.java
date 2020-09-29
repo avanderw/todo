@@ -65,6 +65,6 @@ class AddCli implements Runnable, IExitCodeGenerator {
         Todo todo = new Todo(todoRepository.size(), addition);
         todoRepository.add(todo);
         spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                gson.fromJson(String.format("{idx:'%3s',todo:'%s'}", todo.getIdx(), styleApplicator.apply(todo.getText())), Map.class)));
+                String.format("{idx:'%3s',todo:'%s'}", todo.getIdx(), styleApplicator.apply(todo.getText()))));
     }
 }

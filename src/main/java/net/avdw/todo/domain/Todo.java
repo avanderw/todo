@@ -17,18 +17,29 @@ import java.util.regex.Pattern;
 @SuppressFBWarnings(value = "JLM_JSR166_UTILCONCURRENT_MONITORENTER",
         justification = "Lombok notation does not bring in the confusion as it is hidden by generation")
 public class Todo implements IdType<Integer> {
-    private static final Pattern ADDITION_DATE_PATTERN = Pattern.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d)|^x .*[\\d-]+.* (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
+    private static final Pattern ADDITION_DATE_PATTERN = Pattern.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d)|^[xpr] .*[\\d-]+.* (\\d\\d\\d\\d-\\d\\d-\\d\\d)|\\([A-Z]\\) (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
     private static final Pattern COMPLETION_DATE_PATTERN = Pattern.compile("^x (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
+    private static final Pattern REMOVED_DATE_PATTERN = Pattern.compile("^r (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
+    private static final Pattern PARKED_DATE_PATTERN = Pattern.compile("^p (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
+    @Getter(lazy = true)
+    private final Date lastChangeDate = lastChangeDate();
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
     @Getter
     private final String text;
     @Getter(lazy = true)
-    private final boolean complete = complete();
+    private final boolean done = done();
+    @Getter(lazy = true)
+    private final boolean removed = removed();
+    @Getter(lazy = true)
+    private final boolean parked = parked();
     @Getter(lazy = true)
     private final Date additionDate = additionDate();
     @Getter(lazy = true)
     private final Date doneDate = doneDate();
+    @Getter(lazy = true)
+    private final Date parkedDate = parkedDate();
+    @Getter(lazy = true)
+    private final Date removedDate = removedDate();
     @Getter(lazy = true)
     private final Priority priority = priority();
     @Getter
@@ -45,14 +56,36 @@ public class Todo implements IdType<Integer> {
     private Date additionDate() {
         Matcher matcher = ADDITION_DATE_PATTERN.matcher(text);
         if (matcher.find()) {
-            String group = matcher.group(1) == null ? matcher.group(2) : matcher.group(1);
+            String group = matcher.group(1);
+            group = matcher.group(2) != null ? matcher.group(2) : group;
+            group = matcher.group(3) != null ? matcher.group(3) : group;
             return simpleDateFormat.parse(group);
         } else {
             return null;
         }
     }
 
-    private boolean complete() {
+    @SneakyThrows
+    private Date removedDate() {
+        Matcher matcher = REMOVED_DATE_PATTERN.matcher(text);
+        if (matcher.find()) {
+            return simpleDateFormat.parse(matcher.group(1));
+        } else {
+            return null;
+        }
+    }
+
+    @SneakyThrows
+    private Date parkedDate() {
+        Matcher matcher = PARKED_DATE_PATTERN.matcher(text);
+        if (matcher.find()) {
+            return simpleDateFormat.parse(matcher.group(1));
+        } else {
+            return null;
+        }
+    }
+
+    private boolean done() {
         return text.startsWith("x ");
     }
 
@@ -97,12 +130,53 @@ public class Todo implements IdType<Integer> {
         return tagValueList;
     }
 
+    private Date lastChangeDate() {
+        Date changeDate = null;
+        if (getAdditionDate() != null) {
+            changeDate = getAdditionDate();
+        }
+
+        if (isDone()) {
+            if (getAdditionDate() == null) {
+                changeDate = getDoneDate();
+            } else {
+                changeDate = getDoneDate().after(changeDate) ? getDoneDate() : changeDate;
+            }
+        }
+
+        if (isRemoved()) {
+            if (getAdditionDate() == null) {
+                changeDate = getRemovedDate();
+            } else {
+                changeDate = getRemovedDate().after(changeDate) ? getRemovedDate() : changeDate;
+            }
+        }
+
+        if (isParked()) {
+            if (getAdditionDate() == null) {
+                changeDate = getParkedDate();
+            } else {
+                changeDate = getParkedDate().after(changeDate) ? getParkedDate() : changeDate;
+            }
+        }
+
+        return changeDate;
+    }
+
+    private boolean parked() {
+        return text.startsWith("p ");
+    }
+
     private Priority priority() {
         if (text.matches("^\\([A-Z]\\).*")) {
             return Priority.valueOf(text.substring(text.indexOf("(") + 1, text.indexOf(")")));
         } else {
             return null;
         }
+    }
+
+    private boolean removed() {
+        return text.startsWith("r ");
     }
 
     public String toString() {
