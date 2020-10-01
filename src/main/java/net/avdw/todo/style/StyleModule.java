@@ -13,6 +13,7 @@ import java.util.Properties;
 public class StyleModule extends AbstractModule {
     @Provides
     @Singleton
+    @DefaultColor
     String defaultColor(final Properties properties) {
         return properties.getProperty("color.default") == null
                 ? Ansi.ansi().reset().toString()
@@ -21,15 +22,36 @@ public class StyleModule extends AbstractModule {
 
     @Provides
     @Singleton
-    Properties properties() {
-        PropertyFile propertyFile = new PropertyFile("net.avdw/todo");
-        return propertyFile.read("style");
+    @DefaultDoneColor
+    String defaultDoneColor(final Properties properties, @DefaultColor final String defaultColor) {
+        return properties.getProperty("color.done.default") == null
+                ? defaultColor
+                : new ColorConverter().hexToAnsiFg(Integer.parseInt(properties.getProperty("color.done.default").replace("0x", ""), 16));
     }
 
     @Provides
     @Singleton
-    StylerBuilder stylerBuilder(final String defaultColor) {
-        return new StylerBuilder(defaultColor);
+    @DefaultParkedColor
+    String defaultParkedColor(final Properties properties, @DefaultDoneColor final String defaultColor) {
+        return properties.getProperty("color.parked.default") == null
+                ? defaultColor
+                : new ColorConverter().hexToAnsiFg(Integer.parseInt(properties.getProperty("color.parked.default").replace("0x", ""), 16));
+    }
+
+    @Provides
+    @Singleton
+    @DefaultRemovedColor
+    String defaultRemovedColor(final Properties properties, @DefaultDoneColor final String defaultColor) {
+        return properties.getProperty("color.removed.default") == null
+                ? defaultColor
+                : new ColorConverter().hexToAnsiFg(Integer.parseInt(properties.getProperty("color.removed.default").replace("0x", ""), 16));
+    }
+
+    @Provides
+    @Singleton
+    Properties properties() {
+        PropertyFile propertyFile = new PropertyFile("net.avdw/todo");
+        return propertyFile.read("style");
     }
 
     @Provides

@@ -11,16 +11,14 @@ import net.avdw.todo.style.StyleModule;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 class MainModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(RunningStats.class).toInstance(new RunningStats());
         bind(List.class).to(LinkedList.class);
+        bind(Set.class).to(HashSet.class);
         bind(Path.class).toInstance(Paths.get(".todo/todo.txt"));
         bind(ResourceBundle.class).toInstance(ResourceBundle.getBundle("messages", Locale.getDefault()));
 

@@ -7,12 +7,12 @@ import java.util.List;
 
 public class StyleApplicator {
 
-    private final String defaultColor;
+    private final DefaultTextColor defaultTextColor;
     private final List<IStyler> stylerList;
 
     @Inject
-    StyleApplicator(final String defaultColor, final List<IStyler> stylerList) {
-        this.defaultColor = defaultColor;
+    StyleApplicator(final DefaultTextColor defaultTextColor, final List<IStyler> stylerList) {
+        this.defaultTextColor = defaultTextColor;
         this.stylerList = stylerList;
     }
 
@@ -21,6 +21,6 @@ public class StyleApplicator {
         for (IStyler styler : stylerList) {
             styledText = styler.style(styledText);
         }
-        return Ansi.ansi().a(defaultColor).a(styledText).reset().toString();
+        return Ansi.ansi().a(defaultTextColor.getFromText(text)).a(styledText).reset().toString();
     }
 }

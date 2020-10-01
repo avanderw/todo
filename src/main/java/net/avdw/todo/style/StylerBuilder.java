@@ -1,5 +1,6 @@
 package net.avdw.todo.style;
 
+import com.google.inject.Inject;
 import org.tinylog.Logger;
 
 import java.util.ArrayList;
@@ -7,10 +8,12 @@ import java.util.List;
 import java.util.Properties;
 
 public class StylerBuilder {
-    private final String defaultColor;
 
-    StylerBuilder(final String defaultColor) {
-        this.defaultColor = defaultColor;
+    private final DefaultTextColor defaultTextColor;
+
+    @Inject
+    StylerBuilder(final DefaultTextColor defaultTextColor) {
+        this.defaultTextColor = defaultTextColor;
     }
 
     public List<IStyler> buildFrom(final Properties properties) {
@@ -31,7 +34,7 @@ public class StylerBuilder {
                 case "pattern" -> {
                     String regex = properties.get(propertyKey).toString();
                     String color = properties.getProperty(String.format("color.%s", propertyKey));
-                    stylerList.add(new PatternStyler(regex, color, defaultColor));
+                    stylerList.add(new PatternStyler(regex, color, defaultTextColor));
                     Logger.debug("Creating pattern styler ({})", propertyKey);
                 }
                 case "color" -> Logger.trace("Ignore color property ({})" +
@@ -46,7 +49,7 @@ public class StylerBuilder {
                     String tag = propertyKey.substring(firstDot + 1, secondDot);
                     String argument = propertyKey.substring(secondDot + 1);
                     String color = properties.getProperty(propertyKey);
-                    stylerList.add(new DateStyler(tag, argument, color, defaultColor));
+                    stylerList.add(new DateStyler(tag, argument, color, defaultTextColor));
                     Logger.debug("Creating date styler ({})", propertyKey);
                 }
                 case "int" -> {
@@ -59,7 +62,7 @@ public class StylerBuilder {
                     String tag = propertyKey.substring(firstDot + 1, secondDot);
                     String argument = propertyKey.substring(secondDot + 1);
                     String color = properties.getProperty(propertyKey);
-                    stylerList.add(new IntStyler(tag, argument, color, defaultColor));
+                    stylerList.add(new IntStyler(tag, argument, color, defaultTextColor));
                     Logger.debug("Creating int styler ({})", propertyKey);
                 }
                 default -> Logger.warn("Unknown type ({})" +

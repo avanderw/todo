@@ -2,6 +2,7 @@ package net.avdw.todo.style;
 
 import lombok.SneakyThrows;
 import net.avdw.todo.color.ColorConverter;
+import net.avdw.todo.domain.Todo;
 import org.fusesource.jansi.Ansi;
 import org.tinylog.Logger;
 
@@ -18,15 +19,15 @@ public class DateStyler implements IStyler {
     private static final ColorConverter COLOR_CONVERTER = new ColorConverter();
     private final String tag;
     private final String color;
-    private final String defaultColor;
+    private final DefaultTextColor defaultTextColor;
     private final Date date;
     private boolean ascend;
     private boolean exact;
 
-    public DateStyler(final String tag, final String argument, final String color, final String defaultColor) {
+    public DateStyler(final String tag, final String argument, final String color, final DefaultTextColor defaultTextColor) {
         this.tag = tag;
         this.color = COLOR_CONVERTER.hexToAnsiFg(Integer.parseInt(color.replace("0x", ""), 16));
-        this.defaultColor = defaultColor;
+        this.defaultTextColor = defaultTextColor;
 
         Matcher matcher = ARGUMENT_REGEX.matcher(argument);
         if (matcher.find()) {
@@ -51,10 +52,12 @@ public class DateStyler implements IStyler {
     @SneakyThrows
     public String style(final String text) {
         Pattern pattern = switch (tag) {
-            case "complete" -> Pattern.compile("^x (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
+            case "done" -> Pattern.compile("^x (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
             case "add" -> Pattern.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d)|^x .*[\\d-]+.* (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
             default -> Pattern.compile(String.format("(%s:(\\d\\d\\d\\d-\\d\\d-\\d\\d))", tag));
         };
+
+        String defaultColor = defaultTextColor.getFromText(text);
         Matcher matcher = pattern.matcher(text);
         String replacedText = text;
         while (matcher.find()) {

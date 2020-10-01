@@ -1,6 +1,7 @@
 package net.avdw.todo.style;
 
 import net.avdw.todo.color.ColorConverter;
+import net.avdw.todo.domain.Todo;
 import org.fusesource.jansi.Ansi;
 import org.tinylog.Logger;
 
@@ -12,15 +13,15 @@ public class IntStyler implements IStyler {
     private static final ColorConverter COLOR_CONVERTER = new ColorConverter();
     private final String tag;
     private final String color;
-    private final String defaultColor;
+    private final DefaultTextColor defaultTextColor;
     private boolean ascend;
     private boolean exact;
     private int arg;
 
-    public IntStyler(final String tag, final String argument, final String color, final String defaultColor) {
+    public IntStyler(final String tag, final String argument, final String color, final DefaultTextColor defaultTextColor) {
         this.tag = tag;
         this.color = COLOR_CONVERTER.hexToAnsiFg(Integer.parseInt(color.replace("0x", ""), 16));
-        this.defaultColor = defaultColor;
+        this.defaultTextColor = defaultTextColor;
 
         Matcher matcher = ARGUMENT_REGEX.matcher(argument);
         if (matcher.find()) {
@@ -35,6 +36,8 @@ public class IntStyler implements IStyler {
         Pattern pattern = Pattern.compile(String.format("(%s:(\\d+))", tag));
         Matcher matcher = pattern.matcher(text);
         String replacedText = text;
+
+        String defaultColor = defaultTextColor.getFromText(text);
         while (matcher.find()) {
             int value = Integer.parseInt(matcher.group(2));
             if (exact) {
