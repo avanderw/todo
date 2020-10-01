@@ -52,7 +52,7 @@ public class DateStyler implements IStyler {
     @SneakyThrows
     public String style(final String text) {
         Pattern pattern = switch (tag) {
-            case "done" -> Pattern.compile("^x (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
+            case "done" -> Pattern.compile("^[xpr] (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
             case "add" -> Pattern.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d)|^x .*[\\d-]+.* (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
             default -> Pattern.compile(String.format("(%s:(\\d\\d\\d\\d-\\d\\d-\\d\\d))", tag));
         };

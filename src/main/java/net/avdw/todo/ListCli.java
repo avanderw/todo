@@ -58,7 +58,7 @@ public class ListCli implements Runnable, IExitCodeGenerator {
             todoList.forEach(todo -> {
                 String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
                 spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                        String.format("{idx:'%3s',todo:'%s'}", todo.getIdx(), styleApplicator.apply(todoText))));
+                        String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
             });
         } catch (UnsupportedOperationException e) {
             Logger.debug(e);

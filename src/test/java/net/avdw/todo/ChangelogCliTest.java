@@ -89,7 +89,7 @@ public class ChangelogCliTest {
         cliTester.execute("changelog --added-before 2019-03-01 --added-after 2018-12-31").success().count("\\[", 2);
     }
 
-    @Test(timeout = 80)
+    @Test(timeout = 120)
     public void testBeforeAfterChange() {
         cliTester.execute("changelog --changed-before 2019-12-31 --changed-after 2019-12-03").success().count("\\[", 3);
     }

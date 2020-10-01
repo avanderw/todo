@@ -1,26 +1,27 @@
-(A) 2020-03-31 @Add todo ls --group-by meta | context | project
-x 2020-04-08 2019-07-09 @Add admin +archive
-2019-07-23 @Add default show all +properties
 2019-07-23 @Add reporting for duration +report
 2019-07-23 @Fix bug when global repository does not exist
 2019-07-25 @Fix bug when +add with tilde is used in command prompt
-2019-07-26 @Add +consolodate functionality to view all aware todo directories
-2019-07-26 @Add reporting on todo, in-progress and done for previous months +report
 2019-07-30 @Fix +list to fail when targeting non-existing global with existing local
-2019-08-12 @Add google sync support
 2019-08-12 @Add grouping feature to list, e.g. by project or search term
 2019-08-12 @Enhance +report to list completely done projects and their done date
 2019-08-12 @Enhance +report to list contexts and projects with priority
 2019-08-12 @Enhance +report to show lead and cycle time
 2019-08-12 @Fix +rename when using + on term to replace with
 2019-08-12 @Fix bug when resolving parent directory in nested directories
-2019-08-13 @Add +top command to list top x todos
 2019-08-13 @Enhance +explore to be OS independant
 2019-08-14 @Add +report in the style of github contribution graph
 2019-08-14 Consider adding roadmap generation based off priority, version or combined
 2019-08-21 @Enhance +priority to prioritise a project or context
-2019-10-09 @Change set command to become config command which manages property files
 2019-10-11 @Add an easter egg for making 100 todo items
 2019-10-11 @Fix not allowing multi-line todo +add
-2019-10-11 @Refactor priority shifting to not read the file twice 
-2019-11-11 Create a property for style selection 
+2020-10-01 @Add 'todo roadmap' [project, context, tag] which will list upcoming- due,target,cycle and past- due,target,cycle
+r 2020-10-01 2019-07-23 @Add default show all +properties
+r 2020-10-01 2019-07-26 @Add +consolodate functionality to view all aware todo directories
+r 2020-10-01 2019-08-12 @Add google sync support
+r 2020-10-01 2019-08-13 @Add +top command to list top x todos
+r 2020-10-01 2019-10-09 @Change set command to become config command which manages property files
+r 2020-10-01 2020-03-31 @Add todo ls --group-by meta | context | project
+x 2020-04-08 2019-07-09 @Add admin +archive
+x 2020-10-01 2019-07-26 @Add reporting on todo, in-progress and done for previous months +report
+x 2020-10-01 2019-10-11 @Refactor priority shifting to not read the file twice 
+x 2020-10-01 2019-11-11 Create a property for style selection 

@@ -41,7 +41,7 @@ public class RemoveCli implements Runnable {
                             simpleDateFormat.format(new Date()),
                             todoRepository.findById(id).orElseThrow().toString().replaceFirst("\\([A-Z]\\) ", ""))));
                     spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                            String.format("{idx:'%3s',todo:'%s'}", idx, styleApplicator.apply(todoRepository.findById(id).orElseThrow().getText()))));
+                            String.format("{idx:'%3s',todo:\"%s\"}", idx, styleApplicator.apply(todoRepository.findById(id).orElseThrow().getText()).replaceAll("\"", "\\\\\""))));
                 });
         todoRepository.commit();
     }
