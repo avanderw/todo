@@ -2,7 +2,6 @@ package net.avdw.todo.style;
 
 import lombok.SneakyThrows;
 import net.avdw.todo.color.ColorConverter;
-import net.avdw.todo.domain.Todo;
 import org.fusesource.jansi.Ansi;
 import org.tinylog.Logger;
 
@@ -14,13 +13,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DateStyler implements IStyler {
-    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private static final Pattern ARGUMENT_REGEX = Pattern.compile("(-?\\d+)([dmy])([+-]?)");
     private static final ColorConverter COLOR_CONVERTER = new ColorConverter();
-    private final String tag;
     private final String color;
-    private final DefaultTextColor defaultTextColor;
     private final Date date;
+    private final DefaultTextColor defaultTextColor;
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private final String tag;
     private boolean ascend;
     private boolean exact;
 
@@ -51,25 +50,25 @@ public class DateStyler implements IStyler {
     @Override
     @SneakyThrows
     public String style(final String text) {
+        String defaultColor = defaultTextColor.getFromText(text);
         Pattern pattern = switch (tag) {
             case "done" -> Pattern.compile("^[xpr] (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
-            case "add" -> Pattern.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d)|^x .*[\\d-]+.* (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
+            case "add" -> Pattern.compile("^(\\([A-Z]\\)\\s)?(\\d\\d\\d\\d-\\d\\d-\\d\\d)|^x .*[\\d-]+.* (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
             default -> Pattern.compile(String.format("(%s:(\\d\\d\\d\\d-\\d\\d-\\d\\d))", tag));
         };
 
-        String defaultColor = defaultTextColor.getFromText(text);
         Matcher matcher = pattern.matcher(text);
         String replacedText = text;
         while (matcher.find()) {
             Date value;
-            String replace;
-            try {
-                value = simpleDateFormat.parse(matcher.group(1));
-                replace = matcher.group(1);
-            } catch (Exception e) {
-                value = simpleDateFormat.parse(matcher.group(2));
-                replace = "add".equals(tag) ? matcher.group(2) : matcher.group(1);
-            }
+            String replace = switch (tag) {
+                case "add" -> matcher.group(2) == null
+                        ? matcher.group(3)
+                        : matcher.group(2);
+                default -> matcher.group(1);
+            };
+            value = simpleDateFormat.parse(replace);
+
             if (exact) {
                 if (value.equals(date)) {
                     Logger.trace("Styling group={}; {} == {}", replace, value, date);

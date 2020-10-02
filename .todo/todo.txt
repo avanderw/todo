@@ -14,7 +14,8 @@
 2019-08-21 @Enhance +priority to prioritise a project or context
 2019-10-11 @Add an easter egg for making 100 todo items
 2019-10-11 @Fix not allowing multi-line todo +add
-2020-10-01 @Add 'todo roadmap' [project, context, tag] which will list upcoming- due,target,cycle and past- due,target,cycle
+2020-10-01 @Add 'todo restore' command to restore the last backup
+(A) 2020-10-01 @Add 'todo roadmap' [project, context, tag] which will list upcoming- due,target,cycle and past- due,target,cycle
 r 2020-10-01 2019-07-23 @Add default show all +properties
 r 2020-10-01 2019-07-26 @Add +consolodate functionality to view all aware todo directories
 r 2020-10-01 2019-08-12 @Add google sync support
