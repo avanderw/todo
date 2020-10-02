@@ -42,12 +42,12 @@ public class ChangelogCliTest {
 
     @Test(timeout = 50)
     public void testAfterAdd() {
-        cliTester.execute("changelog --added-after 2020-03-10").success().count("\\[", 4);
+        cliTester.execute("changelog --added-after 2020-03-10").success().count("\\[", 2);
     }
 
     @Test(timeout = 50)
     public void testAfterChange() {
-        cliTester.execute("changelog --changed-after 2019-12-31").success().count("\\[", 54);
+        cliTester.execute("changelog --changed-after 2019-12-31").success().count("\\[", 52);
     }
 
     @Test(timeout = 100)
@@ -97,7 +97,7 @@ public class ChangelogCliTest {
 
     @Test(timeout = 50)
     public void testBeforeChange() {
-        cliTester.execute("changelog --changed-before 2019-12-31").success().count("\\[", 44);
+        cliTester.execute("changelog --changed-before 2019-12-31").success().count("\\[", 46);
     }
 
     @Test(timeout = 100)

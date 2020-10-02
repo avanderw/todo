@@ -5,7 +5,7 @@
 2019-08-12 @Add grouping feature to list, e.g. by project or search term
 2019-08-12 @Enhance +report to list completely done projects and their done date
 2019-08-12 @Enhance +report to list contexts and projects with priority
-2019-08-12 @Enhance +report to show lead and cycle time
+x 2020-10-02 2019-08-12 @Enhance +report to show lead and cycle time
 2019-08-12 @Fix +rename when using + on term to replace with
 2019-08-12 @Fix bug when resolving parent directory in nested directories
 2019-08-13 @Enhance +explore to be OS independant

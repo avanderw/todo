@@ -42,7 +42,7 @@ Resetting remote pin 4 branch support importance:2 urgency:2
 2019-10-29 +ROB DHA consent 2019-11-19:testing 2020-02-25:releasing assigned:andre
 2019-10-29 +ROB ID scan started:2019-11-08 assigned:baldwin 2020-02-25:testing
 2019-10-29 +ROB confidence index started:2019-11-18 analyst:karen 2020-02-25:development assigned:baldwin
-2019-10-29 +ROB liveness and selfie started:2019-08-29 assigned:baldwin analyst:karen 2019-09-03:development 2019-09-16:development 2019-09-30:development 2019-11-19:testing
+2019-08-29 +ROB liveness and selfie started:2019-08-29 assigned:baldwin analyst:karen 2019-09-03:development 2019-09-16:development 2019-09-30:development 2019-11-19:testing
 2019-11-05 Correlation ID in logs assigned:etienne started:2020-03-10
 2019-12-05 Electrum @ECS IDP integration assigned:karl 2020-02-24:releasing end:2020-03-16 
 2020-01-01 +Access_Facility credit estimate @Track1 started:2020-03-10 assigned:shane
@@ -52,7 +52,7 @@ x 2020-05-27 2020-01-05 @CNP bugfixes and 30s failover assigned:shane end:2020-0
 2020-02-04 @USSD mobile PIN for balance enquiries started:2020-02-05 end:2020-03-10 2020-02-24:development assigned:karl
 2020-02-05 +Access_Facility @USSD assigned:karl end:2020-03-10 analyst:tselane started:2020-02-10 2020-02-24:releasing
 2020-02-05 Client preferences in @iBankAdmin assigned:marius 2020-02-24:releasing started:2020-02-05
-2020-02-05 Use support endpoint to retrieve +Send_Cash voucher detail assigned:rentius ref:AL-1512 started:2020-01-13 end:2020-03-03 2020-02-24:releasing
+2020-01-13 Use support endpoint to retrieve +Send_Cash voucher detail assigned:rentius ref:AL-1512 started:2020-01-13 end:2020-03-03 2020-02-24:releasing
 2020-02-10 Logging and security in Fuse fix started:2020-02-17 2020-02-24:development assigned:etienne
 2020-02-14 +Send_Cash agreement changes assigned:shane end:2020-03-03
 2020-02-24 +Funeral_Cover benefits started:2020-02-24 assigned:joseph analyst:cassim
@@ -66,7 +66,7 @@ x 2020-05-27 2020-01-05 @CNP bugfixes and 30s failover assigned:shane end:2020-0
 2020-01-01 +Access_Facility credit estimate @Track1 started:2020-03-10 assigned:shane
 2020-02-24 Tap to pay card service v5 @Track1 @CNP assigned:shane started:2020-03-10
 2020-02-10 Logging and security in Fuse fix started:2020-02-17 2020-02-24:development assigned:etienne
-2020-07-18 +ROB prove that data was on the device at a point in time assigned:leendert started:2019-07-29 2019-08-19:development 2019-09-09:development 2019-10-14:testing 2019-11-19:testing 2020-02-24:development
+2019-07-18 +ROB prove that data was on the device at a point in time assigned:leendert started:2019-07-29 2019-08-19:development 2019-09-09:development 2019-10-14:testing 2019-11-19:testing 2020-02-24:development
 2019-09-09 @Track2 +Funeral_Cover service started:2019-09-09 assigned:etienne 2019-10-14:development 2019-11-19:development 2020-02-24:testing
 2019-11-05 Correlation ID in logs assigned:etienne started:2020-03-10
 2020-01-23 Fix activation data to identify Track2 vs Track1 activations started:2020-01-23 2020-02-24:releasing assigned:etienne

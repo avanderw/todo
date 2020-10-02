@@ -32,6 +32,6 @@ public class TemplatedResourceBundle {
     }
 
     public String getString(final String templateKey) {
-        return resourceBundle.getString(templateKey);
+        return getString(templateKey, "{}");
     }
 }

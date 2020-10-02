@@ -42,12 +42,12 @@ public class ListCliTest {
 
     @Test(timeout = 50)
     public void testAfterAdd() {
-        cliTester.execute("ls --added-after 2020-03-10").success().count("\\[", 3);
+        cliTester.execute("ls --added-after 2020-03-10").success().count("\\[", 2);
     }
 
     @Test(timeout = 50)
     public void testAfterChange() {
-        cliTester.execute("ls --changed-after 2019-12-31").success().count("\\[", 35);
+        cliTester.execute("ls --changed-after 2019-12-31").success().count("\\[", 34);
     }
 
     @Test(timeout = 100)
@@ -102,7 +102,7 @@ public class ListCliTest {
 
     @Test(timeout = 50)
     public void testBeforeChange() {
-        cliTester.execute("ls --changed-before 2019-12-31").success().count("\\[", 36);
+        cliTester.execute("ls --changed-before 2019-12-31").success().count("\\[", 37);
     }
 
     @Test(timeout = 100)

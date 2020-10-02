@@ -35,7 +35,7 @@ public class StylerBuilder {
                     String regex = properties.get(propertyKey).toString();
                     String color = properties.getProperty(String.format("color.%s", propertyKey));
                     stylerList.add(new PatternStyler(regex, color, defaultTextColor));
-                    Logger.debug("Creating pattern styler ({})", propertyKey);
+                    Logger.trace("Creating pattern styler ({})", propertyKey);
                 }
                 case "color" -> Logger.trace("Ignore color property ({})" +
                         "\n  (used when creating '{}')", propertyKey, propertyKey.substring(propertyKey.indexOf(".") + 1));
@@ -50,7 +50,7 @@ public class StylerBuilder {
                     String argument = propertyKey.substring(secondDot + 1);
                     String color = properties.getProperty(propertyKey);
                     stylerList.add(new DateStyler(tag, argument, color, defaultTextColor));
-                    Logger.debug("Creating date styler ({})", propertyKey);
+                    Logger.trace("Creating date styler ({})", propertyKey);
                 }
                 case "int" -> {
                     if (secondDot == -1) {
@@ -63,7 +63,7 @@ public class StylerBuilder {
                     String argument = propertyKey.substring(secondDot + 1);
                     String color = properties.getProperty(propertyKey);
                     stylerList.add(new IntStyler(tag, argument, color, defaultTextColor));
-                    Logger.debug("Creating int styler ({})", propertyKey);
+                    Logger.trace("Creating int styler ({})", propertyKey);
                 }
                 default -> Logger.warn("Unknown type ({})" +
                         "\n  (valid types [ 'pattern', 'date', 'int' ])" +

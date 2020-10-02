@@ -68,7 +68,7 @@ public class PropertyFile {
             Logger.debug("Load local properties ({}):" +
                     "\n{}", localPath, prop);
         } catch (IOException e) {
-            Logger.debug("No local properties found ({})", localPath);
+            Logger.trace("No local properties found ({})", localPath);
         }
 
         Path globalPath = Paths.get(System.getProperty("user.home")).resolve(namespace).resolve(propertyFilename);
@@ -79,7 +79,7 @@ public class PropertyFile {
             Logger.debug("Load global properties ({}):" +
                     "\n{}", globalPath, prop);
         } catch (IOException e) {
-            Logger.debug("No global properties found ({})", globalPath);
+            Logger.trace("No global properties found ({})", globalPath);
         }
         return properties;
     }

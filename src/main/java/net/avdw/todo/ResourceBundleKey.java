@@ -11,6 +11,7 @@ public final class ResourceBundleKey {
     public static final String CHANGELOG_PARKED_HEADER = "changelog.parked.header";
     public static final String CHANGELOG_STARTED_HEADER = "changelog.started.header";
     public static final String CHANGELOG_TYPE_NA = "changelog.type.na";
+    public static final String CHART_BOX = "chart.box(min,trimmedMin,Q1,median,Q3,trimmedMax,max)";
     public static final String INIT_FILE_CREATED = "init.file.created(path,usage)";
     public static final String INIT_FILE_EXISTS = "init.file.exists(path)";
     public static final String INVALID_DATE_FORMAT = "invalid.date.format(date)";
@@ -23,7 +24,18 @@ public final class ResourceBundleKey {
     public static final String PRIORITY_NOT_ALLOWED_DONE = "priority.not.allowed.done";
     public static final String PRIORITY_NOT_ALLOWED_PARKED = "priority.not.allowed.parked";
     public static final String PRIORITY_NOT_ALLOWED_REMOVED = "priority.not.allowed.removed";
+    public static final String STATS_LARGE_CYCLE_TIME = "stats.large.cycle.time";
+    public static final String STATS_LARGE_LEAD_TIME = "stats.large.lead.time";
+    public static final String STATS_LARGE_REACTION_TIME = "stats.large.reaction.time";
+    public static final String STATS_MAX_CYCLE_TIME = "stats.max.cycle.time(time)";
+    public static final String STATS_MAX_LEAD_TIME = "stats.max.lead.time(time)";
+    public static final String STATS_MAX_REACTION_TIME = "stats.max.reaction.time(time)";
+    public static final String STATS_NOT_ENOUGH_DATA = "stats.not.enough.data";
+    public static final String STATS_REACTION_TITLE = "stats.reaction.title";
+    public static final String STATS_CYCLE_TITLE = "stats.cycle.title";
+    public static final String STATS_LEAD_TITLE = "stats.lead.title";
     public static final String TODO_LINE_ITEM = "todo.line.item(idx,todo)";
+    public static final String STATS_DESCRIPTIVE_TIME = "stats.descriptive.time(size,mean,stdDev,oneStdDev,twoStdDev,threeStdDev,minOneStdDev,zeroStdDev)";
 
     private ResourceBundleKey() {
     }
