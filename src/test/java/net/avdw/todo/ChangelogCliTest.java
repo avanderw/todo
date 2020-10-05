@@ -170,7 +170,7 @@ public class ChangelogCliTest {
         cliTester.execute("changelog --by-week").success().notContains("2019/02");
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 100)
     public void testYear() {
         cliTester.execute("changelog --by-year").success().notContains("2019/02");
     }

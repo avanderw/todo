@@ -32,10 +32,12 @@ public class StatsCli implements Runnable {
     private BooleanFilter booleanFilter;
     @Mixin
     private DateFilter dateFilter;
+    @Mixin
+    private RepositoryScope repositoryScope;
     @Option(names = "--clean", descriptionKey = "list.clean.desc")
     private boolean isClean = false;
     @Inject
-    private Repository<Integer, Todo> repository;
+    private Repository<Integer, Todo> todoRepository;
     @Spec
     private CommandSpec spec;
     @Inject
@@ -74,13 +76,13 @@ public class StatsCli implements Runnable {
     private void printCycleTimeStatistics(final List<Todo> todoList) {
         spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.STATS_CYCLE_TITLE));
 
-        DescriptiveStatistics cycleTimeStats = new DescriptiveStatistics();
+        DescriptiveStatistics stats = new DescriptiveStatistics();
         todoList.stream()
                 .filter(todoStatistic::hasCycleTime)
                 .mapToLong(todoStatistic::getCycleTime)
-                .forEach(cycleTimeStats::addValue);
+                .forEach(stats::addValue);
 
-        printStats(cycleTimeStats);
+        printStats(stats);
 
         Optional<Todo> max = todoList.stream()
                 .filter(t -> !todoStatistic.hasCycleTime(t))
@@ -109,7 +111,7 @@ public class StatsCli implements Runnable {
                 .filter(t -> !t.isParked())
                 .filter(t -> {
                     try {
-                        return ChronoUnit.DAYS.between(simpleDateFormat.parse(t.getTagValueList("started").get(0)).toInstant(), now.toInstant()) > cycleTimeStats.getMean();
+                        return ChronoUnit.DAYS.between(simpleDateFormat.parse(t.getTagValueList("started").get(0)).toInstant(), now.toInstant()) > stats.getMean() + stats.getStandardDeviation();
                     } catch (ParseException e) {
                         return false;
                     }
@@ -125,13 +127,13 @@ public class StatsCli implements Runnable {
     private void printLeadTimeStatistics(final List<Todo> todoList) {
         spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.STATS_LEAD_TITLE));
 
-        DescriptiveStatistics leadTimeStats = new DescriptiveStatistics();
+        DescriptiveStatistics stats = new DescriptiveStatistics();
         todoList.stream()
                 .filter(todoStatistic::hasLeadTime)
                 .mapToLong(todoStatistic::getLeadTime)
-                .forEach(leadTimeStats::addValue);
+                .forEach(stats::addValue);
 
-        printStats(leadTimeStats);
+        printStats(stats);
 
         Optional<Todo> max = todoList.stream()
                 .filter(t -> !todoStatistic.hasLeadTime(t))
@@ -152,7 +154,7 @@ public class StatsCli implements Runnable {
                 .filter(t -> !t.isDone())
                 .filter(t -> !t.isRemoved())
                 .filter(t -> !t.isParked())
-                .filter(t -> ChronoUnit.DAYS.between(t.getAdditionDate().toInstant(), now.toInstant()) > leadTimeStats.getMean())
+                .filter(t -> ChronoUnit.DAYS.between(t.getAdditionDate().toInstant(), now.toInstant()) > stats.getMean() + stats.getStandardDeviation())
                 .collect(Collectors.toList());
         if (!largeTimeTodoList.isEmpty()) {
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.STATS_LARGE_LEAD_TIME));
@@ -163,13 +165,13 @@ public class StatsCli implements Runnable {
     private void printReactionTimeStatistics(final List<Todo> todoList) {
         spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.STATS_REACTION_TITLE));
 
-        DescriptiveStatistics reactionTimeStats = new DescriptiveStatistics();
+        DescriptiveStatistics stats = new DescriptiveStatistics();
         todoList.stream()
                 .filter(todoStatistic::hasReactionTime)
                 .mapToLong(todoStatistic::getReactionTime)
-                .forEach(reactionTimeStats::addValue);
+                .forEach(stats::addValue);
 
-        printStats(reactionTimeStats);
+        printStats(stats);
 
         Optional<Todo> max = todoList.stream()
                 .filter(t -> !todoStatistic.hasReactionTime(t))
@@ -190,7 +192,7 @@ public class StatsCli implements Runnable {
                 .filter(t -> !t.isDone())
                 .filter(t -> !t.isRemoved())
                 .filter(t -> !t.isParked())
-                .filter(t -> ChronoUnit.DAYS.between(t.getAdditionDate().toInstant(), now.toInstant()) > reactionTimeStats.getMean())
+                .filter(t -> ChronoUnit.DAYS.between(t.getAdditionDate().toInstant(), now.toInstant()) > stats.getMean() + stats.getStandardDeviation())
                 .collect(Collectors.toList());
         if (!largeTimeTodoList.isEmpty()) {
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.STATS_LARGE_REACTION_TIME));
@@ -257,7 +259,8 @@ public class StatsCli implements Runnable {
         specification = booleanFilter.specification(specification);
         Logger.trace(specification);
 
-        List<Todo> todoList = repository.findAll(specification);
+        Repository<Integer, Todo> scopedRepository = repositoryScope.allRepositories();
+        List<Todo> todoList = scopedRepository.findAll(specification);
 
         if (todoList.isEmpty()) {
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.NO_TODO_FOUND));

@@ -7,3 +7,11 @@
 2020-03-20 @Refactor TodoItemList.class
 2019-08-13 @Add +tag functionality
 2019-07-26 @Add +clean feature which will remove blank lines
+r 2020-10-02 2019-08-12 @Enhance +report to list completely done projects and their done date
+r 2020-10-02 2019-08-12 @Enhance +report to list contexts and projects with priority
+r 2020-10-01 2019-07-23 @Add default show all +properties
+r 2020-10-01 2019-07-26 @Add +consolodate functionality to view all aware todo directories
+r 2020-10-01 2019-08-12 @Add google sync support
+r 2020-10-01 2019-08-13 @Add +top command to list top x todos
+r 2020-10-01 2019-10-09 @Change set command to become config command which manages property files
+r 2020-10-01 2020-03-31 @Add todo ls --group-by meta | context | project

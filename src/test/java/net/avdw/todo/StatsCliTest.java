@@ -38,6 +38,7 @@ public class StatsCliTest {
     @SneakyThrows
     public void beforeTest() {
         Files.copy(Paths.get("src/test/resources/.todo/todo.txt"), todoPath, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(Paths.get("src/test/resources/.todo/done.txt"), todoPath.getParent().resolve("done.txt"), StandardCopyOption.REPLACE_EXISTING);
     }
 
     @Test(timeout = 200)
@@ -48,9 +49,14 @@ public class StatsCliTest {
                 .contains("Max reaction time")
                 .contains("Max cycle time")
                 .contains("Max lead time")
-                .contains("greater than mean reaction time")
-                .contains("greater than mean cycle time")
-                .contains("greater than mean lead time");
+                .contains("greater than mean + stddev reaction time")
+                .contains("greater than mean + stddev cycle time")
+                .contains("greater than mean + stddev lead time");
+    }
+
+    @Test(timeout = 50)
+    public void testDone() {
+        cliTester.execute("stats --incl-done").success().notContains("(n) = 1 todos");
     }
 
     @Test(timeout = 120)
