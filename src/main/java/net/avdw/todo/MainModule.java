@@ -9,6 +9,7 @@ import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.style.StyleModule;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
@@ -24,10 +25,20 @@ class MainModule extends AbstractModule {
         bind(RunningStats.class).toInstance(new RunningStats());
         bind(List.class).to(LinkedList.class);
         bind(Set.class).to(HashSet.class);
-        bind(Path.class).toInstance(Paths.get(".todo/todo.txt"));
         bind(ResourceBundle.class).toInstance(ResourceBundle.getBundle("messages", Locale.getDefault()));
 
         install(new StyleModule());
+    }
+
+    @Provides
+    @Singleton
+    Path todoPath() {
+        Path todoPath = Paths.get(".todo/todo.txt");
+        if (Files.exists(todoPath)) {
+            return todoPath;
+        } else {
+            return Paths.get(System.getProperty("user.home")).resolve(".todo/todo.txt");
+        }
     }
 
     @Provides
