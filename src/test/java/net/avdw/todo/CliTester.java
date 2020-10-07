@@ -5,15 +5,25 @@ import org.tinylog.Logger;
 import picocli.CommandLine;
 
 import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
+/**
+ * Utility class to assist with testing picocli applications.
+ * <p>
+ * The aim is to have one class that can be copied between projects.
+ * The reason is that I hate dependency management on my own classes.
+ * I have no problem with duplication, it makes code more modular.
+ *
+ * @version 2020-10-07: Added javadoc
+ */
 public class CliTester {
     private final Class<?> cliClass;
     private final TestGuiceFactory guiceFactory;
