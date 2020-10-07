@@ -1,6 +1,5 @@
 package net.avdw.todo;
 
-import com.google.gson.Gson;
 import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
@@ -13,13 +12,11 @@ import picocli.CommandLine.Spec;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Map;
 import java.util.Set;
 
 @Command(name = "park", resourceBundle = "messages", description = "${bundle:park}")
 public class ParkCli implements Runnable {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private Gson gson = new Gson();
     @Parameters(descriptionKey = "park.idx.list", arity = "1", split = ",")
     private Set<Integer> idxList;
     @Spec

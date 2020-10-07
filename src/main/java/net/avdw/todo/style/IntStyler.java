@@ -1,7 +1,6 @@
 package net.avdw.todo.style;
 
 import net.avdw.todo.color.ColorConverter;
-import net.avdw.todo.domain.Todo;
 import org.fusesource.jansi.Ansi;
 import org.tinylog.Logger;
 

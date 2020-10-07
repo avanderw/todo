@@ -1,18 +1,34 @@
 package net.avdw.todo;
 
 import com.google.inject.Inject;
-import net.avdw.todo.domain.*;
+import net.avdw.todo.domain.IsAdded;
+import net.avdw.todo.domain.IsContaining;
+import net.avdw.todo.domain.IsDone;
+import net.avdw.todo.domain.IsParked;
+import net.avdw.todo.domain.IsRemoved;
+import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
 import net.avdw.todo.style.StyleApplicator;
 import org.tinylog.Logger;
-import picocli.CommandLine.*;
+import picocli.CommandLine.ArgGroup;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.IExitCodeGenerator;
+import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Model.CommandSpec;
+import picocli.CommandLine.Option;
+import picocli.CommandLine.Spec;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 

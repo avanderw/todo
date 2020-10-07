@@ -11,7 +11,12 @@ import net.avdw.todo.style.StyleModule;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Set;
 
 class MainModule extends AbstractModule {
     @Override

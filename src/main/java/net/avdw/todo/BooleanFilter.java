@@ -2,7 +2,6 @@ package net.avdw.todo;
 
 import net.avdw.todo.domain.IsContaining;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Specification;
 import picocli.CommandLine;
 
@@ -17,16 +16,17 @@ public class BooleanFilter {
     @CommandLine.Option(names = "--or", descriptionKey = "list.or.desc", split = ",")
     private List<String> orFilterList = new ArrayList<>();
 
-    public Specification<Integer, Todo> specification(Specification<Integer, Todo> specification) {
+    public Specification<Integer, Todo> specification(final Specification<Integer, Todo> specification) {
+        Specification<Integer, Todo> spec = specification;
         for (String filter : andFilterList) {
-            specification = specification.and(new IsContaining(filter));
+            spec = spec.and(new IsContaining(filter));
         }
         for (String filter : orFilterList) {
-            specification = specification.or(new IsContaining(filter));
+            spec = spec.or(new IsContaining(filter));
         }
         for (String filter : notFilterList) {
-            specification = specification.not(new IsContaining(filter));
+            spec = spec.not(new IsContaining(filter));
         }
-        return specification;
+        return spec;
     }
 }

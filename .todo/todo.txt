@@ -12,4 +12,5 @@ x 2020-10-05 2020-10-04 Update commands to include parked, done, or removed todo
 2019-08-21 @Enhance +priority to prioritise a project or context
 2019-10-11 @Add an easter egg for making 100 todo items
 2019-10-11 @Fix not allowing multi-line todo +add
-2020-10-01 @Add 'todo restore' command to restore the last backup
+r 2020-10-07 2020-10-01 @Add 'todo restore' command to restore the last backup
+2020-10-07 Structure delivery around iterations with themes and create articles for each iteration

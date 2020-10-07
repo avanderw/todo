@@ -32,12 +32,10 @@ public class StatsCli implements Runnable {
     private BooleanFilter booleanFilter;
     @Mixin
     private DateFilter dateFilter;
-    @Mixin
-    private RepositoryScope repositoryScope;
     @Option(names = "--clean", descriptionKey = "list.clean.desc")
     private boolean isClean = false;
-    @Inject
-    private Repository<Integer, Todo> todoRepository;
+    @Mixin
+    private RepositoryScope repositoryScope;
     @Spec
     private CommandSpec spec;
     @Inject
@@ -200,7 +198,7 @@ public class StatsCli implements Runnable {
         }
     }
 
-    private void printStats(DescriptiveStatistics stats) {
+    private void printStats(final DescriptiveStatistics stats) {
         if (stats.getN() < 1) {
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.STATS_NOT_ENOUGH_DATA));
             return;

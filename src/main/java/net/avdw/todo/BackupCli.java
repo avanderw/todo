@@ -1,6 +1,5 @@
 package net.avdw.todo;
 
-import com.google.gson.Gson;
 import com.google.inject.Inject;
 import lombok.SneakyThrows;
 import picocli.CommandLine.Command;
@@ -12,12 +11,10 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
 
 @Command(name = "backup", resourceBundle = "messages", description = "${bundle:backup}")
 public class BackupCli implements Runnable {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private final Gson gson = new Gson();
     @Spec
     private CommandSpec spec;
     @Inject

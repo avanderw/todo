@@ -1,7 +1,15 @@
 package net.avdw.todo;
 
 import com.google.inject.Inject;
-import net.avdw.todo.domain.*;
+import net.avdw.todo.domain.IsAfterAddedDate;
+import net.avdw.todo.domain.IsAfterChangedDate;
+import net.avdw.todo.domain.IsAfterDoneDate;
+import net.avdw.todo.domain.IsAfterTagDate;
+import net.avdw.todo.domain.IsBeforeAddedDate;
+import net.avdw.todo.domain.IsBeforeChangedDate;
+import net.avdw.todo.domain.IsBeforeDoneDate;
+import net.avdw.todo.domain.IsBeforeTagDate;
+import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Specification;
 import org.tinylog.Logger;
 import picocli.CommandLine.Model.CommandSpec;
@@ -37,25 +45,26 @@ public class DateFilter {
     @Inject
     private TemplatedResourceBundle templatedResourceBundle;
 
-    public Specification<Integer, Todo> specification(Specification<Integer, Todo> specification) {
+    public Specification<Integer, Todo> specification(final Specification<Integer, Todo> specification) {
+        Specification<Integer, Todo> localSpecification = specification;
         int exitCode = 0;
         if (afterAddedDate != null) {
-            specification = specification.and(new IsAfterAddedDate(afterAddedDate));
+            localSpecification = localSpecification.and(new IsAfterAddedDate(afterAddedDate));
         }
         if (beforeAddedDate != null) {
-            specification = specification.and(new IsBeforeAddedDate(beforeAddedDate));
+            localSpecification = localSpecification.and(new IsBeforeAddedDate(beforeAddedDate));
         }
         if (afterDoneDate != null) {
-            specification = specification.and(new IsAfterDoneDate(afterDoneDate));
+            localSpecification = localSpecification.and(new IsAfterDoneDate(afterDoneDate));
         }
         if (beforeDoneDate != null) {
-            specification = specification.and(new IsBeforeDoneDate(beforeDoneDate));
+            localSpecification = localSpecification.and(new IsBeforeDoneDate(beforeDoneDate));
         }
         if (afterChangeDate != null) {
-            specification = specification.and(new IsAfterChangedDate(afterChangeDate));
+            localSpecification = localSpecification.and(new IsAfterChangedDate(afterChangeDate));
         }
         if (beforeChangeDate != null) {
-            specification = specification.and(new IsBeforeChangedDate(beforeChangeDate));
+            localSpecification = localSpecification.and(new IsBeforeChangedDate(beforeChangeDate));
         }
         for (String afterTag : afterTagList) {
             String[] afterTagSplit = afterTag.split(":");
@@ -71,7 +80,7 @@ public class DateFilter {
                             String.format("{date:'%s'}", afterTagSplit[1])));
                     continue;
                 }
-                specification = specification.and(new IsAfterTagDate(tag, date));
+                localSpecification = specification.and(new IsAfterTagDate(tag, date));
             } else {
                 Logger.debug("Unknown after tag ({}) should be tag:value");
                 spec.commandLine().getErr().println(templatedResourceBundle.getString(ResourceBundleKey.INVALID_TAG_FORMAT,
@@ -94,7 +103,7 @@ public class DateFilter {
                             String.format("{date:'%s'}", beforeTagSplit[1])));
                     continue;
                 }
-                specification = specification.and(new IsBeforeTagDate(tag, date));
+                localSpecification = specification.and(new IsBeforeTagDate(tag, date));
             } else {
                 Logger.debug("Unknown before tag ({}) should be tag:value");
                 spec.commandLine().getErr().println(templatedResourceBundle.getString(ResourceBundleKey.INVALID_TAG_FORMAT,
@@ -105,6 +114,6 @@ public class DateFilter {
         if (exitCode != 0) {
             throw new UnsupportedOperationException();
         }
-        return specification;
+        return localSpecification;
     }
 }

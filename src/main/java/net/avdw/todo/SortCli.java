@@ -1,6 +1,5 @@
 package net.avdw.todo;
 
-import com.google.gson.Gson;
 import com.google.inject.Inject;
 import net.avdw.todo.domain.IsPriority;
 import net.avdw.todo.domain.Todo;
@@ -17,24 +16,22 @@ import picocli.CommandLine.Spec;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Command(name = "sort", resourceBundle = "messages", description = "${bundle:sort}")
 public class SortCli implements Runnable {
-    private final Gson gson = new Gson();
     @Parameters(description = "Add these keys together to sort by", split = ",", arity = "0..1")
     private List<String> sortKeys;
     @Spec
     private CommandSpec spec;
+    @Inject
+    private StyleApplicator styleApplicator;
     @Inject
     private TemplatedResourceBundle templatedResourceBundle;
     @Inject
     private Path todoPath;
     @Inject
     private Repository<Integer, Todo> todoRepository;
-    @Inject
-    private StyleApplicator styleApplicator;
 
     @Override
     public void run() {

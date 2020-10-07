@@ -1,6 +1,5 @@
 package net.avdw.todo;
 
-import com.google.gson.Gson;
 import com.google.inject.Inject;
 import lombok.SneakyThrows;
 import picocli.CommandLine.Command;
@@ -9,11 +8,9 @@ import picocli.CommandLine.Spec;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
 
 @Command(name = "init", resourceBundle = "messages", description = "${bundle:init}")
 public class InitCli implements Runnable {
-    private final Gson gson = new Gson();
     @Inject
     private Path todoPath;
     @Spec

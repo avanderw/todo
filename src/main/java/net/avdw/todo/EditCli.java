@@ -1,24 +1,21 @@
 package net.avdw.todo;
 
-import com.google.gson.Gson;
 import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.style.StyleApplicator;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.IExitCodeGenerator;
+import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
-import picocli.CommandLine.IExitCodeGenerator;
 import picocli.CommandLine.Spec;
-import picocli.CommandLine.Model.CommandSpec;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Command(name = "edit", resourceBundle = "messages", description = "${bundle:edit}")
 public class EditCli implements Runnable, IExitCodeGenerator {
-    private final Gson gson = new Gson();
     @Option(names = {"-a", "--add"}, descriptionKey = "edit.add")
     private List<String> addStringList = new ArrayList<>();
     private int exitCode = 0;

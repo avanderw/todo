@@ -12,8 +12,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class RepositoryScope {
-    private final Repository<Integer, Todo> todoRepository;
     private final Path todoPath;
+    private final Repository<Integer, Todo> todoRepository;
     @Option(names = "--incl-done", descriptionKey = "repository.incl.done.desc")
     private boolean inclDone = false;
     @Option(names = "--incl-parked", descriptionKey = "repository.incl.parked.desc")
@@ -32,14 +32,19 @@ public class RepositoryScope {
         allRepositories.setAutoCommit(false);
         allRepositories.addAll(todoRepository.findAll(new Any<>()));
 
+        Path parent = todoPath.getParent();
+        if (parent == null) {
+            return todoRepository;
+        }
+
         if (inclDone) {
-            allRepositories.addAll(new FileRepository<>(todoPath.getParent().resolve("done.txt"), new TodoFileTypeBuilder()).findAll(new Any<>()));
+            allRepositories.addAll(new FileRepository<>(parent.resolve("done.txt"), new TodoFileTypeBuilder()).findAll(new Any<>()));
         }
         if (inclRemoved) {
-            allRepositories.addAll(new FileRepository<>(todoPath.getParent().resolve("removed.txt"), new TodoFileTypeBuilder()).findAll(new Any<>()));
+            allRepositories.addAll(new FileRepository<>(parent.resolve("removed.txt"), new TodoFileTypeBuilder()).findAll(new Any<>()));
         }
         if (inclParked) {
-            allRepositories.addAll(new FileRepository<>(todoPath.getParent().resolve("parked.txt"), new TodoFileTypeBuilder()).findAll(new Any<>()));
+            allRepositories.addAll(new FileRepository<>(parent.resolve("parked.txt"), new TodoFileTypeBuilder()).findAll(new Any<>()));
         }
         return allRepositories;
     }

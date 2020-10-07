@@ -1,6 +1,5 @@
 package net.avdw.todo;
 
-import com.google.gson.Gson;
 import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
@@ -13,23 +12,21 @@ import picocli.CommandLine.Spec;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Map;
 import java.util.Set;
 
 @Command(name = "rm", resourceBundle = "messages", description = "${bundle:remove}")
 public class RemoveCli implements Runnable {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private Gson gson = new Gson();
     @Parameters(description = "${bundle:remove.idx.list}", arity = "1", split = ",")
     private Set<Integer> idxList;
     @Spec
     private CommandSpec spec;
     @Inject
+    private StyleApplicator styleApplicator;
+    @Inject
     private TemplatedResourceBundle templatedResourceBundle;
     @Inject
     private Repository<Integer, Todo> todoRepository;
-    @Inject
-    private StyleApplicator styleApplicator;
 
     @Override
     public void run() {

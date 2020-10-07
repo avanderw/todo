@@ -1,6 +1,5 @@
 package net.avdw.todo;
 
-import com.google.gson.Gson;
 import com.google.inject.Inject;
 import net.avdw.todo.domain.IsContaining;
 import net.avdw.todo.domain.IsPriority;
@@ -10,21 +9,19 @@ import net.avdw.todo.repository.Specification;
 import net.avdw.todo.style.StyleApplicator;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.IExitCodeGenerator;
-import picocli.CommandLine.Parameters;
-import picocli.CommandLine.Option;
-import picocli.CommandLine.Spec;
 import picocli.CommandLine.Model.CommandSpec;
+import picocli.CommandLine.Option;
+import picocli.CommandLine.Parameters;
+import picocli.CommandLine.Spec;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Command(name = "add", description = "Add an item to todo.txt")
 class AddCli implements Runnable, IExitCodeGenerator {
-    private final Gson gson = new Gson();
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     @Parameters(description = "Item to append to todo.txt", arity = "1")
     private String addition;

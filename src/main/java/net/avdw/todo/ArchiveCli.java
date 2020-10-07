@@ -1,8 +1,11 @@
 package net.avdw.todo;
 
-import com.google.gson.Gson;
 import com.google.inject.Inject;
-import net.avdw.todo.domain.*;
+import net.avdw.todo.domain.IsDone;
+import net.avdw.todo.domain.IsParked;
+import net.avdw.todo.domain.IsRemoved;
+import net.avdw.todo.domain.Todo;
+import net.avdw.todo.domain.TodoFileTypeBuilder;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
@@ -14,7 +17,6 @@ import picocli.CommandLine.Spec;
 
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
 
 @Command(name = "archive", resourceBundle = "messages", description = "${bundle:archive}")
 public class ArchiveCli implements Runnable {
@@ -27,7 +29,6 @@ public class ArchiveCli implements Runnable {
     private CommandSpec spec;
     @Inject
     private TemplatedResourceBundle templatedResourceBundle;
-    private Gson gson = new Gson();
     @Inject
     private StyleApplicator styleApplicator;
 

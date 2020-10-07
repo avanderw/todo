@@ -1,15 +1,21 @@
 package net.avdw.todo;
 
 import com.google.inject.Inject;
-import net.avdw.todo.domain.*;
+import net.avdw.todo.domain.Todo;
+import net.avdw.todo.domain.TodoFileTypeBuilder;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
 import net.avdw.todo.style.StyleApplicator;
 import org.tinylog.Logger;
-import picocli.CommandLine.*;
+import picocli.CommandLine.ArgGroup;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.IExitCodeGenerator;
+import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Model.CommandSpec;
+import picocli.CommandLine.Option;
+import picocli.CommandLine.Spec;
 
 import java.nio.file.Path;
 import java.util.List;

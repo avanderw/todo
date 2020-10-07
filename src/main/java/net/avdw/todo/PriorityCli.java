@@ -1,8 +1,11 @@
 package net.avdw.todo;
 
-import com.google.gson.Gson;
 import com.google.inject.Inject;
-import net.avdw.todo.domain.*;
+import net.avdw.todo.domain.IsDone;
+import net.avdw.todo.domain.IsParked;
+import net.avdw.todo.domain.IsPriority;
+import net.avdw.todo.domain.IsRemoved;
+import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.style.StyleApplicator;
 import org.tinylog.Logger;
@@ -12,30 +15,42 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Spec;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Command(name = "pri", resourceBundle = "messages", description = "${bundle:priority}")
 public class PriorityCli implements Runnable {
-    private final Gson gson = new Gson();
+    @Option(names = "--clear", description = "${bundle:priority.clear")
+    private boolean clear;
+    @Option(names = {"-c", "--collapse"}, description = "${bundle:priority.collapse")
+    private boolean collapse;
     @Parameters(description = "${bundle:priority.idx.list}", arity = "0..1", split = ",", index = "0")
     private List<Integer> idxList;
     @Parameters(description = "${bundle:priority.priority}", arity = "0..1")
     private Priority priority;
     @Option(names = {"-r", "--remove"}, description = "${bundle:priority.remove")
     private boolean remove;
-    @Option(names = "--clear", description = "${bundle:priority.clear")
-    private boolean clear;
-    @Option(names = {"-c", "--collapse"}, description = "${bundle:priority.collapse")
-    private boolean collapse;
     @Spec
     private CommandSpec spec;
     @Inject
-    private Repository<Integer, Todo> todoRepository;
+    private StyleApplicator styleApplicator;
     @Inject
     private TemplatedResourceBundle templatedResourceBundle;
     @Inject
-    private StyleApplicator styleApplicator;
+    private Repository<Integer, Todo> todoRepository;
+
+    private Priority nextPriority(final List<Priority> priorityList) {
+        if (priorityList.size() == 1) {
+            return priorityList.get(0);
+        } else {
+            return priorityList.remove(0);
+        }
+    }
 
     @Override
     public void run() {
@@ -149,14 +164,6 @@ public class PriorityCli implements Runnable {
                 }
             });
             todoRepository.commit();
-        }
-    }
-
-    private Priority nextPriority(final List<Priority> priorityList) {
-        if (priorityList.size() == 1) {
-            return priorityList.get(0);
-        } else {
-            return priorityList.remove(0);
         }
     }
 }
