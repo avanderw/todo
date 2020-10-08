@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Entries are suggested using the [Changelog Generator](https://github.com/avanderw/changelog).
 
+## [v2.0.1] (Maintenance release)
+*Released on 2020-10-08*
+
+### Fixed
+- Fix resolving global directory when the local directory does not exist
+
 ## [v2.0.0] (Major release)
 *Released on 2020-10-07*
 
