@@ -9,6 +9,7 @@ import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.style.StyleApplicator;
 import org.tinylog.Logger;
+import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
@@ -23,17 +24,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Command(name = "pri", resourceBundle = "messages", description = "${bundle:priority}")
+@Command(name = "pri", resourceBundle = "messages", description = "${bundle:priority}", mixinStandardHelpOptions = true)
 public class PriorityCli implements Runnable {
-    @Option(names = "--clear", description = "${bundle:priority.clear")
+    @Option(names = "--clear", descriptionKey = "priority.clear")
     private boolean clear;
-    @Option(names = {"-c", "--collapse"}, description = "${bundle:priority.collapse")
+    @Option(names = {"-c", "--collapse"}, descriptionKey ="priority.collapse")
     private boolean collapse;
-    @Parameters(description = "${bundle:priority.idx.list}", arity = "0..1", split = ",", index = "0")
+    @Parameters(descriptionKey = "priority.idx.list", arity = "0..1", split = ",", index = "0")
     private List<Integer> idxList;
-    @Parameters(description = "${bundle:priority.priority}", arity = "0..1")
+    @Parameters(descriptionKey = "priority.priority", arity = "0..1")
     private Priority priority;
-    @Option(names = {"-r", "--remove"}, description = "${bundle:priority.remove")
+    @Option(names = {"-r", "--remove"}, descriptionKey = "priority.remove")
     private boolean remove;
     @Spec
     private CommandSpec spec;

@@ -483,5 +483,11 @@
             <artifactId>maven-model</artifactId>
             <version>3.6.3</version>
         </dependency>
+        <!-- org.apache.maven:maven-model leaks exception from org.codehause.plexus:plexus-utils -->
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>3.2.1</version>
+        </dependency>
     </dependencies>
 </project>
