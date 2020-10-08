@@ -75,15 +75,6 @@ public class PriorityCliTest {
     }
 
     @Test(timeout = 128)
-    public void testClear() {
-        cliTester.execute("pri 1,2,3,6 B").success();
-        cliTester.execute("pri --clear").success().notContains("(B) ");
-        Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
-        List<Todo> priorityTodoList = todoRepository.findAll(new IsPriority());
-        assertEquals(0, priorityTodoList.size());
-    }
-
-    @Test(timeout = 128)
     public void testCollapse() {
         cliTester.execute("pri 1,10 A").success();
         cliTester.execute("pri 2,8 C").success();
@@ -154,5 +145,11 @@ public class PriorityCliTest {
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> priorityTodoList = todoRepository.findAll(new IsPriority());
         assertEquals(2, priorityTodoList.size());
+    }
+
+    @Test(timeout = 64)
+    public void testRemoveAll() {
+        cliTester.execute("pri 1,2,3 F").success();
+        cliTester.execute("pri -R").success().notContains("(F)");
     }
 }
