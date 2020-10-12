@@ -18,10 +18,10 @@
 2020-03-10 Step up authentication on @USSD analyst:unnassigned importance:3 urgency:8
 2019-12-04 Purpose lending vehicle finance analyst:cassim ref:CPORT-22 importance:2 urgency:8
 2018-07-29 Refactor message sender to remove transaction history dependency importance:5 urgency:5
-2018-11-15 Refactor services to make use of the IDP importance:8 urgency:1
+2018-11-15 Refactor services to make use of the IDP importance:8 urgency:1 @strategic
 2019-12-11 Remove reason from stop cards "Suspected fraud" @USSD @Track1 @iBank analyst:unnassigned importance:3 urgency:5
-2019-03-12 Soft freeze card on @Track1 and @USSD analyst:unnassigned importance:3 urgency:5
-2019-05-23 Upgrade bamboo importance:2 urgency:5
+2019-03-12 Soft freeze card on @Track1 and @USSD analyst:unnassigned importance:3 urgency:5 @tactical
+2019-05-23 Upgrade bamboo importance:2 urgency:5 @operational
 2019-10-16 Beneficiary payments on @USSD and RTC analyst:unnassigned ref:BO-4183 importance:2 urgency:5
 2018-11-13 Secure live @USSD traffic importance:5 urgency:2 avanderw@gmail.com @test-input
 r 2019-08-19 Enable encryption for emailing of statements analyst:unnassigned importance:3 urgency:3

@@ -9,7 +9,7 @@ public final class TestGuiceFactory implements CommandLine.IFactory {
     private final Module module;
     private Injector injector;
 
-    TestGuiceFactory(final Module module) {
+    public TestGuiceFactory(final Module module) {
         this.module = module;
 
         reset();

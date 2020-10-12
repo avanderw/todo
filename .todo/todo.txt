@@ -12,3 +12,4 @@
 2019-10-11 @Fix not allowing multi-line todo +add
 2020-10-01 @Add 'todo roadmap' [project, context, tag] which will list upcoming- due,target,cycle and past- due,target,cycle
 2020-10-07 Structure delivery around iterations with themes and create articles for each iteration
+2020-10-12 Add the ability to prioritise on search criteria @should

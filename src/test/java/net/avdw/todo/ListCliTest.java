@@ -15,7 +15,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static net.avdw.todo.TodoCliTestBootstrapper.*;
+import static net.avdw.todo.TodoCliTestBootstrapper.cleanup;
+import static net.avdw.todo.TodoCliTestBootstrapper.setup;
+import static net.avdw.todo.TodoCliTestBootstrapper.warmup;
+import static org.junit.Assert.fail;
 
 public class ListCliTest {
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -64,6 +67,12 @@ public class ListCliTest {
     @Test(timeout = 50)
     public void testAfterTag() {
         cliTester.execute("ls --after-tag started:2020-03-01").success().count("\\[", 9);
+        fail();
+    }
+
+    @Test(timeout = 128)
+    public void testCount() {
+        cliTester.execute("ls").success().contains("92 of 92");
     }
 
     @Test(timeout = 150)
@@ -137,7 +146,7 @@ public class ListCliTest {
                 .contains("avanderwgmail.com").notContains("p 2018-11-14").notContains("r 2019-08-19");
     }
 
-    @Test(timeout = 150)
+    @Test(timeout = 256)
     public void testDone() {
         cliTester.execute("do 1,2,3,4,5,6,7,8,9").success();
         cliTester.execute("archive").success();
@@ -148,6 +157,56 @@ public class ListCliTest {
     @Test(timeout = 100)
     public void testExclusive() {
         cliTester.execute("ls --done --parked --removed").failure();
+    }
+
+    @Test(timeout = 64)
+    public void testGroupByContext() {
+        cliTester.execute("ls --group-by @").success().count("\\s## ", 5);
+    }
+
+    @Test(timeout = 64)
+    public void testGroupByContextSpecific() {
+        cliTester.execute("ls @iBank --or @Track1 --group-by @").success().count("\\s## ", 5);
+    }
+
+    @Test(timeout = 128)
+    public void testGroupByHierarchy() {
+        cliTester.execute("ls @strategic --or @tactical,@operational --group-by +,@,assigned:").success().count("\\s## ", 5);
+    }
+
+    @Test(timeout = 128)
+    public void testGroupByProject() {
+        cliTester.execute("ls --group-by +").success().count("\\s## ", 5);
+    }
+
+    @Test(timeout = 64)
+    public void testGroupByProjectSpecific() {
+        cliTester.execute("ls +ROB --or +Access_Facility --group-by +").success().count("\\s## ", 5);
+    }
+
+    @Test(timeout =128)
+    public void testGroupByLastChangeType() {
+        cliTester.execute("ls --group-by last-change").success();
+    }
+
+    @Test(timeout = 128)
+    public void testAnalytics() {
+        cliTester.execute("ls").success().contains("ms");
+    }
+
+    @Test(timeout = 128)
+    public void testGroupByTag() {
+        cliTester.execute("ls --group-by urgency:").success().count("\\s## ", 5);
+    }
+
+    @Test(timeout = 64)
+    public void testGroupByTagHierarchy() {
+        cliTester.execute("ls --group-by urgency:,importance:").success().count("\\s## ", 5);
+    }
+
+    @Test(timeout = 64)
+    public void testGroupByTagHierarchySpecific() {
+        cliTester.execute("ls --group-by assigned:zubair,assigned:ntombi").success().count("\\s## ", 5);
     }
 
     @Test(timeout = 100)
@@ -162,7 +221,7 @@ public class ListCliTest {
         cliTester.execute("ls service,refactor --or relationship,enforcer").success().startsWith("[  5]").count("\\[", 8);
     }
 
-    @Test(timeout = 150)
+    @Test(timeout = 256)
     public void testParked() {
         cliTester.execute("park 1,2,3,4,5,6,7,8,9").success();
         cliTester.execute("archive").success();
@@ -177,5 +236,4 @@ public class ListCliTest {
         cliTester.execute("rm 1").success();
         cliTester.execute("ls --removed").success().startsWith("[  1]");
     }
-
 }

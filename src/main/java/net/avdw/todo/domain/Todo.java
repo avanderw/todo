@@ -25,10 +25,12 @@ import java.util.regex.Pattern;
 public class Todo implements IdType<Integer> {
     private static final Pattern ADDITION_DATE_PATTERN = Pattern.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d)|^[xpr] .*[\\d-]+.* (\\d\\d\\d\\d-\\d\\d-\\d\\d)|\\([A-Z]\\) (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
     private static final Pattern COMPLETION_DATE_PATTERN = Pattern.compile("^x (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
-    private static final Pattern REMOVED_DATE_PATTERN = Pattern.compile("^r (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
     private static final Pattern PARKED_DATE_PATTERN = Pattern.compile("^p (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
+    private static final Pattern REMOVED_DATE_PATTERN = Pattern.compile("^r (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
     @Getter(lazy = true)
-    private final Date lastChangeDate = lastChangeDate();
+    private final List<String> contextList = contextList();
+    @Getter(lazy = true)
+    private final List<String> projectList = projectList();
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     @Getter
     private final String text;
@@ -47,6 +49,8 @@ public class Todo implements IdType<Integer> {
     @Getter(lazy = true)
     private final Date removedDate = removedDate();
     @Getter(lazy = true)
+    private final Date lastChangeDate = lastChangeDate();
+    @Getter(lazy = true)
     private final Priority priority = priority();
     @Getter
     @Setter
@@ -58,6 +62,26 @@ public class Todo implements IdType<Integer> {
         this.text = Objects.requireNonNull(text);
     }
 
+    private List<String> contextList() {
+        List<String> contextList = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\s@(\\S+)\\s?");
+        Matcher matcher = pattern.matcher(text);
+        while (matcher.find()) {
+            contextList.add(matcher.group(1));
+        }
+        return contextList;
+    }
+
+    private List<String> projectList() {
+        List<String> projectList = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\s\\+(\\S+)\\s?");
+        Matcher matcher = pattern.matcher(text);
+        while (matcher.find()) {
+            projectList.add(matcher.group(1));
+        }
+        return projectList;
+    }
+
     @SneakyThrows
     private Date additionDate() {
         Matcher matcher = ADDITION_DATE_PATTERN.matcher(text);
@@ -66,26 +90,6 @@ public class Todo implements IdType<Integer> {
             group = matcher.group(2) != null ? matcher.group(2) : group;
             group = matcher.group(3) != null ? matcher.group(3) : group;
             return simpleDateFormat.parse(group);
-        } else {
-            return null;
-        }
-    }
-
-    @SneakyThrows
-    private Date removedDate() {
-        Matcher matcher = REMOVED_DATE_PATTERN.matcher(text);
-        if (matcher.find()) {
-            return simpleDateFormat.parse(matcher.group(1));
-        } else {
-            return null;
-        }
-    }
-
-    @SneakyThrows
-    private Date parkedDate() {
-        Matcher matcher = PARKED_DATE_PATTERN.matcher(text);
-        if (matcher.find()) {
-            return simpleDateFormat.parse(matcher.group(1));
         } else {
             return null;
         }
@@ -173,6 +177,16 @@ public class Todo implements IdType<Integer> {
         return text.startsWith("p ");
     }
 
+    @SneakyThrows
+    private Date parkedDate() {
+        Matcher matcher = PARKED_DATE_PATTERN.matcher(text);
+        if (matcher.find()) {
+            return simpleDateFormat.parse(matcher.group(1));
+        } else {
+            return null;
+        }
+    }
+
     private Priority priority() {
         if (text.matches("^\\([A-Z]\\).*")) {
             return Priority.valueOf(text.substring(text.indexOf("(") + 1, text.indexOf(")")));
@@ -183,6 +197,16 @@ public class Todo implements IdType<Integer> {
 
     private boolean removed() {
         return text.startsWith("r ");
+    }
+
+    @SneakyThrows
+    private Date removedDate() {
+        Matcher matcher = REMOVED_DATE_PATTERN.matcher(text);
+        if (matcher.find()) {
+            return simpleDateFormat.parse(matcher.group(1));
+        } else {
+            return null;
+        }
     }
 
     public String toString() {
