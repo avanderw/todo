@@ -20,6 +20,7 @@ import picocli.CommandLine.Spec;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -130,7 +131,24 @@ public class ListCli implements Runnable, IExitCodeGenerator {
             }
 
             if (!groupByCollectorList.isEmpty()) {
-                Logger.debug(todoList.stream().collect(Collectors.groupingBy(groupByCollectorList.get(0))).keySet());
+                Map<String, List<Todo>> groupTodoListMap = todoList.stream().collect(Collectors.groupingBy(groupByCollectorList.get(0)));
+                groupTodoListMap.forEach((key,list)-> {
+                    if (key.isBlank()) {
+                        spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.NO_GROUP));
+                    } else {
+                        spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.GROUP_HEADING,
+                                String.format("{title:'%s'}", key)));
+                    }
+
+                    list.forEach(todo->{
+                        String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
+                        spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
+                                String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
+                    });
+
+                    spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TOTAL_SUMMARY,
+                            String.format("{filtered:'%s',total:'%s'}", list.size(), repository.findAll(new Any<>()).size())));
+                });
             }
 
             todoList.forEach(todo -> {
@@ -138,7 +156,6 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                 spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
                         String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
             });
-
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TOTAL_SUMMARY,
                     String.format("{filtered:'%s',total:'%s'}", todoList.size(), repository.findAll(new Any<>()).size())));
             spec.commandLine().getOut().println(runningStats.getDuration());

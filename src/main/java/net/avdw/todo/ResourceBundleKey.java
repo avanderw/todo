@@ -12,6 +12,7 @@ public final class ResourceBundleKey {
     public static final String CHANGELOG_STARTED_HEADER = "changelog.started.header";
     public static final String CHANGELOG_TYPE_NA = "changelog.type.na";
     public static final String CHART_BOX = "chart.box(min,trimmedMin,Q1,median,Q3,trimmedMax,max)";
+    public static final String GROUP_HEADING = "group.heading(title)";
     public static final String INIT_FILE_CREATED = "init.file.created(path,usage)";
     public static final String INIT_FILE_EXISTS = "init.file.exists(path)";
     public static final String INVALID_DATE_FORMAT = "invalid.date.format(date)";
@@ -19,6 +20,7 @@ public final class ResourceBundleKey {
     public static final String LIST_DONE_TITLE = "list.done.title";
     public static final String LIST_PARKED_TITLE = "list.parked.title";
     public static final String LIST_REMOVED_TITLE = "list.removed.title";
+    public static final String NO_GROUP = "no.group";
     public static final String NO_PRIORITY_TODO = "no.priority.todo";
     public static final String NO_TODO_FOUND = "no.todo.found";
     public static final String PRIORITY_NOT_ALLOWED_DONE = "priority.not.allowed.done";
