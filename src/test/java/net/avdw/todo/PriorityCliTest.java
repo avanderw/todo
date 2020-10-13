@@ -45,7 +45,7 @@ public class PriorityCliTest {
         Files.copy(Paths.get("src/test/resources/.todo/todo.txt"), todoPath, StandardCopyOption.REPLACE_EXISTING);
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testAssign() {
         cliTester.execute("pri 4 F").success().contains("[  4] (F) ");
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
@@ -54,7 +54,7 @@ public class PriorityCliTest {
         priorityTodoList.forEach(todo -> assertTrue(priorityTodoList.get(0).getText().startsWith("(F) ")));
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testAssignMultiIdx() {
         cliTester.execute("pri 1,2,3 F").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
@@ -63,18 +63,18 @@ public class PriorityCliTest {
         priorityTodoList.forEach(todo -> assertTrue(priorityTodoList.get(0).getText().startsWith("(F) ")));
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testAssume() {
         cliTester.execute("pri 4 A").success();
         cliTester.execute("pri 7").success().contains("(B) ");
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testAssumeMultiIdxOrder() {
         cliTester.execute("pri 3,2,1").success().contains("[  3] (A)").contains("[  2] (B)").contains("[  1] (C)");
     }
 
-    @Test(timeout = 128)
+    @Test(timeout = 256)
     public void testCollapse() {
         cliTester.execute("pri 1,10 A").success();
         cliTester.execute("pri 2,8 C").success();
@@ -84,28 +84,28 @@ public class PriorityCliTest {
                 .notContains("(E)");
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testCollapseNoPriority() {
         cliTester.execute("pri --collapse").success();
     }
 
-    @Test(timeout = 64)
+    @Test(timeout = 256)
     public void testHelp() {
         cliTester.execute("pri --help").success();
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testNoIdxEmptyPriorities() {
         cliTester.execute("pri").success();
     }
 
-    @Test(timeout = 128)
+    @Test(timeout = 256)
     public void testNoIdxWithPriorities() {
         cliTester.execute("pri 10 A").success();
         cliTester.execute("pri").success().startsWith("[ 10] (A) ");
     }
 
-    @Test(timeout = 128)
+    @Test(timeout = 256)
     public void testPrioritiseDone() {
         cliTester.execute("do 1").success();
         cliTester.execute("pri 1 A").success();
@@ -114,7 +114,7 @@ public class PriorityCliTest {
         assertEquals(1, priorityTodoList.size());
     }
 
-    @Test(timeout = 128)
+    @Test(timeout = 256)
     public void testPrioritiseParked() {
         cliTester.execute("park 1").success();
         cliTester.execute("pri 1 A").success();
@@ -123,7 +123,7 @@ public class PriorityCliTest {
         assertEquals(1, priorityTodoList.size());
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testPrioritiseRemoved() {
         cliTester.execute("rm 1").success();
         cliTester.execute("pri 1 A").success();
@@ -132,13 +132,13 @@ public class PriorityCliTest {
         assertEquals(1, priorityTodoList.size());
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testReassign() {
         cliTester.execute("pri 10 F").success();
         cliTester.execute("pri 10 D").success().contains("(D) ").notContains("(D) (F)");
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testRemove() {
         cliTester.execute("pri 1,2,3 F").success();
         cliTester.execute("pri 1,2 -r").success().notContains("[  2] (F)");
@@ -147,7 +147,7 @@ public class PriorityCliTest {
         assertEquals(2, priorityTodoList.size());
     }
 
-    @Test(timeout = 64)
+    @Test(timeout = 256)
     public void testRemoveAll() {
         cliTester.execute("pri 1,2,3 F").success();
         cliTester.execute("pri -R").success().notContains("(F)");

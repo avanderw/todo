@@ -40,17 +40,17 @@ public class ChangelogCliTest {
         Files.copy(Paths.get("src/test/resources/.todo/todo.txt"), todoPath, StandardCopyOption.REPLACE_EXISTING);
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testAfterAdd() {
         cliTester.execute("changelog --added-after 2020-03-10").success().count("\\[", 2);
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testAfterChange() {
         cliTester.execute("changelog --changed-after 2019-12-31").success().count("\\[", 52);
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testAfterDone() {
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
         gregorianCalendar.setTime(new Date());
@@ -61,46 +61,46 @@ public class ChangelogCliTest {
         cliTester.execute(String.format("changelog --done-after %s", now)).success().count("\\[", 2);
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testAfterTag() {
         cliTester.execute("changelog --after-tag started:2020-03-01").success().count("\\[", 18);
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testBasic() {
         cliTester.execute("changelog").success()
                 .contains("2018/07").contains("2018/10")
                 .count("\\[ 49\\] x 2020-05-27 2020-01-05 @CNP bugfixes and 30s failover assigned:shane end:2020-03-03 2020-02-24:releasing", 2);
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testStarted() {
         cliTester.execute("changelog").success()
                 .contains("Started");
     }
 
-    @Test(timeout = 80)
+    @Test(timeout = 256)
     public void testBeforeAdd() {
         cliTester.execute("changelog --added-before 2019-03-01").success().count("\\[", 8);
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testBeforeAfterAdd() {
         cliTester.execute("changelog --added-before 2019-03-01 --added-after 2018-12-31").success().count("\\[", 2);
     }
 
-    @Test(timeout = 120)
+    @Test(timeout = 256)
     public void testBeforeAfterChange() {
         cliTester.execute("changelog --changed-before 2019-12-31 --changed-after 2019-12-03").success().count("\\[", 3);
     }
 
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testBeforeChange() {
         cliTester.execute("changelog --changed-before 2019-12-31").success().count("\\[", 46);
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testBeforeDone() {
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
         gregorianCalendar.setTime(new Date());
@@ -111,12 +111,12 @@ public class ChangelogCliTest {
         cliTester.execute(String.format("changelog --done-before %s", now)).success().count("\\[", 5);
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testBeforeTag() {
         cliTester.execute("changelog --before-tag started:2020-01-01").success().count("\\[", 10);
     }
 
-    @Test(timeout = 180)
+    @Test(timeout = 256)
     public void testClean() {
         cliTester.execute("pri 1").success();
         cliTester.execute("do 2").success();
@@ -126,14 +126,14 @@ public class ChangelogCliTest {
                 .contains("avanderwgmail.com").notContains("p 2018-11-14").notContains("r 2019-08-19");
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testContext() {
         cliTester.execute("changelog @USSD").success()
                 .contains("2019/03").contains("2019/08")
                 .count("\\[", 16);
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testNotFilter() {
         cliTester.execute("changelog --not service --not refactor").success()
                 .contains("2018/11").contains("2019/01")
@@ -143,7 +143,7 @@ public class ChangelogCliTest {
                 .notContains("service").notContains("Refactor");
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testOrFilter() {
         cliTester.execute("changelog service,refactor --or relationship --or enforcer").success()
                 .contains("2018/10").contains("2019/05")
@@ -153,24 +153,24 @@ public class ChangelogCliTest {
                 .count("\\[", 8);
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testProject() {
         cliTester.execute("changelog +Live_Better").success()
                 .contains("2020/01")
                 .count("\\[", 2);
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testTag() {
         cliTester.execute("changelog urgency:5").success().contains("2018/07").count("\\[", 10);
     }
 
-    @Test(timeout = 80)
+    @Test(timeout = 256)
     public void testWeek() {
         cliTester.execute("changelog --by-week").success().notContains("2019/02");
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testYear() {
         cliTester.execute("changelog --by-year").success().notContains("2019/02");
     }

@@ -34,7 +34,7 @@ public class BackupCliTest {
         warmup(cliTester);
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     @SneakyThrows
     public void testBasic() {
         cliTester.execute("backup").success();
@@ -45,7 +45,7 @@ public class BackupCliTest {
         assertFalse(Files.exists(todoPath.getParent().resolve(String.format("removed.txt_%s", todayDate))));
     }
 
-    @Test(timeout = 200)
+    @Test(timeout = 256)
     @SneakyThrows
     public void testFull() {
         Files.copy(todoPath, todoPath.getParent().resolve("done.txt"), StandardCopyOption.REPLACE_EXISTING);

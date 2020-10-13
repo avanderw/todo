@@ -35,12 +35,12 @@ public class EditCliTest {
         Files.copy(Paths.get("src/test/resources/.todo/todo.txt"), todoPath, StandardCopyOption.REPLACE_EXISTING);
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testAdd() {
         cliTester.execute("edit 5 --add addition").success().contains("addition").startsWith("[  5]");
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testAddRemove() {
         cliTester.execute("edit 5 --add addition --remove analyst:cassim").success()
                 .contains("addition")
@@ -48,22 +48,22 @@ public class EditCliTest {
                 .startsWith("[  5]");
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testIdxNoOpts() {
         cliTester.execute("edit 5").failure();
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testMultiAdd() {
         cliTester.execute("edit 5,6 --add addition").success().startsWith("[  5]").count("addition", 2);
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testNoIdx() {
         cliTester.execute("edit").failure().notContains("init");
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testRemove() {
         cliTester.execute("edit 5 --remove analyst:cassim").success().notContains("analyst:cassim").startsWith("[  5]");
     }

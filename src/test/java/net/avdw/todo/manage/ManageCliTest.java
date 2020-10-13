@@ -29,12 +29,12 @@ public class ManageCliTest {
         warmup(cliTester);
     }
 
-    @Test(timeout = 64)
+    @Test(timeout = 256)
     public void testBasic() {
         cliTester.execute("manage").success().contains("Usage");
     }
 
-    @Test(timeout = 64)
+    @Test(timeout = 256)
     public void testHelp() {
         cliTester.execute("manage --help").success();
     }

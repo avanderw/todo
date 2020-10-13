@@ -38,23 +38,23 @@ public class AddCliTest {
         Files.copy(Paths.get("src/test/resources/.todo/todo.txt"), todoPath, StandardCopyOption.REPLACE_EXISTING);
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testBasic() {
         cliTester.execute("add", "A new addition").success().startsWith("[ 73]");
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testPriority() {
         cliTester.execute("add -p", "A new addition").success().startsWith("[ 73] (A)");
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testDuplicate() {
         cliTester.execute("add", "A new addition").success();
         cliTester.execute("add", "A new addition").failure();
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testNoIdx() {
         cliTester.execute("add").failure();
     }

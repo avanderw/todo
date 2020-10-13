@@ -45,12 +45,12 @@ public class ParkCliTest {
         Files.copy(Paths.get("src/test/resources/.todo/todo.txt"), todoPath, StandardCopyOption.REPLACE_EXISTING);
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testNoIdx() {
         cliTester.execute("park").failure();
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testRepeatIdx() {
         cliTester.execute("park 5,5").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
@@ -59,7 +59,7 @@ public class ParkCliTest {
         assertFalse(parkedTodoList.get(0).getText().startsWith(String.format("p %s p ", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testPriorityRemoval() {
         cliTester.execute("pri 7 A").success();
         cliTester.execute("park 7").success();
@@ -70,7 +70,7 @@ public class ParkCliTest {
     }
 
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testOneIdx() {
         cliTester.execute("park 2").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
@@ -79,7 +79,7 @@ public class ParkCliTest {
         assertTrue(parkedTodoList.get(0).getText().startsWith(String.format("p %s 2019-02-07", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testTwoIdx() {
         cliTester.execute("park 2,4").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());

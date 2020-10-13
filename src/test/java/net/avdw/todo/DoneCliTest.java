@@ -45,12 +45,12 @@ public class DoneCliTest {
         Files.copy(Paths.get("src/test/resources/.todo/todo.txt"), todoPath, StandardCopyOption.REPLACE_EXISTING);
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testNoIdx() {
         cliTester.execute("do").failure();
     }
 
-    @Test(timeout = 150)
+    @Test(timeout = 256)
     public void testPriorityRemoval() {
         cliTester.execute("pri 7 A").success();
         cliTester.execute("do 7").success();
@@ -60,7 +60,7 @@ public class DoneCliTest {
         assertFalse(doneTodoList.get(0).getText().contains("(A)"));
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testRepeatIdx() {
         cliTester.execute("do 5,5").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
@@ -69,7 +69,7 @@ public class DoneCliTest {
         assertFalse(doneTodoList.get(0).getText().startsWith(String.format("x %s x ", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testOneIdx() {
         cliTester.execute("do 2").success().startsWith("[  2] x ");
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
@@ -78,7 +78,7 @@ public class DoneCliTest {
         assertTrue(doneTodoList.get(0).getText().startsWith(String.format("x %s 2019-02-07", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testTwoIdx() {
         cliTester.execute("do 2,4").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());

@@ -43,7 +43,7 @@ public class SortCliTest {
     }
 
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     @SneakyThrows
     public void testBasic() {
         cliTester.execute("sort").success().startsWith("[  1]");
@@ -52,7 +52,7 @@ public class SortCliTest {
         assertTrue(doneTodoList.get(0).getText().startsWith("(J) 2020-01-23"));
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     @SneakyThrows
     public void testKeys() {
         cliTester.execute("sort importance,urgency").success().startsWith("[  1]");
@@ -62,7 +62,7 @@ public class SortCliTest {
         assertTrue(doneTodoList.get(1).getText().startsWith("2020-03-10"));
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testKeysPriority() {
         cliTester.execute("pri 5 A");
         cliTester.execute("sort importance,urgency").success().startsWith("[  1]");
@@ -73,7 +73,7 @@ public class SortCliTest {
         assertTrue(doneTodoList.get(2).getText().startsWith("2020-03-10"));
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testPriority() {
         cliTester.execute("pri 5 A").success();
         cliTester.execute("sort").success().startsWith("[  1] (A)");

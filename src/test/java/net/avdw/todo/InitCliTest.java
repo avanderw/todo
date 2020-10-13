@@ -27,14 +27,14 @@ public class InitCliTest {
         cleanup(todoPath);
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     @SneakyThrows
     public void testNotExists() {
         Files.deleteIfExists(todoPath);
         cliTester.execute("init").success();
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     @SneakyThrows
     public void testExists() {
         Files.createDirectories(todoPath.getParent());

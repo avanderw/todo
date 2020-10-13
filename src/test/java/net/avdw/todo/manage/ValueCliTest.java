@@ -29,12 +29,12 @@ public class ValueCliTest {
         warmup(cliTester);
     }
 
-    @Test(timeout = 64)
+    @Test(timeout = 256)
     public void testBasic() {
         cliTester.execute("manage value").success();
     }
 
-    @Test(timeout = 64)
+    @Test(timeout = 256)
     public void testHelp() {
         cliTester.execute("manage value --help").success();
     }

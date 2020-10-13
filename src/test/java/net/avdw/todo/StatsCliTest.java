@@ -41,7 +41,7 @@ public class StatsCliTest {
         Files.copy(Paths.get("src/test/resources/.todo/done.txt"), todoPath.getParent().resolve("done.txt"), StandardCopyOption.REPLACE_EXISTING);
     }
 
-    @Test(timeout = 200)
+    @Test(timeout = 256)
     public void testBasic() {
         cliTester.execute("do 72,70,55").success();
         cliTester.execute("stats").success()
@@ -54,22 +54,22 @@ public class StatsCliTest {
                 .contains("greater than mean + stddev lead time");
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testDone() {
         cliTester.execute("stats --incl-done").success().notContains("(n) = 1 todos");
     }
 
-    @Test(timeout = 120)
+    @Test(timeout = 256)
     public void testBeforeAfterChange() {
         cliTester.execute("stats --changed-before 2019-12-31 --changed-after 2019-12-03").success();
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testBeforeChange() {
         cliTester.execute("stats --changed-before 2019-12-31").success();
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testBeforeDone() {
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
         gregorianCalendar.setTime(new Date());
@@ -78,12 +78,12 @@ public class StatsCliTest {
         cliTester.execute(String.format("stats --done-before %s", now)).success().notContains("221 days");
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testBeforeTag() {
         cliTester.execute("stats --before-tag started:2020-01-01").success();
     }
 
-    @Test(timeout = 180)
+    @Test(timeout = 256)
     public void testClean() {
         cliTester.execute("pri 1").success();
         cliTester.execute("do 2").success();
@@ -93,12 +93,12 @@ public class StatsCliTest {
                 .contains("avanderwgmail.com").notContains("p 2018-11-14").notContains("r 2019-08-19");
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testContext() {
         cliTester.execute("stats @USSD").success();
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testNotFilter() {
         cliTester.execute("stats --not service --not refactor").success()
                 .notContains("service").notContains("Refactor");
@@ -106,17 +106,17 @@ public class StatsCliTest {
                 .notContains("service").notContains("Refactor");
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testOrFilter() {
         cliTester.execute("stats service,refactor --or relationship --or enforcer").success();
     }
 
-    @Test(timeout = 50)
+    @Test(timeout = 256)
     public void testProject() {
         cliTester.execute("stats +Live_Better").success();
     }
 
-    @Test(timeout = 100)
+    @Test(timeout = 256)
     public void testTag() {
         cliTester.execute("stats urgency:5").success();
     }
