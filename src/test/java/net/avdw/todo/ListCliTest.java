@@ -181,7 +181,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testGroupByProjectSpecific() {
-        cliTester.execute("ls +ROB --or +Access_Facility --group-by +").success().count("\\s## ", 5);
+        cliTester.execute("ls +ROB --or +Access_Facility --group-by +").success().count("\\s## ", 2);
     }
 
     @Test(timeout =128)
@@ -196,7 +196,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testGroupByTag() {
-        cliTester.execute("ls --group-by urgency:").success().count("\\s## ", 5);
+        cliTester.execute("ls --group-by urgency:").success().count("\\s## ", 7);
     }
 
     @Test(timeout = 256)

@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -71,10 +72,12 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                 return;
             }
 
+            AtomicReference<String> groupingType = new AtomicReference<>();
             List<Function<Todo, String>> groupByCollectorList = new ArrayList<>();
             if (!groupByList.isEmpty()) {
                 groupByList.forEach(groupBy -> {
                     if (groupBy.startsWith("+")) {
+                        groupingType.set(groupingType.toString() + " project");
                         String project = groupBy.substring(1);
                         if (project.isBlank()) {
                             Logger.debug("project 'all' ({})", project, groupBy);
@@ -83,7 +86,7 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                                     return "";
                                 }
                                 if (t.getProjectList().size() > 1) {
-                                    throw new UnsupportedOperationException();
+                                    return String.join(" ", t.getProjectList());
                                 } else {
                                     return t.getProjectList().get(0);
                                 }
@@ -92,6 +95,7 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                             throw new UnsupportedOperationException();
                         }
                     } else if (groupBy.startsWith("@")) {
+                        groupingType.set(groupingType.toString() + " context");
                         String context = groupBy.substring(1);
                         if (context.isBlank()) {
                             Logger.debug("context 'all' ({})", context, groupBy);
@@ -100,7 +104,7 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                                     return "";
                                 }
                                 if (t.getContextList().size() > 1) {
-                                    throw new UnsupportedOperationException();
+                                    return String.join(" ", t.getContextList());
                                 } else {
                                     return t.getContextList().get(0);
                                 }
@@ -110,13 +114,14 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                         }
                     } else if (groupBy.endsWith(":")) {
                         String tag = groupBy.substring(0, groupBy.length() - 1);
+                        groupingType.set(groupingType.toString() + " " + tag);
                         Logger.debug("tag '{}' ({})", tag, groupBy);
                         groupByCollectorList.add(t->{
                             if (t.getTagValueList(tag).isEmpty()) {
                                 return "";
                             }
                             if (t.getTagValueList(tag).size() > 1) {
-                                throw new UnsupportedOperationException();
+                                return String.join(" ", t.getTagValueList(tag));
                             } else {
                                 return t.getTagValueList(tag).get(0);
                             }
@@ -134,10 +139,11 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                 Map<String, List<Todo>> groupTodoListMap = todoList.stream().collect(Collectors.groupingBy(groupByCollectorList.get(0)));
                 groupTodoListMap.forEach((key,list)-> {
                     if (key.isBlank()) {
-                        spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.NO_GROUP));
+                        spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.NO_GROUP,
+                                String.format("{type:'%s'}", groupingType.get())));
                     } else {
                         spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.GROUP_HEADING,
-                                String.format("{title:'%s'}", key)));
+                                String.format("{type:'%s',title:'%s'}", groupingType.get(), key)));
                     }
 
                     list.forEach(todo->{
