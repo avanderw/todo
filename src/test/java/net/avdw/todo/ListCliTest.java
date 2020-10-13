@@ -72,7 +72,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testCount() {
-        cliTester.execute("ls").success().contains("92 of 92");
+        cliTester.execute("ls").success().contains("72 of 72");
     }
 
     @Test(timeout = 256)

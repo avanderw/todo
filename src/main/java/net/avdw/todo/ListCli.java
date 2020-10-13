@@ -19,11 +19,8 @@ import picocli.CommandLine.Spec;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Command(name = "ls", resourceBundle = "messages", description = "${bundle:list}")
@@ -51,6 +48,8 @@ public class ListCli implements Runnable, IExitCodeGenerator {
     private Repository<Integer, Todo> todoRepository;
     @Inject
     private TodoTextCleaner todoTextCleaner;
+    @Inject
+    private RunningStats runningStats;
 
     @Override
     public int getExitCode() {
@@ -139,6 +138,10 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                 spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
                         String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
             });
+
+            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TOTAL_SUMMARY,
+                    String.format("{filtered:'%s',total:'%s'}", todoList.size(), repository.findAll(new Any<>()).size())));
+            spec.commandLine().getOut().println(runningStats.getDuration());
         } catch (UnsupportedOperationException e) {
             Logger.debug(e);
             exitCode = 1;
