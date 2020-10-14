@@ -18,7 +18,6 @@ import java.util.GregorianCalendar;
 import static net.avdw.todo.TodoCliTestBootstrapper.cleanup;
 import static net.avdw.todo.TodoCliTestBootstrapper.setup;
 import static net.avdw.todo.TodoCliTestBootstrapper.warmup;
-import static org.junit.Assert.fail;
 
 public class ListCliTest {
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -67,18 +66,17 @@ public class ListCliTest {
     @Test(timeout = 256)
     public void testAfterTag() {
         cliTester.execute("ls --after-tag started:2020-03-01").success().count("\\[", 9);
-        fail();
-    }
-
-    @Test(timeout = 256)
-    public void testCount() {
-        cliTester.execute("ls").success().contains("72 of 72");
     }
 
     @Test(timeout = 256)
     public void testAfterTagFailure() {
         cliTester.execute("ls --after-tag start:20200310").failure();
         cliTester.execute("ls --after-tag start:").failure();
+    }
+
+    @Test(timeout = 256)
+    public void testAnalytics() {
+        cliTester.execute("ls").success().contains("ms");
     }
 
     @Test(timeout = 256)
@@ -147,6 +145,11 @@ public class ListCliTest {
     }
 
     @Test(timeout = 256)
+    public void testCount() {
+        cliTester.execute("ls").success().contains("72 of 72");
+    }
+
+    @Test(timeout = 256)
     public void testDone() {
         cliTester.execute("do 1,2,3,4,5,6,7,8,9").success();
         cliTester.execute("archive").success();
@@ -170,8 +173,8 @@ public class ListCliTest {
     }
 
     @Test(timeout = 256)
-    public void testGroupByThreeHierarchy() {
-        cliTester.execute("ls --group-by +,@,assigned:").success().count("\\s#### ", 33);
+    public void testGroupByDeepHierarchy() {
+        cliTester.execute("ls --group-by +,@,assigned:,importance:").failure();
     }
 
     @Test(timeout = 256)
@@ -179,29 +182,19 @@ public class ListCliTest {
         cliTester.execute("ls --group-by +").success().count("\\s## ", 6);
     }
 
-    @Test(timeout=256)
-    public void testGroupByDeepHierarchy() {
-        cliTester.execute("ls --group-by +,@,assigned:,importance:").failure();
-    }
-
     @Test(timeout = 256)
     public void testGroupByProjectSpecific() {
         cliTester.execute("ls +ROB --or +Access_Facility --group-by +").success().count("\\s## ", 2);
     }
 
-    @Test(timeout =128)
-    public void testGroupByLastChangeType() {
-        cliTester.execute("ls --group-by last-change").success();
-    }
-
-    @Test(timeout = 256)
-    public void testAnalytics() {
-        cliTester.execute("ls").success().contains("ms");
-    }
-
     @Test(timeout = 256)
     public void testGroupByTag() {
         cliTester.execute("ls --group-by urgency:").success().count("\\s## ", 8);
+    }
+
+    @Test(timeout = 256)
+    public void testGroupByThreeHierarchy() {
+        cliTester.execute("ls --group-by +,@,assigned:").success().count("\\s#### ", 33);
     }
 
     @Test(timeout = 256)

@@ -21,6 +21,7 @@ import picocli.CommandLine.Spec;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collector;
@@ -54,7 +55,7 @@ public class ListCli implements Runnable, IExitCodeGenerator {
     @Inject
     private TodoTextCleaner todoTextCleaner;
 
-    private Collector<Todo, ?, Map<String, ?>> buildCollector(List groupByCollectorList) {
+    private Collector<Todo, ?, Map<String, ?>> buildCollector(final List groupByCollectorList) {
         for (int i = 0; i < groupByCollectorList.size(); i++) {
             Function f = (Function) groupByCollectorList.get(i);
             if (i + 1 < groupByCollectorList.size()) {
@@ -89,10 +90,10 @@ public class ListCli implements Runnable, IExitCodeGenerator {
             List<Function<Todo, String>> groupByCollectorList = new ArrayList<>();
             if (!groupByList.isEmpty()) {
                 groupByList.forEach(groupBy -> {
-                    if (groupBy.startsWith("+") || groupBy.toLowerCase().equals("project")) {
+                    if (groupBy.startsWith("+") || groupBy.toLowerCase(Locale.ENGLISH).equals("project")) {
                         hierarchyList.add("project");
                         String project = groupBy.substring(1);
-                        if (project.isBlank()) {
+                        if (project.isBlank() || project.equals("roject")) {
                             Logger.debug("group-by project 'all' ({})", project, groupBy);
                             groupByCollectorList.add(t -> {
                                 if (t.getProjectList().isEmpty()) {
@@ -107,10 +108,10 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                         } else {
                             throw new UnsupportedOperationException();
                         }
-                    } else if (groupBy.startsWith("@") || groupBy.toLowerCase().equals("context")) {
+                    } else if (groupBy.startsWith("@") || groupBy.toLowerCase(Locale.ENGLISH).equals("context")) {
                         hierarchyList.add("context");
                         String context = groupBy.substring(1);
-                        if (context.isBlank()) {
+                        if (context.isBlank() || context.equals("ontext")) {
                             Logger.debug("group-by context 'all' ({})", context, groupBy);
                             groupByCollectorList.add(t -> {
                                 if (t.getContextList().isEmpty()) {
@@ -150,18 +151,12 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                 throw new UnsupportedOperationException();
             }
 
-            if (!groupByCollectorList.isEmpty()) {
+            if (groupByCollectorList.isEmpty()) {
+                printList(todoList, repository);
+            } else {
                 Map groupTodoListMap = todoList.stream().collect(buildCollector(groupByCollectorList));
                 printMap(groupTodoListMap, repository, hierarchyList, 0);
             }
-
-            todoList.forEach(todo -> {
-                String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
-                spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                        String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
-            });
-            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TOTAL_SUMMARY,
-                    String.format("{filtered:'%s',total:'%s'}", todoList.size(), repository.findAll(new Any<>()).size())));
             spec.commandLine().getOut().println(runningStats.getDuration());
         } catch (UnsupportedOperationException e) {
             Logger.debug(e);
@@ -169,7 +164,7 @@ public class ListCli implements Runnable, IExitCodeGenerator {
         }
     }
 
-    private void printList(List<Todo> list, Repository<Integer, Todo> repository) {
+    private void printList(final List<Todo> list, final Repository<Integer, Todo> repository) {
         list.forEach(todo -> {
             String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
@@ -180,7 +175,7 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                 String.format("{filtered:'%s',total:'%s'}", list.size(), repository.size())));
     }
 
-    private void printMap(Map<String, ?> map, Repository<Integer, Todo> repository, List<String> hierarchyList, int depth) {
+    private void printMap(final Map<String, ?> map, final Repository<Integer, Todo> repository, final List<String> hierarchyList, final int depth) {
         map.forEach((key, value) -> {
             String json = String.format("{type:'%s',title:'%s'}", hierarchyList.get(depth), StringUtils.capitalise(key.isBlank() ? "No" : key));
             String header = switch (depth) {
