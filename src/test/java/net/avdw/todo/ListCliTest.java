@@ -161,17 +161,17 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testGroupByContext() {
-        cliTester.execute("ls --group-by @").success().count("\\s## ", 5);
+        cliTester.execute("ls --group-by @").success().count("\\s## ", 15);
     }
 
     @Test(timeout = 256)
     public void testGroupByContextSpecific() {
-        cliTester.execute("ls @iBank --or @Track1 --group-by @").success().count("\\s## ", 5);
+        cliTester.execute("ls @iBank --or @Track1 --group-by @").success().count("\\s## ", 6);
     }
 
     @Test(timeout = 256)
-    public void testGroupByHierarchy() {
-        cliTester.execute("ls @strategic --or @tactical,@operational --group-by +,@,assigned:").success().count("\\s## ", 5);
+    public void testGroupByThreeHierarchy() {
+        cliTester.execute("ls --group-by +,@,assigned:").success().count("\\s#### ", 7);
     }
 
     @Test(timeout = 256)
@@ -200,13 +200,8 @@ public class ListCliTest {
     }
 
     @Test(timeout = 256)
-    public void testGroupByTagHierarchy() {
-        cliTester.execute("ls --group-by urgency:,importance:").success().count("\\s## ", 5);
-    }
-
-    @Test(timeout = 256)
-    public void testGroupByTagHierarchySpecific() {
-        cliTester.execute("ls --group-by assigned:zubair,assigned:ntombi").success().count("\\s## ", 5);
+    public void testGroupByTwoHierarchy() {
+        cliTester.execute("ls --group-by urgency:,importance:").success().count("\\s### ", 29);
     }
 
     @Test(timeout = 256)

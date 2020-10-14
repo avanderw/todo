@@ -13,6 +13,8 @@ public final class ResourceBundleKey {
     public static final String CHANGELOG_TYPE_NA = "changelog.type.na";
     public static final String CHART_BOX = "chart.box(min,trimmedMin,Q1,median,Q3,trimmedMax,max)";
     public static final String GROUP_HEADING = "group.heading(type,title)";
+    public static final String GROUP_HEADING_2 = "group.heading.2(type,title)";
+    public static final String GROUP_HEADING_3 = "group.heading.3(type,title)";
     public static final String INIT_FILE_CREATED = "init.file.created(path,usage)";
     public static final String INIT_FILE_EXISTS = "init.file.exists(path)";
     public static final String INVALID_DATE_FORMAT = "invalid.date.format(date)";

@@ -8,6 +8,7 @@ import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
 import net.avdw.todo.style.StyleApplicator;
+import org.codehaus.plexus.util.StringUtils;
 import org.tinylog.Logger;
 import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Command;
@@ -38,6 +39,8 @@ public class ListCli implements Runnable, IExitCodeGenerator {
     private List<String> groupByList = new ArrayList<>();
     @Option(names = "--clean", descriptionKey = "list.clean.desc")
     private boolean isClean = false;
+    @Inject
+    private RunningStats runningStats;
     @Spec
     private CommandSpec spec;
     @Inject
@@ -50,8 +53,6 @@ public class ListCli implements Runnable, IExitCodeGenerator {
     private Repository<Integer, Todo> todoRepository;
     @Inject
     private TodoTextCleaner todoTextCleaner;
-    @Inject
-    private RunningStats runningStats;
 
     @Override
     public int getExitCode() {
@@ -72,12 +73,12 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                 return;
             }
 
-            AtomicReference<String> groupingType = new AtomicReference<>();
+            List<String> groupingTypeList = new ArrayList<>();
             List<Function<Todo, String>> groupByCollectorList = new ArrayList<>();
             if (!groupByList.isEmpty()) {
                 groupByList.forEach(groupBy -> {
-                    if (groupBy.startsWith("+")) {
-                        groupingType.set(groupingType.toString() + " project");
+                    if (groupBy.startsWith("+") || groupBy.toLowerCase().equals("project")) {
+                        groupingTypeList.add("project");
                         String project = groupBy.substring(1);
                         if (project.isBlank()) {
                             Logger.debug("project 'all' ({})", project, groupBy);
@@ -86,7 +87,7 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                                     return "";
                                 }
                                 if (t.getProjectList().size() > 1) {
-                                    return String.join(" ", t.getProjectList());
+                                    return String.join(", ", t.getProjectList());
                                 } else {
                                     return t.getProjectList().get(0);
                                 }
@@ -94,17 +95,17 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                         } else {
                             throw new UnsupportedOperationException();
                         }
-                    } else if (groupBy.startsWith("@")) {
-                        groupingType.set(groupingType.toString() + " context");
+                    } else if (groupBy.startsWith("@") || groupBy.toLowerCase().equals("context")) {
+                        groupingTypeList.add("context");
                         String context = groupBy.substring(1);
                         if (context.isBlank()) {
                             Logger.debug("context 'all' ({})", context, groupBy);
-                            groupByCollectorList.add(t->{
+                            groupByCollectorList.add(t -> {
                                 if (t.getContextList().isEmpty()) {
                                     return "";
                                 }
                                 if (t.getContextList().size() > 1) {
-                                    return String.join(" ", t.getContextList());
+                                    return String.join(", ", t.getContextList());
                                 } else {
                                     return t.getContextList().get(0);
                                 }
@@ -114,21 +115,18 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                         }
                     } else if (groupBy.endsWith(":")) {
                         String tag = groupBy.substring(0, groupBy.length() - 1);
-                        groupingType.set(groupingType.toString() + " " + tag);
+                        groupingTypeList.add(tag);
                         Logger.debug("tag '{}' ({})", tag, groupBy);
-                        groupByCollectorList.add(t->{
+                        groupByCollectorList.add(t -> {
                             if (t.getTagValueList(tag).isEmpty()) {
                                 return "";
                             }
                             if (t.getTagValueList(tag).size() > 1) {
-                                return String.join(" ", t.getTagValueList(tag));
+                                return String.join(", ", t.getTagValueList(tag));
                             } else {
                                 return t.getTagValueList(tag).get(0);
                             }
                         });
-                    } else if (groupBy.contains(":")) {
-                        String specificTag = groupBy.trim();
-                        Logger.debug("specific {} ({})", specificTag, groupBy);
                     } else {
                         throw new UnsupportedOperationException();
                     }
@@ -136,25 +134,57 @@ public class ListCli implements Runnable, IExitCodeGenerator {
             }
 
             if (!groupByCollectorList.isEmpty()) {
-                Map<String, List<Todo>> groupTodoListMap = todoList.stream().collect(Collectors.groupingBy(groupByCollectorList.get(0)));
-                groupTodoListMap.forEach((key,list)-> {
-                    if (key.isBlank()) {
-                        spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.NO_GROUP,
-                                String.format("{type:'%s'}", groupingType.get())));
-                    } else {
-                        spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.GROUP_HEADING,
-                                String.format("{type:'%s',title:'%s'}", groupingType.get(), key)));
-                    }
+                if (groupByCollectorList.size() == 2) {
+                    Map<String, Map<String, List<Todo>>> groupTodoListMap = todoList.stream().collect(Collectors.groupingBy(groupByCollectorList.get(0), Collectors.groupingBy(groupByCollectorList.get(1))));
+                    groupTodoListMap.forEach((key1, map)-> {
+                        if (key1.isBlank()) {
+                            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.NO_GROUP,
+                                    String.format("{type:'%s'}", groupingTypeList.get(0))));
+                        } else {
+                            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.GROUP_HEADING,
+                                    String.format("{type:'%s',title:'%s'}", groupingTypeList.get(0), StringUtils.capitalise(key1))));
+                        }
 
-                    list.forEach(todo->{
-                        String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
-                        spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                                String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
+                        map.forEach((key2, list)->{
+                            if (key2.isBlank()) {
+                                spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.NO_GROUP,
+                                        String.format("{type:'%s'}", groupingTypeList.get(1))));
+                            } else {
+                                spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.GROUP_HEADING_2,
+                                        String.format("{type:'%s',title:'%s'}", groupingTypeList.get(1), StringUtils.capitalise(key2))));
+                            }
+
+                            list.forEach(todo -> {
+                                String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
+                                spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
+                                        String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
+                            });
+
+                            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TOTAL_SUMMARY,
+                                    String.format("{filtered:'%s',total:'%s'}", list.size(), repository.findAll(new Any<>()).size())));
+                        });
                     });
+                } else {
+                    Map<String, List<Todo>> groupTodoListMap = todoList.stream().collect(Collectors.groupingBy(groupByCollectorList.get(0)));
+                    groupTodoListMap.forEach((key, list) -> {
+                        if (key.isBlank()) {
+                            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.NO_GROUP,
+                                    String.format("{type:'%s'}", groupingTypeList.get(0))));
+                        } else {
+                            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.GROUP_HEADING,
+                                    String.format("{type:'%s',title:'%s'}", groupingTypeList.get(0), StringUtils.capitalise(key))));
+                        }
 
-                    spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TOTAL_SUMMARY,
-                            String.format("{filtered:'%s',total:'%s'}", list.size(), repository.findAll(new Any<>()).size())));
-                });
+                        list.forEach(todo -> {
+                            String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
+                            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
+                                    String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
+                        });
+
+                        spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TOTAL_SUMMARY,
+                                String.format("{filtered:'%s',total:'%s'}", list.size(), repository.findAll(new Any<>()).size())));
+                    });
+                }
             }
 
             todoList.forEach(todo -> {
