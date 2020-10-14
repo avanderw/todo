@@ -40,6 +40,6 @@ public class IsAfterTagDate extends AbstractSpecification<Integer, Todo> {
 
     @Override
     public String toString() {
-        return String.format("isAfterAddedDate('%tF')", date);
+        return String.format("isAfterTagDate('%tF')", date);
     }
 }

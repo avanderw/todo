@@ -1,7 +1,7 @@
 2019-07-23 @Fix bug when global repository does not exist
 2019-07-25 @Fix bug when +add with tilde is used in command prompt
 2019-07-30 @Fix +list to fail when targeting non-existing global with existing local
-2019-08-12 @Add grouping feature to list, e.g. by project or search term
+x 2020-10-14 2019-08-12 @Add grouping feature to list, e.g. by project or search term
 2019-08-12 @Fix +rename when using + on term to replace with
 2019-08-12 @Fix bug when resolving parent directory in nested directories
 2019-08-13 @Enhance +explore to be OS independant
@@ -11,5 +11,5 @@
 2019-10-11 @Add an easter egg for making 100 todo items
 2019-10-11 @Fix not allowing multi-line todo +add
 2020-10-01 @Add 'todo roadmap' [project, context, tag] which will list upcoming- due,target,cycle and past- due,target,cycle
-2020-10-07 Structure delivery around iterations with themes and create articles for each iteration
+x 2020-10-14 2020-10-07 Structure delivery around iterations with themes and create articles for each iteration
 2020-10-12 Add the ability to prioritise on search criteria @should
