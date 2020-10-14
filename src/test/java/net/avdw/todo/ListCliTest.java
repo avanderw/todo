@@ -164,7 +164,10 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testGroupByContext() {
-        cliTester.execute("ls --group-by @").success().count("\\s## ", 16);
+        cliTester.execute("ls --group-by @").success()
+                .contains("CNP, Track1 Context")
+                .notContains(" gmail.com")
+                .count("\\s## ", 16);
     }
 
     @Test(timeout = 256)

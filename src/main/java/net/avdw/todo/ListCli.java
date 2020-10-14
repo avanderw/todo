@@ -28,9 +28,9 @@ import java.util.Map;
 @Command(name = "ls", resourceBundle = "messages", description = "${bundle:list}")
 public class ListCli implements Runnable, IExitCodeGenerator {
     @Mixin
-    private BooleanFilterMixin booleanFilter;
+    private BooleanFilterMixin booleanFilterMixin;
     @Mixin
-    private DateFilterMixin dateFilter;
+    private DateFilterMixin dateFilterMixin;
     @ArgGroup
     private Exclusive exclusive = new Exclusive();
     private int exitCode = 0;
@@ -63,8 +63,8 @@ public class ListCli implements Runnable, IExitCodeGenerator {
         try {
             Specification<Integer, Todo> specification = new Any<>();
 
-            specification = dateFilter.specification(specification);
-            specification = booleanFilter.specification(specification);
+            specification = dateFilterMixin.specification(specification);
+            specification = booleanFilterMixin.specification(specification);
 
             Logger.debug(specification);
             List<Todo> todoList = repository.findAll(specification);
@@ -72,7 +72,6 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                 spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.NO_TODO_FOUND));
                 return;
             }
-
 
             groupByMixin.setup();
             if (groupByMixin.depth() > 3) {

@@ -10,6 +10,7 @@ import net.avdw.todo.repository.IdType;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -77,11 +78,12 @@ public class Todo implements IdType<Integer> {
 
     private List<String> contextList() {
         List<String> contextList = new ArrayList<>();
-        Pattern pattern = Pattern.compile("\\s@(\\S+)\\s?");
+        Pattern pattern = Pattern.compile("\\s@(\\S+)");
         Matcher matcher = pattern.matcher(text);
         while (matcher.find()) {
             contextList.add(matcher.group(1));
         }
+        contextList.sort(Comparator.naturalOrder());
         return contextList;
     }
 
@@ -121,7 +123,7 @@ public class Todo implements IdType<Integer> {
         }
 
         List<String> tagValueList = new ArrayList<>();
-        Pattern pattern = Pattern.compile(String.format("\\s%s:(\\S+)\\s?", tag));
+        Pattern pattern = Pattern.compile(String.format("\\s%s:(\\S+)", tag));
         Matcher matcher = pattern.matcher(text);
         while (matcher.find()) {
             tagValueList.add(matcher.group(1));
@@ -187,11 +189,12 @@ public class Todo implements IdType<Integer> {
 
     private List<String> projectList() {
         List<String> projectList = new ArrayList<>();
-        Pattern pattern = Pattern.compile("\\s\\+(\\S+)\\s?");
+        Pattern pattern = Pattern.compile("\\s\\+(\\S+)");
         Matcher matcher = pattern.matcher(text);
         while (matcher.find()) {
             projectList.add(matcher.group(1));
         }
+        projectList.sort(Comparator.naturalOrder());
         return projectList;
     }
 
