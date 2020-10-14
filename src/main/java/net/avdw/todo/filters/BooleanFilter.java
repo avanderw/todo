@@ -1,4 +1,4 @@
-package net.avdw.todo;
+package net.avdw.todo.filters;
 
 import net.avdw.todo.domain.IsContaining;
 import net.avdw.todo.domain.Todo;

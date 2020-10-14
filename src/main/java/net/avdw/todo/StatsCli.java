@@ -3,6 +3,8 @@ package net.avdw.todo;
 import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoStatistic;
+import net.avdw.todo.filters.BooleanFilter;
+import net.avdw.todo.filters.DateFilter;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;

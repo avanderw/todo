@@ -1,6 +1,8 @@
-package net.avdw.todo;
+package net.avdw.todo.filters;
 
 import com.google.inject.Inject;
+import net.avdw.todo.ResourceBundleKey;
+import net.avdw.todo.TemplatedResourceBundle;
 import net.avdw.todo.domain.IsAfterAddedDate;
 import net.avdw.todo.domain.IsAfterChangedDate;
 import net.avdw.todo.domain.IsAfterDoneDate;

@@ -7,6 +7,8 @@ import net.avdw.todo.domain.IsDone;
 import net.avdw.todo.domain.IsParked;
 import net.avdw.todo.domain.IsRemoved;
 import net.avdw.todo.domain.Todo;
+import net.avdw.todo.filters.BooleanFilter;
+import net.avdw.todo.filters.DateFilter;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;

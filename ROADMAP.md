@@ -13,12 +13,18 @@ Very basic goal setting
 - Hierarchical (overridable) configuration
 - Property file driven
 
-## 2.1 Category module
+## Lifecycle
+
+- filter
+- actions
+- display
+
+## Category module
 - Strategic: Creating future value
 - Tactical: Refining current value
 - Operational: Maintaining current value
 
-## 2.2 RAG status module
+## RAG status module
 Rule based calculation of green, amber, red status flags
 
 ### Green

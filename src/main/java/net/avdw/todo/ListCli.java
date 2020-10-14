@@ -3,6 +3,12 @@ package net.avdw.todo;
 import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
+import net.avdw.todo.filters.BooleanFilter;
+import net.avdw.todo.filters.DateFilter;
+import net.avdw.todo.groupby.ContextGroupBy;
+import net.avdw.todo.groupby.GroupBy;
+import net.avdw.todo.groupby.ProjectGroupBy;
+import net.avdw.todo.groupby.TagGroupBy;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
@@ -21,7 +27,6 @@ import picocli.CommandLine.Spec;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collector;
@@ -55,16 +60,13 @@ public class ListCli implements Runnable, IExitCodeGenerator {
     @Inject
     private TodoTextCleaner todoTextCleaner;
 
-    private Collector<Todo, ?, Map<String, ?>> buildCollector(final List groupByCollectorList) {
-        for (int i = 0; i < groupByCollectorList.size(); i++) {
-            Function f = (Function) groupByCollectorList.get(i);
-            if (i + 1 < groupByCollectorList.size()) {
-                return Collectors.groupingBy(f, buildCollector(groupByCollectorList.subList(i + 1, groupByCollectorList.size())));
-            } else {
-                return Collectors.groupingBy(f);
-            }
+    private Collector<Todo, ?, Map<String, ?>> buildCollector(final List<Function<Todo, String>> groupByCollectorList) {
+        Function f = groupByCollectorList.get(0);
+        if (groupByCollectorList.size() > 1) {
+            return Collectors.groupingBy(f, buildCollector(groupByCollectorList.subList(1, groupByCollectorList.size())));
+        } else {
+            return Collectors.groupingBy(f);
         }
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -86,76 +88,37 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                 return;
             }
 
-            List<String> hierarchyList = new ArrayList<>();
-            List<Function<Todo, String>> groupByCollectorList = new ArrayList<>();
-            if (!groupByList.isEmpty()) {
-                groupByList.forEach(groupBy -> {
-                    if (groupBy.startsWith("+") || groupBy.toLowerCase(Locale.ENGLISH).equals("project")) {
-                        hierarchyList.add("project");
-                        String project = groupBy.substring(1);
-                        if (project.isBlank() || project.equals("roject")) {
-                            Logger.debug("group-by project 'all' ({})", project, groupBy);
-                            groupByCollectorList.add(t -> {
-                                if (t.getProjectList().isEmpty()) {
-                                    return "";
-                                }
-                                if (t.getProjectList().size() > 1) {
-                                    return String.join(", ", t.getProjectList());
-                                } else {
-                                    return t.getProjectList().get(0);
-                                }
-                            });
-                        } else {
-                            throw new UnsupportedOperationException();
-                        }
-                    } else if (groupBy.startsWith("@") || groupBy.toLowerCase(Locale.ENGLISH).equals("context")) {
-                        hierarchyList.add("context");
-                        String context = groupBy.substring(1);
-                        if (context.isBlank() || context.equals("ontext")) {
-                            Logger.debug("group-by context 'all' ({})", context, groupBy);
-                            groupByCollectorList.add(t -> {
-                                if (t.getContextList().isEmpty()) {
-                                    return "";
-                                }
-                                if (t.getContextList().size() > 1) {
-                                    return String.join(", ", t.getContextList());
-                                } else {
-                                    return t.getContextList().get(0);
-                                }
-                            });
-                        } else {
-                            throw new UnsupportedOperationException();
-                        }
-                    } else if (groupBy.endsWith(":")) {
-                        String tag = groupBy.substring(0, groupBy.length() - 1);
-                        hierarchyList.add(tag);
-                        Logger.debug("group-by tag '{}' ({})", tag, groupBy);
-                        groupByCollectorList.add(t -> {
-                            if (t.getTagValueList(tag).isEmpty()) {
-                                return "";
-                            }
-                            if (t.getTagValueList(tag).size() > 1) {
-                                return String.join(", ", t.getTagValueList(tag));
-                            } else {
-                                return t.getTagValueList(tag).get(0);
-                            }
-                        });
+            List<GroupBy<Todo, String, String>> groupByList = new ArrayList<>();
+            if (!this.groupByList.isEmpty()) {
+                this.groupByList.forEach(selector -> {
+                    GroupBy<Todo, String, String> projectGroupBy = new ProjectGroupBy();
+                    GroupBy<Todo, String, String> contextGroupBy = new ContextGroupBy();
+                    GroupBy<Todo, String, String> tagGroupBy = new TagGroupBy(selector.substring(0, selector.length() - 1));
+                    if (projectGroupBy.isSatisfiedBy(selector)) {
+                        Logger.debug("group-by project ({})", selector);
+                        groupByList.add(projectGroupBy);
+                    } else if (contextGroupBy.isSatisfiedBy(selector)) {
+                        Logger.debug("group-by context ({})", selector);
+                        groupByList.add(contextGroupBy);
+                    } else if (tagGroupBy.isSatisfiedBy(selector)) {
+                        Logger.debug("group-by tag ({})", selector);
+                        groupByList.add(tagGroupBy);
                     } else {
                         throw new UnsupportedOperationException();
                     }
                 });
             }
 
-            if (groupByCollectorList.size() > 3) {
+            if (groupByList.size() > 3) {
                 spec.commandLine().getErr().println(templatedResourceBundle.getString(ResourceBundleKey.GROUP_BY_DEPTH_UNSUPPORTED));
                 throw new UnsupportedOperationException();
             }
 
-            if (groupByCollectorList.isEmpty()) {
+            if (groupByList.isEmpty()) {
                 printList(todoList, repository);
             } else {
-                Map groupTodoListMap = todoList.stream().collect(buildCollector(groupByCollectorList));
-                printMap(groupTodoListMap, repository, hierarchyList, 0);
+                Map<String, ?> groupTodoListMap = todoList.stream().collect(buildCollector(groupByList.stream().map(GroupBy::collector).collect(Collectors.toList())));
+                printMap(groupTodoListMap, repository, groupByList, 0);
             }
             spec.commandLine().getOut().println(runningStats.getDuration());
         } catch (UnsupportedOperationException e) {
@@ -175,9 +138,9 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                 String.format("{filtered:'%s',total:'%s'}", list.size(), repository.size())));
     }
 
-    private void printMap(final Map<String, ?> map, final Repository<Integer, Todo> repository, final List<String> hierarchyList, final int depth) {
+    private void printMap(final Map<String, ?> map, final Repository<Integer, Todo> repository, final List<GroupBy<Todo, String, String>> hierarchyList, final int depth) {
         map.forEach((key, value) -> {
-            String json = String.format("{type:'%s',title:'%s'}", hierarchyList.get(depth), StringUtils.capitalise(key.isBlank() ? "No" : key));
+            String json = String.format("{type:'%s',title:'%s'}", hierarchyList.get(depth).name(), StringUtils.capitalise(key.isBlank() ? "No" : key));
             String header = switch (depth) {
                 case 0 -> templatedResourceBundle.getString(ResourceBundleKey.GROUP_BY_HEADING, json);
                 case 1 -> templatedResourceBundle.getString(ResourceBundleKey.GROUP_BY_HEADING_2, json);
