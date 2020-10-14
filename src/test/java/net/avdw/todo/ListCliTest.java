@@ -40,6 +40,7 @@ public class ListCliTest {
     @SneakyThrows
     public void beforeTest() {
         Files.copy(Paths.get("src/test/resources/.todo/todo.txt"), todoPath, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(Paths.get("src/test/resources/.todo/done.txt"), todoPath.getParent().resolve("done.txt"), StandardCopyOption.REPLACE_EXISTING);
     }
 
     @Test(timeout = 256)
@@ -154,12 +155,7 @@ public class ListCliTest {
         cliTester.execute("do 1,2,3,4,5,6,7,8,9").success();
         cliTester.execute("archive").success();
         cliTester.execute("do 1").success();
-        cliTester.execute("ls --done").success().startsWith("[  1]");
-    }
-
-    @Test(timeout = 256)
-    public void testExclusive() {
-        cliTester.execute("ls --done --parked --removed").failure();
+        cliTester.execute("ls --incl-done").success().startsWith("[  1]").count("\\[", 78);
     }
 
     @Test(timeout = 256)
@@ -222,7 +218,7 @@ public class ListCliTest {
         cliTester.execute("park 1,2,3,4,5,6,7,8,9").success();
         cliTester.execute("archive").success();
         cliTester.execute("park 1").success();
-        cliTester.execute("ls --parked").success().startsWith("[  1]");
+        cliTester.execute("ls --incl-parked").success().count("\\[", 71).startsWith("[  1]");
     }
 
     @Test(timeout = 256)
@@ -230,6 +226,11 @@ public class ListCliTest {
         cliTester.execute("rm 1,2,3,4,5,6,7,8,9").success();
         cliTester.execute("archive").success();
         cliTester.execute("rm 1").success();
-        cliTester.execute("ls --removed").success().startsWith("[  1]");
+        cliTester.execute("ls --incl-removed").success().count("\\[", 70).startsWith("[  1]");
+    }
+
+    @Test(timeout = 256)
+    public void testHelp() {
+        cliTester.execute("ls --help").success();
     }
 }

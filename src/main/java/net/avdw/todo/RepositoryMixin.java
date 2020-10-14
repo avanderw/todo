@@ -11,7 +11,7 @@ import picocli.CommandLine.Option;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class RepositoryScope {
+public class RepositoryMixin {
     private final Path todoPath;
     private final Repository<Integer, Todo> todoRepository;
     @Option(names = "--incl-done", descriptionKey = "repository.incl.done.desc")
@@ -22,7 +22,7 @@ public class RepositoryScope {
     private boolean inclRemoved = false;
 
     @Inject
-    RepositoryScope(final Repository<Integer, Todo> todoRepository, final Path todoPath) {
+    RepositoryMixin(final Repository<Integer, Todo> todoRepository, final Path todoPath) {
         this.todoRepository = todoRepository;
         this.todoPath = todoPath;
     }

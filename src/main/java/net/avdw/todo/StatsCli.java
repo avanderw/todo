@@ -37,7 +37,7 @@ public class StatsCli implements Runnable {
     @Option(names = "--clean", descriptionKey = "list.clean.desc")
     private boolean isClean = false;
     @Mixin
-    private RepositoryScope repositoryScope;
+    private RepositoryMixin repositoryMixin;
     @Spec
     private CommandSpec spec;
     @Inject
@@ -259,7 +259,7 @@ public class StatsCli implements Runnable {
         specification = booleanFilter.specification(specification);
         Logger.trace(specification);
 
-        Repository<Integer, Todo> scopedRepository = repositoryScope.allRepositories();
+        Repository<Integer, Todo> scopedRepository = repositoryMixin.allRepositories();
         List<Todo> todoList = scopedRepository.findAll(specification);
 
         if (todoList.isEmpty()) {
