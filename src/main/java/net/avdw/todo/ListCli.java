@@ -22,8 +22,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Command(name = "ls", resourceBundle = "messages", description = "${bundle:list}")
@@ -54,6 +54,18 @@ public class ListCli implements Runnable, IExitCodeGenerator {
     @Inject
     private TodoTextCleaner todoTextCleaner;
 
+    private Collector<Todo, ?, Map<String, ?>> buildCollector(List groupByCollectorList) {
+        for (int i = 0; i < groupByCollectorList.size(); i++) {
+            Function f = (Function) groupByCollectorList.get(i);
+            if (i + 1 < groupByCollectorList.size()) {
+                return Collectors.groupingBy(f, buildCollector(groupByCollectorList.subList(i + 1, groupByCollectorList.size())));
+            } else {
+                return Collectors.groupingBy(f);
+            }
+        }
+        throw new UnsupportedOperationException();
+    }
+
     @Override
     public int getExitCode() {
         return exitCode;
@@ -73,15 +85,15 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                 return;
             }
 
-            List<String> groupingTypeList = new ArrayList<>();
+            List<String> hierarchyList = new ArrayList<>();
             List<Function<Todo, String>> groupByCollectorList = new ArrayList<>();
             if (!groupByList.isEmpty()) {
                 groupByList.forEach(groupBy -> {
                     if (groupBy.startsWith("+") || groupBy.toLowerCase().equals("project")) {
-                        groupingTypeList.add("project");
+                        hierarchyList.add("project");
                         String project = groupBy.substring(1);
                         if (project.isBlank()) {
-                            Logger.debug("project 'all' ({})", project, groupBy);
+                            Logger.debug("group-by project 'all' ({})", project, groupBy);
                             groupByCollectorList.add(t -> {
                                 if (t.getProjectList().isEmpty()) {
                                     return "";
@@ -96,10 +108,10 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                             throw new UnsupportedOperationException();
                         }
                     } else if (groupBy.startsWith("@") || groupBy.toLowerCase().equals("context")) {
-                        groupingTypeList.add("context");
+                        hierarchyList.add("context");
                         String context = groupBy.substring(1);
                         if (context.isBlank()) {
-                            Logger.debug("context 'all' ({})", context, groupBy);
+                            Logger.debug("group-by context 'all' ({})", context, groupBy);
                             groupByCollectorList.add(t -> {
                                 if (t.getContextList().isEmpty()) {
                                     return "";
@@ -115,8 +127,8 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                         }
                     } else if (groupBy.endsWith(":")) {
                         String tag = groupBy.substring(0, groupBy.length() - 1);
-                        groupingTypeList.add(tag);
-                        Logger.debug("tag '{}' ({})", tag, groupBy);
+                        hierarchyList.add(tag);
+                        Logger.debug("group-by tag '{}' ({})", tag, groupBy);
                         groupByCollectorList.add(t -> {
                             if (t.getTagValueList(tag).isEmpty()) {
                                 return "";
@@ -133,58 +145,14 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                 });
             }
 
+            if (groupByCollectorList.size() > 3) {
+                spec.commandLine().getErr().println(templatedResourceBundle.getString(ResourceBundleKey.GROUP_BY_DEPTH_UNSUPPORTED));
+                throw new UnsupportedOperationException();
+            }
+
             if (!groupByCollectorList.isEmpty()) {
-                if (groupByCollectorList.size() == 2) {
-                    Map<String, Map<String, List<Todo>>> groupTodoListMap = todoList.stream().collect(Collectors.groupingBy(groupByCollectorList.get(0), Collectors.groupingBy(groupByCollectorList.get(1))));
-                    groupTodoListMap.forEach((key1, map)-> {
-                        if (key1.isBlank()) {
-                            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.NO_GROUP,
-                                    String.format("{type:'%s'}", groupingTypeList.get(0))));
-                        } else {
-                            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.GROUP_HEADING,
-                                    String.format("{type:'%s',title:'%s'}", groupingTypeList.get(0), StringUtils.capitalise(key1))));
-                        }
-
-                        map.forEach((key2, list)->{
-                            if (key2.isBlank()) {
-                                spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.NO_GROUP,
-                                        String.format("{type:'%s'}", groupingTypeList.get(1))));
-                            } else {
-                                spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.GROUP_HEADING_2,
-                                        String.format("{type:'%s',title:'%s'}", groupingTypeList.get(1), StringUtils.capitalise(key2))));
-                            }
-
-                            list.forEach(todo -> {
-                                String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
-                                spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                                        String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
-                            });
-
-                            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TOTAL_SUMMARY,
-                                    String.format("{filtered:'%s',total:'%s'}", list.size(), repository.findAll(new Any<>()).size())));
-                        });
-                    });
-                } else {
-                    Map<String, List<Todo>> groupTodoListMap = todoList.stream().collect(Collectors.groupingBy(groupByCollectorList.get(0)));
-                    groupTodoListMap.forEach((key, list) -> {
-                        if (key.isBlank()) {
-                            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.NO_GROUP,
-                                    String.format("{type:'%s'}", groupingTypeList.get(0))));
-                        } else {
-                            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.GROUP_HEADING,
-                                    String.format("{type:'%s',title:'%s'}", groupingTypeList.get(0), StringUtils.capitalise(key))));
-                        }
-
-                        list.forEach(todo -> {
-                            String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
-                            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
-                                    String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
-                        });
-
-                        spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TOTAL_SUMMARY,
-                                String.format("{filtered:'%s',total:'%s'}", list.size(), repository.findAll(new Any<>()).size())));
-                    });
-                }
+                Map groupTodoListMap = todoList.stream().collect(buildCollector(groupByCollectorList));
+                printMap(groupTodoListMap, repository, hierarchyList, 0);
             }
 
             todoList.forEach(todo -> {
@@ -199,6 +167,39 @@ public class ListCli implements Runnable, IExitCodeGenerator {
             Logger.debug(e);
             exitCode = 1;
         }
+    }
+
+    private void printList(List<Todo> list, Repository<Integer, Todo> repository) {
+        list.forEach(todo -> {
+            String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
+            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
+                    String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
+        });
+
+        spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TOTAL_SUMMARY,
+                String.format("{filtered:'%s',total:'%s'}", list.size(), repository.size())));
+    }
+
+    private void printMap(Map<String, ?> map, Repository<Integer, Todo> repository, List<String> hierarchyList, int depth) {
+        map.forEach((key, value) -> {
+            String json = String.format("{type:'%s',title:'%s'}", hierarchyList.get(depth), StringUtils.capitalise(key.isBlank() ? "No" : key));
+            String header = switch (depth) {
+                case 0 -> templatedResourceBundle.getString(ResourceBundleKey.GROUP_BY_HEADING, json);
+                case 1 -> templatedResourceBundle.getString(ResourceBundleKey.GROUP_BY_HEADING_2, json);
+                case 2 -> templatedResourceBundle.getString(ResourceBundleKey.GROUP_BY_HEADING_3, json);
+                default -> throw new UnsupportedOperationException();
+            };
+            spec.commandLine().getOut().println(header);
+
+            if (value instanceof Map) {
+                printMap((Map) value, repository, hierarchyList, depth + 1);
+            } else if (value instanceof List) {
+                printList((List) value, repository);
+            } else {
+                throw new UnsupportedOperationException();
+            }
+        });
+
     }
 
     @Override

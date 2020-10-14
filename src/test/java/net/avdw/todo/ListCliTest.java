@@ -161,7 +161,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testGroupByContext() {
-        cliTester.execute("ls --group-by @").success().count("\\s## ", 15);
+        cliTester.execute("ls --group-by @").success().count("\\s## ", 16);
     }
 
     @Test(timeout = 256)
@@ -171,12 +171,17 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testGroupByThreeHierarchy() {
-        cliTester.execute("ls --group-by +,@,assigned:").success().count("\\s#### ", 7);
+        cliTester.execute("ls --group-by +,@,assigned:").success().count("\\s#### ", 33);
     }
 
     @Test(timeout = 256)
     public void testGroupByProject() {
-        cliTester.execute("ls --group-by +").success().count("\\s## ", 5);
+        cliTester.execute("ls --group-by +").success().count("\\s## ", 6);
+    }
+
+    @Test(timeout=256)
+    public void testGroupByDeepHierarchy() {
+        cliTester.execute("ls --group-by +,@,assigned:,importance:").failure();
     }
 
     @Test(timeout = 256)
@@ -196,12 +201,12 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testGroupByTag() {
-        cliTester.execute("ls --group-by urgency:").success().count("\\s## ", 7);
+        cliTester.execute("ls --group-by urgency:").success().count("\\s## ", 8);
     }
 
     @Test(timeout = 256)
     public void testGroupByTwoHierarchy() {
-        cliTester.execute("ls --group-by urgency:,importance:").success().count("\\s### ", 29);
+        cliTester.execute("ls --group-by urgency:,importance:").success().count("\\s### ", 31);
     }
 
     @Test(timeout = 256)
