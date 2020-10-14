@@ -3,8 +3,8 @@ package net.avdw.todo;
 import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoStatistic;
-import net.avdw.todo.filters.BooleanFilter;
-import net.avdw.todo.filters.DateFilter;
+import net.avdw.todo.filters.BooleanFilterMixin;
+import net.avdw.todo.filters.DateFilterMixin;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
@@ -31,9 +31,9 @@ public class StatsCli implements Runnable {
     private final Date now = new Date();
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     @Mixin
-    private BooleanFilter booleanFilter;
+    private BooleanFilterMixin booleanFilter;
     @Mixin
-    private DateFilter dateFilter;
+    private DateFilterMixin dateFilter;
     @Option(names = "--clean", descriptionKey = "list.clean.desc")
     private boolean isClean = false;
     @Mixin

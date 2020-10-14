@@ -7,8 +7,8 @@ import net.avdw.todo.domain.IsDone;
 import net.avdw.todo.domain.IsParked;
 import net.avdw.todo.domain.IsRemoved;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.filters.BooleanFilter;
-import net.avdw.todo.filters.DateFilter;
+import net.avdw.todo.filters.BooleanFilterMixin;
+import net.avdw.todo.filters.DateFilterMixin;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
@@ -40,9 +40,9 @@ public class ChangelogCli implements Runnable, IExitCodeGenerator {
     private final SimpleDateFormat collectYearlyFormat = new SimpleDateFormat("yyyy");
     private final SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd");
     @Mixin
-    private BooleanFilter booleanFilter;
+    private BooleanFilterMixin booleanFilter;
     @Mixin
-    private DateFilter dateFilter;
+    private DateFilterMixin dateFilter;
     @ArgGroup
     private Exclusive exclusive = new Exclusive();
     private int exitCode = 0;

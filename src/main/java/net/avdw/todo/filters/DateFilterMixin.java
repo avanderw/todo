@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DateFilter {
+public class DateFilterMixin implements Filter<Integer, Todo> {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     @Option(names = "--added-after", descriptionKey = "list.after.added.desc")
     private Date afterAddedDate;

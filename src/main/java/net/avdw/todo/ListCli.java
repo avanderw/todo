@@ -3,12 +3,9 @@ package net.avdw.todo;
 import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
-import net.avdw.todo.filters.BooleanFilter;
-import net.avdw.todo.filters.DateFilter;
-import net.avdw.todo.groupby.ContextGroupBy;
-import net.avdw.todo.groupby.GroupBy;
-import net.avdw.todo.groupby.ProjectGroupBy;
-import net.avdw.todo.groupby.TagGroupBy;
+import net.avdw.todo.filters.BooleanFilterMixin;
+import net.avdw.todo.filters.DateFilterMixin;
+import net.avdw.todo.groupby.GroupByMixin;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
@@ -25,24 +22,20 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 @Command(name = "ls", resourceBundle = "messages", description = "${bundle:list}")
 public class ListCli implements Runnable, IExitCodeGenerator {
     @Mixin
-    private BooleanFilter booleanFilter;
+    private BooleanFilterMixin booleanFilter;
     @Mixin
-    private DateFilter dateFilter;
+    private DateFilterMixin dateFilter;
     @ArgGroup
     private Exclusive exclusive = new Exclusive();
     private int exitCode = 0;
-    @Option(names = "--group-by", descriptionKey = "list.group.by.desc", split = ",")
-    private List<String> groupByList = new ArrayList<>();
+    @Mixin
+    private GroupByMixin groupByMixin;
     @Option(names = "--clean", descriptionKey = "list.clean.desc")
     private boolean isClean = false;
     @Inject
@@ -60,14 +53,6 @@ public class ListCli implements Runnable, IExitCodeGenerator {
     @Inject
     private TodoTextCleaner todoTextCleaner;
 
-    private Collector<Todo, ?, Map<String, ?>> buildCollector(final List<Function<Todo, String>> groupByCollectorList) {
-        Function f = groupByCollectorList.get(0);
-        if (groupByCollectorList.size() > 1) {
-            return Collectors.groupingBy(f, buildCollector(groupByCollectorList.subList(1, groupByCollectorList.size())));
-        } else {
-            return Collectors.groupingBy(f);
-        }
-    }
 
     @Override
     public int getExitCode() {
@@ -88,37 +73,18 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                 return;
             }
 
-            List<GroupBy<Todo, String, String>> groupByList = new ArrayList<>();
-            if (!this.groupByList.isEmpty()) {
-                this.groupByList.forEach(selector -> {
-                    GroupBy<Todo, String, String> projectGroupBy = new ProjectGroupBy();
-                    GroupBy<Todo, String, String> contextGroupBy = new ContextGroupBy();
-                    GroupBy<Todo, String, String> tagGroupBy = new TagGroupBy(selector.substring(0, selector.length() - 1));
-                    if (projectGroupBy.isSatisfiedBy(selector)) {
-                        Logger.debug("group-by project ({})", selector);
-                        groupByList.add(projectGroupBy);
-                    } else if (contextGroupBy.isSatisfiedBy(selector)) {
-                        Logger.debug("group-by context ({})", selector);
-                        groupByList.add(contextGroupBy);
-                    } else if (tagGroupBy.isSatisfiedBy(selector)) {
-                        Logger.debug("group-by tag ({})", selector);
-                        groupByList.add(tagGroupBy);
-                    } else {
-                        throw new UnsupportedOperationException();
-                    }
-                });
-            }
 
-            if (groupByList.size() > 3) {
+            groupByMixin.setup();
+            if (groupByMixin.depth() > 3) {
                 spec.commandLine().getErr().println(templatedResourceBundle.getString(ResourceBundleKey.GROUP_BY_DEPTH_UNSUPPORTED));
                 throw new UnsupportedOperationException();
             }
 
-            if (groupByList.isEmpty()) {
+            if (groupByMixin.isEmpty()) {
                 printList(todoList, repository);
             } else {
-                Map<String, ?> groupTodoListMap = todoList.stream().collect(buildCollector(groupByList.stream().map(GroupBy::collector).collect(Collectors.toList())));
-                printMap(groupTodoListMap, repository, groupByList, 0);
+                Map<String, ?> groupTodoListMap = todoList.stream().collect(groupByMixin.collector());
+                printMap(groupTodoListMap, repository, groupByMixin, 0);
             }
             spec.commandLine().getOut().println(runningStats.getDuration());
         } catch (UnsupportedOperationException e) {
@@ -138,9 +104,9 @@ public class ListCli implements Runnable, IExitCodeGenerator {
                 String.format("{filtered:'%s',total:'%s'}", list.size(), repository.size())));
     }
 
-    private void printMap(final Map<String, ?> map, final Repository<Integer, Todo> repository, final List<GroupBy<Todo, String, String>> hierarchyList, final int depth) {
+    private void printMap(final Map<String, ?> map, final Repository<Integer, Todo> repository, final GroupByMixin groupByMixin, final int depth) {
         map.forEach((key, value) -> {
-            String json = String.format("{type:'%s',title:'%s'}", hierarchyList.get(depth).name(), StringUtils.capitalise(key.isBlank() ? "No" : key));
+            String json = String.format("{type:'%s',title:'%s'}", groupByMixin.getGroupByAtDepth(depth).name(), StringUtils.capitalise(key.isBlank() ? "No" : key));
             String header = switch (depth) {
                 case 0 -> templatedResourceBundle.getString(ResourceBundleKey.GROUP_BY_HEADING, json);
                 case 1 -> templatedResourceBundle.getString(ResourceBundleKey.GROUP_BY_HEADING_2, json);
@@ -150,7 +116,7 @@ public class ListCli implements Runnable, IExitCodeGenerator {
             spec.commandLine().getOut().println(header);
 
             if (value instanceof Map) {
-                printMap((Map) value, repository, hierarchyList, depth + 1);
+                printMap((Map) value, repository, groupByMixin, depth + 1);
             } else if (value instanceof List) {
                 printList((List) value, repository);
             } else {
