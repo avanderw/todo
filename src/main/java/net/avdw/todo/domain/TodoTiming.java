@@ -23,7 +23,10 @@ public class TodoTiming {
 
         long time = ChronoUnit.DAYS.between(simpleDateFormat.parse(startedList.get(0)).toInstant(), todo.getDoneDate().toInstant());
         if (time < 0) {
-            Logger.debug("Cycle time is negative ({}), is this correct?\n{}", time, todo);
+            Logger.debug("Cycle time is negative ({}), is this correct?\n" +
+                    "  ( started = {} )\n" +
+                    "  ( done    = {} )\n" +
+                    "{}", time, startedList.get(0), simpleDateFormat.format(todo.getDoneDate()), todo);
         }
         return time;
     }
@@ -40,7 +43,10 @@ public class TodoTiming {
 
         long time = ChronoUnit.DAYS.between(todo.getAdditionDate().toInstant(), todo.getDoneDate().toInstant());
         if (time < 0) {
-            Logger.debug("Lead time is negative ({}), is this correct?\n{}", time, todo);
+            Logger.debug("Lead time is negative ({}), is this correct?\n" +
+                    "  ( added = {} )\n" +
+                    "  ( done  = {} )\n" +
+                    "{}", time, simpleDateFormat.format(todo.getAdditionDate()), simpleDateFormat.format(todo.getDoneDate()), todo);
         }
         return time;
     }
