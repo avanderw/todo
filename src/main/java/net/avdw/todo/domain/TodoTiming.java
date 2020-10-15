@@ -18,7 +18,9 @@ public class TodoTiming {
 
         List<String> startedList = todo.getTagValueList("started");
         if (startedList.size() > 1) {
-            Logger.debug("Multiple started tags found. Is this correct?\n{}", todo);
+            Logger.debug("Multiple started tags found. Is this correct?\n" +
+                    "  ( consider removing one of the started tags )\n" +
+                    "{}", todo);
         }
 
         long time = ChronoUnit.DAYS.between(simpleDateFormat.parse(startedList.get(0)).toInstant(), todo.getDoneDate().toInstant());
@@ -38,7 +40,9 @@ public class TodoTiming {
 
         List<String> startedList = todo.getTagValueList("started");
         if (startedList.size() > 1) {
-            Logger.debug("Multiple started tags found. Is this correct?\n{}", todo);
+            Logger.debug("Multiple started tags found. Is this correct?\n" +
+                    "  ( consider removing one of the started tags )\n" +
+                    "{}", todo);
         }
 
         long time = ChronoUnit.DAYS.between(todo.getAdditionDate().toInstant(), todo.getDoneDate().toInstant());
