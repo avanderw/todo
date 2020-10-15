@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class GroupByMixin {
     private final List<GroupBy<Todo, String, String>> groupByList = new ArrayList<>();
-    @Option(names = "--group-by", descriptionKey = "list.group.by.desc", split = ",")
+    @Option(names = "--group-by", descriptionKey = "list.group.by.desc", split = ",", paramLabel = "@|+|tag:")
     private List<String> groupBySelectorList = new ArrayList<>();
 
     private Collector<Todo, ?, Map<String, ?>> buildCollector(final List<Function<Todo, String>> groupByCollectorList) {

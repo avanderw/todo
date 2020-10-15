@@ -85,3 +85,4 @@ x 2020-10-05 2020-10-04 Update commands to include parked, done, or removed todo
 x 2020-10-14 2019-08-12 @Add grouping feature to list, e.g. by project or search term
 x 2020-10-14 2020-10-07 Structure delivery around iterations with themes and create articles for each iteration
 x 2020-10-15 2020-10-14 Merge 'stats' functionality into all 'list' commands @tactical @must
+x 2020-10-15 2020-10-15 Enhance EditCli to not autocommit after every todo edit

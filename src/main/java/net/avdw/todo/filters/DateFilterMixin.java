@@ -26,21 +26,21 @@ import java.util.List;
 
 public class DateFilterMixin implements Filter<Integer, Todo> {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    @Option(names = "--added-after", descriptionKey = "list.after.added.desc")
+    @Option(names = "--added-after", descriptionKey = "list.after.added.desc", paramLabel = "yyyy-mm-dd")
     private Date afterAddedDate;
-    @Option(names = "--changed-after", descriptionKey = "list.before.change.desc")
+    @Option(names = "--changed-after", descriptionKey = "list.after.change.desc", paramLabel = "yyyy-mm-dd")
     private Date afterChangeDate;
-    @Option(names = "--done-after", descriptionKey = "list.after.done.desc")
+    @Option(names = "--done-after", descriptionKey = "list.after.done.desc", paramLabel = "yyyy-mm-dd")
     private Date afterDoneDate;
-    @Option(names = "--after-tag", descriptionKey = "list.after.desc")
+    @Option(names = "--after-tag", descriptionKey = "list.after.desc", paramLabel = "tag:yyyy-mm-dd")
     private List<String> afterTagList = new ArrayList<>();
-    @Option(names = "--added-before", descriptionKey = "list.before.added.desc")
+    @Option(names = "--added-before", descriptionKey = "list.before.added.desc", paramLabel = "yyyy-mm-dd")
     private Date beforeAddedDate;
-    @Option(names = "--changed-before", descriptionKey = "list.before.change.desc")
+    @Option(names = "--changed-before", descriptionKey = "list.before.change.desc", paramLabel = "yyyy-mm-dd")
     private Date beforeChangeDate;
-    @Option(names = "--done-before", descriptionKey = "list.before.done.desc")
+    @Option(names = "--done-before", descriptionKey = "list.before.done.desc", paramLabel = "yyyy-mm-dd")
     private Date beforeDoneDate;
-    @Option(names = "--before-tag", descriptionKey = "list.before.desc")
+    @Option(names = "--before-tag", descriptionKey = "list.before.desc", paramLabel = "tag:yyyy-mm-dd")
     private List<String> beforeTagList = new ArrayList<>();
     @Spec
     private CommandSpec spec;

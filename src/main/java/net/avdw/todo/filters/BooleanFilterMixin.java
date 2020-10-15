@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BooleanFilterMixin implements Filter<Integer, Todo> {
-    @Parameters(descriptionKey = "list.and.desc", split = ",")
+    @Parameters(descriptionKey = "list.and.desc", split = ",", paramLabel = "text")
     private List<String> andFilterList = new ArrayList<>();
-    @Option(names = "--not", descriptionKey = "list.not.desc", split = ",")
+    @Option(names = "--not", descriptionKey = "list.not.desc", split = ",", paramLabel = "text")
     private List<String> notFilterList = new ArrayList<>();
-    @Option(names = "--or", descriptionKey = "list.or.desc", split = ",")
+    @Option(names = "--or", descriptionKey = "list.or.desc", split = ",", paramLabel = "text")
     private List<String> orFilterList = new ArrayList<>();
 
     @Override
