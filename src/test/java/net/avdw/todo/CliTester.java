@@ -7,6 +7,7 @@ import picocli.CommandLine;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +31,7 @@ public class CliTester {
     private ByteArrayOutputStream err;
     private int exitCode;
     private ByteArrayOutputStream out;
+    private String[] lastArgs;
 
     public CliTester(final Class<?> cliClass, final TestGuiceFactory guiceFactory) {
         this.cliClass = cliClass;
@@ -38,10 +40,10 @@ public class CliTester {
 
     private void assertFailure(final int exitCode) {
         if (!out.toString().isEmpty()) {
-            Logger.debug("Standard output:\n{}", out.toString());
+            Logger.debug("Standard output: {}\n{}", Arrays.toString(lastArgs), out.toString());
         }
         if (!err.toString().isEmpty()) {
-            Logger.debug("Error output:\n{}", err.toString());
+            Logger.debug("Error output: {}\n{}", Arrays.toString(lastArgs), err.toString());
         }
         assertNotEquals("MUST HAVE error output", "", err.toString().trim());
         assertEquals("MUST NOT HAVE standard output", "", out.toString().trim());
@@ -50,10 +52,10 @@ public class CliTester {
 
     private void assertSuccess(final int exitCode) {
         if (!out.toString().isEmpty()) {
-            Logger.debug("Standard output:\n{}", out.toString());
+            Logger.debug("Standard output: {}\n{}", Arrays.toString(lastArgs), out.toString());
         }
         if (!err.toString().isEmpty()) {
-            Logger.error("Error output:\n{}", err.toString());
+            Logger.error("Error output: {}\n{}", Arrays.toString(lastArgs), err.toString());
         }
         assertEquals("MUST NOT HAVE error output", "", err.toString().trim());
         assertNotEquals("MUST HAVE standard output", "", out.toString().trim());
@@ -95,6 +97,7 @@ public class CliTester {
                 System.arraycopy(splitCommand, 0, args, 0, splitCommand.length);
                 System.arraycopy(arguments, 0, args, splitCommand.length, arguments.length);
             }
+            lastArgs = args;
             exitCode = commandLine.execute(args);
         }
         return this;

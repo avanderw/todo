@@ -29,7 +29,7 @@ public class FileRepository<T extends IdType<Integer>> implements Repository<Int
         }
 
         if (itemList.isEmpty()) {
-            Logger.debug("Repository is empty {}", path.toUri());
+            Logger.trace("Repository is empty {}", path.toUri());
         }
     }
 
@@ -57,7 +57,7 @@ public class FileRepository<T extends IdType<Integer>> implements Repository<Int
     @SneakyThrows
     @Override
     public void commit() {
-        Logger.debug("Writing {}", path);
+        Logger.trace("Writing {}", path);
         Files.write(path, itemList.stream().map(Object::toString).collect(Collectors.toList()));
     }
 

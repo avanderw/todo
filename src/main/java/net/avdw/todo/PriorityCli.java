@@ -112,7 +112,7 @@ public class PriorityCli implements Runnable {
 
             }
         } else {
-            Logger.debug("Index list provided");
+            Logger.trace("Index list provided");
             if (remove) {
                 todoRepository.setAutoCommit(false);
                 idxList.forEach(idx -> {
@@ -129,7 +129,7 @@ public class PriorityCli implements Runnable {
 
             List<Priority> availablePriorityList = new ArrayList<>();
             if (priority == null) {
-                Logger.debug("Assume priority for todos");
+                Logger.trace("Assume priority for todos");
                 List<Priority> usedPriorityList = todoRepository.findAll(new IsPriority()).stream().map(Todo::getPriority).collect(Collectors.toList());
                 availablePriorityList.addAll(Arrays.asList(Priority.values()));
                 availablePriorityList.removeAll(usedPriorityList);
@@ -138,7 +138,7 @@ public class PriorityCli implements Runnable {
                 availablePriorityList.add(priority);
             }
 
-            Logger.debug("Assign priority to todos");
+            Logger.trace("Assign priority to todos");
             todoRepository.setAutoCommit(false);
             idxList.forEach(idx -> {
                 int id = idx - 1;

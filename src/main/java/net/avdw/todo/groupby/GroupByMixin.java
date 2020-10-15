@@ -48,13 +48,13 @@ public class GroupByMixin {
                 GroupBy<Todo, String, String> contextGroupBy = new ContextGroupBy();
                 GroupBy<Todo, String, String> tagGroupBy = new TagGroupBy(selector.substring(0, selector.length() - 1));
                 if (projectGroupBy.isSatisfiedBy(selector)) {
-                    Logger.debug("group-by project ({})", selector);
+                    Logger.trace("group-by project ({})", selector);
                     groupByList.add(projectGroupBy);
                 } else if (contextGroupBy.isSatisfiedBy(selector)) {
-                    Logger.debug("group-by context ({})", selector);
+                    Logger.trace("group-by context ({})", selector);
                     groupByList.add(contextGroupBy);
                 } else if (tagGroupBy.isSatisfiedBy(selector)) {
-                    Logger.debug("group-by tag ({})", selector);
+                    Logger.trace("group-by tag ({})", selector);
                     groupByList.add(tagGroupBy);
                 } else {
                     throw new UnsupportedOperationException();

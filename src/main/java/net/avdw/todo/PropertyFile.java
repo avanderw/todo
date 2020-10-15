@@ -50,7 +50,7 @@ public class PropertyFile {
             prop.load(is);
             properties.putAll(prop);
             int width = prop.keySet().stream().mapToInt(k -> k.toString().length()).max().orElseThrow();
-            Logger.debug("Load class properties ({}):" +
+            Logger.trace("Load class properties ({}):" +
                     "\n{}", classPath, prop.entrySet().stream()
                     .map(e -> String.format("%-" + width + "s = %s", e.getKey(), e.getValue()))
                     .sorted()
