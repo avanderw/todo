@@ -4,3 +4,4 @@
 2020-10-01 @Add 'todo roadmap' [project, context, tag] which will list upcoming- due,target,cycle and past- due,target,cycle
 2020-10-12 Add the ability to prioritise on search criteria @should
 2020-10-15 @Add functionality to replace text in the todo (great for fixing mispelling)
+x 2020-10-15 2020-10-15 Enhance EditCli to not autocommit after every todo edit

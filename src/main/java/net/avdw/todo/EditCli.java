@@ -45,6 +45,7 @@ public class EditCli implements Runnable, IExitCodeGenerator {
             return;
         }
 
+        todoRepository.setAutoCommit(false);
         idxList.forEach(idx -> {
             int id = idx - 1;
             String todoText = todoRepository.findById(id).orElseThrow().getText();
@@ -62,5 +63,6 @@ public class EditCli implements Runnable, IExitCodeGenerator {
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
                     String.format("{idx:'%3s',todo:\"%s\"}", idx, styleApplicator.apply(todo.getText()).replaceAll("\"", "\\\\\""))));
         });
+        todoRepository.commit();
     }
 }
