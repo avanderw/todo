@@ -16,3 +16,5 @@ r 2020-10-01 2019-08-13 @Add +top command to list top x todos
 r 2020-10-01 2019-10-09 @Change set command to become config command which manages property files
 r 2020-10-01 2020-03-31 @Add todo ls --group-by meta | context | project
 r 2020-10-07 2020-10-01 @Add 'todo restore' command to restore the last backup
+r 2020-10-15 2019-07-25 @Fix bug when +add with tilde is used in command prompt
+r 2020-10-15 2019-08-12 @Fix bug when resolving parent directory in nested directories

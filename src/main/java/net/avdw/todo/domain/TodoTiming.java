@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-public class TodoStatistic {
+public class TodoTiming {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @SneakyThrows
@@ -58,7 +58,10 @@ public class TodoStatistic {
 
         long time = ChronoUnit.DAYS.between(todo.getAdditionDate().toInstant(), simpleDateFormat.parse(startedList.get(0)).toInstant());
         if (time < 0) {
-            Logger.debug("Reaction time is negative ({}), is this correct?\n{}", time, todo);
+            Logger.debug("Reaction time is negative ({}), is this correct?\n" +
+                    "  ( added   = {} )\n" +
+                    "  ( started = {} )\n" +
+                    "{}", time, simpleDateFormat.format(todo.getAdditionDate()), startedList.get(0), todo);
         }
         return time;
     }

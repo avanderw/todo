@@ -2,14 +2,15 @@ package net.avdw.todo;
 
 import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.domain.TodoStatistic;
+import net.avdw.todo.domain.TodoTiming;
 import net.avdw.todo.filters.BooleanFilterMixin;
 import net.avdw.todo.filters.DateFilterMixin;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
+import net.avdw.todo.stats.Statistic;
+import net.avdw.todo.stats.TimingStatsCalculator;
 import net.avdw.todo.style.StyleApplicator;
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Mixin;
@@ -45,11 +46,13 @@ public class StatsCli implements Runnable {
     @Inject
     private TemplatedResourceBundle templatedResourceBundle;
     @Inject
-    private TodoStatistic todoStatistic;
+    private TimingStatsCalculator timingStatsCalculator;
+    @Inject
+    private TodoTiming todoStatistic;
     @Inject
     private TodoTextCleaner todoTextCleaner;
 
-    private String period(final long totalDays) {
+    private String days2period(final long totalDays) {
         long days = Math.abs(totalDays);
         long years = Math.floorDiv(days, 365);
         days %= 365;
@@ -76,12 +79,7 @@ public class StatsCli implements Runnable {
     private void printCycleTimeStatistics(final List<Todo> todoList) {
         spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.STATS_CYCLE_TITLE));
 
-        DescriptiveStatistics stats = new DescriptiveStatistics();
-        todoList.stream()
-                .filter(todoStatistic::hasCycleTime)
-                .mapToLong(todoStatistic::getCycleTime)
-                .forEach(stats::addValue);
-
+        Statistic stats = timingStatsCalculator.calculateCycleTime(todoList);
         printStats(stats);
 
         Optional<Todo> max = todoList.stream()
@@ -99,7 +97,7 @@ public class StatsCli implements Runnable {
                 }));
         if (max.isPresent()) {
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.STATS_MAX_CYCLE_TIME,
-                    String.format("{time:'%s'}", period(ChronoUnit.DAYS.between(max.get().getAdditionDate().toInstant(), now.toInstant())))));
+                    String.format("{time:'%s'}", days2period(ChronoUnit.DAYS.between(max.get().getAdditionDate().toInstant(), now.toInstant())))));
             printTodo(max.get());
         }
 
@@ -111,7 +109,7 @@ public class StatsCli implements Runnable {
                 .filter(t -> !t.isParked())
                 .filter(t -> {
                     try {
-                        return ChronoUnit.DAYS.between(simpleDateFormat.parse(t.getTagValueList("started").get(0)).toInstant(), now.toInstant()) > stats.getMean() + stats.getStandardDeviation();
+                        return ChronoUnit.DAYS.between(simpleDateFormat.parse(t.getTagValueList("started").get(0)).toInstant(), now.toInstant()) > stats.getMean() + stats.getStdDev();
                     } catch (ParseException e) {
                         return false;
                     }
@@ -127,12 +125,7 @@ public class StatsCli implements Runnable {
     private void printLeadTimeStatistics(final List<Todo> todoList) {
         spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.STATS_LEAD_TITLE));
 
-        DescriptiveStatistics stats = new DescriptiveStatistics();
-        todoList.stream()
-                .filter(todoStatistic::hasLeadTime)
-                .mapToLong(todoStatistic::getLeadTime)
-                .forEach(stats::addValue);
-
+        Statistic stats = timingStatsCalculator.calculateLeadTime(todoList);
         printStats(stats);
 
         Optional<Todo> max = todoList.stream()
@@ -144,7 +137,7 @@ public class StatsCli implements Runnable {
                 .max(Comparator.comparing(t -> ChronoUnit.DAYS.between(t.getAdditionDate().toInstant(), now.toInstant())));
         if (max.isPresent()) {
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.STATS_MAX_LEAD_TIME,
-                    String.format("{time:'%s'}", period(ChronoUnit.DAYS.between(max.get().getAdditionDate().toInstant(), now.toInstant())))));
+                    String.format("{time:'%s'}", days2period(ChronoUnit.DAYS.between(max.get().getAdditionDate().toInstant(), now.toInstant())))));
             printTodo(max.get());
         }
 
@@ -154,7 +147,7 @@ public class StatsCli implements Runnable {
                 .filter(t -> !t.isDone())
                 .filter(t -> !t.isRemoved())
                 .filter(t -> !t.isParked())
-                .filter(t -> ChronoUnit.DAYS.between(t.getAdditionDate().toInstant(), now.toInstant()) > stats.getMean() + stats.getStandardDeviation())
+                .filter(t -> ChronoUnit.DAYS.between(t.getAdditionDate().toInstant(), now.toInstant()) > stats.getMean() + stats.getStdDev())
                 .collect(Collectors.toList());
         if (!largeTimeTodoList.isEmpty()) {
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.STATS_LARGE_LEAD_TIME));
@@ -165,12 +158,7 @@ public class StatsCli implements Runnable {
     private void printReactionTimeStatistics(final List<Todo> todoList) {
         spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.STATS_REACTION_TITLE));
 
-        DescriptiveStatistics stats = new DescriptiveStatistics();
-        todoList.stream()
-                .filter(todoStatistic::hasReactionTime)
-                .mapToLong(todoStatistic::getReactionTime)
-                .forEach(stats::addValue);
-
+        Statistic stats = timingStatsCalculator.calculateReactionTime(todoList);
         printStats(stats);
 
         Optional<Todo> max = todoList.stream()
@@ -182,7 +170,7 @@ public class StatsCli implements Runnable {
                 .max(Comparator.comparing(t -> ChronoUnit.DAYS.between(t.getAdditionDate().toInstant(), now.toInstant())));
         if (max.isPresent()) {
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.STATS_MAX_REACTION_TIME,
-                    String.format("{time:'%s'}", period(ChronoUnit.DAYS.between(max.get().getAdditionDate().toInstant(), now.toInstant())))));
+                    String.format("{time:'%s'}", days2period(ChronoUnit.DAYS.between(max.get().getAdditionDate().toInstant(), now.toInstant())))));
             printTodo(max.get());
         }
 
@@ -192,7 +180,7 @@ public class StatsCli implements Runnable {
                 .filter(t -> !t.isDone())
                 .filter(t -> !t.isRemoved())
                 .filter(t -> !t.isParked())
-                .filter(t -> ChronoUnit.DAYS.between(t.getAdditionDate().toInstant(), now.toInstant()) > stats.getMean() + stats.getStandardDeviation())
+                .filter(t -> ChronoUnit.DAYS.between(t.getAdditionDate().toInstant(), now.toInstant()) > stats.getMean() + stats.getStdDev())
                 .collect(Collectors.toList());
         if (!largeTimeTodoList.isEmpty()) {
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.STATS_LARGE_REACTION_TIME));
@@ -200,49 +188,35 @@ public class StatsCli implements Runnable {
         }
     }
 
-    private void printStats(final DescriptiveStatistics stats) {
+    private void printStats(final Statistic stats) {
         if (stats.getN() < 1) {
             spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.STATS_NOT_ENOUGH_DATA));
             return;
         }
 
-        String min = String.format("%.0f", stats.getMin());
-        String max = String.format("%.0f", stats.getMax());
-        String q1 = String.format("%.0f", stats.getPercentile(25));
-        String median = String.format("%.0f", stats.getPercentile(50));
-        String q3 = String.format("%.0f", stats.getPercentile(75));
-        String lowerIqr = String.format("%.0f", stats.getPercentile(25) - 1.5 * (stats.getPercentile(75) - stats.getPercentile(25)));
-        String upperIqr = String.format("%.0f", stats.getPercentile(75) + 1.5 * (stats.getPercentile(75) - stats.getPercentile(25)));
         spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.CHART_BOX,
                 String.format("{min:'%4s',max:'%4s',Q1:'%4s',Q3:'%4s',median:'%4s',trimmedMin:'%4s',trimmedMax:'%4s'}",
-                        min,
-                        max,
-                        q1,
-                        q3,
-                        median,
-                        lowerIqr,
-                        upperIqr
+                        stats.getMin(),
+                        stats.getMax(),
+                        stats.getQ1(),
+                        stats.getQ3(),
+                        stats.getMedian(),
+                        stats.getTrimmedMin(),
+                        stats.getTrimmedMax()
                 )));
 
         spec.commandLine().getOut().println("");
-        long size = stats.getN();
-        String mean = String.format("%.0f", stats.getMean());
-        String stdDev = String.format("%.0f", stats.getStandardDeviation());
-        String minOneStdDev = period((long) (stats.getMean() + -1 * stats.getStandardDeviation()));
-        String zeroStdDev = period((long) (stats.getMean() + 0 * stats.getStandardDeviation()));
-        String oneStdDev = period((long) (stats.getMean() + 1 * stats.getStandardDeviation()));
-        String twoStdDev = period((long) (stats.getMean() + 2 * stats.getStandardDeviation()));
-        String threeStdDev = period((long) (stats.getMean() + 3 * stats.getStandardDeviation()));
+
         spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.STATS_DESCRIPTIVE_TIME,
                 String.format("{size:'%s',mean:'%s',stdDev:'%s',oneStdDev:'%s',twoStdDev:'%s',threeStdDev:'%s',minOneStdDev:'%s',zeroStdDev:'%s'}",
-                        size,
-                        mean,
-                        stdDev,
-                        oneStdDev,
-                        twoStdDev,
-                        threeStdDev,
-                        minOneStdDev,
-                        zeroStdDev
+                        stats.getN(),
+                        stats.getMean(),
+                        stats.getStdDev(),
+                        stats.getOneStdDev(),
+                        stats.getTwoStdDev(),
+                        stats.getThreeStdDev(),
+                        stats.getMinOneStdDev(),
+                        stats.getMean()
                 )));
     }
 

@@ -21,13 +21,17 @@ public class TemplatedResourceBundle {
     }
 
     public String getString(final String templateKey, final String json) {
+        return getString(templateKey, gson.fromJson(json, Map.class));
+    }
+
+    public String getString(final String templateKey, final Object object) {
         try {
             Mustache mustache = new DefaultMustacheFactory().compile(new StringReader(resourceBundle.getString(templateKey)), templateKey);
             StringWriter stringWriter = new StringWriter();
-            return mustache.execute(stringWriter, gson.fromJson(json, Map.class)).toString();
+            return mustache.execute(stringWriter, object).toString();
         } catch (RuntimeException e) {
             Logger.debug(e);
-            return json;
+            return "Could not get string";
         }
     }
 

@@ -159,6 +159,19 @@ public class ListCliTest {
     }
 
     @Test(timeout = 256)
+    public void testStatistic() {
+        cliTester.execute("ls --incl-done").success()
+                .contains("Reaction").contains("Cycle").contains("Lead");
+    }
+
+    @Test(timeout = 256)
+    public void testStatisticDetail() {
+        cliTester.execute("ls --incl-done --detail").success()
+                .contains("Reaction").contains("Cycle").contains("Lead")
+                .contains("(Q1)=").contains("(Q2)=").contains("(Q3)=");
+    }
+
+    @Test(timeout = 256)
     public void testGroupByContext() {
         cliTester.execute("ls --group-by @").success()
                 .contains("CNP, Track1 Context")

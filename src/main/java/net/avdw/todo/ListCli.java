@@ -8,6 +8,7 @@ import net.avdw.todo.groupby.GroupByMixin;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
+import net.avdw.todo.stats.StatisticMixin;
 import net.avdw.todo.style.StyleApplicator;
 import org.codehaus.plexus.util.StringUtils;
 import org.tinylog.Logger;
@@ -44,6 +45,8 @@ public class ListCli implements Runnable, IExitCodeGenerator {
     private TemplatedResourceBundle templatedResourceBundle;
     @Inject
     private TodoTextCleaner todoTextCleaner;
+    @Mixin
+    private StatisticMixin statisticMixin;
 
     @Override
     public int getExitCode() {
@@ -59,6 +62,8 @@ public class ListCli implements Runnable, IExitCodeGenerator {
 
         spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TOTAL_SUMMARY,
                 String.format("{filtered:'%s',total:'%s'}", list.size(), repository.size())));
+
+        spec.commandLine().getOut().print(statisticMixin.renderStats(list));
     }
 
     private void printMap(final Map<String, ?> map, final Repository<Integer, Todo> repository, final GroupByMixin groupByMixin, final int depth) {
@@ -115,5 +120,4 @@ public class ListCli implements Runnable, IExitCodeGenerator {
         }
         spec.commandLine().getOut().println(runningStats.getDuration());
     }
-
 }

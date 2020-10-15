@@ -39,6 +39,10 @@ public final class ResourceBundleKey {
     public static final String STATS_REACTION_TITLE = "stats.reaction.title";
     public static final String STATS_CYCLE_TITLE = "stats.cycle.title";
     public static final String STATS_LEAD_TITLE = "stats.lead.title";
+    public static final String TIMING_CYCLE = "timing.cycle";
+    public static final String TIMING_LEAD = "timing.lead";
+    public static final String TIMING_REACTION = "timing.reaction";
+    public static final String TIMING_DETAIL = "timing.detail";
     public static final String TODO_LINE_ITEM = "todo.line.item(idx,todo)";
     public static final String STATS_DESCRIPTIVE_TIME = "stats.descriptive.time(size,mean,stdDev,oneStdDev,twoStdDev,threeStdDev,minOneStdDev,zeroStdDev)";
     public static final String TOTAL_SUMMARY = "total.summary(filtered,total)";

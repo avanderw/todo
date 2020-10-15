@@ -25,7 +25,7 @@ class MainModule extends AbstractModule {
         bind(RunningStats.class).toInstance(new RunningStats());
         bind(List.class).to(LinkedList.class);
         bind(Set.class).to(HashSet.class);
-        bind(ResourceBundle.class).toInstance(ResourceBundle.getBundle("messages", Locale.getDefault()));
+        bind(ResourceBundle.class).toInstance(ResourceBundle.getBundle("messages", Locale.ENGLISH));
 
         install(new StyleModule());
     }

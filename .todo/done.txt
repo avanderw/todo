@@ -82,3 +82,6 @@ x 2020-10-01 2019-07-26 @Add reporting on todo, in-progress and done for previou
 x 2020-10-01 2019-10-11 @Refactor priority shifting to not read the file twice 
 x 2020-10-01 2019-11-11 Create a property for style selection 
 x 2020-10-05 2020-10-04 Update commands to include parked, done, or removed todos
+x 2020-10-14 2019-08-12 @Add grouping feature to list, e.g. by project or search term
+x 2020-10-14 2020-10-07 Structure delivery around iterations with themes and create articles for each iteration
+x 2020-10-15 2020-10-14 Merge 'stats' functionality into all 'list' commands @tactical @must
