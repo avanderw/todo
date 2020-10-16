@@ -42,13 +42,9 @@ public class ArchiveCliTest {
 
     @Test(timeout = 250)
     public void testBasic() {
-        cliTester.execute("do 5").success();
-        cliTester.execute("rm 3").success();
-        cliTester.execute("park 2").success();
-
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneParkedOrRemoved = todoRepository.findAll(new IsDone().or(new IsParked()).or(new IsRemoved()));
-        assertEquals(7, doneParkedOrRemoved.size());
+        assertEquals(4, doneParkedOrRemoved.size());
 
         cliTester.execute("archive").success();
 

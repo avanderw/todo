@@ -5,6 +5,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
+import net.avdw.todo.ext.StartedExt;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.style.StyleModule;
@@ -26,6 +27,7 @@ class MainModule extends AbstractModule {
         bind(List.class).to(LinkedList.class);
         bind(Set.class).to(HashSet.class);
         bind(ResourceBundle.class).toInstance(ResourceBundle.getBundle("messages", Locale.ENGLISH));
+        bind(StartedExt.class).toInstance(new StartedExt("started"));
 
         install(new StyleModule());
     }

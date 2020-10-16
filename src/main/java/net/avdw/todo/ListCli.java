@@ -2,6 +2,7 @@ package net.avdw.todo;
 
 import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
+import net.avdw.todo.ext.StartedExt;
 import net.avdw.todo.filters.BooleanFilterMixin;
 import net.avdw.todo.filters.DateFilterMixin;
 import net.avdw.todo.groupby.GroupByMixin;
@@ -47,6 +48,8 @@ public class ListCli implements Runnable, IExitCodeGenerator {
     private TodoTextCleaner todoTextCleaner;
     @Mixin
     private StatisticMixin statisticMixin;
+    @Inject
+    private StartedExt startedExt;
 
     @Override
     public int getExitCode() {
@@ -61,7 +64,10 @@ public class ListCli implements Runnable, IExitCodeGenerator {
         });
 
         spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TOTAL_SUMMARY,
-                String.format("{filtered:'%s',total:'%s'}", list.size(), repository.size())));
+                String.format("{filtered:'%s',total:'%s',todo:'%s',started:'%s',done:'%s'}", list.size(), repository.size(),
+                list.stream().filter(startedExt::notStarted).count(),
+                list.stream().filter(startedExt::started).count(),
+                list.stream().filter(Todo::isDone).count())));
 
         spec.commandLine().getOut().print(statisticMixin.renderStats(list));
     }
