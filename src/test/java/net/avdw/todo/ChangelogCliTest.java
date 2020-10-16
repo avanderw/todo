@@ -30,7 +30,7 @@ public class ChangelogCliTest {
     @BeforeClass
     public static void beforeClass() {
         setup(todoPath);
-        cliTester = new CliTester(MainCli.class, new TestGuiceFactory(new TestModule(todoPath)));
+        cliTester = new CliTester(MainCli.class, new TestModule(todoPath));
         warmup(cliTester);
     }
 
@@ -119,7 +119,6 @@ public class ChangelogCliTest {
     @Test(timeout = 256)
     public void testClean() {
         cliTester.execute("pri 1").success();
-        cliTester.execute("do 2").success();
         cliTester.execute("changelog --clean").success()
                 .notContains("importance:").notContains("(A) ").notContains("2020-03-10").notContains("x 2")
                 .notContains("@iBank").notContains("+Live_Better").notContains("iBankAdmin").notContains("Funeral_Cover")

@@ -35,7 +35,7 @@ public class DoneCliTest {
     @BeforeClass
     public static void beforeClass() {
         setup(todoPath);
-        cliTester = new CliTester(MainCli.class, new TestGuiceFactory(new TestModule(todoPath)));
+        cliTester = new CliTester(MainCli.class, new TestModule(todoPath));
         warmup(cliTester);
     }
 

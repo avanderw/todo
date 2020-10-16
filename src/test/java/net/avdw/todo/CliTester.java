@@ -1,20 +1,19 @@
 package net.avdw.todo;
 
-import org.fusesource.jansi.AnsiConsole;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.Module;
+import com.google.inject.name.Names;
 import org.tinylog.Logger;
 import picocli.CommandLine;
 
 import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Utility class to assist with testing picocli applications.
@@ -27,39 +26,15 @@ import static org.junit.Assert.assertTrue;
  */
 public class CliTester {
     private final Class<?> cliClass;
-    private final TestGuiceFactory guiceFactory;
+    private final Module module;
     private ByteArrayOutputStream err;
     private int exitCode;
     private ByteArrayOutputStream out;
     private String[] lastArgs;
 
-    public CliTester(final Class<?> cliClass, final TestGuiceFactory guiceFactory) {
+    public CliTester(final Class<?> cliClass, final Module module) {
         this.cliClass = cliClass;
-        this.guiceFactory = guiceFactory;
-    }
-
-    private void assertFailure(final int exitCode) {
-        if (!out.toString().isEmpty()) {
-            Logger.debug("Standard output: {}\n{}", Arrays.toString(lastArgs), out.toString());
-        }
-        if (!err.toString().isEmpty()) {
-            Logger.debug("Error output: {}\n{}", Arrays.toString(lastArgs), err.toString());
-        }
-        assertNotEquals("MUST HAVE error output", "", err.toString().trim());
-        assertEquals("MUST NOT HAVE standard output", "", out.toString().trim());
-        assertNotEquals(0, exitCode);
-    }
-
-    private void assertSuccess(final int exitCode) {
-        if (!out.toString().isEmpty()) {
-            Logger.debug("Standard output: {}\n{}", Arrays.toString(lastArgs), out.toString());
-        }
-        if (!err.toString().isEmpty()) {
-            Logger.error("Error output: {}\n{}", Arrays.toString(lastArgs), err.toString());
-        }
-        assertEquals("MUST NOT HAVE error output", "", err.toString().trim());
-        assertNotEquals("MUST HAVE standard output", "", out.toString().trim());
-        assertEquals(0, exitCode);
+        this.module = module;
     }
 
     public CliTester contains(final String text) {
@@ -78,13 +53,15 @@ public class CliTester {
         return execute(null);
     }
 
+    public CliTester execute(final String command) {
+        return execute(command, null);
+    }
+
     public CliTester execute(final String command, final String... arguments) {
-        err = new ByteArrayOutputStream();
-        out = new ByteArrayOutputStream();
-        guiceFactory.reset();
-        CommandLine commandLine = new CommandLine(cliClass, guiceFactory);
-        commandLine.setOut(new PrintWriter(AnsiConsole.wrapOutputStream(out), true, StandardCharsets.UTF_8));
-        commandLine.setErr(new PrintWriter(AnsiConsole.wrapOutputStream(err), true, StandardCharsets.UTF_8));
+        Injector injector = Guice.createInjector(module);
+        out = injector.getInstance(Key.get(ByteArrayOutputStream.class, Names.named("out")));
+        err = injector.getInstance(Key.get(ByteArrayOutputStream.class, Names.named("err")));
+        CommandLine commandLine = injector.getInstance(CommandLineBuilder.class).build(cliClass, injector);
         if (command == null) {
             exitCode = commandLine.execute();
         } else {
@@ -103,24 +80,26 @@ public class CliTester {
         return this;
     }
 
-    public CliTester execute(final String command) {
-        return execute(command, null);
-    }
-
     public CliTester failure() {
         assertFailure(exitCode);
         return this;
     }
 
+    private void assertFailure(final int exitCode) {
+        if (!out.toString().isEmpty()) {
+            Logger.debug("Standard output: {}\n{}", Arrays.toString(lastArgs), out.toString());
+        }
+        if (!err.toString().isEmpty()) {
+            Logger.debug("Error output: {}\n{}", Arrays.toString(lastArgs), err.toString());
+        }
+        assertNotEquals("MUST HAVE error output", "", err.toString().trim());
+        assertEquals("MUST NOT HAVE standard output", "", out.toString().trim());
+        assertNotEquals(0, exitCode);
+    }
+
     public CliTester notContains(final String text) {
         assertFalse(String.format("Output MUST NOT contain '%s'", text), out.toString().contains(text));
         assertFalse(String.format("Error MUST NOT contain '%s'", text), err.toString().contains(text));
-        return this;
-    }
-
-    public CliTester notStartsWith(final String text) {
-        assertFalse(String.format("Output MUST NOT start with '%s'", text), out.toString().startsWith(text));
-        assertFalse(String.format("Error MUST NOT start with '%s'", text), err.toString().startsWith(text));
         return this;
     }
 
@@ -132,5 +111,17 @@ public class CliTester {
     public CliTester success() {
         assertSuccess(exitCode);
         return this;
+    }
+
+    private void assertSuccess(final int exitCode) {
+        if (!out.toString().isEmpty()) {
+            Logger.debug("Standard output: {}\n{}", Arrays.toString(lastArgs), out.toString());
+        }
+        if (!err.toString().isEmpty()) {
+            Logger.error("Error output: {}\n{}", Arrays.toString(lastArgs), err.toString());
+        }
+        assertEquals("MUST NOT HAVE error output", "", err.toString().trim());
+        assertNotEquals("MUST HAVE standard output", "", out.toString().trim());
+        assertEquals(0, exitCode);
     }
 }

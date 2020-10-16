@@ -32,7 +32,7 @@ public class ListCliTest {
     @BeforeClass
     public static void beforeClass() {
         setup(todoPath);
-        cliTester = new CliTester(MainCli.class, new TestGuiceFactory(new TestModule(todoPath)));
+        cliTester = new CliTester(MainCli.class, new TestModule(todoPath));
         warmup(cliTester);
     }
 
@@ -152,10 +152,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testDone() {
-        cliTester.execute("do 1,2,3,4,5,6,7,8,9").success();
-        cliTester.execute("archive").success();
-        cliTester.execute("do 1").success();
-        cliTester.execute("ls --incl-done").success().startsWith("[  1]").count("\\[", 78);
+        cliTester.execute("ls --incl-done").success().startsWith("[  1]").count("\\[", 80);
     }
 
     @Test(timeout = 256)
@@ -231,7 +228,7 @@ public class ListCliTest {
         cliTester.execute("park 1,2,3,4,5,6,7,8,9").success();
         cliTester.execute("archive").success();
         cliTester.execute("park 1").success();
-        cliTester.execute("ls --incl-parked").success().count("\\[", 71).startsWith("[  1]");
+        cliTester.execute("ls --incl-parked").success().count("\\[", 70).startsWith("[  1]");
     }
 
     @Test(timeout = 256)
@@ -239,7 +236,7 @@ public class ListCliTest {
         cliTester.execute("rm 1,2,3,4,5,6,7,8,9").success();
         cliTester.execute("archive").success();
         cliTester.execute("rm 1").success();
-        cliTester.execute("ls --incl-removed").success().count("\\[", 70).startsWith("[  1]");
+        cliTester.execute("ls --incl-removed").success().count("\\[", 69).startsWith("[  1]");
     }
 
     @Test(timeout = 256)
