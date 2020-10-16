@@ -40,7 +40,7 @@ public class PriorityCli implements Runnable {
     @Inject
     private StyleApplicator styleApplicator;
     @Inject
-    private TemplatedResourceBundle templatedResourceBundle;
+    private TemplatedResource templatedResource;
     @Inject
     private Repository<Integer, Todo> todoRepository;
 
@@ -58,7 +58,7 @@ public class PriorityCli implements Runnable {
             Logger.debug("Collapse priority todos");
             List<Todo> priorityTodoList = todoRepository.findAll(new IsPriority());
             if (priorityTodoList.isEmpty()) {
-                spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.NO_PRIORITY_TODO));
+                spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.NO_PRIORITY_TODO));
             } else {
                 Map<Priority, Priority> mapping = new HashMap<>();
                 List<Priority> usedPriorityList = priorityTodoList.stream().map(Todo::getPriority).sorted(Enum::compareTo).collect(Collectors.toList());
@@ -78,7 +78,7 @@ public class PriorityCli implements Runnable {
                     Priority pri = todo.getPriority();
                     Todo updatedTodo = new Todo(todo.getId(), todo.getText().replaceFirst(String.format("\\(%s\\)", pri.name()), String.format("(%s)", mapping.get(pri))));
                     todoRepository.update(updatedTodo);
-                    spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
+                    spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.TODO_LINE_ITEM,
                             String.format("{idx:'%3s',todo:\"%s\"}", updatedTodo.getIdx(), styleApplicator.apply(updatedTodo.getText()).replaceAll("\"", "\\\\\""))));
                 });
                 todoRepository.commit();
@@ -93,7 +93,7 @@ public class PriorityCli implements Runnable {
             priorityTodoList.forEach(todo -> {
                 Todo updatedTodo = new Todo(todo.getId(), todo.getText().replaceFirst("\\([A-Z]\\) ", ""));
                 todoRepository.update(updatedTodo);
-                spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
+                spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.TODO_LINE_ITEM,
                         String.format("{idx:'%3s',todo:\"%s\"}", updatedTodo.getIdx(), styleApplicator.apply(updatedTodo.getText()).replaceAll("\"", "\\\\\""))));
             });
             todoRepository.commit();
@@ -104,9 +104,9 @@ public class PriorityCli implements Runnable {
             Logger.debug("No index list provided");
             List<Todo> priorityTodoList = todoRepository.findAll(new IsPriority());
             if (priorityTodoList.isEmpty()) {
-                spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.NO_PRIORITY_TODO));
+                spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.NO_PRIORITY_TODO));
             } else {
-                priorityTodoList.forEach(todo -> spec.commandLine().getOut().println(templatedResourceBundle.getString(
+                priorityTodoList.forEach(todo -> spec.commandLine().getOut().println(templatedResource.populate(
                         ResourceBundleKey.TODO_LINE_ITEM,
                         String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todo.getText()).replaceAll("\"", "\\\\\"")))));
 
@@ -120,7 +120,7 @@ public class PriorityCli implements Runnable {
                     Todo todoById = todoRepository.findById(id).orElseThrow();
                     Todo removePriorityTodo = new Todo(todoById.getId(), todoById.getText().replaceFirst("\\([A-Z]\\) ", ""));
                     todoRepository.update(removePriorityTodo);
-                    spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
+                    spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.TODO_LINE_ITEM,
                             String.format("{idx:'%3s',todo:\"%s\"}", removePriorityTodo.getIdx(), styleApplicator.apply(removePriorityTodo.getText()).replaceAll("\"", "\\\\\""))));
                 });
                 todoRepository.commit();
@@ -144,11 +144,11 @@ public class PriorityCli implements Runnable {
                 int id = idx - 1;
                 Todo todoById = todoRepository.findById(id).orElseThrow();
                 if (new IsDone().isSatisfiedBy(todoById)) {
-                    spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.PRIORITY_NOT_ALLOWED_DONE));
+                    spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.PRIORITY_NOT_ALLOWED_DONE));
                 } else if (new IsRemoved().isSatisfiedBy(todoById)) {
-                    spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.PRIORITY_NOT_ALLOWED_REMOVED));
+                    spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.PRIORITY_NOT_ALLOWED_REMOVED));
                 } else if (new IsParked().isSatisfiedBy(todoById)) {
-                    spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.PRIORITY_NOT_ALLOWED_PARKED));
+                    spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.PRIORITY_NOT_ALLOWED_PARKED));
                 } else {
                     String priorityTodoText;
                     if (new IsPriority().isSatisfiedBy(todoById)) {
@@ -159,7 +159,7 @@ public class PriorityCli implements Runnable {
 
                     Todo priorityTodo = new Todo(id, String.format("(%s) %s", nextPriority(availablePriorityList), priorityTodoText));
                     todoRepository.update(priorityTodo);
-                    spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
+                    spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.TODO_LINE_ITEM,
                             String.format("{idx:'%3s',todo:\"%s\"}", idx, styleApplicator.apply(priorityTodo.getText()).replaceAll("\"", "\\\\\""))));
                 }
             });

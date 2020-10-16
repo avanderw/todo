@@ -43,7 +43,7 @@ public class ListCli implements Runnable, IExitCodeGenerator {
     @Inject
     private StyleApplicator styleApplicator;
     @Inject
-    private TemplatedResourceBundle templatedResourceBundle;
+    private TemplatedResource templatedResource;
     @Inject
     private TodoTextCleaner todoTextCleaner;
     @Mixin
@@ -59,11 +59,11 @@ public class ListCli implements Runnable, IExitCodeGenerator {
     private void printList(final List<Todo> list, final Repository<Integer, Todo> repository) {
         list.forEach(todo -> {
             String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
-            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
+            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.TODO_LINE_ITEM,
                     String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
         });
 
-        spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TOTAL_SUMMARY,
+        spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.TOTAL_SUMMARY,
                 String.format("{filtered:'%s',total:'%s',todo:'%s',started:'%s',done:'%s'}", list.size(), repository.size(),
                 list.stream().filter(startedExt::notStarted).count(),
                 list.stream().filter(startedExt::started).count(),
@@ -76,9 +76,9 @@ public class ListCli implements Runnable, IExitCodeGenerator {
         map.forEach((key, value) -> {
             String json = String.format("{type:'%s',title:'%s'}", groupByMixin.getGroupByAtDepth(depth).name(), StringUtils.capitalise(key.isBlank() ? "No" : key));
             String header = switch (depth) {
-                case 0 -> templatedResourceBundle.getString(ResourceBundleKey.GROUP_BY_HEADING, json);
-                case 1 -> templatedResourceBundle.getString(ResourceBundleKey.GROUP_BY_HEADING_2, json);
-                case 2 -> templatedResourceBundle.getString(ResourceBundleKey.GROUP_BY_HEADING_3, json);
+                case 0 -> templatedResource.populate(ResourceBundleKey.GROUP_BY_HEADING, json);
+                case 1 -> templatedResource.populate(ResourceBundleKey.GROUP_BY_HEADING_2, json);
+                case 2 -> templatedResource.populate(ResourceBundleKey.GROUP_BY_HEADING_3, json);
                 default -> throw new UnsupportedOperationException();
             };
             spec.commandLine().getOut().println(header);
@@ -98,23 +98,20 @@ public class ListCli implements Runnable, IExitCodeGenerator {
     @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
             justification = "todoPath will always have a directory parent")
     public void run() {
-        Specification<Integer, Todo> specification = new Any<>();
-
-        specification = dateFilterMixin.specification(specification);
-        specification = booleanFilterMixin.specification(specification);
+        Specification<Integer, Todo> specification = dateFilterMixin.specification();
+        specification = specification.and(booleanFilterMixin.specification());
 
         Logger.debug(specification);
-
-        Repository<Integer, Todo> scopedRepository = repositoryMixin.allRepositories();
+        Repository<Integer, Todo> scopedRepository = repositoryMixin.repository();
         List<Todo> todoList = scopedRepository.findAll(specification);
         if (todoList.isEmpty()) {
-            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.NO_TODO_FOUND));
+            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.NO_TODO_FOUND));
             return;
         }
 
         groupByMixin.setup();
         if (groupByMixin.depth() > 3) {
-            spec.commandLine().getErr().println(templatedResourceBundle.getString(ResourceBundleKey.GROUP_BY_DEPTH_UNSUPPORTED));
+            spec.commandLine().getErr().println(templatedResource.populate(ResourceBundleKey.GROUP_BY_DEPTH_UNSUPPORTED));
             throw new UnsupportedOperationException();
         }
 

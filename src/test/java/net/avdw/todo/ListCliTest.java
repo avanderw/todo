@@ -82,7 +82,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testAndOrNotFilter() {
-        cliTester.execute("ls service refactor --or relationship,enforcer --not card").success().count("\\[", 7);
+        cliTester.execute("ls --and service,refactor --or relationship,enforcer --not card").success().count("\\[", 7);
     }
 
     @Test(timeout = 256)
@@ -94,8 +94,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testBasicFilter() {
-        cliTester.execute("ls service refactor").success().startsWith("[  6]").count("\\[", 6);
-        cliTester.execute("ls service,refactor").success().startsWith("[  6]").count("\\[", 6);
+        cliTester.execute("ls --and service,refactor").success().startsWith("[  6]").count("\\[", 6);
     }
 
     @Test(timeout = 256)
@@ -178,7 +177,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testGroupByContextSpecific() {
-        cliTester.execute("ls @iBank --or @Track1 --group-by @").success().count("\\s## ", 6);
+        cliTester.execute("ls --and @iBank --or @Track1 --group-by @").success().count("\\s## ", 6);
     }
 
     @Test(timeout = 256)
@@ -193,7 +192,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testGroupByProjectSpecific() {
-        cliTester.execute("ls +ROB --or +Access_Facility --group-by +").success().count("\\s## ", 2);
+        cliTester.execute("ls --and +ROB --or +Access_Facility --group-by +").success().count("\\s## ", 2);
     }
 
     @Test(timeout = 256)
@@ -219,23 +218,19 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testOrFilter() {
-        cliTester.execute("ls service,refactor --or relationship --or enforcer").success().startsWith("[  5]").count("\\[", 8);
-        cliTester.execute("ls service,refactor --or relationship,enforcer").success().startsWith("[  5]").count("\\[", 8);
+        cliTester.execute("ls --and service,refactor --or relationship --or enforcer").success().startsWith("[  5]").count("\\[", 8);
+        cliTester.execute("ls --and service,refactor --or relationship,enforcer").success().startsWith("[  5]").count("\\[", 8);
     }
 
     @Test(timeout = 256)
     public void testParked() {
-        cliTester.execute("park 1,2,3,4,5,6,7,8,9").success();
         cliTester.execute("archive").success();
-        cliTester.execute("park 1").success();
         cliTester.execute("ls --incl-parked").success().count("\\[", 70).startsWith("[  1]");
     }
 
     @Test(timeout = 256)
     public void testRemoved() {
-        cliTester.execute("rm 1,2,3,4,5,6,7,8,9").success();
         cliTester.execute("archive").success();
-        cliTester.execute("rm 1").success();
         cliTester.execute("ls --incl-removed").success().count("\\[", 69).startsWith("[  1]");
     }
 

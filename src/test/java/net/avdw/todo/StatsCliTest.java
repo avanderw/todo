@@ -95,7 +95,7 @@ public class StatsCliTest {
 
     @Test(timeout = 256)
     public void testContext() {
-        cliTester.execute("stats @USSD").success();
+        cliTester.execute("stats --and @USSD").success();
     }
 
     @Test(timeout = 256)
@@ -108,17 +108,17 @@ public class StatsCliTest {
 
     @Test(timeout = 256)
     public void testOrFilter() {
-        cliTester.execute("stats service,refactor --or relationship --or enforcer").success();
+        cliTester.execute("stats --and service,refactor --or relationship --or enforcer").success();
     }
 
     @Test(timeout = 256)
     public void testProject() {
-        cliTester.execute("stats +Live_Better").success();
+        cliTester.execute("stats --and +Live_Better").success();
     }
 
     @Test(timeout = 256)
     public void testTag() {
-        cliTester.execute("stats urgency:5").success();
+        cliTester.execute("stats --and urgency:5").success();
     }
 
 }

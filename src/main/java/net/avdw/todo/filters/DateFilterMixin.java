@@ -2,7 +2,7 @@ package net.avdw.todo.filters;
 
 import com.google.inject.Inject;
 import net.avdw.todo.ResourceBundleKey;
-import net.avdw.todo.TemplatedResourceBundle;
+import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.domain.IsAfterAddedDate;
 import net.avdw.todo.domain.IsAfterChangedDate;
 import net.avdw.todo.domain.IsAfterDoneDate;
@@ -12,6 +12,7 @@ import net.avdw.todo.domain.IsBeforeChangedDate;
 import net.avdw.todo.domain.IsBeforeDoneDate;
 import net.avdw.todo.domain.IsBeforeTagDate;
 import net.avdw.todo.domain.Todo;
+import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Specification;
 import org.tinylog.Logger;
 import picocli.CommandLine.Model.CommandSpec;
@@ -45,28 +46,28 @@ public class DateFilterMixin implements Filter<Integer, Todo> {
     @Spec
     private CommandSpec spec;
     @Inject
-    private TemplatedResourceBundle templatedResourceBundle;
+    private TemplatedResource templatedResource;
 
-    public Specification<Integer, Todo> specification(final Specification<Integer, Todo> specification) {
-        Specification<Integer, Todo> localSpecification = specification;
+    public Specification<Integer, Todo> specification() {
+        Specification<Integer, Todo> specification = new Any<>();
         int exitCode = 0;
         if (afterAddedDate != null) {
-            localSpecification = localSpecification.and(new IsAfterAddedDate(afterAddedDate));
+            specification = specification.and(new IsAfterAddedDate(afterAddedDate));
         }
         if (beforeAddedDate != null) {
-            localSpecification = localSpecification.and(new IsBeforeAddedDate(beforeAddedDate));
+            specification = specification.and(new IsBeforeAddedDate(beforeAddedDate));
         }
         if (afterDoneDate != null) {
-            localSpecification = localSpecification.and(new IsAfterDoneDate(afterDoneDate));
+            specification = specification.and(new IsAfterDoneDate(afterDoneDate));
         }
         if (beforeDoneDate != null) {
-            localSpecification = localSpecification.and(new IsBeforeDoneDate(beforeDoneDate));
+            specification = specification.and(new IsBeforeDoneDate(beforeDoneDate));
         }
         if (afterChangeDate != null) {
-            localSpecification = localSpecification.and(new IsAfterChangedDate(afterChangeDate));
+            specification = specification.and(new IsAfterChangedDate(afterChangeDate));
         }
         if (beforeChangeDate != null) {
-            localSpecification = localSpecification.and(new IsBeforeChangedDate(beforeChangeDate));
+            specification = specification.and(new IsBeforeChangedDate(beforeChangeDate));
         }
         for (String afterTag : afterTagList) {
             String[] afterTagSplit = afterTag.split(":");
@@ -78,14 +79,14 @@ public class DateFilterMixin implements Filter<Integer, Todo> {
                 } catch (ParseException e) {
                     Logger.debug(e);
                     exitCode = 1;
-                    spec.commandLine().getErr().println(templatedResourceBundle.getString(ResourceBundleKey.INVALID_DATE_FORMAT,
+                    spec.commandLine().getErr().println(templatedResource.populate(ResourceBundleKey.INVALID_DATE_FORMAT,
                             String.format("{date:'%s'}", afterTagSplit[1])));
                     continue;
                 }
-                localSpecification = specification.and(new IsAfterTagDate(tag, date));
+                specification = specification.and(new IsAfterTagDate(tag, date));
             } else {
                 Logger.debug("Unknown after tag ({}) should be tag:value");
-                spec.commandLine().getErr().println(templatedResourceBundle.getString(ResourceBundleKey.INVALID_TAG_FORMAT,
+                spec.commandLine().getErr().println(templatedResource.populate(ResourceBundleKey.INVALID_TAG_FORMAT,
                         String.format("{tag:'%s'}", afterTag)));
                 exitCode = 1;
             }
@@ -101,14 +102,14 @@ public class DateFilterMixin implements Filter<Integer, Todo> {
                 } catch (ParseException e) {
                     Logger.debug(e);
                     exitCode = 1;
-                    spec.commandLine().getErr().println(templatedResourceBundle.getString(ResourceBundleKey.INVALID_DATE_FORMAT,
+                    spec.commandLine().getErr().println(templatedResource.populate(ResourceBundleKey.INVALID_DATE_FORMAT,
                             String.format("{date:'%s'}", beforeTagSplit[1])));
                     continue;
                 }
-                localSpecification = specification.and(new IsBeforeTagDate(tag, date));
+                specification = specification.and(new IsBeforeTagDate(tag, date));
             } else {
                 Logger.debug("Unknown before tag ({}) should be tag:value");
-                spec.commandLine().getErr().println(templatedResourceBundle.getString(ResourceBundleKey.INVALID_TAG_FORMAT,
+                spec.commandLine().getErr().println(templatedResource.populate(ResourceBundleKey.INVALID_TAG_FORMAT,
                         String.format("{tag:'%s'}", beforeTag)));
                 exitCode = 1;
             }
@@ -116,6 +117,6 @@ public class DateFilterMixin implements Filter<Integer, Todo> {
         if (exitCode != 0) {
             throw new UnsupportedOperationException();
         }
-        return localSpecification;
+        return specification;
     }
 }

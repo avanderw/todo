@@ -26,7 +26,7 @@ public class EditCli implements Runnable, IExitCodeGenerator {
     @Spec
     private CommandSpec spec;
     @Inject
-    private TemplatedResourceBundle templatedResourceBundle;
+    private TemplatedResource templatedResource;
     @Inject
     private Repository<Integer, Todo> todoRepository;
     @Inject
@@ -60,7 +60,7 @@ public class EditCli implements Runnable, IExitCodeGenerator {
             todoText = todoText.replaceAll("\\s+", " ");
             Todo todo = new Todo(id, todoText);
             todoRepository.update(todo);
-            spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
+            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.TODO_LINE_ITEM,
                     String.format("{idx:'%3s',todo:\"%s\"}", idx, styleApplicator.apply(todo.getText()).replaceAll("\"", "\\\\\""))));
         });
         todoRepository.commit();

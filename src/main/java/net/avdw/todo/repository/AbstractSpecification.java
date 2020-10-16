@@ -4,9 +4,7 @@ import java.lang.reflect.ParameterizedType;
 
 public abstract class AbstractSpecification<I, T extends IdType<I>> implements Specification<I, T> {
     @Override
-    public boolean isSatisfiedBy(final T t) {
-        throw new UnsupportedOperationException();
-    }
+    public abstract boolean isSatisfiedBy(final T t);
 
     @Override
     public Specification<I, T> and(final Specification<I, T> other) {

@@ -22,7 +22,7 @@ public class ParkCli implements Runnable {
     @Spec
     private CommandSpec spec;
     @Inject
-    private TemplatedResourceBundle templatedResourceBundle;
+    private TemplatedResource templatedResource;
     @Inject
     private Repository<Integer, Todo> todoRepository;
     @Inject
@@ -37,7 +37,7 @@ public class ParkCli implements Runnable {
                     todoRepository.update(new Todo(id, String.format("p %s %s",
                             simpleDateFormat.format(new Date()),
                             todoRepository.findById(id).orElseThrow().toString().replaceFirst("\\([A-Z]\\) ", ""))));
-                    spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
+                    spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.TODO_LINE_ITEM,
                             String.format("{idx:'%3s',todo:\"%s\"}", idx, styleApplicator.apply(todoRepository.findById(id).orElseThrow().getText()).replaceAll("\"", "\\\\\""))));
                 });
         todoRepository.commit();

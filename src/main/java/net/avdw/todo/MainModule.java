@@ -1,19 +1,26 @@
 package net.avdw.todo;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
 import net.avdw.todo.ext.StartedExt;
+import net.avdw.todo.plugin.Plugin;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.style.StyleModule;
-import picocli.CommandLine;
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.tinylog.Logger;
 
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,6 +43,17 @@ class MainModule extends AbstractModule {
         bind(PrintWriter.class).annotatedWith(Names.named("out")).toInstance(new PrintWriter(new OutputStreamWriter(System.out, StandardCharsets.UTF_8), true));
         bind(PrintWriter.class).annotatedWith(Names.named("err")).toInstance(new PrintWriter(new OutputStreamWriter(System.err, StandardCharsets.UTF_8), true));
 
+        Reflections reflection = new Reflections(new ConfigurationBuilder()
+                .setUrls(ClasspathHelper.forPackage("net.avdw.todo.plugin"))
+                .setScanners(new SubTypesScanner()));
+        reflection.getSubTypesOf(Module.class).stream().filter(m->m.isAnnotationPresent(Plugin.class)).forEach(module -> {
+            try {
+                Logger.debug("Registering plugin module: {}", module.getSimpleName());
+                install(module.getDeclaredConstructor().newInstance());
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                Logger.error(e);
+            }
+        });
         install(new StyleModule());
     }
 

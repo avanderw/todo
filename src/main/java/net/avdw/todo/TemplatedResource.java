@@ -2,6 +2,7 @@ package net.avdw.todo;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import org.tinylog.Logger;
@@ -11,22 +12,25 @@ import java.io.StringWriter;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class TemplatedResourceBundle {
+public class TemplatedResource {
     private final Gson gson = new Gson();
     private final ResourceBundle resourceBundle;
+    private final MustacheFactory mustacheFactory;
 
     @Inject
-    public TemplatedResourceBundle(final ResourceBundle resourceBundle) {
+    public TemplatedResource(final ResourceBundle resourceBundle) {
         this.resourceBundle = resourceBundle;
+        mustacheFactory = new DefaultMustacheFactory();
     }
 
-    public String getString(final String templateKey, final String json) {
-        return getString(templateKey, gson.fromJson(json, Map.class));
+    public String populate(final String key, final String json) {
+        return populate(key, gson.fromJson(json, Map.class));
     }
 
-    public String getString(final String templateKey, final Object object) {
+    public String populate(final String key, final Object object) {
         try {
-            Mustache mustache = new DefaultMustacheFactory().compile(new StringReader(resourceBundle.getString(templateKey)), templateKey);
+            StringReader stringReader = new StringReader(resourceBundle.getString(key));
+            Mustache mustache = mustacheFactory.compile(stringReader, key);
             StringWriter stringWriter = new StringWriter();
             return mustache.execute(stringWriter, object).toString();
         } catch (RuntimeException e) {
@@ -35,7 +39,7 @@ public class TemplatedResourceBundle {
         }
     }
 
-    public String getString(final String templateKey) {
-        return getString(templateKey, "{}");
+    public String populate(final String key) {
+        return populate(key, "{}");
     }
 }

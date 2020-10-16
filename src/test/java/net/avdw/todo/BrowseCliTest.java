@@ -1,4 +1,4 @@
-package net.avdw.todo.action;
+package net.avdw.todo;
 
 import lombok.SneakyThrows;
 import net.avdw.todo.CliTester;
@@ -30,12 +30,6 @@ public class BrowseCliTest {
         setup(todoPath);
         cliTester = new CliTester(MainCli.class, new TestModule(todoPath));
         warmup(cliTester);
-    }
-
-    @Test(timeout = 256)
-    @SneakyThrows
-    public void testBasic() {
-        cliTester.execute("browse").success();
     }
 
     @Test(timeout = 256)

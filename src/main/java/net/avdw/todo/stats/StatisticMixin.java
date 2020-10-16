@@ -2,7 +2,7 @@ package net.avdw.todo.stats;
 
 import com.google.inject.Inject;
 import net.avdw.todo.ResourceBundleKey;
-import net.avdw.todo.TemplatedResourceBundle;
+import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.format.DayFormatter;
 import picocli.CommandLine.Option;
@@ -13,7 +13,7 @@ public class StatisticMixin {
     @Option(names = "--detail", descriptionKey = "statistic.detail.desc")
     private boolean detail;
     @Inject
-    private TemplatedResourceBundle templatedResourceBundle;
+    private TemplatedResource templatedResource;
     @Inject
     private TimingConfidence timingConfidence;
     @Inject
@@ -23,30 +23,30 @@ public class StatisticMixin {
         StringBuilder sb = new StringBuilder();
         Statistic reactionTimeStatistic = timingStatsCalculator.calculateReactionTime(list);
         if (reactionTimeStatistic.getN() != 0) {
-            sb.append(templatedResourceBundle.getString(ResourceBundleKey.TIMING_REACTION,
+            sb.append(templatedResource.populate(ResourceBundleKey.TIMING_REACTION,
                     String.format("{timing:'%s'}", DayFormatter.days2period(timingConfidence.estimate(reactionTimeStatistic)))));
             if (detail) {
-                sb.append(templatedResourceBundle.getString(ResourceBundleKey.TIMING_DETAIL, toRoundedJson(reactionTimeStatistic)));
+                sb.append(templatedResource.populate(ResourceBundleKey.TIMING_DETAIL, toRoundedJson(reactionTimeStatistic)));
             }
             sb.append("\n");
         }
 
         Statistic cycleTimeStatistic = timingStatsCalculator.calculateCycleTime(list);
         if (cycleTimeStatistic.getN() != 0) {
-            sb.append(templatedResourceBundle.getString(ResourceBundleKey.TIMING_CYCLE,
+            sb.append(templatedResource.populate(ResourceBundleKey.TIMING_CYCLE,
                     String.format("{timing:'%s'}", DayFormatter.days2period(timingConfidence.estimate(cycleTimeStatistic)))));
             if (detail) {
-                sb.append(templatedResourceBundle.getString(ResourceBundleKey.TIMING_DETAIL, toRoundedJson(cycleTimeStatistic)));
+                sb.append(templatedResource.populate(ResourceBundleKey.TIMING_DETAIL, toRoundedJson(cycleTimeStatistic)));
             }
             sb.append("\n");
         }
 
         Statistic leadTimeStatistic = timingStatsCalculator.calculateLeadTime(list);
         if (leadTimeStatistic.getN() != 0) {
-            sb.append(templatedResourceBundle.getString(ResourceBundleKey.TIMING_LEAD,
+            sb.append(templatedResource.populate(ResourceBundleKey.TIMING_LEAD,
                     String.format("{timing:'%s'}", DayFormatter.days2period(timingConfidence.estimate(leadTimeStatistic)))));
             if (detail) {
-                sb.append(templatedResourceBundle.getString(ResourceBundleKey.TIMING_DETAIL, toRoundedJson(leadTimeStatistic)));
+                sb.append(templatedResource.populate(ResourceBundleKey.TIMING_DETAIL, toRoundedJson(leadTimeStatistic)));
             }
             sb.append("\n");
         }

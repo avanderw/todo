@@ -127,7 +127,7 @@ public class ChangelogCliTest {
 
     @Test(timeout = 256)
     public void testContext() {
-        cliTester.execute("changelog @USSD").success()
+        cliTester.execute("changelog --and @USSD").success()
                 .contains("2019/03").contains("2019/08")
                 .count("\\[", 16);
     }
@@ -144,24 +144,24 @@ public class ChangelogCliTest {
 
     @Test(timeout = 256)
     public void testOrFilter() {
-        cliTester.execute("changelog service,refactor --or relationship --or enforcer").success()
+        cliTester.execute("changelog --and service,refactor --or relationship --or enforcer").success()
                 .contains("2018/10").contains("2019/05")
                 .count("\\[", 8);
-        cliTester.execute("changelog service,refactor --or relationship,enforcer").success()
+        cliTester.execute("changelog --and service,refactor --or relationship,enforcer").success()
                 .contains("2018/10").contains("2019/05")
                 .count("\\[", 8);
     }
 
     @Test(timeout = 256)
     public void testProject() {
-        cliTester.execute("changelog +Live_Better").success()
+        cliTester.execute("changelog --and +Live_Better").success()
                 .contains("2020/01")
                 .count("\\[", 2);
     }
 
     @Test(timeout = 256)
     public void testTag() {
-        cliTester.execute("changelog urgency:5").success().contains("2018/07").count("\\[", 10);
+        cliTester.execute("changelog --and urgency:5").success().contains("2018/07").count("\\[", 10);
     }
 
     @Test(timeout = 256)

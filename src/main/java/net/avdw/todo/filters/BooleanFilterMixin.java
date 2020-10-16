@@ -2,16 +2,15 @@ package net.avdw.todo.filters;
 
 import net.avdw.todo.domain.IsContaining;
 import net.avdw.todo.domain.Todo;
+import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Specification;
-import picocli.CommandLine;
 import picocli.CommandLine.Option;
-import picocli.CommandLine.Parameters;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BooleanFilterMixin implements Filter<Integer, Todo> {
-    @Parameters(descriptionKey = "list.and.desc", split = ",", paramLabel = "text")
+    @Option(names = "--and", descriptionKey = "list.and.desc", split = ",", paramLabel = "text")
     private List<String> andFilterList = new ArrayList<>();
     @Option(names = "--not", descriptionKey = "list.not.desc", split = ",", paramLabel = "text")
     private List<String> notFilterList = new ArrayList<>();
@@ -19,17 +18,17 @@ public class BooleanFilterMixin implements Filter<Integer, Todo> {
     private List<String> orFilterList = new ArrayList<>();
 
     @Override
-    public Specification<Integer, Todo> specification(final Specification<Integer, Todo> specification) {
-        Specification<Integer, Todo> spec = specification;
+    public Specification<Integer, Todo> specification() {
+        Specification<Integer, Todo> specification = new Any<>();
         for (String filter : andFilterList) {
-            spec = spec.and(new IsContaining(filter));
+            specification = specification.and(new IsContaining(filter));
         }
         for (String filter : orFilterList) {
-            spec = spec.or(new IsContaining(filter));
+            specification = specification.or(new IsContaining(filter));
         }
         for (String filter : notFilterList) {
-            spec = spec.not(new IsContaining(filter));
+            specification = specification.not(new IsContaining(filter));
         }
-        return spec;
+        return specification;
     }
 }

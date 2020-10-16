@@ -28,7 +28,7 @@ public class ArchiveCli implements Runnable {
     @Spec
     private CommandSpec spec;
     @Inject
-    private TemplatedResourceBundle templatedResourceBundle;
+    private TemplatedResource templatedResource;
     @Inject
     private StyleApplicator styleApplicator;
 
@@ -44,7 +44,7 @@ public class ArchiveCli implements Runnable {
         List<Todo> allTodoList = todoRepository.findAll(new Any<>());
         for (int i = 0; i < allTodoList.size(); i++) {
             if (isArchive.isSatisfiedBy(allTodoList.get(i))) {
-                spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
+                spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.TODO_LINE_ITEM,
                         String.format("{idx:'%3s',todo:\"%s\"}", i + 1, styleApplicator.apply(allTodoList.get(i).getText()).replaceAll("\"", "\\\\\""))));
             }
         }

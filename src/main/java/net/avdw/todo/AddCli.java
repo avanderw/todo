@@ -33,7 +33,7 @@ class AddCli implements Runnable, IExitCodeGenerator {
     @Inject
     private StyleApplicator styleApplicator;
     @Inject
-    private TemplatedResourceBundle templatedResourceBundle;
+    private TemplatedResource templatedResource;
     @Inject
     private Repository<Integer, Todo> todoRepository;
 
@@ -46,7 +46,7 @@ class AddCli implements Runnable, IExitCodeGenerator {
     public void run() {
         Specification<Integer, Todo> containingAddition = new IsContaining(addition);
         if (!todoRepository.findAll(containingAddition).isEmpty()) {
-            spec.commandLine().getErr().println(templatedResourceBundle.getString(ResourceBundleKey.ADD_DUPLICATE));
+            spec.commandLine().getErr().println(templatedResource.populate(ResourceBundleKey.ADD_DUPLICATE));
             exitCode = 1;
             return;
         }
@@ -61,7 +61,7 @@ class AddCli implements Runnable, IExitCodeGenerator {
 
         Todo todo = new Todo(todoRepository.size(), addition);
         todoRepository.add(todo);
-        spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
+        spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.TODO_LINE_ITEM,
                 String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todo.getText()).replaceAll("\"", "\\\\\""))));
     }
 }

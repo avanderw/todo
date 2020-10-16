@@ -27,7 +27,7 @@ public class RepositoryMixin {
         this.todoPath = todoPath;
     }
 
-    public Repository<Integer, Todo> allRepositories() {
+    public Repository<Integer, Todo> repository() {
         Repository<Integer, Todo> allRepositories = new FileRepository<>(Paths.get("scoped-repository.txt"), new TodoFileTypeBuilder());
         allRepositories.setAutoCommit(false);
         allRepositories.addAll(todoRepository.findAll(new Any<>()));

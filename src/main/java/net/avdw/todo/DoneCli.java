@@ -24,7 +24,7 @@ public class DoneCli implements Runnable {
     @Inject
     private Repository<Integer, Todo> todoRepository;
     @Inject
-    private TemplatedResourceBundle templatedResourceBundle;
+    private TemplatedResource templatedResource;
     @Inject
     private StyleApplicator styleApplicator;
 
@@ -37,7 +37,7 @@ public class DoneCli implements Runnable {
                     todoRepository.update(new Todo(id, String.format("x %s %s",
                             simpleDateFormat.format(new Date()),
                             todoRepository.findById(id).orElseThrow().toString().replaceFirst("\\([A-Z]\\) ", ""))));
-                    spec.commandLine().getOut().println(templatedResourceBundle.getString(ResourceBundleKey.TODO_LINE_ITEM,
+                    spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.TODO_LINE_ITEM,
                             String.format("{idx:'%3s',todo:\"%s\"}", idx, styleApplicator.apply(todoRepository.findById(id).orElseThrow().getText()).replaceAll("\"", "\\\\\""))));
                 });
         todoRepository.commit();
