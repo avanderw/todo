@@ -20,10 +20,15 @@ public class TodoListView {
     }
 
     public String render(final List<Todo> list, final Repository<Integer, Todo> repository) {
-        return addonList.stream().map(addon -> addon.preList(list, repository)).filter(Objects::nonNull).collect(Collectors.joining("\n")) +
-                "\n" +
-                list.stream().map(todoView::render).collect(Collectors.joining("\n")) +
-                "\n" +
-                addonList.stream().map(addon -> addon.postList(list, repository)).filter(Objects::nonNull).collect(Collectors.joining("\n"));
+        String render = "";
+        List<String> preList = addonList.stream().map(addon -> addon.preList(list, repository)).filter(Objects::nonNull).collect(Collectors.toList());
+        if (!preList.isEmpty()) {
+            render += String.join("\n", preList);
+            render += "\n";
+        }
+        render += list.stream().map(todoView::render).collect(Collectors.joining("\n"));
+        render += "\n";
+        render += addonList.stream().map(addon -> addon.postList(list, repository)).filter(Objects::nonNull).collect(Collectors.joining("\n"));
+        return render;
     }
 }

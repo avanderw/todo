@@ -2,6 +2,7 @@ package net.avdw.todo;
 
 import com.google.inject.Inject;
 import net.avdw.todo.plugin.browse.BrowseCli;
+import net.avdw.todo.plugin.changelog.ChangelogCli;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;

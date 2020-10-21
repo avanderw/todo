@@ -3,38 +3,33 @@ package net.avdw.todo.plugin.change;
 import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 public class ChangeMapper {
     private final ChangeExt changeExt;
-    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @Inject
-    ChangeMapper(final ChangeExt changeExt) {
+    public ChangeMapper(final ChangeExt changeExt) {
         this.changeExt = changeExt;
     }
 
-    public Optional<Date> mapToLastChangeDate(final Todo todo) {
-        List<Date> changeDateList = new ArrayList<>();
-        if (todo.getAdditionDate() != null) {
-            changeDateList.add(todo.getAdditionDate());
-        }
-
+    public Change mapToChange(final Todo todo) {
+        Change change = null;
         if (todo.isDone()) {
-            changeDateList.add(todo.getDoneDate());
+            change = new Change("Done", todo.getDoneDate());
         } else if (todo.isRemoved()) {
-            changeDateList.add(todo.getRemovedDate());
+            change = new Change("Removed", todo.getRemovedDate());
         } else if (todo.isParked()) {
-            changeDateList.add(todo.getParkedDate());
+            change = new Change("Parked", todo.getParkedDate());
+        } else if (changeExt.isSatisfiedBy(todo)) {
+            change =  changeExt.getValueList(todo).stream().max(Comparator.comparing(Change::getDate)).orElseThrow();
+        } else if (todo.getAdditionDate() != null) {
+            change = new Change("Added", todo.getAdditionDate());
+        } else {
+            change = new Change("No group", null);
         }
 
-        changeDateList.addAll(changeExt.getValueList(todo));
-
-        return changeDateList.stream().max(Comparator.naturalOrder());
+        return change;
     }
 }

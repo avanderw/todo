@@ -1,6 +1,9 @@
-package net.avdw.todo;
+package net.avdw.todo.plugin.changelog;
 
 import com.google.inject.Inject;
+import net.avdw.todo.ResourceBundleKey;
+import net.avdw.todo.TemplatedResource;
+import net.avdw.todo.TodoTextCleaner;
 import net.avdw.todo.domain.IsAdded;
 import net.avdw.todo.domain.IsContaining;
 import net.avdw.todo.domain.IsDone;
@@ -35,7 +38,7 @@ import java.util.stream.Collectors;
 
 @Command(name = "changelog", resourceBundle = "messages", description = "${bundle:changelog}")
 public class ChangelogCli implements Runnable, IExitCodeGenerator {
-    private final SimpleDateFormat collectMonthlyFormat = new SimpleDateFormat("yyyy/MM");
+    private final SimpleDateFormat collectMonthlyFormat = new SimpleDateFormat("MMMMM yyyy");
     private final SimpleDateFormat collectYearlyFormat = new SimpleDateFormat("yyyy");
     private final SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd");
     @Mixin

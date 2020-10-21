@@ -8,9 +8,8 @@ import net.avdw.todo.repository.Repository;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 public class ChangeAddon implements Addon {
     private final ChangeMapper changeMapper;
@@ -28,9 +27,9 @@ public class ChangeAddon implements Addon {
     @Override
     public String postList(final List<Todo> list, final Repository<Integer, Todo> repository) {
         return list.stream()
-                .map(changeMapper::mapToLastChangeDate)
-                .filter(Optional::isPresent)
-                .map(Optional::orElseThrow)
+                .map(changeMapper::mapToChange)
+                .map(Change::getDate)
+                .filter(Objects::nonNull)
                 .max(Comparator.naturalOrder())
                 .map(value -> templatedResource.populateKey(ChangeKey.POST_RENDER,
                         String.format("{last:'%s'}", prettyTime.format(value))))
@@ -50,9 +49,8 @@ public class ChangeAddon implements Addon {
     @Override
     public String preTodo(final Todo todo) {
         if (changeMixin.showDetail) {
-            return changeMapper.mapToLastChangeDate(todo)
-                    .map(value -> String.format("%17s", prettyTime.format(value)))
-                    .orElse(String.format("%17s", "n/a"));
+            Change change = changeMapper.mapToChange(todo);
+            return change.getDate() == null ? String.format("%17s", "n/a") : String.format("%17s", prettyTime.format(change.getDate()));
         } else {
             return null;
         }

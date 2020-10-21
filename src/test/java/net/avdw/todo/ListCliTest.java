@@ -184,6 +184,19 @@ public class ListCliTest {
     }
 
     @Test(timeout = 256)
+    public void testGroupByChangeType() {
+        cliTester.execute("ls --group-by change").success();
+    }
+    @Test(timeout = 256)
+    public void testGroupByMonth() {
+        cliTester.execute("ls --group-by month").success();
+    }
+    @Test(timeout = 256)
+    public void testGroupByMonthChangelog() {
+        cliTester.execute("ls --group-by month,change").success();
+    }
+
+    @Test(timeout = 256)
     public void testGroupByDeepHierarchy() {
         cliTester.execute("ls --group-by +,@,assigned:,importance:").failure();
     }

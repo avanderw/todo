@@ -1,16 +1,19 @@
-package net.avdw.todo.groupby;
+package net.avdw.todo.core.groupby;
 
+import net.avdw.todo.core.Guard;
 import net.avdw.todo.domain.Todo;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.util.function.Function;
 
-public class TagGroupBy implements GroupBy<Todo, String, String> {
+public class TagGroup implements Group<Todo, String> {
 
+    private final String selector;
     private final String tag;
 
-    public TagGroupBy(final String tag) {
-        this.tag = tag;
+    public TagGroup(final String selector) {
+        this.selector = selector;
+        this.tag = selector.substring(0, selector.length() - 1);
     }
 
     @Override
@@ -29,7 +32,7 @@ public class TagGroupBy implements GroupBy<Todo, String, String> {
 
     @Override
     public boolean isSatisfiedBy(final String selector) {
-        return selector.endsWith(":");
+        return this.selector.equals(selector) && selector.endsWith(":");
     }
 
     @Override

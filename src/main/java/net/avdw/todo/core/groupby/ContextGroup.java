@@ -1,11 +1,12 @@
-package net.avdw.todo.groupby;
+package net.avdw.todo.core.groupby;
 
+import net.avdw.todo.core.Guard;
 import net.avdw.todo.domain.Todo;
 
 import java.util.Locale;
 import java.util.function.Function;
 
-public class ContextGroupBy implements GroupBy<Todo, String, String> {
+public class ContextGroup implements Group<Todo, String> {
     @Override
     public Function<Todo, String> collector() {
         return t -> {

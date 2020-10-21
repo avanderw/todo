@@ -2,11 +2,11 @@ package net.avdw.todo;
 
 import com.google.inject.Inject;
 import net.avdw.todo.core.TodoListView;
+import net.avdw.todo.core.groupby.GroupByMixin;
 import net.avdw.todo.core.mixin.CleanMixin;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.filters.BooleanFilterMixin;
 import net.avdw.todo.filters.DateFilterMixin;
-import net.avdw.todo.groupby.GroupByMixin;
 import net.avdw.todo.plugin.blocker.BlockerMixin;
 import net.avdw.todo.plugin.change.ChangeMixin;
 import net.avdw.todo.repository.Repository;
@@ -19,15 +19,20 @@ import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 @Command(name = "ls", resourceBundle = "messages", description = "${bundle:list}", mixinStandardHelpOptions = true)
 public class ListCli implements Runnable {
-    @Mixin private BooleanFilterMixin booleanFilterMixin;
-    @Mixin private CleanMixin cleanMixin;
-    @Mixin private ChangeMixin changeMixin;
+    private final SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM yyyy");
+    private final SimpleDateFormat monthSortFormat = new SimpleDateFormat("yyyy-MM");
     @Mixin private BlockerMixin blockerMixin;
+    @Mixin private BooleanFilterMixin booleanFilterMixin;
+    @Mixin private ChangeMixin changeMixin;
+    @Mixin private CleanMixin cleanMixin;
     @Mixin private DateFilterMixin dateFilterMixin;
     @Mixin private GroupByMixin groupByMixin;
     @Mixin private RepositoryMixin repositoryMixin;
@@ -37,31 +42,41 @@ public class ListCli implements Runnable {
     @Inject private TemplatedResource templatedResource;
     @Inject private TodoListView todoListView;
 
-
     private void printList(final List<Todo> list, final Repository<Integer, Todo> repository) {
         spec.commandLine().getOut().println(todoListView.render(list, repository));
         spec.commandLine().getOut().print(statisticMixin.renderStats(list));
     }
 
     private void printMap(final Map<String, ?> map, final Repository<Integer, Todo> repository, final GroupByMixin groupByMixin, final int depth) {
-        map.forEach((key, value) -> {
-            String json = String.format("{type:'%s',title:'%s'}", groupByMixin.getGroupByAtDepth(depth).name(), StringUtils.capitalise(key.isBlank() ? "No" : key));
-            String header = switch (depth) {
-                case 0 -> templatedResource.populateKey(ResourceBundleKey.GROUP_BY_HEADING, json);
-                case 1 -> templatedResource.populateKey(ResourceBundleKey.GROUP_BY_HEADING_2, json);
-                case 2 -> templatedResource.populateKey(ResourceBundleKey.GROUP_BY_HEADING_3, json);
-                default -> throw new UnsupportedOperationException();
-            };
-            spec.commandLine().getOut().println(header);
+        map.entrySet().stream()
+                .sorted(Comparator.comparing(entry -> {
+                    String key = entry.getKey();
+                    try {
+                        return monthSortFormat.format(monthFormat.parse(key));
+                    } catch (ParseException e) {
+                        return key;
+                    }
+                }))
+                .forEach((entry) -> {
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+                    String json = String.format("{type:'%s',title:'%s'}", groupByMixin.getGroupByAtDepth(depth).name(), StringUtils.capitalise(key.isBlank() ? "No" : key));
+                    String header = switch (depth) {
+                        case 0 -> templatedResource.populateKey(ResourceBundleKey.GROUP_BY_HEADING, json);
+                        case 1 -> templatedResource.populateKey(ResourceBundleKey.GROUP_BY_HEADING_2, json);
+                        case 2 -> templatedResource.populateKey(ResourceBundleKey.GROUP_BY_HEADING_3, json);
+                        default -> throw new UnsupportedOperationException();
+                    };
+                    spec.commandLine().getOut().println(header);
 
-            if (value instanceof Map) {
-                printMap((Map) value, repository, groupByMixin, depth + 1);
-            } else if (value instanceof List) {
-                printList((List) value, repository);
-            } else {
-                throw new UnsupportedOperationException();
-            }
-        });
+                    if (value instanceof Map) {
+                        printMap((Map) value, repository, groupByMixin, depth + 1);
+                    } else if (value instanceof List) {
+                        printList((List) value, repository);
+                    } else {
+                        throw new UnsupportedOperationException();
+                    }
+                });
 
     }
 
@@ -81,7 +96,7 @@ public class ListCli implements Runnable {
             return;
         }
 
-        groupByMixin.setup();
+        groupByMixin.parse();
         if (groupByMixin.depth() > 3) {
             spec.commandLine().getErr().println(templatedResource.populateKey(ResourceBundleKey.GROUP_BY_DEPTH_UNSUPPORTED));
             throw new UnsupportedOperationException();

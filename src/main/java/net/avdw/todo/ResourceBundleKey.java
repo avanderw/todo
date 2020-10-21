@@ -45,6 +45,7 @@ public final class ResourceBundleKey {
     public static final String TIMING_DETAIL = "timing.detail";
     public static final String TODO_LINE_ITEM = "todo.line.item(idx,todo)";
     public static final String STATS_DESCRIPTIVE_TIME = "stats.descriptive.time(size,mean,stdDev,oneStdDev,twoStdDev,threeStdDev,minOneStdDev,zeroStdDev)";
+    public static final String UNKNOWN_DATE = "unknown.date";
 
     private ResourceBundleKey() {
     }
