@@ -20,11 +20,17 @@ public class ProgressAddon implements Addon {
 
     @Override
     public String postList(final List<Todo> list, final Repository<Integer, Todo> repository) {
-        return templatedResource.populateKey(ProgressKey.SUMMARY,
-                String.format("{subTotal:'%s',total:'%s',todo:'%s',started:'%s',done:'%s'}", list.size(), repository.size(),
+        long done = list.stream().filter(Todo::isDone).count();
+        long parked = list.stream().filter(Todo::isParked).count();
+        long removed = list.stream().filter(Todo::isRemoved).count();
+        long progress = (done + parked + removed) * 100 / list.size();
+        return templatedResource.populateKey(ProgressKey.POST_LIST,
+                String.format("{subTotal:'%d',total:'%d',todo:'%d',started:'%d',done:'%d',progress:'%d',parked:'%s',removed:'%s'}", list.size(), repository.size(),
                         list.stream().filter(progressExtension::notStarted).count(),
                         list.stream().filter(progressExtension::started).count(),
-                        list.stream().filter(Todo::isDone).count()));
+                        done, progress,
+                        (parked == 0) ? "" : parked, (removed == 0) ? "" : removed
+                        ));
     }
 
     @Override

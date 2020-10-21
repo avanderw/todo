@@ -164,6 +164,13 @@ public class ListCliTest {
     }
 
     @Test(timeout = 256)
+    public void testProgress() {
+        cliTester.execute("ls --incl-done").success()
+                .contains("15% completion").contains("1 parked").contains("1 removed")
+                .notContains("0% completion");
+    }
+
+    @Test(timeout = 256)
     public void testGroupByContext() {
         cliTester.execute("ls --group-by @").success()
                 .contains("CNP, Track1 Context")
