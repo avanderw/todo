@@ -19,7 +19,7 @@ public class ProgressAddon implements Addon {
     }
 
     @Override
-    public String postRender(final List<Todo> list, final Repository<Integer, Todo> repository) {
+    public String postList(final List<Todo> list, final Repository<Integer, Todo> repository) {
         return templatedResource.populateKey(ProgressKey.SUMMARY,
                 String.format("{subTotal:'%s',total:'%s',todo:'%s',started:'%s',done:'%s'}", list.size(), repository.size(),
                         list.stream().filter(progressExtension::notStarted).count(),
@@ -28,7 +28,17 @@ public class ProgressAddon implements Addon {
     }
 
     @Override
-    public String preRender(final List<Todo> list, final Repository<Integer, Todo> repository) {
+    public String postTodo(final Todo todo) {
+        return null;
+    }
+
+    @Override
+    public String preList(final List<Todo> list, final Repository<Integer, Todo> repository) {
+        return null;
+    }
+
+    @Override
+    public String preTodo(final Todo todo) {
         return null;
     }
 }

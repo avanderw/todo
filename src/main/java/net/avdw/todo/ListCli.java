@@ -7,6 +7,7 @@ import net.avdw.todo.domain.Todo;
 import net.avdw.todo.filters.BooleanFilterMixin;
 import net.avdw.todo.filters.DateFilterMixin;
 import net.avdw.todo.groupby.GroupByMixin;
+import net.avdw.todo.plugin.change.ChangeMixin;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
 import net.avdw.todo.stats.StatisticMixin;
@@ -24,6 +25,7 @@ import java.util.Map;
 public class ListCli implements Runnable {
     @Mixin private BooleanFilterMixin booleanFilterMixin;
     @Mixin private CleanMixin cleanMixin;
+    @Mixin private ChangeMixin changeMixin;
     @Mixin private DateFilterMixin dateFilterMixin;
     @Mixin private GroupByMixin groupByMixin;
     @Mixin private RepositoryMixin repositoryMixin;

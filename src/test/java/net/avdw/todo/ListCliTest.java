@@ -134,6 +134,11 @@ public class ListCliTest {
     }
 
     @Test(timeout = 256)
+    public void testChangeDetail() {
+        cliTester.execute("ls --change-detail").success().contains("7 months ago").contains("n/a");
+    }
+
+    @Test(timeout = 256)
     public void testClean() {
         cliTester.execute("pri 1").success();
         cliTester.execute("ls --clean").success()
@@ -150,19 +155,6 @@ public class ListCliTest {
     @Test(timeout = 256)
     public void testDone() {
         cliTester.execute("ls --incl-done").success().contains("[ 73] x").count("\\[", 80);
-    }
-
-    @Test(timeout = 256)
-    public void testStatistic() {
-        cliTester.execute("ls --incl-done").success()
-                .contains("Reaction").contains("Cycle").contains("Lead");
-    }
-
-    @Test(timeout = 256)
-    public void testStatisticDetail() {
-        cliTester.execute("ls --incl-done --detail").success()
-                .contains("Reaction").contains("Cycle").contains("Lead")
-                .contains("(Q1)=").contains("(Q2)=").contains("(Q3)=");
     }
 
     @Test(timeout = 256)
@@ -209,6 +201,11 @@ public class ListCliTest {
     }
 
     @Test(timeout = 256)
+    public void testHelp() {
+        cliTester.execute("ls --help").success();
+    }
+
+    @Test(timeout = 256)
     public void testNotFilter() {
         cliTester.execute("ls --not service --not refactor").success().notContains("service").notContains("Refactor");
         cliTester.execute("ls --not service,refactor").success().notContains("service").notContains("Refactor");
@@ -233,7 +230,15 @@ public class ListCliTest {
     }
 
     @Test(timeout = 256)
-    public void testHelp() {
-        cliTester.execute("ls --help").success();
+    public void testStatistic() {
+        cliTester.execute("ls --incl-done").success()
+                .contains("Reaction").contains("Cycle").contains("Lead");
+    }
+
+    @Test(timeout = 256)
+    public void testStatisticDetail() {
+        cliTester.execute("ls --incl-done --detail").success()
+                .contains("Reaction").contains("Cycle").contains("Lead")
+                .contains("(Q1)=").contains("(Q2)=").contains("(Q3)=");
     }
 }
