@@ -24,6 +24,12 @@ Very basic goal setting
 - Tactical: Refining current value
 - Operational: Maintaining current value
 
+## MoSCoW module
+- Must have: non-negotiable, mandatory
+- Should have: important, not vital, significant value
+- Could have: nice to have, small impact
+- Won't have: not priority given time frame
+
 ## RAG status module
 Rule based calculation of green, amber, red status flags
 
@@ -52,12 +58,6 @@ Determine automation to trigger phase identification.
 
 ## Agile module
 Functional area (component) breakdown into epics, features, enhancements, fixes mapped against time
-
-## MoSCoW module
-- Must have: non-negotiable, mandatory
-- Should have: important, not vital, significant value
-- Could have: nice to have, small impact
-- Won't have: not priority given time frame
 
 ## Priority module
 Various variables can be used for further detail. 
