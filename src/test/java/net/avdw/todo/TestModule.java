@@ -4,8 +4,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
+import net.avdw.todo.core.Addon;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
 import net.avdw.todo.plugin.Plugin;
@@ -17,7 +19,6 @@ import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
 import org.tinylog.Logger;
 
 import java.io.ByteArrayOutputStream;
@@ -61,6 +62,12 @@ public class TestModule extends AbstractModule {
             }
         });
         install(new StyleModule());
+
+        Multibinder<Addon> addons = Multibinder.newSetBinder(binder(), Addon.class);
+        reflection.getSubTypesOf(Addon.class).forEach(addon -> {
+            Logger.debug("Registering addon: {}", addon);
+            addons.addBinding().to(addon);
+        });
     }
 
     @Provides

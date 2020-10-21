@@ -55,7 +55,7 @@ public class SortCli implements Runnable {
         sortedRepository.commit();
 
         sortedRepository.findAll(new Any<>()).forEach(todo ->
-                spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.TODO_LINE_ITEM,
+                spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
                         String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todo.getText()).replaceAll("\"", "\\\\\""))))
         );
     }

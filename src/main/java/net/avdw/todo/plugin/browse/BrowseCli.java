@@ -76,16 +76,16 @@ public class BrowseCli implements Runnable {
                     String json = String.format("{uri:'%s'}", uri);
                     try {
                         Desktop.getDesktop().browse(uri);
-                        spec.commandLine().getOut().println(templatedResource.populate(BrowseKey.BROWSE_URI, json));
+                        spec.commandLine().getOut().println(templatedResource.populateKey(BrowseKey.BROWSE_URI, json));
                     } catch (IOException e) {
-                        spec.commandLine().getOut().println(templatedResource.populate(BrowseKey.BROWSE_URI_FAIL, json));
+                        spec.commandLine().getOut().println(templatedResource.populateKey(BrowseKey.BROWSE_URI_FAIL, json));
                     }
                 });
             } else {
-                spec.commandLine().getOut().println(templatedResource.populate(BrowseKey.NOT_SUPPORTED));
+                spec.commandLine().getOut().println(templatedResource.populateKey(BrowseKey.NOT_SUPPORTED));
             }
         } else {
-            spec.commandLine().getOut().println(templatedResource.populate(BrowseKey.NOT_SUPPORTED));
+            spec.commandLine().getOut().println(templatedResource.populateKey(BrowseKey.NOT_SUPPORTED));
         }
     }
 }

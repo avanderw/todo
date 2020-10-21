@@ -1,13 +1,13 @@
-package net.avdw.todo.ext;
+package net.avdw.todo.plugin.progress;
 
 import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
 
-public class StartedExt {
+public class ProgressExtension {
     private final String tag;
 
     @Inject
-    public StartedExt(String tag) {
+    public ProgressExtension(String tag) {
         this.tag = tag;
     }
 

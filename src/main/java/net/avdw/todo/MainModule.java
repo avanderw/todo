@@ -4,10 +4,12 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
+import net.avdw.todo.core.Addon;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
-import net.avdw.todo.ext.StartedExt;
+import net.avdw.todo.plugin.progress.ProgressExtension;
 import net.avdw.todo.plugin.Plugin;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
@@ -39,7 +41,7 @@ class MainModule extends AbstractModule {
         bind(List.class).to(LinkedList.class);
         bind(Set.class).to(HashSet.class);
         bind(ResourceBundle.class).toInstance(ResourceBundle.getBundle("messages", Locale.ENGLISH));
-        bind(StartedExt.class).toInstance(new StartedExt("started"));
+        bind(ProgressExtension.class).toInstance(new ProgressExtension("started"));
         bind(PrintWriter.class).annotatedWith(Names.named("out")).toInstance(new PrintWriter(new OutputStreamWriter(System.out, StandardCharsets.UTF_8), true));
         bind(PrintWriter.class).annotatedWith(Names.named("err")).toInstance(new PrintWriter(new OutputStreamWriter(System.err, StandardCharsets.UTF_8), true));
 
@@ -55,6 +57,9 @@ class MainModule extends AbstractModule {
             }
         });
         install(new StyleModule());
+
+        Multibinder<Addon> addons = Multibinder.newSetBinder(binder(), Addon.class);
+        reflection.getSubTypesOf(Addon.class).forEach(addon -> addons.addBinding().to(addon));
     }
 
     @Provides

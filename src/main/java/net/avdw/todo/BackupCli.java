@@ -37,22 +37,22 @@ public class BackupCli implements Runnable {
         Path removedBackup = todoPath.getParent().resolve(String.format("removed.txt_%s", todayFormat));
 
         Files.copy(todoPath, todoBackup, StandardCopyOption.REPLACE_EXISTING);
-        spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.BACKUP_COMPLETE,
+        spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.BACKUP_COMPLETE,
                 String.format("{path:'%s'}", todoBackup.toUri())));
 
         if (Files.exists(donePath)) {
             Files.copy(donePath, doneBackup, StandardCopyOption.REPLACE_EXISTING);
-            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.BACKUP_COMPLETE,
+            spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.BACKUP_COMPLETE,
                     String.format("{path:'%s'}", doneBackup.toUri())));
         }
         if (Files.exists(parkedPath)) {
             Files.copy(parkedPath, parkedBackup, StandardCopyOption.REPLACE_EXISTING);
-            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.BACKUP_COMPLETE,
+            spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.BACKUP_COMPLETE,
                     String.format("{path:'%s'}", parkedBackup.toUri())));
         }
         if (Files.exists(removedPath)) {
             Files.copy(removedPath, removedBackup, StandardCopyOption.REPLACE_EXISTING);
-            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.BACKUP_COMPLETE,
+            spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.BACKUP_COMPLETE,
                     String.format("{path:'%s'}", removedBackup.toUri())));
         }
 

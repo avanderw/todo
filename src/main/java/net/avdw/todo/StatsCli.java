@@ -5,7 +5,6 @@ import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoTiming;
 import net.avdw.todo.filters.BooleanFilterMixin;
 import net.avdw.todo.filters.DateFilterMixin;
-import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
 import net.avdw.todo.stats.Statistic;
@@ -77,7 +76,7 @@ public class StatsCli implements Runnable {
     }
 
     private void printCycleTimeStatistics(final List<Todo> todoList) {
-        spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.STATS_CYCLE_TITLE));
+        spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_CYCLE_TITLE));
 
         Statistic stats = timingStatsCalculator.calculateCycleTime(todoList);
         printStats(stats);
@@ -96,7 +95,7 @@ public class StatsCli implements Runnable {
                     }
                 }));
         if (max.isPresent()) {
-            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.STATS_MAX_CYCLE_TIME,
+            spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_MAX_CYCLE_TIME,
                     String.format("{time:'%s'}", days2period(ChronoUnit.DAYS.between(max.get().getAdditionDate().toInstant(), now.toInstant())))));
             printTodo(max.get());
         }
@@ -116,14 +115,14 @@ public class StatsCli implements Runnable {
                 })
                 .collect(Collectors.toList());
         if (!largeTimeTodoList.isEmpty()) {
-            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.STATS_LARGE_CYCLE_TIME));
+            spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_LARGE_CYCLE_TIME));
             largeTimeTodoList.forEach(this::printTodo);
         }
 
     }
 
     private void printLeadTimeStatistics(final List<Todo> todoList) {
-        spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.STATS_LEAD_TITLE));
+        spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_LEAD_TITLE));
 
         Statistic stats = timingStatsCalculator.calculateLeadTime(todoList);
         printStats(stats);
@@ -136,7 +135,7 @@ public class StatsCli implements Runnable {
                 .filter(t -> t.getAdditionDate() != null)
                 .max(Comparator.comparing(t -> ChronoUnit.DAYS.between(t.getAdditionDate().toInstant(), now.toInstant())));
         if (max.isPresent()) {
-            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.STATS_MAX_LEAD_TIME,
+            spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_MAX_LEAD_TIME,
                     String.format("{time:'%s'}", days2period(ChronoUnit.DAYS.between(max.get().getAdditionDate().toInstant(), now.toInstant())))));
             printTodo(max.get());
         }
@@ -150,13 +149,13 @@ public class StatsCli implements Runnable {
                 .filter(t -> ChronoUnit.DAYS.between(t.getAdditionDate().toInstant(), now.toInstant()) > stats.getMean() + stats.getStdDev())
                 .collect(Collectors.toList());
         if (!largeTimeTodoList.isEmpty()) {
-            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.STATS_LARGE_LEAD_TIME));
+            spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_LARGE_LEAD_TIME));
             largeTimeTodoList.forEach(this::printTodo);
         }
     }
 
     private void printReactionTimeStatistics(final List<Todo> todoList) {
-        spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.STATS_REACTION_TITLE));
+        spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_REACTION_TITLE));
 
         Statistic stats = timingStatsCalculator.calculateReactionTime(todoList);
         printStats(stats);
@@ -169,7 +168,7 @@ public class StatsCli implements Runnable {
                 .filter(t -> !t.isParked())
                 .max(Comparator.comparing(t -> ChronoUnit.DAYS.between(t.getAdditionDate().toInstant(), now.toInstant())));
         if (max.isPresent()) {
-            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.STATS_MAX_REACTION_TIME,
+            spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_MAX_REACTION_TIME,
                     String.format("{time:'%s'}", days2period(ChronoUnit.DAYS.between(max.get().getAdditionDate().toInstant(), now.toInstant())))));
             printTodo(max.get());
         }
@@ -183,18 +182,18 @@ public class StatsCli implements Runnable {
                 .filter(t -> ChronoUnit.DAYS.between(t.getAdditionDate().toInstant(), now.toInstant()) > stats.getMean() + stats.getStdDev())
                 .collect(Collectors.toList());
         if (!largeTimeTodoList.isEmpty()) {
-            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.STATS_LARGE_REACTION_TIME));
+            spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_LARGE_REACTION_TIME));
             largeTimeTodoList.forEach(this::printTodo);
         }
     }
 
     private void printStats(final Statistic stats) {
         if (stats.getN() < 1) {
-            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.STATS_NOT_ENOUGH_DATA));
+            spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_NOT_ENOUGH_DATA));
             return;
         }
 
-        spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.CHART_BOX,
+        spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.CHART_BOX,
                 String.format("{min:'%4s',max:'%4s',Q1:'%4s',Q3:'%4s',median:'%4s',trimmedMin:'%4s',trimmedMax:'%4s'}",
                         stats.getMin(),
                         stats.getMax(),
@@ -207,7 +206,7 @@ public class StatsCli implements Runnable {
 
         spec.commandLine().getOut().println("");
 
-        spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.STATS_DESCRIPTIVE_TIME,
+        spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_DESCRIPTIVE_TIME,
                 String.format("{size:'%s',mean:'%s',stdDev:'%s',oneStdDev:'%s',twoStdDev:'%s',threeStdDev:'%s',minOneStdDev:'%s',zeroStdDev:'%s'}",
                         stats.getN(),
                         stats.getMean(),
@@ -222,7 +221,7 @@ public class StatsCli implements Runnable {
 
     private void printTodo(final Todo todo) {
         String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
-        spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.TODO_LINE_ITEM,
+        spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
                 String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
     }
 
@@ -236,7 +235,7 @@ public class StatsCli implements Runnable {
         List<Todo> todoList = scopedRepository.findAll(specification);
 
         if (todoList.isEmpty()) {
-            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.NO_TODO_FOUND));
+            spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.NO_TODO_FOUND));
         }
         todoList.forEach(Logger::trace);
 

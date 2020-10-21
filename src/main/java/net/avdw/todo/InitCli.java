@@ -24,14 +24,14 @@ public class InitCli implements Runnable {
             justification = "Google Guice does not allow for null injection (todoPath)")
     public void run() {
         if (Files.exists(todoPath)) {
-            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.INIT_FILE_EXISTS,
+            spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.INIT_FILE_EXISTS,
                     String.format("{path:'%s'}", todoPath.toUri())));
             return;
         }
 
         Files.createDirectories(todoPath.getParent());
         Files.createFile(todoPath);
-        spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.INIT_FILE_CREATED,
+        spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.INIT_FILE_CREATED,
                 String.format("{path:'%s',usage:'%s'}", todoPath.toUri(), spec.commandLine().getParent().getUsageMessage())));
     }
 }

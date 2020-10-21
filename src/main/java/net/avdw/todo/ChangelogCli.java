@@ -9,7 +9,6 @@ import net.avdw.todo.domain.IsRemoved;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.filters.BooleanFilterMixin;
 import net.avdw.todo.filters.DateFilterMixin;
-import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
 import net.avdw.todo.style.StyleApplicator;
@@ -59,28 +58,28 @@ public class ChangelogCli implements Runnable, IExitCodeGenerator {
     private final Function<Date, String> collectWeekly = date -> {
         String title;
         if (date == null) {
-            title = templatedResource.populate(ResourceBundleKey.CHANGELOG_DATE_NA);
+            title = templatedResource.populateKey(ResourceBundleKey.CHANGELOG_DATE_NA);
         } else {
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(date);
             title = String.format("%s/%02d", collectYearlyFormat.format(date), calendar.get(Calendar.WEEK_OF_YEAR));
         }
-        return templatedResource.populate(ResourceBundleKey.CHANGELOG_DATE_HEADER,
+        return templatedResource.populateKey(ResourceBundleKey.CHANGELOG_DATE_HEADER,
                 String.format("{date:'%s'}", title));
     };
     private final Function<Date, String> collectYearly = date -> {
         String title = date == null
-                ? templatedResource.populate(ResourceBundleKey.CHANGELOG_DATE_NA)
+                ? templatedResource.populateKey(ResourceBundleKey.CHANGELOG_DATE_NA)
                 : collectYearlyFormat.format(date);
 
-        return templatedResource.populate(ResourceBundleKey.CHANGELOG_DATE_HEADER,
+        return templatedResource.populateKey(ResourceBundleKey.CHANGELOG_DATE_HEADER,
                 String.format("{date:'%s'}", title));
     };
     private final Function<Date, String> collectMonthly = date -> {
         String title = date == null
-                ? templatedResource.populate(ResourceBundleKey.CHANGELOG_DATE_NA)
+                ? templatedResource.populateKey(ResourceBundleKey.CHANGELOG_DATE_NA)
                 : collectMonthlyFormat.format(date);
-        return templatedResource.populate(ResourceBundleKey.CHANGELOG_DATE_HEADER,
+        return templatedResource.populateKey(ResourceBundleKey.CHANGELOG_DATE_HEADER,
                 String.format("{date:'%s'}", title));
     };
     @Inject
@@ -109,23 +108,23 @@ public class ChangelogCli implements Runnable, IExitCodeGenerator {
             Map<String, Map<String, List<Todo>>> byPeriodByTypeTodoListMap = new HashMap<>();
             updateChangelog(specification.and(new IsAdded()),
                     (t) -> finalGroupingBy.apply(t.getAdditionDate()),
-                    templatedResource.populate(ResourceBundleKey.CHANGELOG_ADDED_HEADER),
+                    templatedResource.populateKey(ResourceBundleKey.CHANGELOG_ADDED_HEADER),
                     byPeriodByTypeTodoListMap);
             updateChangelog(specification.and(new IsDone()),
                     (t) -> finalGroupingBy.apply(t.getDoneDate()),
-                    templatedResource.populate(ResourceBundleKey.CHANGELOG_DONE_HEADER),
+                    templatedResource.populateKey(ResourceBundleKey.CHANGELOG_DONE_HEADER),
                     byPeriodByTypeTodoListMap);
             updateChangelog(specification.and(new IsRemoved()),
                     (t) -> finalGroupingBy.apply(t.getRemovedDate()),
-                    templatedResource.populate(ResourceBundleKey.CHANGELOG_REMOVED_HEADER),
+                    templatedResource.populateKey(ResourceBundleKey.CHANGELOG_REMOVED_HEADER),
                     byPeriodByTypeTodoListMap);
             updateChangelog(specification.and(new IsParked()),
                     (t) -> finalGroupingBy.apply(t.getParkedDate()),
-                    templatedResource.populate(ResourceBundleKey.CHANGELOG_PARKED_HEADER),
+                    templatedResource.populateKey(ResourceBundleKey.CHANGELOG_PARKED_HEADER),
                     byPeriodByTypeTodoListMap);
             updateChangelog(specification.and(new IsContaining("started:")),
                     (t) -> {
-                        String grouping = templatedResource.populate(ResourceBundleKey.CHANGELOG_DATE_NA);
+                        String grouping = templatedResource.populateKey(ResourceBundleKey.CHANGELOG_DATE_NA);
                         try {
                             grouping = finalGroupingBy.apply(isoFormat.parse(t.getTagValueList("started").get(0)));
                         } catch (ParseException e) {
@@ -133,15 +132,15 @@ public class ChangelogCli implements Runnable, IExitCodeGenerator {
                         }
                         return grouping;
                     },
-                    templatedResource.populate(ResourceBundleKey.CHANGELOG_STARTED_HEADER),
+                    templatedResource.populateKey(ResourceBundleKey.CHANGELOG_STARTED_HEADER),
                     byPeriodByTypeTodoListMap);
             updateChangelog(specification.not(new IsAdded()).not(new IsDone()).not(new IsRemoved()).not(new IsParked()),
-                    (t) -> templatedResource.populate(ResourceBundleKey.CHANGELOG_DATE_NA),
-                    templatedResource.populate(ResourceBundleKey.CHANGELOG_TYPE_NA),
+                    (t) -> templatedResource.populateKey(ResourceBundleKey.CHANGELOG_DATE_NA),
+                    templatedResource.populateKey(ResourceBundleKey.CHANGELOG_TYPE_NA),
                     byPeriodByTypeTodoListMap);
 
             if (byPeriodByTypeTodoListMap.isEmpty()) {
-                spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.NO_TODO_FOUND));
+                spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.NO_TODO_FOUND));
             }
 
             byPeriodByTypeTodoListMap.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(periodByTypeTodoListMap -> {
@@ -150,7 +149,7 @@ public class ChangelogCli implements Runnable, IExitCodeGenerator {
                     spec.commandLine().getOut().println(periodTypeTodoListMap.getKey());
                     periodTypeTodoListMap.getValue().forEach(todo -> {
                         String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
-                        spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.TODO_LINE_ITEM,
+                        spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
                                 String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
                     });
                 });

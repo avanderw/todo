@@ -79,14 +79,14 @@ public class DateFilterMixin implements Filter<Integer, Todo> {
                 } catch (ParseException e) {
                     Logger.debug(e);
                     exitCode = 1;
-                    spec.commandLine().getErr().println(templatedResource.populate(ResourceBundleKey.INVALID_DATE_FORMAT,
+                    spec.commandLine().getErr().println(templatedResource.populateKey(ResourceBundleKey.INVALID_DATE_FORMAT,
                             String.format("{date:'%s'}", afterTagSplit[1])));
                     continue;
                 }
                 specification = specification.and(new IsAfterTagDate(tag, date));
             } else {
                 Logger.debug("Unknown after tag ({}) should be tag:value");
-                spec.commandLine().getErr().println(templatedResource.populate(ResourceBundleKey.INVALID_TAG_FORMAT,
+                spec.commandLine().getErr().println(templatedResource.populateKey(ResourceBundleKey.INVALID_TAG_FORMAT,
                         String.format("{tag:'%s'}", afterTag)));
                 exitCode = 1;
             }
@@ -102,14 +102,14 @@ public class DateFilterMixin implements Filter<Integer, Todo> {
                 } catch (ParseException e) {
                     Logger.debug(e);
                     exitCode = 1;
-                    spec.commandLine().getErr().println(templatedResource.populate(ResourceBundleKey.INVALID_DATE_FORMAT,
+                    spec.commandLine().getErr().println(templatedResource.populateKey(ResourceBundleKey.INVALID_DATE_FORMAT,
                             String.format("{date:'%s'}", beforeTagSplit[1])));
                     continue;
                 }
                 specification = specification.and(new IsBeforeTagDate(tag, date));
             } else {
                 Logger.debug("Unknown before tag ({}) should be tag:value");
-                spec.commandLine().getErr().println(templatedResource.populate(ResourceBundleKey.INVALID_TAG_FORMAT,
+                spec.commandLine().getErr().println(templatedResource.populateKey(ResourceBundleKey.INVALID_TAG_FORMAT,
                         String.format("{tag:'%s'}", beforeTag)));
                 exitCode = 1;
             }

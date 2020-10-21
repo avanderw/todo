@@ -1,23 +1,22 @@
 package net.avdw.todo;
 
 import com.google.inject.Inject;
+import net.avdw.todo.core.TodoListView;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.ext.StartedExt;
 import net.avdw.todo.filters.BooleanFilterMixin;
 import net.avdw.todo.filters.DateFilterMixin;
 import net.avdw.todo.groupby.GroupByMixin;
-import net.avdw.todo.repository.Any;
+import net.avdw.todo.core.mixin.CleanMixin;
+import net.avdw.todo.plugin.progress.ProgressExtension;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
 import net.avdw.todo.stats.StatisticMixin;
-import net.avdw.todo.style.StyleApplicator;
 import org.codehaus.plexus.util.StringUtils;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.IExitCodeGenerator;
 import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Model.CommandSpec;
-import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
 
 import java.util.List;
@@ -25,31 +24,18 @@ import java.util.Map;
 
 @Command(name = "ls", resourceBundle = "messages", description = "${bundle:list}", mixinStandardHelpOptions = true)
 public class ListCli implements Runnable, IExitCodeGenerator {
-    @Mixin
-    private BooleanFilterMixin booleanFilterMixin;
-    @Mixin
-    private DateFilterMixin dateFilterMixin;
+    @Mixin private BooleanFilterMixin booleanFilterMixin;
+    @Mixin private DateFilterMixin dateFilterMixin;
     private int exitCode = 0;
-    @Mixin
-    private GroupByMixin groupByMixin;
-    @Option(names = "--clean", descriptionKey = "list.clean.desc")
-    private boolean isClean = false;
-    @Mixin
-    private RepositoryMixin repositoryMixin;
-    @Inject
-    private RunningStats runningStats;
-    @Spec
-    private CommandSpec spec;
-    @Inject
-    private StyleApplicator styleApplicator;
-    @Inject
-    private TemplatedResource templatedResource;
-    @Inject
-    private TodoTextCleaner todoTextCleaner;
-    @Mixin
-    private StatisticMixin statisticMixin;
-    @Inject
-    private StartedExt startedExt;
+    @Mixin private GroupByMixin groupByMixin;
+    @Mixin private CleanMixin cleanMixin;
+    @Mixin private RepositoryMixin repositoryMixin;
+    @Inject private RunningStats runningStats;
+    @Spec private CommandSpec spec;
+    @Inject private ProgressExtension startedExt;
+    @Mixin private StatisticMixin statisticMixin;
+    @Inject private TemplatedResource templatedResource;
+    @Inject private TodoListView todoListView;
 
     @Override
     public int getExitCode() {
@@ -57,18 +43,7 @@ public class ListCli implements Runnable, IExitCodeGenerator {
     }
 
     private void printList(final List<Todo> list, final Repository<Integer, Todo> repository) {
-        list.forEach(todo -> {
-            String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
-            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.TODO_LINE_ITEM,
-                    String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
-        });
-
-        spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.TOTAL_SUMMARY,
-                String.format("{filtered:'%s',total:'%s',todo:'%s',started:'%s',done:'%s'}", list.size(), repository.size(),
-                list.stream().filter(startedExt::notStarted).count(),
-                list.stream().filter(startedExt::started).count(),
-                list.stream().filter(Todo::isDone).count())));
-
+        spec.commandLine().getOut().println(todoListView.render(list, repository));
         spec.commandLine().getOut().print(statisticMixin.renderStats(list));
     }
 
@@ -76,9 +51,9 @@ public class ListCli implements Runnable, IExitCodeGenerator {
         map.forEach((key, value) -> {
             String json = String.format("{type:'%s',title:'%s'}", groupByMixin.getGroupByAtDepth(depth).name(), StringUtils.capitalise(key.isBlank() ? "No" : key));
             String header = switch (depth) {
-                case 0 -> templatedResource.populate(ResourceBundleKey.GROUP_BY_HEADING, json);
-                case 1 -> templatedResource.populate(ResourceBundleKey.GROUP_BY_HEADING_2, json);
-                case 2 -> templatedResource.populate(ResourceBundleKey.GROUP_BY_HEADING_3, json);
+                case 0 -> templatedResource.populateKey(ResourceBundleKey.GROUP_BY_HEADING, json);
+                case 1 -> templatedResource.populateKey(ResourceBundleKey.GROUP_BY_HEADING_2, json);
+                case 2 -> templatedResource.populateKey(ResourceBundleKey.GROUP_BY_HEADING_3, json);
                 default -> throw new UnsupportedOperationException();
             };
             spec.commandLine().getOut().println(header);
@@ -105,13 +80,13 @@ public class ListCli implements Runnable, IExitCodeGenerator {
         Repository<Integer, Todo> scopedRepository = repositoryMixin.repository();
         List<Todo> todoList = scopedRepository.findAll(specification);
         if (todoList.isEmpty()) {
-            spec.commandLine().getOut().println(templatedResource.populate(ResourceBundleKey.NO_TODO_FOUND));
+            spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.NO_TODO_FOUND));
             return;
         }
 
         groupByMixin.setup();
         if (groupByMixin.depth() > 3) {
-            spec.commandLine().getErr().println(templatedResource.populate(ResourceBundleKey.GROUP_BY_DEPTH_UNSUPPORTED));
+            spec.commandLine().getErr().println(templatedResource.populateKey(ResourceBundleKey.GROUP_BY_DEPTH_UNSUPPORTED));
             throw new UnsupportedOperationException();
         }
 

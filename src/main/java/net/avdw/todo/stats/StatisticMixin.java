@@ -23,30 +23,30 @@ public class StatisticMixin {
         StringBuilder sb = new StringBuilder();
         Statistic reactionTimeStatistic = timingStatsCalculator.calculateReactionTime(list);
         if (reactionTimeStatistic.getN() != 0) {
-            sb.append(templatedResource.populate(ResourceBundleKey.TIMING_REACTION,
+            sb.append(templatedResource.populateKey(ResourceBundleKey.TIMING_REACTION,
                     String.format("{timing:'%s'}", DayFormatter.days2period(timingConfidence.estimate(reactionTimeStatistic)))));
             if (detail) {
-                sb.append(templatedResource.populate(ResourceBundleKey.TIMING_DETAIL, toRoundedJson(reactionTimeStatistic)));
+                sb.append(templatedResource.populateKey(ResourceBundleKey.TIMING_DETAIL, toRoundedJson(reactionTimeStatistic)));
             }
             sb.append("\n");
         }
 
         Statistic cycleTimeStatistic = timingStatsCalculator.calculateCycleTime(list);
         if (cycleTimeStatistic.getN() != 0) {
-            sb.append(templatedResource.populate(ResourceBundleKey.TIMING_CYCLE,
+            sb.append(templatedResource.populateKey(ResourceBundleKey.TIMING_CYCLE,
                     String.format("{timing:'%s'}", DayFormatter.days2period(timingConfidence.estimate(cycleTimeStatistic)))));
             if (detail) {
-                sb.append(templatedResource.populate(ResourceBundleKey.TIMING_DETAIL, toRoundedJson(cycleTimeStatistic)));
+                sb.append(templatedResource.populateKey(ResourceBundleKey.TIMING_DETAIL, toRoundedJson(cycleTimeStatistic)));
             }
             sb.append("\n");
         }
 
         Statistic leadTimeStatistic = timingStatsCalculator.calculateLeadTime(list);
         if (leadTimeStatistic.getN() != 0) {
-            sb.append(templatedResource.populate(ResourceBundleKey.TIMING_LEAD,
+            sb.append(templatedResource.populateKey(ResourceBundleKey.TIMING_LEAD,
                     String.format("{timing:'%s'}", DayFormatter.days2period(timingConfidence.estimate(leadTimeStatistic)))));
             if (detail) {
-                sb.append(templatedResource.populate(ResourceBundleKey.TIMING_DETAIL, toRoundedJson(leadTimeStatistic)));
+                sb.append(templatedResource.populateKey(ResourceBundleKey.TIMING_DETAIL, toRoundedJson(leadTimeStatistic)));
             }
             sb.append("\n");
         }

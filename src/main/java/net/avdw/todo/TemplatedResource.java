@@ -23,23 +23,27 @@ public class TemplatedResource {
         mustacheFactory = new DefaultMustacheFactory();
     }
 
-    public String populate(final String key, final String json) {
-        return populate(key, gson.fromJson(json, Map.class));
+    public String populateKey(final String key, final String json) {
+        return populate(key, resourceBundle.getString(key), gson.fromJson(json, Map.class));
     }
 
-    public String populate(final String key, final Object object) {
+    public String populate(final String key, final String template, final Object object) {
         try {
-            StringReader stringReader = new StringReader(resourceBundle.getString(key));
+            StringReader stringReader = new StringReader(template);
             Mustache mustache = mustacheFactory.compile(stringReader, key);
             StringWriter stringWriter = new StringWriter();
             return mustache.execute(stringWriter, object).toString();
         } catch (RuntimeException e) {
             Logger.debug(e);
-            return "Could not get string";
+            return "Could not populate template";
         }
     }
 
-    public String populate(final String key) {
-        return populate(key, "{}");
+    public String populate(final String key, final String template, final String json) {
+        return populate(key, template, gson.fromJson(json, Map.class));
+    }
+
+    public String populateKey(final String key) {
+        return populateKey(key, "{}");
     }
 }
