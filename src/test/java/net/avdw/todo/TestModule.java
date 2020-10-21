@@ -9,6 +9,7 @@ import com.google.inject.name.Names;
 import net.avdw.todo.core.Addon;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
+import net.avdw.todo.plugin.change.ChangeAddon;
 import net.avdw.todo.plugin.progress.ProgressAddon;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
@@ -43,9 +44,7 @@ public class TestModule extends AbstractModule {
         bind(ByteArrayOutputStream.class).annotatedWith(Names.named("err")).toInstance(new ByteArrayOutputStream());
 
         install(new StyleModule());
-
-        Multibinder<Addon> addons = Multibinder.newSetBinder(binder(), Addon.class);
-        addons.addBinding().to(ProgressAddon.class);
+        install(new AddonModule());
     }
 
     @Provides

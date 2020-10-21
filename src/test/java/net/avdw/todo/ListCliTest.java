@@ -88,7 +88,7 @@ public class ListCliTest {
     @Test(timeout = 256)
     public void testBasic() {
         cliTester.execute("pri 1");
-        cliTester.execute("ls").success().contains("[  1] (A)").count("\\[", 72).contains("@iBank");
+        cliTester.execute("ls").success().contains("[  1] (A)").count("\\[", 72).contains("@iBank").contains("Last change");
     }
 
     @Test(timeout = 256)

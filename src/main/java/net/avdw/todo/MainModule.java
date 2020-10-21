@@ -3,12 +3,9 @@ package net.avdw.todo;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
-import net.avdw.todo.core.Addon;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
-import net.avdw.todo.plugin.progress.ProgressAddon;
 import net.avdw.todo.plugin.progress.ProgressExtension;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
@@ -39,9 +36,7 @@ class MainModule extends AbstractModule {
         bind(PrintWriter.class).annotatedWith(Names.named("err")).toInstance(new PrintWriter(new OutputStreamWriter(System.err, StandardCharsets.UTF_8), true));
 
         install(new StyleModule());
-
-        Multibinder<Addon> addons = Multibinder.newSetBinder(binder(), Addon.class);
-        addons.addBinding().to(ProgressAddon.class);
+        install(new AddonModule());
     }
 
     @Provides

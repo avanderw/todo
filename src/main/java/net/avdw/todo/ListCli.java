@@ -2,19 +2,17 @@ package net.avdw.todo;
 
 import com.google.inject.Inject;
 import net.avdw.todo.core.TodoListView;
+import net.avdw.todo.core.mixin.CleanMixin;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.filters.BooleanFilterMixin;
 import net.avdw.todo.filters.DateFilterMixin;
 import net.avdw.todo.groupby.GroupByMixin;
-import net.avdw.todo.core.mixin.CleanMixin;
-import net.avdw.todo.plugin.progress.ProgressExtension;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
 import net.avdw.todo.stats.StatisticMixin;
 import org.codehaus.plexus.util.StringUtils;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;
-import picocli.CommandLine.IExitCodeGenerator;
 import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;
@@ -23,24 +21,18 @@ import java.util.List;
 import java.util.Map;
 
 @Command(name = "ls", resourceBundle = "messages", description = "${bundle:list}", mixinStandardHelpOptions = true)
-public class ListCli implements Runnable, IExitCodeGenerator {
+public class ListCli implements Runnable {
     @Mixin private BooleanFilterMixin booleanFilterMixin;
-    @Mixin private DateFilterMixin dateFilterMixin;
-    private int exitCode = 0;
-    @Mixin private GroupByMixin groupByMixin;
     @Mixin private CleanMixin cleanMixin;
+    @Mixin private DateFilterMixin dateFilterMixin;
+    @Mixin private GroupByMixin groupByMixin;
     @Mixin private RepositoryMixin repositoryMixin;
     @Inject private RunningStats runningStats;
     @Spec private CommandSpec spec;
-    @Inject private ProgressExtension startedExt;
     @Mixin private StatisticMixin statisticMixin;
     @Inject private TemplatedResource templatedResource;
     @Inject private TodoListView todoListView;
 
-    @Override
-    public int getExitCode() {
-        return exitCode;
-    }
 
     private void printList(final List<Todo> list, final Repository<Integer, Todo> repository) {
         spec.commandLine().getOut().println(todoListView.render(list, repository));

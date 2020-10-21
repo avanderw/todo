@@ -14,5 +14,5 @@
 2020-10-16 Add histogram for timings https://screenful.com/tour/timing-screen#:~:text=Lead%20time%20is%20the%20total,a%20task%20until%20its%20completion.
 2020-10-20 Add due < 5 days, due < 0 days, in-progress  > 10 days module https://screenful.com/tour/task-status-screen/
 2020-10-20 Add current state duration https://screenful.com/tour/epics/
-2020-10-20 Add last changed for group https://screenful.com/blog/gain-birds-eye-view-across-your-boards-with-epics
+x 2020-10-21 2020-10-20 Add last changed for group https://screenful.com/blog/gain-birds-eye-view-across-your-boards-with-epics
 2020-10-20 Add agile module to track state change https://screenful.com/how-to/how-to-find-bottlenecks-in-your-workflow
