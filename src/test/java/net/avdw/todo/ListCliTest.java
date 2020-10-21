@@ -88,7 +88,8 @@ public class ListCliTest {
     @Test(timeout = 256)
     public void testBasic() {
         cliTester.execute("pri 1");
-        cliTester.execute("ls").success().contains("[  1] (A)").count("\\[", 72).contains("@iBank").contains("Last change");
+        cliTester.execute("ls").success().contains("[  1] (A)").count("\\[", 72)
+                .contains("@iBank").contains("Last change");
     }
 
     @Test(timeout = 256)
@@ -104,6 +105,11 @@ public class ListCliTest {
     @Test(timeout = 256)
     public void testBeforeAfterChange() {
         cliTester.execute("ls --changed-before 2019-12-31 --changed-after 2019-12-03").success().count("\\[", 3);
+    }
+
+    @Test(timeout = 256)
+    public void testBlocker() {
+        cliTester.execute("ls --blocker").success().count("\\[", 1);
     }
 
     @Test(timeout = 256)
@@ -135,7 +141,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testChangeDetail() {
-        cliTester.execute("ls --change-detail").success().contains("7 months ago").contains("n/a");
+        cliTester.execute("ls --change-detail").success().contains("months ago").contains("n/a");
     }
 
     @Test(timeout = 256)

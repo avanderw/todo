@@ -6,13 +6,13 @@
 2020-10-15 @Add functionality to replace text in the todo (great for fixing mispelling)
 2020-10-16 Review what to do with these actions https://github.com/inkarkat/todo.txt-cli-ex/tree/master/actions
 2020-10-16 Add notes to todos https://github.com/mgarrido/todo.txt-cli/tree/note/todo.actions.d
-2020-10-16 Add standup action to list yesterday, today and impediments https://github.com/civrot/todo_txt_actions
-2020-10-16 Add blocked module https://screenful.com/tour/task-status-screen/
+r 2020-10-21 2020-10-16 Add standup action to list yesterday, today and impediments https://github.com/civrot/todo_txt_actions
+x 2020-10-21 2020-10-16 Add blocked module https://screenful.com/tour/task-status-screen/
 2020-10-16 Add progress complete for groups https://screenful.com/tour/epics/
 2020-10-16 Add estimated completion for groups with visible velocity module https://screenful.com/tour/milestone-burnup-chart
 2020-10-16 Add trending feeback for timings https://screenful.com/tour/timing-screen#:~:text=Lead%20time%20is%20the%20total,a%20task%20until%20its%20completion.
 2020-10-16 Add histogram for timings https://screenful.com/tour/timing-screen#:~:text=Lead%20time%20is%20the%20total,a%20task%20until%20its%20completion.
 2020-10-20 Add due < 5 days, due < 0 days, in-progress  > 10 days module https://screenful.com/tour/task-status-screen/
-2020-10-20 Add current state duration https://screenful.com/tour/epics/
+x 2020-10-21 2020-10-20 Add current state duration https://screenful.com/tour/epics/
 x 2020-10-21 2020-10-20 Add last changed for group https://screenful.com/blog/gain-birds-eye-view-across-your-boards-with-epics
 2020-10-20 Add agile module to track state change https://screenful.com/how-to/how-to-find-bottlenecks-in-your-workflow

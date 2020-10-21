@@ -64,7 +64,7 @@ public class BrowseCli implements Runnable {
             specification = specification.and(booleanFilterMixin.specification());
             Logger.debug(specification);
             uriList = repository.findAll(specification).stream()
-                    .flatMap(browseMapper::map)
+                    .flatMap(browseMapper::mapToUriStream)
                     .collect(Collectors.toList());
         }
 

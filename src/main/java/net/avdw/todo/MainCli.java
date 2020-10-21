@@ -32,11 +32,10 @@ import java.nio.file.Path;
                 BrowseCli.class,
         })
 public class MainCli implements Runnable {
-    @Inject
-    private Path todoPath;
-
     @Spec
     private CommandSpec spec;
+    @Inject
+    private Path todoPath;
 
     @Override
     public void run() {

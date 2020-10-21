@@ -13,7 +13,7 @@
 2020-03-10 Refactor contract / agreement / fees changes to be purely operational analyst:unnassigned importance:5 urgency:8
 2020-02-05 @iBank once off payments analyst:unnassigned importance:5 urgency:8
 2020-03-13 Increase PIN retries for @APP to around 5/6 importance:8 urgency:5
-2019-11-18 +ROB evidence retrieval system importance:8 urgency:5 analyst:karen
+2019-11-18 +ROB evidence retrieval system importance:8 urgency:5 analyst:karen blocker:IntegrationDown
 2018-10-23 Refactor services to have versioned endpoints importance:8 urgency:5
 2020-03-10 Step up authentication on @USSD analyst:unnassigned importance:3 urgency:8
 2019-12-04 Purpose lending vehicle finance analyst:cassim ref:CPORT-22 importance:2 urgency:8

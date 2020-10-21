@@ -7,6 +7,7 @@ import net.avdw.todo.domain.Todo;
 import net.avdw.todo.filters.BooleanFilterMixin;
 import net.avdw.todo.filters.DateFilterMixin;
 import net.avdw.todo.groupby.GroupByMixin;
+import net.avdw.todo.plugin.blocker.BlockerMixin;
 import net.avdw.todo.plugin.change.ChangeMixin;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
@@ -26,6 +27,7 @@ public class ListCli implements Runnable {
     @Mixin private BooleanFilterMixin booleanFilterMixin;
     @Mixin private CleanMixin cleanMixin;
     @Mixin private ChangeMixin changeMixin;
+    @Mixin private BlockerMixin blockerMixin;
     @Mixin private DateFilterMixin dateFilterMixin;
     @Mixin private GroupByMixin groupByMixin;
     @Mixin private RepositoryMixin repositoryMixin;
@@ -69,6 +71,7 @@ public class ListCli implements Runnable {
     public void run() {
         Specification<Integer, Todo> specification = dateFilterMixin.specification();
         specification = specification.and(booleanFilterMixin.specification());
+        specification = specification.and(blockerMixin.specification());
 
         Logger.debug(specification);
         Repository<Integer, Todo> scopedRepository = repositoryMixin.repository();
