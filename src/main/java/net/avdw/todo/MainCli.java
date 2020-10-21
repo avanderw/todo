@@ -1,6 +1,7 @@
 package net.avdw.todo;
 
 import com.google.inject.Inject;
+import net.avdw.todo.plugin.browse.BrowseCli;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;
@@ -28,6 +29,7 @@ import java.nio.file.Path;
                 ArchiveCli.class,
                 BackupCli.class,
                 ExploreCli.class,
+                BrowseCli.class,
         })
 public class MainCli implements Runnable {
     @Inject

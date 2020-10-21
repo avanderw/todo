@@ -9,16 +9,9 @@ import java.util.regex.Pattern;
 
 public class BrowseSpecification extends AbstractSpecification<Integer, Todo> {
 
-    private final Pattern pattern;
-
-    @Inject
-    BrowseSpecification(@Browse final Pattern pattern) {
-        this.pattern = pattern;
-    }
-
     @Override
     public boolean isSatisfiedBy(final Todo todo) {
-        Matcher matcher = pattern.matcher(todo.getText());
+        Matcher matcher = BrowseStatic.PATTERN.matcher(todo.getText());
         return matcher.find();
     }
 

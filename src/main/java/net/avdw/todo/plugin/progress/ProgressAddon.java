@@ -7,8 +7,6 @@ import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class ProgressAddon implements Addon {
     private final ProgressExtension progressExtension;

@@ -1,7 +1,6 @@
 package net.avdw.todo;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.multibindings.Multibinder;
@@ -10,20 +9,14 @@ import com.google.inject.name.Names;
 import net.avdw.todo.core.Addon;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
-import net.avdw.todo.plugin.Plugin;
+import net.avdw.todo.plugin.progress.ProgressAddon;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.style.StyleModule;
 import org.fusesource.jansi.AnsiConsole;
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
-import org.tinylog.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashSet;
@@ -49,25 +42,10 @@ public class TestModule extends AbstractModule {
         bind(ByteArrayOutputStream.class).annotatedWith(Names.named("out")).toInstance(new ByteArrayOutputStream());
         bind(ByteArrayOutputStream.class).annotatedWith(Names.named("err")).toInstance(new ByteArrayOutputStream());
 
-        Reflections reflection = new Reflections(new ConfigurationBuilder()
-                .setUrls(ClasspathHelper.forPackage("net.avdw.todo.plugin"))
-                .setScanners(new SubTypesScanner()));
-        reflection.getSubTypesOf(Module.class).stream().filter(m->m.isAnnotationPresent(Plugin.class)).forEach(module -> {
-            try {
-                Logger.debug("Registering module: {}", module);
-                install(module.getDeclaredConstructor().newInstance());
-
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                Logger.error(e);
-            }
-        });
         install(new StyleModule());
 
         Multibinder<Addon> addons = Multibinder.newSetBinder(binder(), Addon.class);
-        reflection.getSubTypesOf(Addon.class).forEach(addon -> {
-            Logger.debug("Registering addon: {}", addon);
-            addons.addBinding().to(addon);
-        });
+        addons.addBinding().to(ProgressAddon.class);
     }
 
     @Provides

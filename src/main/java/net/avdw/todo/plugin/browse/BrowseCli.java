@@ -7,7 +7,6 @@ import net.avdw.todo.domain.Todo;
 import net.avdw.todo.filters.BooleanFilterMixin;
 import net.avdw.todo.filters.DateFilterMixin;
 import net.avdw.todo.filters.IndexSpecificationMixin;
-import net.avdw.todo.plugin.Plugin;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
 import org.tinylog.Logger;
@@ -25,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Plugin
 @Command(name = "browse", resourceBundle = "messages", description = "${bundle:browse.description}", mixinStandardHelpOptions = true)
 public class BrowseCli implements Runnable {
 
