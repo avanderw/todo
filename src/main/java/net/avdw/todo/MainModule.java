@@ -31,7 +31,6 @@ class MainModule extends AbstractModule {
         bind(List.class).to(LinkedList.class);
         bind(Set.class).to(HashSet.class);
         bind(ResourceBundle.class).toInstance(ResourceBundle.getBundle("messages", Locale.ENGLISH));
-        bind(ProgressExt.class).toInstance(new ProgressExt("started"));
         bind(PrintWriter.class).annotatedWith(Names.named("out")).toInstance(new PrintWriter(new OutputStreamWriter(System.out, StandardCharsets.UTF_8), true));
         bind(PrintWriter.class).annotatedWith(Names.named("err")).toInstance(new PrintWriter(new OutputStreamWriter(System.err, StandardCharsets.UTF_8), true));
 

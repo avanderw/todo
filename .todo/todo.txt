@@ -1,6 +1,5 @@
 2019-07-23 @Fix bug when global repository does not exist
 2019-08-14 Consider adding roadmap generation based off priority, version or combined
-r 2020-10-21 2019-08-21 @Enhance +priority to prioritise a project or context
 2020-10-01 @Add 'todo roadmap' [project, context, tag] which will list upcoming- due,target,cycle and past- due,target,cycle
 2020-10-12 Add the ability to prioritise on search criteria @should
 2020-10-15 @Add functionality to replace text in the todo (great for fixing mispelling)
@@ -11,9 +10,3 @@ r 2020-10-21 2019-08-21 @Enhance +priority to prioritise a project or context
 2020-10-16 Review what to do with these actions https://github.com/inkarkat/todo.txt-cli-ex/tree/master/actions
 2020-10-20 Add agile module to track state change https://screenful.com/how-to/how-to-find-bottlenecks-in-your-workflow
 2020-10-20 Add due < 5 days, due < 0 days, in-progress  > 10 days module https://screenful.com/tour/task-status-screen/
-x 2020-10-21 2020-10-21 Combine changelog with list using the group-by option
-r 2020-10-21 2020-10-16 Add standup action to list yesterday, today and impediments https://github.com/civrot/todo_txt_actions
-x 2020-10-21 2020-10-16 Add blocked module https://screenful.com/tour/task-status-screen/
-x 2020-10-21 2020-10-16 Add progress complete for groups https://screenful.com/tour/epics/
-x 2020-10-21 2020-10-20 Add current state duration https://screenful.com/tour/epics/
-x 2020-10-21 2020-10-20 Add last changed for group https://screenful.com/blog/gain-birds-eye-view-across-your-boards-with-epics

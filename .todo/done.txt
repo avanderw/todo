@@ -86,3 +86,8 @@ x 2020-10-14 2019-08-12 @Add grouping feature to list, e.g. by project or search
 x 2020-10-14 2020-10-07 Structure delivery around iterations with themes and create articles for each iteration
 x 2020-10-15 2020-10-14 Merge 'stats' functionality into all 'list' commands @tactical @must
 x 2020-10-15 2020-10-15 Enhance EditCli to not autocommit after every todo edit
+x 2020-10-21 2020-10-21 Combine changelog with list using the group-by option
+x 2020-10-21 2020-10-16 Add blocked module https://screenful.com/tour/task-status-screen/
+x 2020-10-21 2020-10-16 Add progress complete for groups https://screenful.com/tour/epics/
+x 2020-10-21 2020-10-20 Add current state duration https://screenful.com/tour/epics/
+x 2020-10-21 2020-10-20 Add last changed for group https://screenful.com/blog/gain-birds-eye-view-across-your-boards-with-epics

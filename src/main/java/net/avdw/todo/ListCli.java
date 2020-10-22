@@ -36,16 +36,14 @@ public class ListCli implements Runnable {
     @Mixin private DateFilterMixin dateFilterMixin;
     @Mixin private GroupByMixin groupByMixin;
     @Mixin private RepositoryMixin repositoryMixin;
-    @Mixin private TimingMixin statsMixin;
     @Inject private RunningStats runningStats;
     @Spec private CommandSpec spec;
-//    @Mixin private StatisticMixin statisticMixin;
+    @Mixin private TimingMixin statsMixin;
     @Inject private TemplatedResource templatedResource;
     @Inject private TodoListView todoListView;
 
     private void printList(final List<Todo> list, final Repository<Integer, Todo> repository) {
         spec.commandLine().getOut().println(todoListView.render(list, repository));
-//        spec.commandLine().getOut().print(statisticMixin.renderStats(list));
     }
 
     private void printMap(final Map<String, ?> map, final Repository<Integer, Todo> repository, final GroupByMixin groupByMixin, final int depth) {
