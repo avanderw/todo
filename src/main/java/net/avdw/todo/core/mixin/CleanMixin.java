@@ -2,7 +2,7 @@ package net.avdw.todo.core.mixin;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.avdw.todo.TodoTextCleaner;
+import net.avdw.todo.domain.TodoTextCleaner;
 import net.avdw.todo.domain.Todo;
 import picocli.CommandLine.Option;
 

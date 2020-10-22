@@ -14,7 +14,10 @@ public final class Main {
 
     public static void main(final String[] args) {
         Injector injector = Guice.createInjector(new MainModule());
-        injector.getInstance(CommandLineBuilder.class).build(MainCli.class, injector).execute(args);
+        injector.getInstance(CommandLineBuilder.class)
+                .build(MainCli.class, injector)
+                .execute(args);
+
     }
 
 }

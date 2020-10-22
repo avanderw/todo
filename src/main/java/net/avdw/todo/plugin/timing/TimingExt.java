@@ -1,9 +1,8 @@
 package net.avdw.todo.plugin.timing;
 
 import net.avdw.todo.ThrowingFunction;
-import net.avdw.todo.core.Ext;
+import net.avdw.todo.plugin.Ext;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.plugin.change.Change;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

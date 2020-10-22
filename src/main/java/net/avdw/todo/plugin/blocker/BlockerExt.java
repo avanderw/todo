@@ -1,6 +1,6 @@
 package net.avdw.todo.plugin.blocker;
 
-import net.avdw.todo.core.Ext;
+import net.avdw.todo.plugin.Ext;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.AbstractSpecification;
 

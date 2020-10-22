@@ -1,10 +1,14 @@
 package net.avdw.todo;
 
 import com.google.inject.Inject;
+import net.avdw.todo.core.*;
 import net.avdw.todo.plugin.browse.BrowseCli;
 import net.avdw.todo.plugin.changelog.ChangelogCli;
+import net.avdw.todo.plugin.edit.EditCli;
+import net.avdw.todo.plugin.explore.ExploreCli;
 import net.avdw.todo.plugin.replace.ReplaceCli;
 import net.avdw.todo.plugin.start.StartCli;
+import net.avdw.todo.plugin.stats.StatsCli;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;

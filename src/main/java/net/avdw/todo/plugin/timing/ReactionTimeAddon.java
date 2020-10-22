@@ -2,9 +2,9 @@ package net.avdw.todo.plugin.timing;
 
 import com.google.inject.Inject;
 import net.avdw.todo.TemplatedResource;
-import net.avdw.todo.core.Addon;
+import net.avdw.todo.plugin.Addon;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.format.DayFormatter;
+import net.avdw.todo.core.DayFormatter;
 import net.avdw.todo.repository.Repository;
 
 import java.util.List;

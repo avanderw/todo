@@ -2,7 +2,7 @@ package net.avdw.todo.plugin.progress;
 
 import com.google.inject.Inject;
 import net.avdw.todo.TemplatedResource;
-import net.avdw.todo.core.Addon;
+import net.avdw.todo.plugin.Addon;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
 

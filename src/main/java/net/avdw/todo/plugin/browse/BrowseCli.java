@@ -1,12 +1,12 @@
 package net.avdw.todo.plugin.browse;
 
 import com.google.inject.Inject;
-import net.avdw.todo.RepositoryMixin;
+import net.avdw.todo.core.mixin.RepositoryMixin;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.filters.BooleanFilterMixin;
-import net.avdw.todo.filters.DateFilterMixin;
-import net.avdw.todo.filters.IndexSpecificationMixin;
+import net.avdw.todo.core.mixin.BooleanFilterMixin;
+import net.avdw.todo.core.mixin.DateFilterMixin;
+import net.avdw.todo.core.mixin.IndexSpecificationMixin;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
 import org.tinylog.Logger;

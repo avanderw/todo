@@ -1,7 +1,7 @@
 package net.avdw.todo.plugin.change;
 
 import net.avdw.todo.ThrowingFunction;
-import net.avdw.todo.core.Ext;
+import net.avdw.todo.plugin.Ext;
 import net.avdw.todo.domain.Todo;
 
 import java.text.SimpleDateFormat;

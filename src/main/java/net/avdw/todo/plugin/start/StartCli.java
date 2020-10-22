@@ -1,7 +1,7 @@
 package net.avdw.todo.plugin.start;
 
 import com.google.inject.Inject;
-import net.avdw.todo.core.TodoView;
+import net.avdw.todo.core.view.TodoView;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
 import picocli.CommandLine.Command;

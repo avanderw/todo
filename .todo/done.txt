@@ -91,3 +91,4 @@ x 2020-10-21 2020-10-16 Add blocked module https://screenful.com/tour/task-statu
 x 2020-10-21 2020-10-16 Add progress complete for groups https://screenful.com/tour/epics/
 x 2020-10-21 2020-10-20 Add current state duration https://screenful.com/tour/epics/
 x 2020-10-21 2020-10-20 Add last changed for group https://screenful.com/blog/gain-birds-eye-view-across-your-boards-with-epics
+x 2020-10-22 2020-10-15 @Add functionality to replace text in the todo (great for fixing mispelling)

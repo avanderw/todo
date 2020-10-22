@@ -2,7 +2,7 @@ package net.avdw.todo.plugin.change;
 
 import com.google.inject.Inject;
 import net.avdw.todo.TemplatedResource;
-import net.avdw.todo.core.Addon;
+import net.avdw.todo.plugin.Addon;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
 import org.ocpsoft.prettytime.PrettyTime;

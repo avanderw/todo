@@ -1,6 +1,5 @@
 package net.avdw.todo.core.groupby;
 
-import net.avdw.todo.core.Guard;
 import net.avdw.todo.domain.Todo;
 
 import java.util.Locale;
