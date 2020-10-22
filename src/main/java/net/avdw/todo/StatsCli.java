@@ -2,13 +2,13 @@ package net.avdw.todo;
 
 import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.domain.TodoTiming;
+import net.avdw.todo.plugin.timing.TodoTiming;
 import net.avdw.todo.filters.BooleanFilterMixin;
 import net.avdw.todo.filters.DateFilterMixin;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
-import net.avdw.todo.stats.Statistic;
-import net.avdw.todo.stats.TimingStatsCalculator;
+import net.avdw.todo.plugin.timing.TimingStats;
+import net.avdw.todo.plugin.timing.TimingCalculator;
 import net.avdw.todo.style.StyleApplicator;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;
@@ -45,7 +45,7 @@ public class StatsCli implements Runnable {
     @Inject
     private TemplatedResource templatedResource;
     @Inject
-    private TimingStatsCalculator timingStatsCalculator;
+    private TimingCalculator timingStatsCalculator;
     @Inject
     private TodoTiming todoStatistic;
     @Inject
@@ -78,7 +78,7 @@ public class StatsCli implements Runnable {
     private void printCycleTimeStatistics(final List<Todo> todoList) {
         spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_CYCLE_TITLE));
 
-        Statistic stats = timingStatsCalculator.calculateCycleTime(todoList);
+        TimingStats stats = timingStatsCalculator.calculateCycleTime(todoList);
         printStats(stats);
 
         Optional<Todo> max = todoList.stream()
@@ -124,7 +124,7 @@ public class StatsCli implements Runnable {
     private void printLeadTimeStatistics(final List<Todo> todoList) {
         spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_LEAD_TITLE));
 
-        Statistic stats = timingStatsCalculator.calculateLeadTime(todoList);
+        TimingStats stats = timingStatsCalculator.calculateLeadTime(todoList);
         printStats(stats);
 
         Optional<Todo> max = todoList.stream()
@@ -157,7 +157,7 @@ public class StatsCli implements Runnable {
     private void printReactionTimeStatistics(final List<Todo> todoList) {
         spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_REACTION_TITLE));
 
-        Statistic stats = timingStatsCalculator.calculateReactionTime(todoList);
+        TimingStats stats = timingStatsCalculator.calculateReactionTime(todoList);
         printStats(stats);
 
         Optional<Todo> max = todoList.stream()
@@ -187,7 +187,7 @@ public class StatsCli implements Runnable {
         }
     }
 
-    private void printStats(final Statistic stats) {
+    private void printStats(final TimingStats stats) {
         if (stats.getN() < 1) {
             spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_NOT_ENOUGH_DATA));
             return;

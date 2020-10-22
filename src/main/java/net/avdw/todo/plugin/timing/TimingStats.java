@@ -1,9 +1,9 @@
-package net.avdw.todo.stats;
+package net.avdw.todo.plugin.timing;
 
 import lombok.Data;
 
 @Data
-public class Statistic {
+public class TimingStats {
     private double iqr;
     private double min;
     private double trimmedMin;

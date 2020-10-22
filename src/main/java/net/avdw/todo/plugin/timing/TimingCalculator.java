@@ -1,18 +1,17 @@
-package net.avdw.todo.stats;
+package net.avdw.todo.plugin.timing;
 
 import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.domain.TodoTiming;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import java.util.List;
 
-public class TimingStatsCalculator {
+public class TimingCalculator {
 
     @Inject
     private TodoTiming todoTiming;
 
-    public Statistic calculateCycleTime(final List<Todo> todoList) {
+    public TimingStats calculateCycleTime(final List<Todo> todoList) {
         DescriptiveStatistics stats = new DescriptiveStatistics();
         todoList.stream()
                 .filter(todoTiming::hasCycleTime)
@@ -22,7 +21,7 @@ public class TimingStatsCalculator {
         return map(stats);
     }
 
-    public Statistic calculateLeadTime(final List<Todo> todoList) {
+    public TimingStats calculateLeadTime(final List<Todo> todoList) {
         DescriptiveStatistics stats = new DescriptiveStatistics();
         todoList.stream()
                 .filter(todoTiming::hasLeadTime)
@@ -32,7 +31,7 @@ public class TimingStatsCalculator {
         return map(stats);
     }
 
-    public Statistic calculateReactionTime(final List<Todo> todoList) {
+    public TimingStats calculateReactionTime(final List<Todo> todoList) {
         DescriptiveStatistics stats = new DescriptiveStatistics();
         todoList.stream()
                 .filter(todoTiming::hasReactionTime)
@@ -42,8 +41,8 @@ public class TimingStatsCalculator {
         return map(stats);
     }
 
-    private Statistic map(final DescriptiveStatistics stats) {
-        Statistic statistic = new Statistic();
+    private TimingStats map(final DescriptiveStatistics stats) {
+        TimingStats statistic = new TimingStats();
         statistic.setIqr(stats.getPercentile(75) - stats.getPercentile(25));
         statistic.setMin(stats.getMin());
         statistic.setTrimmedMin(stats.getPercentile(25) - 1.5 * statistic.getIqr());

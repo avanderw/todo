@@ -6,5 +6,5 @@ import picocli.CommandLine.Option;
 @Singleton
 public class ChangeMixin {
     @Option(names = "--change-detail", descriptionKey = "change.mixin.desc.change.detail")
-    public boolean showDetail = false;
+    boolean showDetail = false;
 }

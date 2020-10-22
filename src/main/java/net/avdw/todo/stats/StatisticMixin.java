@@ -5,6 +5,9 @@ import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.format.DayFormatter;
+import net.avdw.todo.plugin.timing.TimingStats;
+import net.avdw.todo.plugin.timing.TimingCalculator;
+import net.avdw.todo.plugin.timing.TimingConfidence;
 import picocli.CommandLine.Option;
 
 import java.util.List;
@@ -17,11 +20,11 @@ public class StatisticMixin {
     @Inject
     private TimingConfidence timingConfidence;
     @Inject
-    private TimingStatsCalculator timingStatsCalculator;
+    private TimingCalculator timingStatsCalculator;
 
     public String renderStats(final List<Todo> list) {
         StringBuilder sb = new StringBuilder();
-        Statistic reactionTimeStatistic = timingStatsCalculator.calculateReactionTime(list);
+        TimingStats reactionTimeStatistic = timingStatsCalculator.calculateReactionTime(list);
         if (reactionTimeStatistic.getN() != 0) {
             sb.append(templatedResource.populateKey(ResourceBundleKey.TIMING_REACTION,
                     String.format("{timing:'%s'}", DayFormatter.days2period(timingConfidence.estimate(reactionTimeStatistic)))));
@@ -31,7 +34,7 @@ public class StatisticMixin {
             sb.append("\n");
         }
 
-        Statistic cycleTimeStatistic = timingStatsCalculator.calculateCycleTime(list);
+        TimingStats cycleTimeStatistic = timingStatsCalculator.calculateCycleTime(list);
         if (cycleTimeStatistic.getN() != 0) {
             sb.append(templatedResource.populateKey(ResourceBundleKey.TIMING_CYCLE,
                     String.format("{timing:'%s'}", DayFormatter.days2period(timingConfidence.estimate(cycleTimeStatistic)))));
@@ -41,7 +44,7 @@ public class StatisticMixin {
             sb.append("\n");
         }
 
-        Statistic leadTimeStatistic = timingStatsCalculator.calculateLeadTime(list);
+        TimingStats leadTimeStatistic = timingStatsCalculator.calculateLeadTime(list);
         if (leadTimeStatistic.getN() != 0) {
             sb.append(templatedResource.populateKey(ResourceBundleKey.TIMING_LEAD,
                     String.format("{timing:'%s'}", DayFormatter.days2period(timingConfidence.estimate(leadTimeStatistic)))));
@@ -54,7 +57,7 @@ public class StatisticMixin {
         return sb.toString();
     }
 
-    private String toRoundedJson(Statistic statistic) {
+    private String toRoundedJson(TimingStats statistic) {
         return String.format("{n:'%3d',mean:'%3.0f',stdDev:'%3.0f',trimmedMin:'%3.0f',q1:'%3.0f',q2:'%3.0f',q3:'%3.0f',trimmedMax:'%3.0f'}",
                 statistic.getN(),
                 statistic.getMean(),

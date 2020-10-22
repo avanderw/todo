@@ -32,9 +32,9 @@ public class TodoView {
         return templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
                 String.format("{idx:'%3s',pre:'%s',todo:\"%s\",post:'%s'}",
                         todo.getIdx(),
-                        addonList.stream().map(addon -> addon.preTodo(todo)).filter(Objects::nonNull).collect(Collectors.joining("\n")),
+                        addonList.stream().map(addon -> addon.preTodo(todo)).filter(Objects::nonNull).collect(Collectors.joining(" ")),
                         escapedText,
-                        addonList.stream().map(addon -> addon.postTodo(todo)).filter(Objects::nonNull).collect(Collectors.joining("\n"))
+                        addonList.stream().map(addon -> addon.postTodo(todo)).filter(Objects::nonNull).collect(Collectors.joining(" "))
                 ));
     }
 }

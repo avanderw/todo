@@ -1,7 +1,7 @@
-package net.avdw.todo.stats;
+package net.avdw.todo.plugin.timing;
 
 public class TimingConfidence {
-    public double estimate(Statistic statistic) {
+    public double estimate(TimingStats statistic) {
         double estimate = statistic.getN() > 8 ? statistic.getOneStdDev() : statistic.getTrimmedMax();
         return cap(estimate, statistic.getTrimmedMax());
     }

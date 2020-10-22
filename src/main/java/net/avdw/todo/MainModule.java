@@ -6,7 +6,7 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
-import net.avdw.todo.plugin.progress.ProgressExtension;
+import net.avdw.todo.plugin.progress.ProgressExt;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.style.StyleModule;
@@ -31,7 +31,7 @@ class MainModule extends AbstractModule {
         bind(List.class).to(LinkedList.class);
         bind(Set.class).to(HashSet.class);
         bind(ResourceBundle.class).toInstance(ResourceBundle.getBundle("messages", Locale.ENGLISH));
-        bind(ProgressExtension.class).toInstance(new ProgressExtension("started"));
+        bind(ProgressExt.class).toInstance(new ProgressExt("started"));
         bind(PrintWriter.class).annotatedWith(Names.named("out")).toInstance(new PrintWriter(new OutputStreamWriter(System.out, StandardCharsets.UTF_8), true));
         bind(PrintWriter.class).annotatedWith(Names.named("err")).toInstance(new PrintWriter(new OutputStreamWriter(System.err, StandardCharsets.UTF_8), true));
 

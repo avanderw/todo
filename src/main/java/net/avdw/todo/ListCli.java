@@ -9,9 +9,9 @@ import net.avdw.todo.filters.BooleanFilterMixin;
 import net.avdw.todo.filters.DateFilterMixin;
 import net.avdw.todo.plugin.blocker.BlockerMixin;
 import net.avdw.todo.plugin.change.ChangeMixin;
+import net.avdw.todo.plugin.timing.TimingMixin;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
-import net.avdw.todo.stats.StatisticMixin;
 import org.codehaus.plexus.util.StringUtils;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;
@@ -36,15 +36,16 @@ public class ListCli implements Runnable {
     @Mixin private DateFilterMixin dateFilterMixin;
     @Mixin private GroupByMixin groupByMixin;
     @Mixin private RepositoryMixin repositoryMixin;
+    @Mixin private TimingMixin statsMixin;
     @Inject private RunningStats runningStats;
     @Spec private CommandSpec spec;
-    @Mixin private StatisticMixin statisticMixin;
+//    @Mixin private StatisticMixin statisticMixin;
     @Inject private TemplatedResource templatedResource;
     @Inject private TodoListView todoListView;
 
     private void printList(final List<Todo> list, final Repository<Integer, Todo> repository) {
         spec.commandLine().getOut().println(todoListView.render(list, repository));
-        spec.commandLine().getOut().print(statisticMixin.renderStats(list));
+//        spec.commandLine().getOut().print(statisticMixin.renderStats(list));
     }
 
     private void printMap(final Map<String, ?> map, final Repository<Integer, Todo> repository, final GroupByMixin groupByMixin, final int depth) {

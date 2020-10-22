@@ -50,7 +50,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testAfterChange() {
-        cliTester.execute("ls --changed-after 2019-12-31").success().count("\\[", 34);
+        cliTester.execute("ls --changed-after 2019-12-31").success().count("\\[", 36);
     }
 
     @Test(timeout = 256)
@@ -61,12 +61,12 @@ public class ListCliTest {
         String now = SIMPLE_DATE_FORMAT.format(gregorianCalendar.getTime());
         cliTester.execute(String.format("ls --done-after %s", now)).success().count("\\[", 0);
         cliTester.execute("do 5").success();
-        cliTester.execute(String.format("ls --done-after %s", now)).success().count("\\[", 1);
+        cliTester.execute(String.format("ls --done-after %s", now)).success().count("\\[", 2);
     }
 
     @Test(timeout = 256)
     public void testAfterTag() {
-        cliTester.execute("ls --after-tag started:2020-03-01").success().count("\\[", 9);
+        cliTester.execute("ls --after-tag started:2020-03-01").success().count("\\[", 10);
     }
 
     @Test(timeout = 256)
@@ -88,7 +88,7 @@ public class ListCliTest {
     @Test(timeout = 256)
     public void testBasic() {
         cliTester.execute("pri 1");
-        cliTester.execute("ls").success().contains("[  1] (A)").count("\\[", 72)
+        cliTester.execute("ls").success().contains("[  1] (A)").count("\\[", 74)
                 .contains("@iBank").contains("Last change");
     }
 
@@ -114,7 +114,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testBeforeChange() {
-        cliTester.execute("ls --changed-before 2019-12-31").success().count("\\[", 37);
+        cliTester.execute("ls --changed-before 2019-12-31").success().count("\\[", 38);
     }
 
     @Test(timeout = 256)
@@ -123,14 +123,14 @@ public class ListCliTest {
         gregorianCalendar.setTime(new Date());
         gregorianCalendar.add(Calendar.DAY_OF_MONTH, 1);
         String now = SIMPLE_DATE_FORMAT.format(gregorianCalendar.getTime());
-        cliTester.execute(String.format("ls --done-before %s", now)).success().count("\\[", 2);
-        cliTester.execute("do 2").success();
         cliTester.execute(String.format("ls --done-before %s", now)).success().count("\\[", 3);
+        cliTester.execute("do 2").success();
+        cliTester.execute(String.format("ls --done-before %s", now)).success().count("\\[", 4);
     }
 
     @Test(timeout = 256)
     public void testBeforeTag() {
-        cliTester.execute("ls --before-tag started:2020-01-01").success().count("\\[", 5);
+        cliTester.execute("ls --before-tag started:2020-01-01").success().count("\\[", 6);
     }
 
     @Test(timeout = 256)
@@ -160,7 +160,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testDone() {
-        cliTester.execute("ls --incl-done").success().contains("[ 73] x").count("\\[", 80);
+        cliTester.execute("ls --incl-done").success().contains("[ 73] x").count("\\[", 83);
     }
 
     @Test(timeout = 256)
@@ -246,24 +246,24 @@ public class ListCliTest {
     @Test(timeout = 256)
     public void testParked() {
         cliTester.execute("archive").success();
-        cliTester.execute("ls --incl-parked").success().count("\\[", 70);
+        cliTester.execute("ls --incl-parked").success().count("\\[", 71);
     }
 
     @Test(timeout = 256)
     public void testRemoved() {
         cliTester.execute("archive").success();
-        cliTester.execute("ls --incl-removed").success().count("\\[", 69);
+        cliTester.execute("ls --incl-removed").success().count("\\[", 70);
     }
 
     @Test(timeout = 256)
-    public void testStatistic() {
+    public void testTiming() {
         cliTester.execute("ls --incl-done").success()
                 .contains("Reaction").contains("Cycle").contains("Lead");
     }
 
     @Test(timeout = 256)
-    public void testStatisticDetail() {
-        cliTester.execute("ls --incl-done --detail").success()
+    public void testTimingDetail() {
+        cliTester.execute("ls --incl-done --timing-detail").success()
                 .contains("Reaction").contains("Cycle").contains("Lead")
                 .contains("(Q1)=").contains("(Q2)=").contains("(Q3)=");
     }

@@ -9,11 +9,11 @@ import net.avdw.todo.repository.Repository;
 import java.util.List;
 
 public class ProgressAddon implements Addon {
-    private final ProgressExtension progressExtension;
+    private final ProgressExt progressExtension;
     private final TemplatedResource templatedResource;
 
     @Inject
-    ProgressAddon(final ProgressExtension progressExtension, final TemplatedResource templatedResource) {
+    ProgressAddon(final ProgressExt progressExtension, final TemplatedResource templatedResource) {
         this.progressExtension = progressExtension;
         this.templatedResource = templatedResource;
     }
