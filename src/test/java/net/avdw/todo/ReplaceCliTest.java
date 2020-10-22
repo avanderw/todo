@@ -6,17 +6,21 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
 
 import static net.avdw.todo.TodoCliTestBootstrapper.cleanup;
 import static net.avdw.todo.TodoCliTestBootstrapper.setup;
 import static net.avdw.todo.TodoCliTestBootstrapper.warmup;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-public class StartCliTest {
-    private static final Path todoPath = Paths.get("target/test-resources/start/.todo/todo.txt");
+public class ReplaceCliTest {
+    private static final Path todoPath = Paths.get("target/test-resources/replace/.todo/todo.txt");
     private static CliTester cliTester;
 
     @AfterClass
@@ -38,17 +42,20 @@ public class StartCliTest {
     }
 
     @Test(timeout = 256)
-    public void testBasic() {
-        cliTester.execute("start 1,2").success().contains("started:").startsWith("[  1]");
+    public void testBasic() throws IOException {
+        cliTester.execute("replace started: s:").success();
+        String contents = Files.readString(todoPath);
+        assertFalse("started: should be replaced", contents.contains("started:"));
+        assertTrue("s: should be replaced", contents.contains("s:"));
     }
 
     @Test(timeout = 256)
     public void testHelp() {
-        cliTester.execute("start --help").success().contains("Usage: todo start");
+        cliTester.execute("replace --help").success().contains("Usage: todo replace");
     }
 
     @Test(timeout = 256)
     public void testNoIdx() {
-        cliTester.execute("start").failure();
+        cliTester.execute("replace").failure();
     }
 }

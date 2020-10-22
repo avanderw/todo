@@ -19,14 +19,10 @@ public class ParkCli implements Runnable {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     @Parameters(descriptionKey = "park.idx.list", arity = "1", split = ",")
     private Set<Integer> idxList;
-    @Spec
-    private CommandSpec spec;
-    @Inject
-    private TemplatedResource templatedResource;
-    @Inject
-    private Repository<Integer, Todo> todoRepository;
-    @Inject
-    private StyleApplicator styleApplicator;
+    @Spec private CommandSpec spec;
+    @Inject private StyleApplicator styleApplicator;
+    @Inject private TemplatedResource templatedResource;
+    @Inject private Repository<Integer, Todo> todoRepository;
 
     @Override
     public void run() {

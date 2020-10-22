@@ -28,14 +28,10 @@ class AddCli implements Runnable, IExitCodeGenerator {
     private int exitCode = 0;
     @Option(names = {"-p", "--priority"}, description = "Prioritise addition with the next highest available priority")
     private boolean hasPriority = false;
-    @Spec
-    private CommandSpec spec;
-    @Inject
-    private StyleApplicator styleApplicator;
-    @Inject
-    private TemplatedResource templatedResource;
-    @Inject
-    private Repository<Integer, Todo> todoRepository;
+    @Spec private CommandSpec spec;
+    @Inject private StyleApplicator styleApplicator;
+    @Inject private TemplatedResource templatedResource;
+    @Inject private Repository<Integer, Todo> todoRepository;
 
     @Override
     public int getExitCode() {

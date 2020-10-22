@@ -3,6 +3,7 @@ package net.avdw.todo;
 import com.google.inject.Inject;
 import net.avdw.todo.plugin.browse.BrowseCli;
 import net.avdw.todo.plugin.changelog.ChangelogCli;
+import net.avdw.todo.plugin.replace.ReplaceCli;
 import net.avdw.todo.plugin.start.StartCli;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
@@ -33,6 +34,7 @@ import java.nio.file.Path;
                 ExploreCli.class,
                 BrowseCli.class,
                 StartCli.class,
+                ReplaceCli.class,
         })
 public class MainCli implements Runnable {
     @Spec
