@@ -17,10 +17,9 @@ public class DayFormatter {
         long weeks = Math.floorDiv(days, 7);
         days %= 7;
 
-        return String.format("%3s days (", totalDays) +
-                ((years != 0) ? String.format(" %sy", years) : "   ") +
+        return ((years != 0) ? String.format("%sy", years) : "  ") +
                 ((months != 0) ? String.format(" %2sm", months) : "    ") +
                 ((weeks != 0) ? String.format(" %sw", weeks) : "   ") +
-                ((days != 0) ? String.format(" %sd )", days) : "    )");
+                ((days != 0) ? String.format(" %sd", days) : "   ");
     }
 }

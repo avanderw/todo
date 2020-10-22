@@ -31,7 +31,7 @@ public class LeadTimeAddon implements Addon {
         TimingStats statistic = statsCalculator.calculateLeadTime(list);
         if (statistic.getN() != 0) {
             render = templatedResource.populateKey(TimingKey.LEAD_SUMMARY,
-                    String.format("{timing:'%s'}", DayFormatter.days2period(statsConfidence.estimate(statistic))));
+                    String.format("{fifty:'%s',eighty:'%s'}", DayFormatter.days2period(statistic.getMean()), DayFormatter.days2period(statsConfidence.estimate(statistic))));
             if (timingMixin.showDetail) {
                 render += templatedResource.populateKey(TimingKey.SUMMARY_DETAIL, TimingUtil.toRoundedJson(statistic));
             }
