@@ -5,7 +5,7 @@ import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
-import net.avdw.todo.style.StyleApplicator;
+import net.avdw.todo.style.TodoStyler;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Parameters;
@@ -21,14 +21,10 @@ public class DoneCli implements Runnable {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     @Parameters(description = "${bundle:done.idx.list}", arity = "1", split = ",")
     private Set<Integer> idxList;
-    @Spec
-    private CommandSpec spec;
-    @Inject
-    private Repository<Integer, Todo> todoRepository;
-    @Inject
-    private TemplatedResource templatedResource;
-    @Inject
-    private StyleApplicator styleApplicator;
+    @Spec private CommandSpec spec;
+    @Inject private TemplatedResource templatedResource;
+    @Inject private Repository<Integer, Todo> todoRepository;
+    @Inject private TodoStyler todoStyler;
 
     @Override
     public void run() {
@@ -40,7 +36,7 @@ public class DoneCli implements Runnable {
                             simpleDateFormat.format(new Date()),
                             todoRepository.findById(id).orElseThrow().toString().replaceFirst("\\([A-Z]\\) ", ""))));
                     spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
-                            String.format("{idx:'%3s',todo:\"%s\"}", idx, styleApplicator.apply(todoRepository.findById(id).orElseThrow().getText()).replaceAll("\"", "\\\\\""))));
+                            String.format("{idx:'%3s',todo:\"%s\"}", idx, todoStyler.style(todoRepository.findById(id).orElseThrow()).replaceAll("\"", "\\\\\""))));
                 });
         todoRepository.commit();
     }

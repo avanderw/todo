@@ -59,7 +59,7 @@ public class PriorityCliTest {
         cliTester.execute("pri 1,2,3 F").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> priorityTodoList = todoRepository.findAll(new IsPriority());
-        assertEquals(4, priorityTodoList.size());
+        assertEquals(3, priorityTodoList.size());
         priorityTodoList.forEach(todo -> assertTrue(priorityTodoList.get(0).getText().startsWith("(F) ")));
     }
 
@@ -71,7 +71,7 @@ public class PriorityCliTest {
 
     @Test(timeout = 256)
     public void testAssumeMultiIdxOrder() {
-        cliTester.execute("pri 3,2,1").success().contains("[  3] (A)").contains("[  2] (B)").contains("[  1] (C)");
+        cliTester.execute("pri 5,4,3").success().contains("[  5] (A)").contains("[  4] (B)").contains("[  3] (C)");
     }
 
     @Test(timeout = 256)
@@ -80,7 +80,7 @@ public class PriorityCliTest {
         cliTester.execute("pri 2,8 C").success();
         cliTester.execute("pri 5 E").success();
         cliTester.execute("pri --collapse").success()
-                .contains("[  1] (A) ").contains("[  2] (B) ").contains("[  5] (C) ")
+                .contains("[  1] (A) ").contains("[  8] (B) ").contains("[  5] (C) ")
                 .notContains("(E)");
     }
 

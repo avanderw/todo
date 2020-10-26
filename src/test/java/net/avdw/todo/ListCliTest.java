@@ -45,12 +45,12 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testAfterAdd() {
-        cliTester.execute("ls --added-after 2020-03-10").success().count("\\[", 2);
+        cliTester.execute("ls --added-after 2020-03-10").success().count("\\[", 16);
     }
 
     @Test(timeout = 256)
     public void testAfterChange() {
-        cliTester.execute("ls --changed-after 2019-12-31").success().count("\\[", 36);
+        cliTester.execute("ls --changed-after 2019-12-31").success().count("\\[", 49);
     }
 
     @Test(timeout = 256)
@@ -66,7 +66,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testAfterTag() {
-        cliTester.execute("ls --after-tag started:2020-03-01").success().count("\\[", 10);
+        cliTester.execute("ls --after-tag started:2020-03-01").success().count("\\[", 11);
     }
 
     @Test(timeout = 256)
@@ -88,7 +88,7 @@ public class ListCliTest {
     @Test(timeout = 256)
     public void testBasic() {
         cliTester.execute("pri 1");
-        cliTester.execute("ls").success().contains("[  1] (A)").count("\\[", 74)
+        cliTester.execute("ls").success().contains("[  1] (A)").count("\\[", 89)
                 .contains("@iBank").contains("Last change");
     }
 
@@ -114,7 +114,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testBeforeChange() {
-        cliTester.execute("ls --changed-before 2019-12-31").success().count("\\[", 38);
+        cliTester.execute("ls --changed-before 2019-12-31").success().count("\\[", 39);
     }
 
     @Test(timeout = 256)
@@ -123,9 +123,9 @@ public class ListCliTest {
         gregorianCalendar.setTime(new Date());
         gregorianCalendar.add(Calendar.DAY_OF_MONTH, 1);
         String now = SIMPLE_DATE_FORMAT.format(gregorianCalendar.getTime());
-        cliTester.execute(String.format("ls --done-before %s", now)).success().count("\\[", 3);
-        cliTester.execute("do 2").success();
         cliTester.execute(String.format("ls --done-before %s", now)).success().count("\\[", 4);
+        cliTester.execute("do 3").success();
+        cliTester.execute(String.format("ls --done-before %s", now)).success().count("\\[", 5);
     }
 
     @Test(timeout = 256)
@@ -155,18 +155,18 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testCount() {
-        cliTester.execute("ls").success().contains("72 of 72");
+        cliTester.execute("ls").success().contains("86 of 86");
     }
 
     @Test(timeout = 256)
     public void testDone() {
-        cliTester.execute("ls --incl-done").success().contains("[ 73] x").count("\\[", 83);
+        cliTester.execute("ls --incl-done").success().contains("[ 94] x").count("\\[", 98);
     }
 
     @Test(timeout = 256)
     public void testProgress() {
         cliTester.execute("ls --incl-done").success()
-                .contains("15% completion").contains("1 parked").contains("1 removed")
+                .contains("14% completion").contains("1 parked").contains("2 removed")
                 .notContains("0% completion");
     }
 
@@ -175,7 +175,7 @@ public class ListCliTest {
         cliTester.execute("ls --group-by @").success()
                 .contains("CNP, Track1 Context")
                 .notContains(" gmail.com")
-                .count("\\s## ", 16);
+                .count("\\s## ", 19);
     }
 
     @Test(timeout = 256)
@@ -218,7 +218,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testGroupByThreeHierarchy() {
-        cliTester.execute("ls --group-by +,@,assigned:").success().count("\\s#### ", 33);
+        cliTester.execute("ls --group-by +,@,assigned:").success().count("\\s#### ", 36);
     }
 
     @Test(timeout = 256)
@@ -246,13 +246,13 @@ public class ListCliTest {
     @Test(timeout = 256)
     public void testParked() {
         cliTester.execute("archive").success();
-        cliTester.execute("ls --incl-parked").success().count("\\[", 71);
+        cliTester.execute("ls --incl-parked").success().count("\\[", 84);
     }
 
     @Test(timeout = 256)
     public void testRemoved() {
         cliTester.execute("archive").success();
-        cliTester.execute("ls --incl-removed").success().count("\\[", 70);
+        cliTester.execute("ls --incl-removed").success().count("\\[", 84);
     }
 
     @Test(timeout = 256)

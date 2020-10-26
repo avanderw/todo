@@ -1,10 +1,12 @@
 package net.avdw.todo.core.groupby;
 
+import com.google.inject.Singleton;
 import net.avdw.todo.domain.Todo;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.util.function.Function;
 
+@Singleton
 public class TagGroup implements Group<Todo, String> {
 
     private final String selector;

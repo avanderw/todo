@@ -5,7 +5,7 @@ import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
-import net.avdw.todo.style.StyleApplicator;
+import net.avdw.todo.style.TodoStyler;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.IExitCodeGenerator;
 import picocli.CommandLine.Model.CommandSpec;
@@ -32,7 +32,7 @@ public class EditCli implements Runnable, IExitCodeGenerator {
     @Inject
     private Repository<Integer, Todo> todoRepository;
     @Inject
-    private StyleApplicator styleApplicator;
+    private TodoStyler todoStyler;
 
     @Override
     public int getExitCode() {
@@ -63,7 +63,7 @@ public class EditCli implements Runnable, IExitCodeGenerator {
             Todo todo = new Todo(id, todoText);
             todoRepository.update(todo);
             spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
-                    String.format("{idx:'%3s',todo:\"%s\"}", idx, styleApplicator.apply(todo.getText()).replaceAll("\"", "\\\\\""))));
+                    String.format("{idx:'%3s',todo:\"%s\"}", idx, todoStyler.style(todo).replaceAll("\"", "\\\\\""))));
         });
         todoRepository.commit();
     }

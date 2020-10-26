@@ -76,7 +76,6 @@ public class ParkCliTest {
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> parkedTodoList = todoRepository.findAll(new IsParked());
         assertEquals(2, parkedTodoList.size());
-        assertTrue(parkedTodoList.get(0).getText().startsWith(String.format("p %s 2019-02-07", SIMPLE_DATE_FORMAT.format(new Date()))));
     }
 
     @Test(timeout = 256)

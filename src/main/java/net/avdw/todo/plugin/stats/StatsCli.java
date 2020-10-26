@@ -3,22 +3,21 @@ package net.avdw.todo.plugin.stats;
 import com.google.inject.Inject;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
+import net.avdw.todo.core.mixin.BooleanFilterMixin;
+import net.avdw.todo.core.mixin.CleanMixin;
+import net.avdw.todo.core.mixin.DateFilterMixin;
 import net.avdw.todo.core.mixin.RepositoryMixin;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.domain.TodoTextCleaner;
+import net.avdw.todo.plugin.timing.TimingCalculator;
+import net.avdw.todo.plugin.timing.TimingStats;
 import net.avdw.todo.plugin.timing.TodoTiming;
-import net.avdw.todo.core.mixin.BooleanFilterMixin;
-import net.avdw.todo.core.mixin.DateFilterMixin;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
-import net.avdw.todo.plugin.timing.TimingStats;
-import net.avdw.todo.plugin.timing.TimingCalculator;
-import net.avdw.todo.style.StyleApplicator;
+import net.avdw.todo.style.TodoStyler;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Model.CommandSpec;
-import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
 
 import java.text.ParseException;
@@ -34,26 +33,15 @@ import java.util.stream.Collectors;
 public class StatsCli implements Runnable {
     private final Date now = new Date();
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    @Mixin
-    private BooleanFilterMixin booleanFilter;
-    @Mixin
-    private DateFilterMixin dateFilter;
-    @Option(names = "--clean", descriptionKey = "list.clean.desc")
-    private boolean isClean = false;
-    @Mixin
-    private RepositoryMixin repositoryMixin;
-    @Spec
-    private CommandSpec spec;
-    @Inject
-    private StyleApplicator styleApplicator;
-    @Inject
-    private TemplatedResource templatedResource;
-    @Inject
-    private TimingCalculator timingStatsCalculator;
-    @Inject
-    private TodoTiming todoStatistic;
-    @Inject
-    private TodoTextCleaner todoTextCleaner;
+    @Mixin private BooleanFilterMixin booleanFilter;
+    @Mixin private DateFilterMixin dateFilter;
+    @Mixin private RepositoryMixin repositoryMixin;
+    @Mixin private CleanMixin cleanMixin;
+    @Spec private CommandSpec spec;
+    @Inject private TemplatedResource templatedResource;
+    @Inject private TimingCalculator timingStatsCalculator;
+    @Inject private TodoTiming todoStatistic;
+    @Inject private TodoStyler todoStyler;
 
     private String days2period(final long totalDays) {
         long days = Math.abs(totalDays);
@@ -224,9 +212,8 @@ public class StatsCli implements Runnable {
     }
 
     private void printTodo(final Todo todo) {
-        String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
         spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
-                String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
+                String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), todoStyler.style(todo).replaceAll("\"", "\\\\\""))));
     }
 
     @Override

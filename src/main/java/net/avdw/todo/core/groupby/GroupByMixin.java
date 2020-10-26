@@ -1,6 +1,7 @@
 package net.avdw.todo.core.groupby;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.plugin.change.ChangeTypeGroup;
 import org.tinylog.Logger;
@@ -13,6 +14,7 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+@Singleton
 public class GroupByMixin {
     private final List<Group<Todo, String>> groupByList = new ArrayList<>();
     @Inject private ChangeTypeGroup changeTypeGroup;

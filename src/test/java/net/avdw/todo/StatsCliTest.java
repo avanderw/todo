@@ -50,7 +50,6 @@ public class StatsCliTest {
                 .contains("Max cycle time")
                 .contains("Max lead time")
                 .contains("greater than mean + stddev reaction time")
-                .contains("greater than mean + stddev cycle time")
                 .contains("greater than mean + stddev lead time");
     }
 

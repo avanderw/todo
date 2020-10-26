@@ -42,12 +42,12 @@ public class ChangelogCliTest {
 
     @Test(timeout = 256)
     public void testAfterAdd() {
-        cliTester.execute("changelog --added-after 2020-03-10").success().count("\\[", 2);
+        cliTester.execute("changelog --added-after 2020-03-10").success().count("\\[", 16);
     }
 
     @Test(timeout = 256)
     public void testAfterChange() {
-        cliTester.execute("changelog --changed-after 2019-12-31").success().count("\\[", 52);
+        cliTester.execute("changelog --changed-after 2019-12-31").success().count("\\[", 68);
     }
 
     @Test(timeout = 256)
@@ -63,14 +63,14 @@ public class ChangelogCliTest {
 
     @Test(timeout = 256)
     public void testAfterTag() {
-        cliTester.execute("changelog --after-tag started:2020-03-01").success().count("\\[", 18);
+        cliTester.execute("changelog --after-tag started:2020-03-01").success().count("\\[", 20);
     }
 
     @Test(timeout = 256)
     public void testBasic() {
         cliTester.execute("changelog").success()
                 .contains("July 2018").contains("October 2018")
-                .count("\\[ 49\\] x 2020-05-27 2020-01-05 @CNP bugfixes and 30s failover assigned:shane end:2020-03-03 2020-02-24:releasing", 2);
+                .count("\\[ 50\\] x 2020-05-27 2020-01-05 @CNP bugfixes and 30s failover assigned:shane end:2020-03-03 2020-02-24:releasing", 2);
     }
 
     @Test(timeout = 256)
@@ -97,7 +97,7 @@ public class ChangelogCliTest {
 
     @Test(timeout = 256)
     public void testBeforeChange() {
-        cliTester.execute("changelog --changed-before 2019-12-31").success().count("\\[", 46);
+        cliTester.execute("changelog --changed-before 2019-12-31").success().count("\\[", 47);
     }
 
     @Test(timeout = 256)
@@ -106,9 +106,9 @@ public class ChangelogCliTest {
         gregorianCalendar.setTime(new Date());
         gregorianCalendar.add(Calendar.DAY_OF_MONTH, 1);
         String now = SIMPLE_DATE_FORMAT.format(gregorianCalendar.getTime());
-        cliTester.execute(String.format("changelog --done-before %s", now)).success().count("\\[", 3);
-        cliTester.execute("do 2").success();
         cliTester.execute(String.format("changelog --done-before %s", now)).success().count("\\[", 5);
+        cliTester.execute("do 2").success();
+        cliTester.execute(String.format("changelog --done-before %s", now)).success().count("\\[", 4);
     }
 
     @Test(timeout = 256)

@@ -13,7 +13,7 @@ import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
-import net.avdw.todo.style.StyleApplicator;
+import net.avdw.todo.style.TodoStyler;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;
@@ -24,16 +24,17 @@ import java.util.List;
 @Command(name = "archive", resourceBundle = "messages", description = "${bundle:archive}")
 public class ArchiveCli implements Runnable {
 
-    @Inject
-    private Repository<Integer, Todo> todoRepository;
-    @Inject
-    private Path todoPath;
-    @Spec
-    private CommandSpec spec;
-    @Inject
-    private TemplatedResource templatedResource;
-    @Inject
-    private StyleApplicator styleApplicator;
+    @Spec private CommandSpec spec;
+    @Inject private TodoStyler todoStyler;
+    @Inject private TemplatedResource templatedResource;
+    @Inject private Path todoPath;
+    @Inject private Repository<Integer, Todo> todoRepository;
+
+    private void archive(final Repository<Integer, Todo> archiveRepository, final Specification<Integer, Todo> specification) {
+        List<Todo> archiveTodoList = todoRepository.findAll(specification);
+        archiveRepository.addAll(archiveTodoList);
+        todoRepository.removeAll(specification);
+    }
 
     @Override
     @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
@@ -48,7 +49,7 @@ public class ArchiveCli implements Runnable {
         for (int i = 0; i < allTodoList.size(); i++) {
             if (isArchive.isSatisfiedBy(allTodoList.get(i))) {
                 spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
-                        String.format("{idx:'%3s',todo:\"%s\"}", i + 1, styleApplicator.apply(allTodoList.get(i).getText()).replaceAll("\"", "\\\\\""))));
+                        String.format("{idx:'%3s',todo:\"%s\"}", i + 1, todoStyler.style(allTodoList.get(i)).replaceAll("\"", "\\\\\""))));
             }
         }
 
@@ -57,11 +58,5 @@ public class ArchiveCli implements Runnable {
         archive(new FileRepository<>(todoPath.getParent().resolve("parked.txt"), new TodoFileTypeBuilder()), isParked);
         archive(new FileRepository<>(todoPath.getParent().resolve("removed.txt"), new TodoFileTypeBuilder()), isRemoved);
         todoRepository.commit();
-    }
-
-    private void archive(final Repository<Integer, Todo> archiveRepository, final Specification<Integer, Todo> specification) {
-        List<Todo> archiveTodoList = todoRepository.findAll(specification);
-        archiveRepository.addAll(archiveTodoList);
-        todoRepository.removeAll(specification);
     }
 }

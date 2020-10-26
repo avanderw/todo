@@ -1,6 +1,7 @@
 package net.avdw.todo.core.groupby;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.core.groupby.Group;
@@ -13,6 +14,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.function.Function;
 
+@Singleton
 public class MonthGroup implements Group<Todo, String> {
     private final SimpleDateFormat collectMonthlyFormat = new SimpleDateFormat("MMMMM yyyy");
     private final TemplatedResource templatedResource;

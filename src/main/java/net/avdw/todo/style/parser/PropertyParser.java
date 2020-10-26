@@ -1,5 +1,7 @@
 package net.avdw.todo.style.parser;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import net.avdw.todo.Guard;
 import net.avdw.todo.color.ColorConverter;
 import net.avdw.todo.style.painter.DatePainter;
@@ -13,11 +15,13 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.Properties;
 
+@Singleton
 public class PropertyParser implements IParser<IPainter> {
     private final ColorConverter colorConverter;
     private final DateKeyParser dateKeyParser;
     private final Properties properties;
 
+    @Inject
     public PropertyParser(final Properties properties, final ColorConverter colorConverter, final DateKeyParser dateKeyParser) {
         this.properties = properties;
         this.colorConverter = colorConverter;

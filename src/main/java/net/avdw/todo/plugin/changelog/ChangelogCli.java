@@ -3,18 +3,19 @@ package net.avdw.todo.plugin.changelog;
 import com.google.inject.Inject;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
-import net.avdw.todo.domain.TodoTextCleaner;
+import net.avdw.todo.core.mixin.BooleanFilterMixin;
+import net.avdw.todo.core.mixin.CleanMixin;
+import net.avdw.todo.core.mixin.DateFilterMixin;
 import net.avdw.todo.domain.IsAdded;
 import net.avdw.todo.domain.IsContaining;
 import net.avdw.todo.domain.IsDone;
 import net.avdw.todo.domain.IsParked;
 import net.avdw.todo.domain.IsRemoved;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.core.mixin.BooleanFilterMixin;
-import net.avdw.todo.core.mixin.DateFilterMixin;
+import net.avdw.todo.domain.TodoTextCleaner;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
-import net.avdw.todo.style.StyleApplicator;
+import net.avdw.todo.style.TodoStyler;
 import org.tinylog.Logger;
 import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Command;
@@ -41,23 +42,14 @@ public class ChangelogCli implements Runnable, IExitCodeGenerator {
     private final SimpleDateFormat collectMonthlyFormat = new SimpleDateFormat("MMMMM yyyy");
     private final SimpleDateFormat collectYearlyFormat = new SimpleDateFormat("yyyy");
     private final SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd");
-    @Mixin
-    private BooleanFilterMixin booleanFilter;
-    @Mixin
-    private DateFilterMixin dateFilter;
-    @ArgGroup
-    private Exclusive exclusive = new Exclusive();
+    @Mixin private BooleanFilterMixin booleanFilter;
+    @Mixin private DateFilterMixin dateFilter;
+    @Mixin private CleanMixin cleanMixin;
+    @ArgGroup private Exclusive exclusive = new Exclusive();
     private int exitCode = 0;
-    @Option(names = "--clean", descriptionKey = "changelog.clean.desc")
-    private boolean isClean = false;
-    @Inject
-    private Repository<Integer, Todo> repository;
-    @Spec
-    private CommandSpec spec;
-    @Inject
-    private StyleApplicator styleApplicator;
-    @Inject
-    private TemplatedResource templatedResource;
+    @Inject private Repository<Integer, Todo> repository;
+    @Spec private CommandSpec spec;
+    @Inject private TemplatedResource templatedResource;
     private final Function<Date, String> collectWeekly = date -> {
         String title;
         if (date == null) {
@@ -85,8 +77,7 @@ public class ChangelogCli implements Runnable, IExitCodeGenerator {
         return templatedResource.populateKey(ResourceBundleKey.CHANGELOG_DATE_HEADER,
                 String.format("{date:'%s'}", title));
     };
-    @Inject
-    private TodoTextCleaner todoTextCleaner;
+    @Inject private TodoStyler todoStyler;
 
     @Override
     public int getExitCode() {
@@ -151,9 +142,8 @@ public class ChangelogCli implements Runnable, IExitCodeGenerator {
                 periodByTypeTodoListMap.getValue().entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(periodTypeTodoListMap -> {
                     spec.commandLine().getOut().println(periodTypeTodoListMap.getKey());
                     periodTypeTodoListMap.getValue().forEach(todo -> {
-                        String todoText = isClean ? todoTextCleaner.clean(todo) : todo.getText();
                         spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
-                                String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todoText).replaceAll("\"", "\\\\\""))));
+                                String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), todoStyler.style(todo).replaceAll("\"", "\\\\\""))));
                     });
                 });
             });

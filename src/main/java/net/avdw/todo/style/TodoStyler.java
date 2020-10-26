@@ -1,6 +1,8 @@
 package net.avdw.todo.style;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import net.avdw.todo.core.mixin.CleanMixin;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.style.painter.IDefaultPainter;
 import net.avdw.todo.style.painter.IPainter;
@@ -13,12 +15,15 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+@Singleton
 public class TodoStyler {
+    private final CleanMixin cleanMixin;
     private final List<IDefaultPainter> defaultPainterList;
     private final List<IPainter> painterList;
 
     @Inject
-    TodoStyler(final Properties properties, final PropertyParser propertyParser) {
+    TodoStyler(final Properties properties, final PropertyParser propertyParser, final CleanMixin cleanMixin) {
+        this.cleanMixin = cleanMixin;
         painterList = properties.keySet().stream()
                 .map(propertyParser::parse)
                 .filter(Optional::isPresent)
@@ -54,7 +59,7 @@ public class TodoStyler {
     }
 
     public String style(final Todo todo) {
-        String text = todo.getText();
+        String text = cleanMixin.clean(todo);
         String defaultColor = getDefaultColor(todo);
 
         for (IPainter iPainter : painterList) {

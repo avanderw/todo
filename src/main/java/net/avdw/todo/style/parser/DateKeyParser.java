@@ -1,17 +1,18 @@
 package net.avdw.todo.style.parser;
 
+import com.google.inject.Singleton;
 import lombok.SneakyThrows;
 import net.avdw.todo.Guard;
 import org.tinylog.Logger;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Singleton
 public class DateKeyParser {
     private final Pattern fixedRegex = Pattern.compile("^.+\\.(?<date>\\d\\d\\d\\d-\\d\\d-\\d\\d)(?<sign>[+-])?$");
     private final Pattern relativeRegex = Pattern.compile("^.*\\.(?<relative>-30)(?<type>[dmy])(?<sign>[+-])?$");

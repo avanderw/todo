@@ -1,16 +1,16 @@
 package net.avdw.todo.core;
 
 import com.google.inject.Inject;
-import net.avdw.todo.domain.Priority;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.domain.IsDone;
 import net.avdw.todo.domain.IsParked;
 import net.avdw.todo.domain.IsPriority;
 import net.avdw.todo.domain.IsRemoved;
+import net.avdw.todo.domain.Priority;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
-import net.avdw.todo.style.StyleApplicator;
+import net.avdw.todo.style.TodoStyler;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
@@ -38,14 +38,10 @@ public class PriorityCli implements Runnable {
     private boolean remove;
     @Option(names = {"-R", "--REMOVE"}, descriptionKey = "priority.clear")
     private boolean removeAll;
-    @Spec
-    private CommandSpec spec;
-    @Inject
-    private StyleApplicator styleApplicator;
-    @Inject
-    private TemplatedResource templatedResource;
-    @Inject
-    private Repository<Integer, Todo> todoRepository;
+    @Spec private CommandSpec spec;
+    @Inject private TemplatedResource templatedResource;
+    @Inject private Repository<Integer, Todo> todoRepository;
+    @Inject private TodoStyler todoStyler;
 
     private Priority nextPriority(final List<Priority> priorityList) {
         if (priorityList.size() == 1) {
@@ -82,7 +78,7 @@ public class PriorityCli implements Runnable {
                     Todo updatedTodo = new Todo(todo.getId(), todo.getText().replaceFirst(String.format("\\(%s\\)", pri.name()), String.format("(%s)", mapping.get(pri))));
                     todoRepository.update(updatedTodo);
                     spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
-                            String.format("{idx:'%3s',todo:\"%s\"}", updatedTodo.getIdx(), styleApplicator.apply(updatedTodo.getText()).replaceAll("\"", "\\\\\""))));
+                            String.format("{idx:'%3s',todo:\"%s\"}", updatedTodo.getIdx(), todoStyler.style(updatedTodo).replaceAll("\"", "\\\\\""))));
                 });
                 todoRepository.commit();
             }
@@ -97,7 +93,7 @@ public class PriorityCli implements Runnable {
                 Todo updatedTodo = new Todo(todo.getId(), todo.getText().replaceFirst("\\([A-Z]\\) ", ""));
                 todoRepository.update(updatedTodo);
                 spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
-                        String.format("{idx:'%3s',todo:\"%s\"}", updatedTodo.getIdx(), styleApplicator.apply(updatedTodo.getText()).replaceAll("\"", "\\\\\""))));
+                        String.format("{idx:'%3s',todo:\"%s\"}", updatedTodo.getIdx(), todoStyler.style(updatedTodo).replaceAll("\"", "\\\\\""))));
             });
             todoRepository.commit();
             return;
@@ -111,7 +107,7 @@ public class PriorityCli implements Runnable {
             } else {
                 priorityTodoList.forEach(todo -> spec.commandLine().getOut().println(templatedResource.populateKey(
                         ResourceBundleKey.TODO_LINE_ITEM,
-                        String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todo.getText()).replaceAll("\"", "\\\\\"")))));
+                        String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), todoStyler.style(todo).replaceAll("\"", "\\\\\"")))));
 
             }
         } else {
@@ -124,7 +120,7 @@ public class PriorityCli implements Runnable {
                     Todo removePriorityTodo = new Todo(todoById.getId(), todoById.getText().replaceFirst("\\([A-Z]\\) ", ""));
                     todoRepository.update(removePriorityTodo);
                     spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
-                            String.format("{idx:'%3s',todo:\"%s\"}", removePriorityTodo.getIdx(), styleApplicator.apply(removePriorityTodo.getText()).replaceAll("\"", "\\\\\""))));
+                            String.format("{idx:'%3s',todo:\"%s\"}", removePriorityTodo.getIdx(), todoStyler.style(removePriorityTodo).replaceAll("\"", "\\\\\""))));
                 });
                 todoRepository.commit();
                 return;
@@ -163,7 +159,7 @@ public class PriorityCli implements Runnable {
                     Todo priorityTodo = new Todo(id, String.format("(%s) %s", nextPriority(availablePriorityList), priorityTodoText));
                     todoRepository.update(priorityTodo);
                     spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
-                            String.format("{idx:'%3s',todo:\"%s\"}", idx, styleApplicator.apply(priorityTodo.getText()).replaceAll("\"", "\\\\\""))));
+                            String.format("{idx:'%3s',todo:\"%s\"}", idx, todoStyler.style(priorityTodo).replaceAll("\"", "\\\\\""))));
                 }
             });
             todoRepository.commit();

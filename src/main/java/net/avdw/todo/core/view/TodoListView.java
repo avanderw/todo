@@ -1,6 +1,7 @@
 package net.avdw.todo.core.view;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import net.avdw.todo.plugin.Addon;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
@@ -10,6 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Singleton
 public class TodoListView {
     private final Set<Addon> addonList;
     private final TodoView todoView;

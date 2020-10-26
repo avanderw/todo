@@ -1,10 +1,12 @@
 package net.avdw.todo.core.groupby;
 
+import com.google.inject.Singleton;
 import net.avdw.todo.domain.Todo;
 
 import java.util.Locale;
 import java.util.function.Function;
 
+@Singleton
 public class ProjectGroup implements Group<Todo, String> {
     @Override
     public Function<Todo, String> collector() {

@@ -40,12 +40,12 @@ public class AddCliTest {
 
     @Test(timeout = 256)
     public void testBasic() {
-        cliTester.execute("add", "A new addition").success().startsWith("[ 73]");
+        cliTester.execute("add", "A new addition").success().count("\\[", 1);
     }
 
     @Test(timeout = 256)
     public void testPriority() {
-        cliTester.execute("add -p", "A new addition").success().startsWith("[ 73] (A)");
+        cliTester.execute("add -p", "A new addition").success().count("\\[", 1).contains ("(A)");
     }
 
     @Test(timeout = 256)

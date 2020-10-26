@@ -2,8 +2,10 @@ package net.avdw.todo.style;
 
 import net.avdw.todo.PropertyFile;
 import net.avdw.todo.color.ColorConverter;
+import net.avdw.todo.core.mixin.CleanMixin;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
+import net.avdw.todo.domain.TodoTextCleaner;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
@@ -23,7 +25,8 @@ public class TodoStylerTest {
     public void test() {
         Properties properties = new PropertyFile("net.avdw/todo").read("style-test");
         ColorConverter colorConverter = new ColorConverter();
-        TodoStyler todoStyler = new TodoStyler(properties, new PropertyParser(properties, colorConverter, new DateKeyParser()));
+        CleanMixin cleanMixin = new CleanMixin(new TodoTextCleaner());
+        TodoStyler todoStyler = new TodoStyler(properties, new PropertyParser(properties, colorConverter, new DateKeyParser()), cleanMixin);
         Repository<Integer, Todo> repository = new FileRepository<>(Paths.get("src/test/resources/.todo/todo.txt"), new TodoFileTypeBuilder());
         repository.findAll(new Any<>()).forEach(todo -> {
             String styled = todoStyler.style(todo);

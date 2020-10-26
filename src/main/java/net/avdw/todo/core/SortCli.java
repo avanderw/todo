@@ -9,7 +9,7 @@ import net.avdw.todo.domain.TodoFileTypeBuilder;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
-import net.avdw.todo.style.StyleApplicator;
+import net.avdw.todo.style.TodoStyler;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Parameters;
@@ -24,16 +24,11 @@ import java.util.stream.Collectors;
 public class SortCli implements Runnable {
     @Parameters(description = "Add these keys together to sort by", split = ",", arity = "0..1")
     private List<String> sortKeys;
-    @Spec
-    private CommandSpec spec;
-    @Inject
-    private StyleApplicator styleApplicator;
-    @Inject
-    private TemplatedResource templatedResource;
-    @Inject
-    private Path todoPath;
-    @Inject
-    private Repository<Integer, Todo> todoRepository;
+    @Spec private CommandSpec spec;
+    @Inject private TemplatedResource templatedResource;
+    @Inject private Path todoPath;
+    @Inject private Repository<Integer, Todo> todoRepository;
+    @Inject private TodoStyler todoStyler;
 
     @Override
     public void run() {
@@ -58,7 +53,7 @@ public class SortCli implements Runnable {
 
         sortedRepository.findAll(new Any<>()).forEach(todo ->
                 spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
-                        String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todo.getText()).replaceAll("\"", "\\\\\""))))
+                        String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), todoStyler.style(todo).replaceAll("\"", "\\\\\""))))
         );
     }
 }

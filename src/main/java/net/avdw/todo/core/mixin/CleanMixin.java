@@ -14,7 +14,7 @@ public class CleanMixin {
     private TodoTextCleaner todoTextCleaner;
 
     @Inject
-    CleanMixin(final TodoTextCleaner todoTextCleaner) {
+    public CleanMixin(final TodoTextCleaner todoTextCleaner) {
         this.todoTextCleaner = todoTextCleaner;
     }
 

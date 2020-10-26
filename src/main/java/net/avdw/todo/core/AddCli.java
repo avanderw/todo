@@ -9,7 +9,7 @@ import net.avdw.todo.domain.IsPriority;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
-import net.avdw.todo.style.StyleApplicator;
+import net.avdw.todo.style.TodoStyler;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.IExitCodeGenerator;
 import picocli.CommandLine.Model.CommandSpec;
@@ -33,7 +33,7 @@ class AddCli implements Runnable, IExitCodeGenerator {
     @Option(names = {"-p", "--priority"}, description = "Prioritise addition with the next highest available priority")
     private boolean hasPriority = false;
     @Spec private CommandSpec spec;
-    @Inject private StyleApplicator styleApplicator;
+    @Inject private TodoStyler todoStyler;
     @Inject private TemplatedResource templatedResource;
     @Inject private Repository<Integer, Todo> todoRepository;
 
@@ -62,6 +62,6 @@ class AddCli implements Runnable, IExitCodeGenerator {
         Todo todo = new Todo(todoRepository.size(), addition);
         todoRepository.add(todo);
         spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
-                String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), styleApplicator.apply(todo.getText()).replaceAll("\"", "\\\\\""))));
+                String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), todoStyler.style(todo).replaceAll("\"", "\\\\\""))));
     }
 }
