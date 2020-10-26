@@ -10,4 +10,4 @@
 2020-10-20 Add due < 5 days, due < 0 days, in-progress  > 10 days module https://screenful.com/tour/task-status-screen/
 2020-10-22 Add NLP processing for dates https://www.ocpsoft.org/prettytime/nlp/ http://natty.joestelmach.com/doc.jsp
 r 2020-10-22 2019-08-14 Consider adding roadmap generation based off priority, version or combined
-2020-10-26 Add blocked module to keep a blocker.txt file which can be referenced
+x 2020-10-26 2020-10-26 Add blocked module to keep a blocker.txt file which can be referenced

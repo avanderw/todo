@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ChangeExt implements Ext<Change> {
@@ -26,6 +27,16 @@ public class ChangeExt implements Ext<Change> {
                         .filter(Objects::nonNull)
                         .map(value -> new Change(ext, value)))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getSupportedExtList() {
+        return supportedExtList;
+    }
+
+    @Override
+    public Optional<Change> getValue(final Todo todo) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

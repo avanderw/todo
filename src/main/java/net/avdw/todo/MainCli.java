@@ -6,6 +6,7 @@ import net.avdw.todo.plugin.browse.BrowseCli;
 import net.avdw.todo.plugin.changelog.ChangelogCli;
 import net.avdw.todo.plugin.edit.EditCli;
 import net.avdw.todo.plugin.explore.ExploreCli;
+import net.avdw.todo.plugin.link.LinkCli;
 import net.avdw.todo.plugin.replace.ReplaceCli;
 import net.avdw.todo.plugin.start.StartCli;
 import net.avdw.todo.plugin.stats.StatsCli;
@@ -39,6 +40,7 @@ import java.nio.file.Path;
                 BrowseCli.class,
                 StartCli.class,
                 ReplaceCli.class,
+                LinkCli.class
         })
 public class MainCli implements Runnable {
     @Spec

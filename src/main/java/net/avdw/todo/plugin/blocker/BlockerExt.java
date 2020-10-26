@@ -6,6 +6,7 @@ import net.avdw.todo.repository.AbstractSpecification;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class BlockerExt extends AbstractSpecification<Integer, Todo> implements Ext<String> {
@@ -20,6 +21,16 @@ public class BlockerExt extends AbstractSpecification<Integer, Todo> implements 
         return supportedExtList.stream()
                 .flatMap(ext -> todo.getTagValueList(ext).stream())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getSupportedExtList() {
+        return supportedExtList;
+    }
+
+    @Override
+    public Optional<String> getValue(final Todo todo) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

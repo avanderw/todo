@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TimingExt implements Ext<Date> {
@@ -26,6 +27,16 @@ public class TimingExt implements Ext<Date> {
                         .map(ThrowingFunction.unchecked(simpleDateFormat::parse))
                         .filter(Objects::nonNull))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getSupportedExtList() {
+        return supportedExtList;
+    }
+
+    @Override
+    public Optional<Date> getValue(final Todo todo) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

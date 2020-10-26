@@ -25,14 +25,10 @@ public class EditCli implements Runnable, IExitCodeGenerator {
     private List<Integer> idxList;
     @Option(names = {"-r", "--remove"}, descriptionKey = "edit.remove")
     private List<String> removeStringList = new ArrayList<>();
-    @Spec
-    private CommandSpec spec;
-    @Inject
-    private TemplatedResource templatedResource;
-    @Inject
-    private Repository<Integer, Todo> todoRepository;
-    @Inject
-    private TodoStyler todoStyler;
+    @Spec private CommandSpec spec;
+    @Inject private TemplatedResource templatedResource;
+    @Inject private Repository<Integer, Todo> todoRepository;
+    @Inject private TodoStyler todoStyler;
 
     @Override
     public int getExitCode() {
