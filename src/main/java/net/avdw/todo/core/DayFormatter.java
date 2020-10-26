@@ -9,6 +9,9 @@ public class DayFormatter {
     }
 
     public static String days2period(final long totalDays) {
+        if (totalDays == 0) {
+            return "          0d";
+        }
         long days = Math.abs(totalDays);
         long years = Math.floorDiv(days, 365);
         days %= 365;
