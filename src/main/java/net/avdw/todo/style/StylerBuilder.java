@@ -1,6 +1,7 @@
 package net.avdw.todo.style;
 
 import com.google.inject.Inject;
+import net.avdw.todo.style.painter.IPainter;
 import org.tinylog.Logger;
 
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ public class StylerBuilder {
         this.defaultTextColor = defaultTextColor;
     }
 
-    public List<IStyler> buildFrom(final Properties properties) {
-        List<IStyler> stylerList = new ArrayList<>();
+    public List<IPainter> buildFrom(final Properties properties) {
+        List<IPainter> stylerList = new ArrayList<>();
         properties.keySet().forEach(key -> {
             String propertyKey = key.toString();
             int firstDot = propertyKey.indexOf(".");

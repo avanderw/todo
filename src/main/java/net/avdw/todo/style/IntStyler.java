@@ -1,13 +1,14 @@
 package net.avdw.todo.style;
 
 import net.avdw.todo.color.ColorConverter;
+import net.avdw.todo.style.painter.IPainter;
 import org.fusesource.jansi.Ansi;
 import org.tinylog.Logger;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class IntStyler implements IStyler {
+public class IntStyler implements IPainter {
     private static final Pattern ARGUMENT_REGEX = Pattern.compile("(-?\\d+)([+-]?)");
     private static final ColorConverter COLOR_CONVERTER = new ColorConverter();
     private final String tag;
@@ -31,29 +32,29 @@ public class IntStyler implements IStyler {
     }
 
     @Override
-    public String style(final String text) {
+    public String paint(final String string, final String reset) {
         Pattern pattern = Pattern.compile(String.format("(%s:(\\d+))", tag));
-        Matcher matcher = pattern.matcher(text);
-        String replacedText = text;
+        Matcher matcher = pattern.matcher(string);
+        String replacedText = string;
 
-        String defaultColor = defaultTextColor.getFromText(text);
+//        String defaultColor = defaultTextColor.getFromText(string);
         while (matcher.find()) {
             int value = Integer.parseInt(matcher.group(2));
             if (exact) {
                 if (value == arg) {
                     Logger.trace("Styling {}; {} == {}", matcher.group(), value, arg);
-                    replacedText = replacedText.replaceFirst(matcher.group(), Ansi.ansi().a(color).a(matcher.group()).a(defaultColor).toString());
+                    replacedText = replacedText.replaceFirst(matcher.group(), Ansi.ansi().a(color).a(matcher.group()).a(reset).toString());
                 }
             } else if (ascend) {
                 if (value >= arg) {
                     Logger.trace("Styling {}; {} >= {}", matcher.group(), value, arg);
-                    replacedText = replacedText.replaceFirst(matcher.group(), Ansi.ansi().a(color).a(matcher.group()).a(defaultColor).toString());
+                    replacedText = replacedText.replaceFirst(matcher.group(), Ansi.ansi().a(color).a(matcher.group()).a(reset).toString());
                 }
             } else {
                 if (value <= arg) {
                     Logger.trace("Styling {}; {} <= {}", matcher.group(), value, arg);
 
-                    replacedText = replacedText.replaceFirst(matcher.group(), Ansi.ansi().a(color).a(matcher.group()).a(defaultColor).toString());
+                    replacedText = replacedText.replaceFirst(matcher.group(), Ansi.ansi().a(color).a(matcher.group()).a(reset).toString());
                 }
             }
         }

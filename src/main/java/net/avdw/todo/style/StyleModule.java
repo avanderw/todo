@@ -5,6 +5,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import net.avdw.todo.PropertyFile;
 import net.avdw.todo.color.ColorConverter;
+import net.avdw.todo.style.painter.IPainter;
 import org.fusesource.jansi.Ansi;
 
 import java.util.List;
@@ -56,7 +57,7 @@ public class StyleModule extends AbstractModule {
 
     @Provides
     @Singleton
-    List<IStyler> stylerList(final StylerBuilder stylerBuilder, final Properties properties) {
+    List<IPainter> stylerList(final StylerBuilder stylerBuilder, final Properties properties) {
         return stylerBuilder.buildFrom(properties);
     }
 }

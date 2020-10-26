@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 @SuppressFBWarnings(value = {"JLM_JSR166_UTILCONCURRENT_MONITORENTER", "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"},
         justification = "Lombok generation makes these mute")
 public class Todo implements IdType<Integer> {
-    private static final Pattern ADDITION_DATE_PATTERN = Pattern.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d)|^[xpr] [\\d-]+ (\\d\\d\\d\\d-\\d\\d-\\d\\d)|\\([A-Z]\\) (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
+    public static final Pattern ADDITION_DATE_PATTERN = Pattern.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d)|^[xpr] [\\d-]+ (\\d\\d\\d\\d-\\d\\d-\\d\\d)|\\([A-Z]\\) (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
     private static final Pattern COMPLETION_DATE_PATTERN = Pattern.compile("^x (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
     private static final Pattern PARKED_DATE_PATTERN = Pattern.compile("^p (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
     private static final Pattern REMOVED_DATE_PATTERN = Pattern.compile("^r (\\d\\d\\d\\d-\\d\\d-\\d\\d)");

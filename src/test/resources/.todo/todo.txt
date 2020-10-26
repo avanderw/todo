@@ -1,4 +1,5 @@
 2020-03-10 +Funeral_Cover compliance analyst:Julias importance:13 urgency:21
+x 2020-10-21 2020-10-21 Combine changelog with list using the group-by option
 2019-02-07 Digital authorisation service analyst:dollie importance:8 urgency:21
 2020-03-10 Service to provide fraud confidence on transactions importance:13 urgency:13
 2019-09-19 Fix INT-HRD importance:3 urgency:21
@@ -70,3 +71,16 @@ x 2020-05-27 2020-01-05 @CNP bugfixes and 30s failover assigned:shane end:2020-0
 2019-09-09 @Track2 +Funeral_Cover service started:2019-09-09 assigned:etienne 2019-10-14:development 2019-11-19:development 2020-02-24:testing
 2019-11-05 Correlation ID in logs assigned:etienne started:2020-03-10
 2020-01-23 Fix activation data to identify Track2 vs Track1 activations started:2020-01-23 2020-02-24:releasing assigned:etienne
+2019-07-23 @Fix bug when global repository does not exist
+2020-10-01 @Add 'todo roadmap' [project, context, tag] which will list upcoming- due,target,cycle and past- due,target,cycle
+2020-10-12 Add the ability to prioritise on search criteria @should
+2020-10-16 Add estimated completion for groups with visible velocity module https://screenful.com/tour/milestone-burnup-chart started:2020-10-22
+2020-10-16 Add histogram for timings https://screenful.com/tour/timing-screen#:~:text=Lead%20time%20is%20the%20total,a%20task%20until%20its%20completion.
+2020-10-16 Add notes to todos https://github.com/mgarrido/todo.txt-cli/tree/note/todo.actions.d
+2020-10-16 Add trending feeback for timings https://screenful.com/tour/timing-screen#:~:text=Lead%20time%20is%20the%20total,a%20task%20until%20its%20completion.
+2020-10-16 Review what to do with these actions https://github.com/inkarkat/todo.txt-cli-ex/tree/master/actions
+2020-10-20 Add agile module to track state change https://screenful.com/how-to/how-to-find-bottlenecks-in-your-workflow
+2020-10-20 Add due < 5 days, due < 0 days, in-progress  > 10 days module protocol://screenful.com/tour/task-status-screen/
+2020-10-22 Add NLP processing for dates protocol://www.ocpsoft.org/prettytime/nlp/ https://natty.joestelmach.com/doc.jsp
+r 2020-10-22 2019-08-14 Consider adding roadmap generation based off priority, version or combined
+checkout file:///C:/Users/cp318674/Documents/source-avanderw/todo/.todo/todo.txt

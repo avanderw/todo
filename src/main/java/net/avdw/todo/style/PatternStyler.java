@@ -1,13 +1,14 @@
 package net.avdw.todo.style;
 
 import net.avdw.todo.color.ColorConverter;
+import net.avdw.todo.style.painter.IPainter;
 import org.fusesource.jansi.Ansi;
 import org.tinylog.Logger;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PatternStyler implements IStyler {
+public class PatternStyler implements IPainter {
     private final Pattern pattern;
     private final String color;
     private final DefaultTextColor defaultTextColor;
@@ -20,13 +21,13 @@ public class PatternStyler implements IStyler {
     }
 
     @Override
-    public String style(final String text) {
-        String replacedText = text;
-        Matcher matcher = pattern.matcher(text);
+    public String paint(final String string, final String reset) {
+        String replacedText = string;
+        Matcher matcher = pattern.matcher(string);
 
         while (matcher.find()) {
             Logger.trace("Styling {}; '{}'", pattern.pattern(), matcher.group());
-            replacedText = replacedText.replace(matcher.group(), Ansi.ansi().a(color).a(matcher.group()).a(defaultTextColor.getFromText(text)).toString());
+            replacedText = replacedText.replace(matcher.group(), Ansi.ansi().a(color).a(matcher.group()).a(reset).toString());
         }
         return replacedText;
     }

@@ -2,6 +2,7 @@ package net.avdw.todo.style;
 
 import lombok.SneakyThrows;
 import net.avdw.todo.color.ColorConverter;
+import net.avdw.todo.style.painter.IPainter;
 import org.fusesource.jansi.Ansi;
 import org.tinylog.Logger;
 
@@ -12,7 +13,7 @@ import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DateStyler implements IStyler {
+public class DateStyler implements IPainter {
     private static final Pattern ARGUMENT_REGEX = Pattern.compile("(-?\\d+)([dmy])([+-]?)");
     private static final ColorConverter COLOR_CONVERTER = new ColorConverter();
     private final String color;
@@ -49,22 +50,26 @@ public class DateStyler implements IStyler {
 
     @Override
     @SneakyThrows
-    public String style(final String text) {
-        String defaultColor = defaultTextColor.getFromText(text);
+    public String paint(final String string, final String reset) {
+        //String defaultColor = defaultTextColor.getFromText(string);
         Pattern pattern = switch (tag) {
             case "done" -> Pattern.compile("^[xpr] (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
-            case "add" -> Pattern.compile("^(\\([A-Z]\\)\\s)?(\\d\\d\\d\\d-\\d\\d-\\d\\d)|^x .*[\\d-]+.* (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
+            case "add" -> Pattern.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d)|^[xpr] [\\d-]+ (\\d\\d\\d\\d-\\d\\d-\\d\\d)|\\([A-Z]\\) (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
             default -> Pattern.compile(String.format("(%s:(\\d\\d\\d\\d-\\d\\d-\\d\\d))", tag));
         };
 
-        Matcher matcher = pattern.matcher(text);
-        String replacedText = text;
+        Matcher matcher = pattern.matcher(string);
+        String replacedText = string;
         while (matcher.find()) {
             Date value;
             String replace = switch (tag) {
-                case "add" -> matcher.group(2) == null
-                        ? matcher.group(3)
-                        : matcher.group(2);
+                case "add" -> {
+                    String group = matcher.group(1);
+                    group = matcher.group(2) != null ? matcher.group(2) : group;
+                    group = matcher.group(3) != null ? matcher.group(3) : group;
+                    yield group;
+                }
+
                 default -> matcher.group(1);
             };
             value = simpleDateFormat.parse(replace);
@@ -72,18 +77,18 @@ public class DateStyler implements IStyler {
             if (exact) {
                 if (value.equals(date)) {
                     Logger.trace("Styling group={}; {} == {}", replace, value, date);
-                    replacedText = replacedText.replaceFirst(replace, Ansi.ansi().a(color).a(replace).a(defaultColor).toString());
+                    replacedText = replacedText.replaceFirst(replace, Ansi.ansi().a(color).a(replace).a(reset).toString());
                 }
             } else if (ascend) {
                 if (value.after(date)) {
                     Logger.trace("Styling group={}; {} >= {}", replace, value, date);
-                    replacedText = replacedText.replaceFirst(replace, Ansi.ansi().a(color).a(replace).a(defaultColor).toString());
+                    replacedText = replacedText.replaceFirst(replace, Ansi.ansi().a(color).a(replace).a(reset).toString());
                 }
             } else {
                 if (value.before(date)) {
                     Logger.trace("Styling group={}; {} <= {}", replace, value, date);
 
-                    replacedText = replacedText.replaceFirst(replace, Ansi.ansi().a(color).a(replace).a(defaultColor).toString());
+                    replacedText = replacedText.replaceFirst(replace, Ansi.ansi().a(color).a(replace).a(reset).toString());
                 }
             }
         }
