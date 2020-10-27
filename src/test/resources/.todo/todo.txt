@@ -10,10 +10,10 @@ x 2020-10-21 2020-10-21 Combine changelog with list using the group-by option st
 2019-10-03 Apply the enforcer plugin for dependency management importance:13 urgency:5
 2019-01-15 Rebuild DEV importance:3 urgency:13
 2020-03-10 Upgrade Java to use the latest redhat openJDK LTS importance:13 urgency:3
-2020-03-13 Refactor @USSD menu to be toggled via feature toggle importance:13 urgency:2
+2020-03-13 Refactor @USSD menu to be toggled via feature toggle importance:13 urgency:2 moscow:must
 2020-03-10 Refactor contract / agreement / fees changes to be purely operational analyst:unnassigned importance:5 urgency:8
-2020-02-05 @iBank once off payments analyst:unnassigned importance:5 urgency:8
-2020-03-13 Increase PIN retries for @APP to around 5/6 importance:8 urgency:5
+2020-02-05 @iBank once off payments analyst:unnassigned importance:5 urgency:8 moscow:should
+2020-03-13 Increase PIN retries for @APP to around 5/6 importance:8 urgency:5 moscow:could
 2019-11-18 +ROB evidence retrieval system importance:8 urgency:5 analyst:karen blocker:IntegrationDown
 2018-10-23 Refactor services to have versioned endpoints importance:8 urgency:5
 2020-03-10 [1] Step up authentication on @USSD analyst:unnassigned importance:3 urgency:8

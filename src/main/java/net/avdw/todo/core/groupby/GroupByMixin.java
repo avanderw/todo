@@ -3,14 +3,12 @@ package net.avdw.todo.core.groupby;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.plugin.change.ChangeTypeGroup;
-import net.avdw.todo.plugin.state.StateGroup;
-import org.tinylog.Logger;
 import picocli.CommandLine.Option;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -18,13 +16,9 @@ import java.util.stream.Collectors;
 @Singleton
 public class GroupByMixin {
     private final List<Group<Todo, String>> groupByList = new ArrayList<>();
-    @Inject private ChangeTypeGroup changeTypeGroup;
-    @Inject private ContextGroup contextGroup;
     @Option(names = "--group-by", descriptionKey = "list.group.by.desc", split = ",", paramLabel = "@|+|tag:|change")
     private List<String> groupBySelectorList = new ArrayList<>();
-    @Inject private MonthGroup monthGroup;
-    @Inject private ProjectGroup projectGroup;
-    @Inject private StateGroup stateGroup;
+    @Inject private Set<Group<Todo, String>> groupBySet;
 
     private Collector<Todo, ?, Map<String, ?>> buildCollector(final List<Function<Todo, String>> groupByCollectorList) {
         Function f = groupByCollectorList.get(0);
@@ -52,30 +46,18 @@ public class GroupByMixin {
     }
 
     public void parse() {
-        groupBySelectorList.forEach(selector -> {
+        groupByList.addAll(groupBySelectorList.stream().map(selector -> {
             TagGroup tagGroup = new TagGroup(selector);
             if (tagGroup.isSatisfiedBy(selector)) {
-                Logger.trace("group-by {} ({})", tagGroup, selector);
-                groupByList.add(tagGroup);
-            } else if (projectGroup.isSatisfiedBy(selector)) {
-                Logger.trace("group-by {} ({})", projectGroup, selector);
-                groupByList.add(projectGroup);
-            } else if (contextGroup.isSatisfiedBy(selector)) {
-                Logger.trace("group-by {} ({})", projectGroup, selector);
-                groupByList.add(contextGroup);
-            } else if (changeTypeGroup.isSatisfiedBy(selector)) {
-                Logger.trace("group-by {} ({})", changeTypeGroup, selector);
-                groupByList.add(changeTypeGroup);
-            } else if (monthGroup.isSatisfiedBy(selector)) {
-                Logger.trace("group-by {} ({})", monthGroup, selector);
-                groupByList.add(monthGroup);
-            } else if (stateGroup.isSatisfiedBy(selector)) {
-                Logger.trace("group-by {} ({})", stateGroup, selector);
-                groupByList.add(stateGroup);
+                return tagGroup;
             } else {
-                throw new UnsupportedOperationException();
+                for (Group<Todo, String> group : groupBySet) {
+                    if (group.isSatisfiedBy(selector)) {
+                        return group;
+                    }
+                }
+                throw new UnsupportedOperationException(String.format("group-by selector '%s' not supported", selector));
             }
-        });
-
+        }).collect(Collectors.toList()));
     }
 }

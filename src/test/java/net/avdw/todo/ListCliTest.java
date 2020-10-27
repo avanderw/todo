@@ -45,12 +45,12 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testAfterAdd() {
-        cliTester.execute("ls --added-after 2020-03-10").success().count("\\[", 16);
+        cliTester.execute("ls --added-after 2020-03-10").success().count("\\[", 17);
     }
 
     @Test(timeout = 256)
     public void testAfterChange() {
-        cliTester.execute("ls --changed-after 2019-12-31").success().count("\\[", 49);
+        cliTester.execute("ls --changed-after 2019-12-31").success().count("\\[", 51);
     }
 
     @Test(timeout = 256)
@@ -66,7 +66,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testAfterTag() {
-        cliTester.execute("ls --after-tag started:2020-03-01").success().count("\\[", 11);
+        cliTester.execute("ls --after-tag started:2020-03-01").success().count("\\[", 14);
     }
 
     @Test(timeout = 256)
@@ -88,7 +88,7 @@ public class ListCliTest {
     @Test(timeout = 256)
     public void testBasic() {
         cliTester.execute("pri 1");
-        cliTester.execute("ls").success().contains("[  1] (A)").count("\\[", 89)
+        cliTester.execute("ls").success().contains("[  1] (A)")
                 .contains("@iBank").contains("Last change");
     }
 
@@ -104,7 +104,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testBeforeAfterChange() {
-        cliTester.execute("ls --changed-before 2019-12-31 --changed-after 2019-12-03").success().count("\\[", 3);
+        cliTester.execute("ls --changed-before 2019-12-31 --changed-after 2019-12-03").success().count("\\[", 4);
     }
 
     @Test(timeout = 256)
@@ -114,7 +114,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testBeforeChange() {
-        cliTester.execute("ls --changed-before 2019-12-31").success().count("\\[", 39);
+        cliTester.execute("ls --changed-before 2019-12-31").success().count("\\[", 40);
     }
 
     @Test(timeout = 256)
@@ -123,9 +123,9 @@ public class ListCliTest {
         gregorianCalendar.setTime(new Date());
         gregorianCalendar.add(Calendar.DAY_OF_MONTH, 1);
         String now = SIMPLE_DATE_FORMAT.format(gregorianCalendar.getTime());
-        cliTester.execute(String.format("ls --done-before %s", now)).success().count("\\[", 4);
+        cliTester.execute(String.format("ls --done-before %s", now)).success().count("\\[", 6);
         cliTester.execute("do 3").success();
-        cliTester.execute(String.format("ls --done-before %s", now)).success().count("\\[", 5);
+        cliTester.execute(String.format("ls --done-before %s", now)).success().count("\\[", 7);
     }
 
     @Test(timeout = 256)
@@ -160,7 +160,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testDone() {
-        cliTester.execute("ls --incl-done").success().contains("[ 94] x").count("\\[", 98);
+        cliTester.execute("ls --incl-done").success().contains("[ 94] x");
     }
 
     @Test(timeout = 256)
@@ -246,13 +246,13 @@ public class ListCliTest {
     @Test(timeout = 256)
     public void testParked() {
         cliTester.execute("archive").success();
-        cliTester.execute("ls --incl-parked").success().count("\\[", 84);
+        cliTester.execute("ls --incl-parked").success().count("\\[", 86);
     }
 
     @Test(timeout = 256)
     public void testRemoved() {
         cliTester.execute("archive").success();
-        cliTester.execute("ls --incl-removed").success().count("\\[", 84);
+        cliTester.execute("ls --incl-removed").success().count("\\[", 86);
     }
 
     @Test(timeout = 256)
