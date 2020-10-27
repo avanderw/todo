@@ -46,6 +46,10 @@ public class PropertyFile {
 
         String classPath = String.format("/%s", propertyFilename);
         try (InputStream is = PropertyFile.class.getResourceAsStream(classPath)) {
+            if (is == null) {
+                Logger.warn("No property file found: {}", propertyFilename);
+                throw new UnsupportedOperationException();
+            }
             Properties prop = new Properties();
             prop.load(is);
             properties.putAll(prop);

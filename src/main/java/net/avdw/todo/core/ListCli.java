@@ -14,6 +14,7 @@ import net.avdw.todo.core.mixin.BooleanFilterMixin;
 import net.avdw.todo.core.mixin.DateFilterMixin;
 import net.avdw.todo.plugin.blocker.BlockerMixin;
 import net.avdw.todo.plugin.change.ChangeMixin;
+import net.avdw.todo.plugin.state.StateMixin;
 import net.avdw.todo.plugin.timing.TimingMixin;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
@@ -41,6 +42,7 @@ public class ListCli implements Runnable {
     @Mixin private DateFilterMixin dateFilterMixin;
     @Mixin private GroupByMixin groupByMixin;
     @Mixin private RepositoryMixin repositoryMixin;
+    @Mixin private StateMixin stateMixin;
     @Inject private RunningStats runningStats;
     @Spec private CommandSpec spec;
     @Mixin private TimingMixin statsMixin;

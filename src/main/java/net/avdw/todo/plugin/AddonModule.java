@@ -2,8 +2,8 @@ package net.avdw.todo.plugin;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
-import net.avdw.todo.plugin.Addon;
 import net.avdw.todo.plugin.change.ChangeAddon;
+import net.avdw.todo.plugin.state.StateAddon;
 import net.avdw.todo.plugin.progress.ProgressAddon;
 import net.avdw.todo.plugin.timing.CycleTimeAddon;
 import net.avdw.todo.plugin.timing.LeadTimeAddon;
@@ -18,5 +18,6 @@ public class AddonModule extends AbstractModule {
         addons.addBinding().to(ReactionTimeAddon.class);
         addons.addBinding().to(CycleTimeAddon.class);
         addons.addBinding().to(LeadTimeAddon.class);
+        addons.addBinding().to(StateAddon.class);
     }
 }

@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.plugin.change.ChangeTypeGroup;
+import net.avdw.todo.plugin.state.StateGroup;
 import org.tinylog.Logger;
 import picocli.CommandLine.Option;
 
@@ -19,10 +20,11 @@ public class GroupByMixin {
     private final List<Group<Todo, String>> groupByList = new ArrayList<>();
     @Inject private ChangeTypeGroup changeTypeGroup;
     @Inject private ContextGroup contextGroup;
-    @Inject private MonthGroup monthGroup;
     @Option(names = "--group-by", descriptionKey = "list.group.by.desc", split = ",", paramLabel = "@|+|tag:|change")
     private List<String> groupBySelectorList = new ArrayList<>();
+    @Inject private MonthGroup monthGroup;
     @Inject private ProjectGroup projectGroup;
+    @Inject private StateGroup stateGroup;
 
     private Collector<Todo, ?, Map<String, ?>> buildCollector(final List<Function<Todo, String>> groupByCollectorList) {
         Function f = groupByCollectorList.get(0);
@@ -67,6 +69,9 @@ public class GroupByMixin {
             } else if (monthGroup.isSatisfiedBy(selector)) {
                 Logger.trace("group-by {} ({})", monthGroup, selector);
                 groupByList.add(monthGroup);
+            } else if (stateGroup.isSatisfiedBy(selector)) {
+                Logger.trace("group-by {} ({})", stateGroup, selector);
+                groupByList.add(stateGroup);
             } else {
                 throw new UnsupportedOperationException();
             }
