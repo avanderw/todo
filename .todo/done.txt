@@ -19,23 +19,23 @@ x 2019-07-25 2019-07-23 @Add remove +remove
 x 2019-07-25 2019-07-23 @Add versioning command support
 x 2019-07-25 2019-07-24 @Add +clear functionality for stale .todo directories
 x 2019-07-25 2019-07-25 @Add +rename admin functionality
-x 2019-07-30 2019-07-24 @Add +init functionality start:2019-07-25
+x 2019-07-30 2019-07-24 @Add +init functionality started:2019-07-25
 x 2019-07-30 2019-07-24 Improve performance of the +add command
 x 2019-07-30 2019-07-30 @Add feature to +migrate items from local to global and visa versa
-x 2019-08-07 2019-07-26 @Add +start feature to indicate when todo was started start:2019-08-07
-x 2019-08-12 2019-07-23 @Add auto startdate +properties start:2019-08-12
-x 2019-08-12 2019-07-23 @Add priority +priority start:2019-08-12
-x 2019-08-12 2019-07-26 @Add in-progress feature to indicate what todos have been started start:2019-08-07
-x 2019-08-12 2019-08-12 @Add all known repositories to +status check start:2019-08-12
-x 2019-08-13 2019-08-12 @Enhance +priority to allow for removal start:2019-08-13
-x 2019-08-13 2019-08-13 @Add +explore command to open directory start:2019-08-13
-x 2019-08-13 2019-08-13 @Add clean +priority option, which will remove all priorities start:2019-08-13
-x 2019-08-13 2019-08-13 @Add listing of only +priority items start:2019-08-13
-x 2019-08-14 2019-07-24 @Enhance +status check to show the amount of items in each repository start:2019-08-14
-x 2019-08-14 2019-08-14 @Fix bug when adding specified +priority start:2019-08-14
-x 2019-09-17 2019-07-26 @Enhance +start feature to update priority to (S) if none is assinged and the option is provided start:2019-09-17
+x 2019-08-07 2019-07-26 @Add +start feature to indicate when todo was started started:2019-08-07
+x 2019-08-12 2019-07-23 @Add auto startdate +properties started:2019-08-12
+x 2019-08-12 2019-07-23 @Add priority +priority started:2019-08-12
+x 2019-08-12 2019-07-26 @Add in-progress feature to indicate what todos have been started started:2019-08-07
+x 2019-08-12 2019-08-12 @Add all known repositories to +status check started:2019-08-12
+x 2019-08-13 2019-08-12 @Enhance +priority to allow for removal started:2019-08-13
+x 2019-08-13 2019-08-13 @Add +explore command to open directory started:2019-08-13
+x 2019-08-13 2019-08-13 @Add clean +priority option, which will remove all priorities started:2019-08-13
+x 2019-08-13 2019-08-13 @Add listing of only +priority items started:2019-08-13
+x 2019-08-14 2019-07-24 @Enhance +status check to show the amount of items in each repository started:2019-08-14
+x 2019-08-14 2019-08-14 @Fix bug when adding specified +priority started:2019-08-14
+x 2019-09-17 2019-07-26 @Enhance +start feature to update priority to (S) if none is assinged and the option is provided started:2019-09-17
 x 2019-09-17 2019-08-12 @Add +repeat functionality to remove and @Add an item with due date
-x 2019-09-17 2019-08-13 @Enhance empty +priority to choose next available priority start:2019-09-17
+x 2019-09-17 2019-08-13 @Enhance empty +priority to choose next available priority started:2019-09-17
 x 2019-09-18 2019-07-24 @Add README to document installation with alias
 x 2019-09-19 2019-07-23 @Refactor +log level to +properties
 x 2019-09-20 2019-07-23 @Add editor +properties
@@ -44,7 +44,7 @@ x 2019-09-25 2019-07-23 @Enhance +list of projects to contain counts
 x 2019-09-25 2019-07-26 @Add +clean feature which will @Add priority to started items
 x 2019-09-25 2019-08-12 @Enhance +priority to shift todos up or down
 x 2019-09-30 2019-09-27 Update due date to color according to deadline
-x 2019-10-07 2019-07-30 @Fix +remove functionality on LF vs CRLF start:2019-10-07
+x 2019-10-07 2019-07-30 @Fix +remove functionality on LF vs CRLF started:2019-10-07
 x 2019-10-08 2019-08-12 @Add +report graph chain for completed items
 x 2019-10-08 2019-08-12 @Enhance +report for showing percentage complete on projects
 x 2019-10-09 2019-07-24 @Enhance +status to show projects and contexts for each repository
@@ -53,7 +53,7 @@ x 2019-10-09 2019-09-17 @Refactor all console output to use logger
 x 2019-10-09 2019-09-17 Rename feature rename to replace
 x 2019-10-09 2019-10-08 @Fix inconsistencies between +done and list
 x 2019-10-11 2019-06-20 @Add warning when adding duplicates +add
-x 2019-10-11 2019-10-11 @Change default 'pri' command to list priorities start:2019-10-11
+x 2019-10-11 2019-10-11 @Change default 'pri' command to list priorities started:2019-10-11
 x 2019-10-11 2019-10-11 @Fix inconsistencies between ls and pri
 x 2019-10-11 2019-10-11 @Fix inconsistencies between ls and rm
 x 2019-10-11 2019-10-11 @Fix inconsitencies between ls and @Add
@@ -64,7 +64,7 @@ x 2019-10-15 2019-10-11 @Fix formatting for +sort command
 x 2019-10-15 2019-10-11 @Fix formatting of +start
 x 2019-10-15 2019-10-11 @Fix inconsistency between +start and list
 x 2019-10-15 2019-10-15 @Refactor TodoItemV1 to TodoItem
-x 2019-10-21 2019-10-11 @Change status to show +status for the current repository start:2019-10-15
+x 2019-10-21 2019-10-11 @Change status to show +status for the current repository started:2019-10-15
 x 2019-10-21 2019-10-11 @Refactor colors to a TodoColor class
 x 2019-11-08 2019-07-23 @Refactor task styling to template
 x 2020-03-24 2020-02-06 Configure default action to list all todo items
@@ -92,3 +92,7 @@ x 2020-10-21 2020-10-16 Add progress complete for groups https://screenful.com/t
 x 2020-10-21 2020-10-20 Add current state duration https://screenful.com/tour/epics/
 x 2020-10-21 2020-10-20 Add last changed for group https://screenful.com/blog/gain-birds-eye-view-across-your-boards-with-epics
 x 2020-10-22 2020-10-15 @Add functionality to replace text in the todo (great for fixing mispelling)
+x 2020-10-26 2020-10-26 Add blocked module to keep a blocker.txt file which can be referenced moscow:wont
+x 2020-10-27 2020-10-20 Add agile module to track state change https://screenful.com/how-to/how-to-find-bottlenecks-in-your-workflow started:2020-10-27 moscow:should
+x 2020-10-27 2020-10-27 Add moscow interactive input cli started:2020-10-27 moscow:could
+x 2020-10-27 2020-10-27 Integrate a MuSCoW group-by moscow:should

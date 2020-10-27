@@ -150,13 +150,15 @@ public class PriorityCli implements Runnable {
                     spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.PRIORITY_NOT_ALLOWED_PARKED));
                 } else {
                     String priorityTodoText;
+                    Todo priorityTodo;
                     if (new IsPriority().isSatisfiedBy(todoById)) {
                         priorityTodoText = todoById.getText().replaceFirst("\\([A-Z]\\) ", "");
+                        priorityTodo = new Todo(id, String.format("(%s) %s", todoById.getPriority().promote(), priorityTodoText));
                     } else {
                         priorityTodoText = todoById.getText();
+                        priorityTodo = new Todo(id, String.format("(%s) %s", nextPriority(availablePriorityList), priorityTodoText));
                     }
 
-                    Todo priorityTodo = new Todo(id, String.format("(%s) %s", nextPriority(availablePriorityList), priorityTodoText));
                     todoRepository.update(priorityTodo);
                     spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
                             String.format("{idx:'%3s',todo:\"%s\"}", idx, todoStyler.style(priorityTodo).replaceAll("\"", "\\\\\""))));

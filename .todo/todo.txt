@@ -1,18 +1,17 @@
-2019-07-23 @Fix bug when global repository does not exist plan:operational
-2020-10-01 @Add 'todo roadmap' [project, context, tag] which will list upcoming- due,target,cycle and past- due,target,cycle
+(A) 2020-10-26 Add sizing module to assist in sizing multiple todos moscow:must plan:strategic link:1.1.1 +DoneEstimate
+(A) 2020-10-27 Add plan interactive input cli moscow:could plan:tactical
+2019-07-23 Fix bug when global repository does not exist plan:operational moscow:should
+2020-10-01 Add 'todo roadmap' [project, context, tag] which will list upcoming- due,target,cycle and past- due,target,cycle moscow:must
 2020-10-12 Add the ability to prioritise on search criteria moscow:should plan:tactical
-2020-10-16 Add estimated completion for groups with visible velocity module https://screenful.com/tour/milestone-burnup-chart plan:strategic 
-2020-10-16 Add histogram for timings https://screenful.com/tour/timing-screen#:~:text=Lead%20time%20is%20the%20total,a%20task%20until%20its%20completion. plan:strategic
-2020-10-16 Add notes to todos https://github.com/mgarrido/todo.txt-cli/tree/note/todo.actions.d plan:strategic
-2020-10-16 Add trending feeback for timings https://screenful.com/tour/timing-screen#:~:text=Lead%20time%20is%20the%20total,a%20task%20until%20its%20completion. plan:tactical
-2020-10-16 Review what to do with these actions https://github.com/inkarkat/todo.txt-cli-ex/tree/master/actions plan:operational
-2020-10-20 Add due < 5 days, due < 0 days, in-progress > 10 days module https://screenful.com/tour/task-status-screen/ plan:strategic
-2020-10-22 Add NLP processing for dates https://www.ocpsoft.org/prettytime/nlp/ http://natty.joestelmach.com/doc.jsp plan:tactical
-2020-10-26 Add sizing module to assist in sizing multiple todos moscow:must plan:strategic
-2020-10-27 Review the reports at https://taskwarrior.org/docs/report.html plan:operational
-2020-10-27 Review todo.txt for meeting setup https://news.ycombinator.com/item?id=20745654 plan:operational
-r 2020-10-22 2019-08-14 Consider adding roadmap generation based off priority, version or combined
-x 2020-10-26 2020-10-26 Add blocked module to keep a blocker.txt file which can be referenced
-x 2020-10-27 2020-10-20 Add agile module to track state change https://screenful.com/how-to/how-to-find-bottlenecks-in-your-workflow started:2020-10-27
-x 2020-10-27 2020-10-27 Integrate a MuSCoW group-by
-2020-10-27 Add moscow interactive input cli started:2020-10-27
+2020-10-16 Add estimated completion for groups with visible velocity module https://screenful.com/tour/milestone-burnup-chart plan:strategic moscow:must link:1 +DoneEstimate
+2020-10-16 Add histogram for timings https://screenful.com/tour/timing-screen#:~:text=Lead%20time%20is%20the%20total,a%20task%20until%20its%20completion. plan:strategic moscow:wont
+2020-10-16 Add notes to todos https://github.com/mgarrido/todo.txt-cli/tree/note/todo.actions.d plan:strategic moscow:should
+2020-10-16 Add trending feeback for timings https://screenful.com/tour/timing-screen#:~:text=Lead%20time%20is%20the%20total,a%20task%20until%20its%20completion. plan:tactical moscow:must link:1.2 +DoneEstimate
+2020-10-16 Review what to do with these actions https://github.com/inkarkat/todo.txt-cli-ex/tree/master/actions plan:operational moscow:could
+2020-10-20 Add due < 5 days, due < 0 days, in-progress > 10 days module https://screenful.com/tour/task-status-screen/ plan:strategic moscow:must
+2020-10-22 Add NLP processing for dates https://www.ocpsoft.org/prettytime/nlp/ http://natty.joestelmach.com/doc.jsp plan:tactical moscow:should
+2020-10-27 Add link cli to show linked todos plan:tactical moscow:could
+2020-10-27 Add velocity module moscow:must link:1.1 plan:strategic +DoneEstimate
+2020-10-27 Review the reports at https://taskwarrior.org/docs/report.html plan:operational moscow:could
+2020-10-27 Review todo.txt for meeting setup https://news.ycombinator.com/item?id=20745654 plan:operational moscow:could
+x 2020-10-28 2020-10-27 Fix pri # to promote existing priority plan:operational moscow:must
