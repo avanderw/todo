@@ -1,5 +1,5 @@
 2020-03-10 +Funeral_Cover compliance analyst:Julias importance:13 urgency:21
-x 2020-10-21 2020-10-21 Combine changelog with list using the group-by option
+x 2020-10-21 2020-10-21 Combine changelog with list using the group-by option started:2020-10-21
 2019-02-07 Digital authorisation service analyst:dollie importance:8 urgency:21
 2020-03-10 Service to provide fraud confidence on transactions importance:13 urgency:13
 2019-09-19 Fix INT-HRD importance:3 urgency:21
