@@ -6,6 +6,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,7 +41,32 @@ public class MoscowCliTest {
     }
 
     @Test(timeout = 256)
+    public void testBasic() {
+        cliTester.execute("moscow 1,2,3,13,15 --not moscow: --assign could").success()
+                .contains("moscow:could").count("\\[", 3);
+    }
+
+    @Test(timeout = 256)
+    public void testFilter() {
+        cliTester.execute("moscow --and refactor --not moscow: --assign could").success().contains("moscow:could");
+    }
+
+    @Test(timeout = 256)
+    public void testInteractive() {
+        InputStream systemIn = System.in;
+        ByteArrayInputStream testIn = new ByteArrayInputStream("could 2 2 2 n y should 2".getBytes());
+        System.setIn(testIn);
+        cliTester.execute("moscow 1,2,3,13,15").success().contains("moscow:could");
+        System.setIn(systemIn);
+    }
+
+    @Test(timeout = 256)
     public void testGroupBy() {
         cliTester.execute("ls --group-by moscow").success().contains("Must have");
+    }
+
+    @Test(timeout = 256)
+    public void testHelp() {
+        cliTester.execute("moscow --help").success();
     }
 }

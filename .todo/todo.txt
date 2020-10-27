@@ -15,3 +15,4 @@ r 2020-10-22 2019-08-14 Consider adding roadmap generation based off priority, v
 x 2020-10-26 2020-10-26 Add blocked module to keep a blocker.txt file which can be referenced
 x 2020-10-27 2020-10-20 Add agile module to track state change https://screenful.com/how-to/how-to-find-bottlenecks-in-your-workflow started:2020-10-27
 x 2020-10-27 2020-10-27 Integrate a MuSCoW group-by
+2020-10-27 Add moscow interactive input cli started:2020-10-27
