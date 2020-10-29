@@ -12,4 +12,6 @@ public interface Ext<T> extends Guard<Todo> {
     Optional<T> getValue(final Todo todo);
 
     List<T> getValueList(final Todo todo);
+
+    String preferredExt();
 }

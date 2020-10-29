@@ -12,7 +12,6 @@ import net.avdw.todo.domain.IsDone;
 import net.avdw.todo.domain.IsParked;
 import net.avdw.todo.domain.IsRemoved;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.domain.TodoTextCleaner;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
 import net.avdw.todo.style.TodoStyler;

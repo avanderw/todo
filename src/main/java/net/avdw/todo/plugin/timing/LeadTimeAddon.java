@@ -2,9 +2,9 @@ package net.avdw.todo.plugin.timing;
 
 import com.google.inject.Inject;
 import net.avdw.todo.TemplatedResource;
-import net.avdw.todo.plugin.Addon;
-import net.avdw.todo.domain.Todo;
 import net.avdw.todo.core.DayFormatter;
+import net.avdw.todo.domain.Todo;
+import net.avdw.todo.plugin.Addon;
 import net.avdw.todo.repository.Repository;
 
 import java.util.List;
@@ -56,7 +56,7 @@ public class LeadTimeAddon implements Addon {
             String lead;
             if (todoTiming.hasLeadTime(todo)) {
                 lead = String.format("%s", todoTiming.getLeadTime(todo));
-            } else  if (todoTiming.hasRunningLeadTime(todo)) {
+            } else if (todoTiming.hasRunningLeadTime(todo)) {
                 lead = String.format("!%s", todoTiming.getRunningLeadTime(todo));
             } else {
                 lead = " ";

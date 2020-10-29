@@ -3,9 +3,7 @@ package net.avdw.todo.plugin.browse;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.AbstractSpecification;
 
-import com.google.inject.Inject;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class BrowseSpecification extends AbstractSpecification<Integer, Todo> {
 

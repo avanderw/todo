@@ -6,6 +6,7 @@ import com.google.inject.multibindings.Multibinder;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.plugin.change.ChangeTypeGroup;
 import net.avdw.todo.plugin.muscow.MoscowGroup;
+import net.avdw.todo.plugin.plan.PlanGroup;
 import net.avdw.todo.plugin.state.StateGroup;
 
 public class GroupByModule extends AbstractModule {
@@ -19,5 +20,6 @@ public class GroupByModule extends AbstractModule {
         addons.addBinding().to(MoscowGroup.class);
         addons.addBinding().to(ProjectGroup.class);
         addons.addBinding().to(StateGroup.class);
+        addons.addBinding().to(PlanGroup.class);
     }
 }

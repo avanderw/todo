@@ -5,19 +5,15 @@ import net.avdw.todo.core.mixin.BooleanFilterMixin;
 import net.avdw.todo.core.mixin.IndexSpecificationMixin;
 import net.avdw.todo.core.view.TodoView;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.plugin.muscow.MoscowType;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
-import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
 
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -32,7 +28,7 @@ public class SizeCli implements Runnable {
     @Mixin private BooleanFilterMixin booleanFilterMixin;
     @Spec private CommandSpec spec;
     @Inject private Repository<Integer, Todo> todoRepository;
-    @Option(names="--assign", descriptionKey = "size.type.desc")
+    @Option(names = "--assign", descriptionKey = "size.type.desc")
     private Integer size;
     @Inject private TodoView todoView;
     @Inject private SizeMapper sizeMapper;
@@ -57,10 +53,10 @@ public class SizeCli implements Runnable {
         }
         if (size == null) {
             Scanner scanner = new Scanner(System.in);
-            todoList.forEach(todo-> {
+            todoList.forEach(todo -> {
                 spec.commandLine().getOut().println("");
                 Map<String, List<Todo>> sizeGroupMap = todoRepository.findAll(hasSize).stream().collect(Collectors.groupingBy(sizeGroup.collector()));
-                sizeGroupMap.forEach((key, list)-> spec.commandLine().getOut().println(String.format("SIZE %s: %s", key, list.get(random.nextInt(list.size())))));
+                sizeGroupMap.forEach((key, list) -> spec.commandLine().getOut().println(String.format("SIZE %s: %s", key, list.get(random.nextInt(list.size())))));
                 spec.commandLine().getOut().println(String.format("ASSIGN: %s", todoView.render(todo)));
                 String answer;
                 if (hasSize.isSatisfiedBy(todo)) {

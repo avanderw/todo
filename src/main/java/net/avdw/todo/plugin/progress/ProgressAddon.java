@@ -2,8 +2,8 @@ package net.avdw.todo.plugin.progress;
 
 import com.google.inject.Inject;
 import net.avdw.todo.TemplatedResource;
-import net.avdw.todo.plugin.Addon;
 import net.avdw.todo.domain.Todo;
+import net.avdw.todo.plugin.Addon;
 import net.avdw.todo.repository.Repository;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class ProgressAddon implements Addon {
                         list.stream().filter(progressExtension::started).count(),
                         done, progress,
                         (parked == 0) ? "" : parked, (removed == 0) ? "" : removed
-                        ));
+                ));
     }
 
     @Override

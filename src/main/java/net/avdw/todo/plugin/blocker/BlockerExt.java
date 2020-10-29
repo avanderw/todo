@@ -1,7 +1,7 @@
 package net.avdw.todo.plugin.blocker;
 
-import net.avdw.todo.plugin.Ext;
 import net.avdw.todo.domain.Todo;
+import net.avdw.todo.plugin.Ext;
 import net.avdw.todo.repository.AbstractSpecification;
 
 import java.util.ArrayList;
@@ -17,13 +17,6 @@ public class BlockerExt extends AbstractSpecification<Integer, Todo> implements 
     }
 
     @Override
-    public List<String> getValueList(final Todo todo) {
-        return supportedExtList.stream()
-                .flatMap(ext -> todo.getTagValueList(ext).stream())
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<String> getSupportedExtList() {
         return supportedExtList;
     }
@@ -34,8 +27,20 @@ public class BlockerExt extends AbstractSpecification<Integer, Todo> implements 
     }
 
     @Override
+    public List<String> getValueList(final Todo todo) {
+        return supportedExtList.stream()
+                .flatMap(ext -> todo.getTagValueList(ext).stream())
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public boolean isSatisfiedBy(final Todo todo) {
         return !supportedExtList.stream().allMatch(ext -> todo.getTagValueList(ext).isEmpty());
+    }
+
+    @Override
+    public String preferredExt() {
+        return supportedExtList.get(0);
     }
 
     @Override

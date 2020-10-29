@@ -8,6 +8,7 @@ import net.avdw.todo.plugin.edit.EditCli;
 import net.avdw.todo.plugin.explore.ExploreCli;
 import net.avdw.todo.plugin.link.LinkCli;
 import net.avdw.todo.plugin.muscow.MoscowCli;
+import net.avdw.todo.plugin.plan.PlanCli;
 import net.avdw.todo.plugin.replace.ReplaceCli;
 import net.avdw.todo.plugin.size.SizeCli;
 import net.avdw.todo.plugin.start.StartCli;
@@ -44,7 +45,8 @@ import java.nio.file.Path;
                 ReplaceCli.class,
                 LinkCli.class,
                 MoscowCli.class,
-                SizeCli.class
+                SizeCli.class,
+                PlanCli.class
         })
 public class MainCli implements Runnable {
     @Spec

@@ -1,8 +1,8 @@
 package net.avdw.todo.plugin.change;
 
 import net.avdw.todo.ThrowingFunction;
-import net.avdw.todo.plugin.Ext;
 import net.avdw.todo.domain.Todo;
+import net.avdw.todo.plugin.Ext;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,16 +20,6 @@ public class ChangeExt implements Ext<Change> {
     }
 
     @Override
-    public List<Change> getValueList(final Todo todo) {
-        return supportedExtList.stream()
-                .flatMap(ext -> todo.getTagValueList(ext).stream()
-                        .map(ThrowingFunction.unchecked(simpleDateFormat::parse))
-                        .filter(Objects::nonNull)
-                        .map(value -> new Change(ext, value)))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<String> getSupportedExtList() {
         return supportedExtList;
     }
@@ -40,7 +30,22 @@ public class ChangeExt implements Ext<Change> {
     }
 
     @Override
+    public List<Change> getValueList(final Todo todo) {
+        return supportedExtList.stream()
+                .flatMap(ext -> todo.getTagValueList(ext).stream()
+                        .map(ThrowingFunction.unchecked(simpleDateFormat::parse))
+                        .filter(Objects::nonNull)
+                        .map(value -> new Change(ext, value)))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public boolean isSatisfiedBy(final Todo todo) {
         return !supportedExtList.stream().allMatch(ext -> todo.getTagValueList(ext).isEmpty());
+    }
+
+    @Override
+    public String preferredExt() {
+        return supportedExtList.get(0);
     }
 }

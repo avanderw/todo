@@ -55,4 +55,9 @@ public class LinkExt extends AbstractSpecification<Integer, Todo> implements Ext
     public boolean isSatisfiedBy(final Todo todo) {
         return !supportedExtList.stream().allMatch(ext -> todo.getTagValueList(ext).isEmpty());
     }
+
+    @Override
+    public String preferredExt() {
+        return supportedExtList.get(0);
+    }
 }

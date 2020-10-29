@@ -43,4 +43,9 @@ public class SizeExt implements Ext<String> {
     public boolean isSatisfiedBy(final Todo todo) {
         return !supportedExtList.stream().allMatch(ext -> todo.getTagValueList(ext).isEmpty());
     }
+
+    @Override
+    public String preferredExt() {
+        return supportedExtList.get(0);
+    }
 }

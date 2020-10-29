@@ -3,8 +3,6 @@ package net.avdw.todo.plugin.size;
 import com.google.inject.Inject;
 import net.avdw.todo.core.groupby.Group;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.plugin.muscow.MoscowExt;
-import net.avdw.todo.plugin.muscow.MoscowMapper;
 
 import java.util.Locale;
 import java.util.function.Function;
