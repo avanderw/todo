@@ -5,6 +5,67 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Entries are suggested using the [Changelog Generator](https://github.com/avanderw/changelog).
 
+## [v2.1.0] (Major release, Update recommended)
+*Released on 2020-10-29*
+
+### Added
+- Add plan module to assist in planning multiple todos
+- Add sizing module to assist in sizing multiple todos
+- Add MoSCoW cli shortcut for 'edit --add moscow:lvl'
+- Add moscow group-by functionality
+- Add state module to group-by and list todo states
+- Add linking extension to link two todos with each other
+- Add new style module
+- Add replace command to rename text
+- Add start shortcut to 'edit --add started:today'
+- Add changelog month option to list group-by option
+- Add progress complete for groups
+- Add blocker extension
+- Add change addon to highlight when the list last changed
+- Add browse plugin
+- Add started extension, still need to refactor hardcoding to use the ext
+- Add group-by support for depth 3
+- Add grouping by with a hierarchy of two
+- Add group-by for singular groups
+- Add total summary for ListCli
+- Add analytics to ListCli
+
+### Changed
+- Update formatting for newly added features
+- Update MoSCoW styling for must and should haves
+- Refactor styling module to use new styling module
+- Refactor packaging of the classes to fit new design
+- Update formatting of the tmiing summary to include mean
+- Refactor stats to timing addon
+- Update change addon to display last change before each todo
+- Refactor first module into addon, extension and plugin taxonomy
+- Refactor addition of commands to use reflection to enable plugins
+- Update ListCli help messages
+- Enhance logging for multiple start tags during statistic calculations
+- Enhance debugging on statistic calculation
+- Enhance EditCli to not autocommit after every edit
+- Update log levels to be less noisy
+- Refactor statistics view into list command
+- Refactor including extra files to StatsCli method
+- Update group-by module to have a mixin for command line adoption
+- Refactor group-by functionality to be more modular
+- Update timeout on tests to allow for slow hard drives
+- Change priority --clean option to -R
+
+### Removed
+- Remove reflections library as it slowed things down too much
+
+### Fixed
+- Fix styling regex for sizing module
+- Fix styling bug with relative dates
+- Fix sort to always have completed items at the bottom
+- Fix bug with priority reassign
+- Fix 'pri #' to promote existing priority todos
+- Fix ordering bug for multiple matches no state regex
+- Fix styling of addition date
+- Fix group-by multi- context, project reduction to be sorted
+- Fix priority --help null pointer
+
 ## [v2.0.1] (Maintenance release)
 *Released on 2020-10-08*
 

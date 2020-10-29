@@ -8,14 +8,8 @@
 2020-10-20 Add due < 5 days, due < 0 days, in-progress > 10 days module https://screenful.com/tour/task-status-screen/ plan:strategic moscow:must size:5
 2020-10-22 Add NLP processing for dates https://www.ocpsoft.org/prettytime/nlp/ http://natty.joestelmach.com/doc.jsp plan:tactical moscow:should size:5
 2020-10-27 Add link cli to show linked todos plan:tactical moscow:could size:3
-2020-10-27 Add velocity module moscow:must link:1.1 plan:strategic +DoneEstimate size:5
-2020-10-27 Review todo.txt for meeting setup https://news.ycombinator.com/item?id=20745654 plan:operational moscow:could size:2
+(A) 2020-10-27 Add velocity module moscow:must link:1.1 plan:strategic +DoneEstimate size:5
+r 2020-10-29 2020-10-27 Review todo.txt for meeting setup https://news.ycombinator.com/item?id=20745654 plan:operational moscow:could size:2
 2020-10-29 Add blocked/blocking extension with reasons size:5 plan:strategic moscow:could
-2020-10-29 Add burndown.<daily|monthly|weekly> to show burndown chart size:8 plan:tactical moscow:should
+(B) 2020-10-29 Add burndown.<daily|monthly|weekly> to show burndown chart size:8 plan:tactical moscow:should
 2020-10-29 Enhance list module to show next-up for project size:8 plan:tactical moscow:should
-r 2020-10-29 2020-10-29 Extend link module to list blockers and blocking size:3 plan:strategic moscow:could
-x 2020-10-28 2020-10-27 Fix pri # to promote existing priority plan:operational moscow:must size:1
-x 2020-10-29 2019-07-23 Fix bug when global repository does not exist plan:operational moscow:should size:1
-x 2020-10-29 2020-10-26 Add sizing module to assist in sizing multiple todos moscow:must plan:strategic link:1.1.1 +DoneEstimate size:3
-x 2020-10-29 2020-10-27 Add plan interactive input cli moscow:could plan:tactical size:3
-x 2020-10-29 2020-10-27 Review the reports at https://taskwarrior.org/docs/report.html plan:operational moscow:could size:2 started:2020-10-29

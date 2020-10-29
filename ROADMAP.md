@@ -13,18 +13,18 @@ Very basic goal setting
 - Hierarchical (overridable) configuration
 - Property file driven
 
-## Lifecycle
+## ~~Lifecycle~~
 
 - filter
 - actions
 - display
 
-## Category module
+## ~~Category module~~
 - Strategic: Creating future value
 - Tactical: Refining current value
 - Operational: Maintaining current value
 
-## MoSCoW module
+## ~~MoSCoW module~~
 - Must have: non-negotiable, mandatory
 - Should have: important, not vital, significant value
 - Could have: nice to have, small impact
@@ -95,4 +95,5 @@ Plot value vs. effort into 4 quadrants.
 - Binding commands to external binaries
 - Binding commands to external scripts
 - Single source for configuration
+- Must not use reflection as it is too slow
 - Property file driven
