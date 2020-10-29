@@ -62,12 +62,13 @@ public class MoscowCli implements Runnable {
                     spec.commandLine().getOut().println(String.format("%s",
                             Arrays.stream(MoscowType.values())
                                     .sorted(Comparator.naturalOrder())
-                                    .map(type -> String.format("%s. %s", type.ordinal(), type.name()))
+                                    .map(type -> String.format("> %2s: %s", type.ordinal(), type))
                                     .collect(Collectors.joining("\n"))));
                     MoscowType moscowType = null;
                     boolean notAssigned = true;
                     while (notAssigned) {
-                        spec.commandLine().getOut().println("Choice: ");
+                        spec.commandLine().getOut().print("Choice: ");
+                        spec.commandLine().getOut().flush();
                         try {
                             String assign = scanner.next();
                             moscowType = MoscowType.values()[Integer.parseInt(assign)];
@@ -78,7 +79,7 @@ public class MoscowCli implements Runnable {
                         }
                     }
                     String clean = moscowCleaner.clean(todo);
-                    Todo newTodo = new Todo(todo.getId(), String.format("%s moscow:%s", clean, moscowType.toString().toLowerCase(Locale.ENGLISH)));
+                    Todo newTodo = new Todo(todo.getId(), String.format("%s moscow:%s", clean, moscowType.name().toLowerCase(Locale.ENGLISH)));
                     todoRepository.update(newTodo);
                     spec.commandLine().getOut().println(todoView.render(newTodo));
                 }
@@ -87,7 +88,7 @@ public class MoscowCli implements Runnable {
             todoRepository.setAutoCommit(false);
             todoList.forEach(todo -> {
                 String clean = moscowCleaner.clean(todo);
-                Todo newTodo = new Todo(todo.getId(), String.format("%s moscow:%s", clean, moscowType.toString().toLowerCase(Locale.ENGLISH)));
+                Todo newTodo = new Todo(todo.getId(), String.format("%s moscow:%s", clean, moscowType.name().toLowerCase(Locale.ENGLISH)));
                 todoRepository.update(newTodo);
                 spec.commandLine().getOut().println(todoView.render(newTodo));
             });

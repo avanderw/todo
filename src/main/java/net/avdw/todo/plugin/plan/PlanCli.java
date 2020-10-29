@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Command(name = "plan", resourceBundle = "messages", description = "${bundle:plan.desc}", mixinStandardHelpOptions = true)
 public class PlanCli implements Runnable {
     @Mixin private BooleanFilterMixin booleanFilterMixin;
-    @Inject private HasPlan hasMoscow;
+    @Inject private HasPlan hasPlan;
     @Mixin private IndexSpecificationMixin indexSpecificationMixin;
     @Inject private PlanCleaner planCleaner;
     @Inject private PlanExt planExt;
@@ -56,7 +56,7 @@ public class PlanCli implements Runnable {
             todoList.forEach(todo -> {
                 spec.commandLine().getOut().println(String.format("%nASSIGN: %s", todoView.render(todo)));
                 String answer;
-                if (hasMoscow.isSatisfiedBy(todo)) {
+                if (hasPlan.isSatisfiedBy(todo)) {
                     spec.commandLine().getOut().println(String.format("Currently assigned '%s' re-assign (y/n):", planMapper.map(todo).toUpperCase(Locale.ENGLISH)));
                     answer = scanner.next();
                 } else {
@@ -67,15 +67,16 @@ public class PlanCli implements Runnable {
                     spec.commandLine().getOut().println(String.format("%s",
                             Arrays.stream(PlanType.values())
                                     .sorted(Comparator.naturalOrder())
-                                    .map(type -> String.format("%s. %s", type.ordinal(), type.name()))
+                                    .map(type -> String.format("> %2s: %s", type.ordinal(), type))
                                     .collect(Collectors.joining("\n"))));
-                    PlanType moscowType = null;
+                    PlanType planType = null;
                     boolean notAssigned = true;
                     while (notAssigned) {
-                        spec.commandLine().getOut().println("Choice: ");
+                        spec.commandLine().getOut().print("Choice: ");
+                        spec.commandLine().getOut().flush();
                         try {
                             String assign = scanner.next();
-                            moscowType = PlanType.values()[Integer.parseInt(assign)];
+                            planType = PlanType.values()[Integer.parseInt(assign)];
                             notAssigned = false;
                         } catch (NumberFormatException e) {
                             spec.commandLine().getOut().println("Bad option, chose again");
@@ -83,7 +84,7 @@ public class PlanCli implements Runnable {
                         }
                     }
                     String clean = planCleaner.clean(todo);
-                    Todo newTodo = new Todo(todo.getId(), String.format("%s %s:%s", clean, planExt.preferredExt(), moscowType.toString().toLowerCase(Locale.ENGLISH)));
+                    Todo newTodo = new Todo(todo.getId(), String.format("%s %s:%s", clean, planExt.preferredExt(), planType.name().toLowerCase(Locale.ENGLISH)));
                     todoRepository.update(newTodo);
                     spec.commandLine().getOut().println(todoView.render(newTodo));
                 }
@@ -92,7 +93,7 @@ public class PlanCli implements Runnable {
             todoRepository.setAutoCommit(false);
             todoList.forEach(todo -> {
                 String clean = planCleaner.clean(todo);
-                Todo newTodo = new Todo(todo.getId(), String.format("%s %s:%s", clean, planExt.preferredExt(), planType.toString().toLowerCase(Locale.ENGLISH)));
+                Todo newTodo = new Todo(todo.getId(), String.format("%s %s:%s", clean, planExt.preferredExt(), planType.name().toLowerCase(Locale.ENGLISH)));
                 todoRepository.update(newTodo);
                 spec.commandLine().getOut().println(todoView.render(newTodo));
             });

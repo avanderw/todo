@@ -5,6 +5,7 @@ import net.avdw.todo.core.mixin.BooleanFilterMixin;
 import net.avdw.todo.core.mixin.IndexSpecificationMixin;
 import net.avdw.todo.core.view.TodoView;
 import net.avdw.todo.domain.Todo;
+import net.avdw.todo.domain.TodoTextCleaner;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
@@ -31,6 +32,7 @@ public class SizeCli implements Runnable {
     @Option(names = "--assign", descriptionKey = "size.type.desc")
     private Integer size;
     @Inject private TodoView todoView;
+    @Inject private TodoTextCleaner todoTextCleaner;
     @Inject private SizeMapper sizeMapper;
     @Inject private SizeCleaner sizeCleaner;
     @Inject private SizeGroup sizeGroup;
@@ -56,8 +58,8 @@ public class SizeCli implements Runnable {
             todoList.forEach(todo -> {
                 spec.commandLine().getOut().println("");
                 Map<String, List<Todo>> sizeGroupMap = todoRepository.findAll(hasSize).stream().collect(Collectors.groupingBy(sizeGroup.collector()));
-                sizeGroupMap.forEach((key, list) -> spec.commandLine().getOut().println(String.format("SIZE %s: %s", key, list.get(random.nextInt(list.size())))));
-                spec.commandLine().getOut().println(String.format("ASSIGN: %s", todoView.render(todo)));
+                sizeGroupMap.forEach((key, list) -> spec.commandLine().getOut().println(String.format("     SIZE %2s: %s", key, todoTextCleaner.clean(list.get(random.nextInt(list.size()))))));
+                spec.commandLine().getOut().println(String.format("      ASSIGN: %s", todoView.render(todo)));
                 String answer;
                 if (hasSize.isSatisfiedBy(todo)) {
                     spec.commandLine().getOut().println(String.format("Currently assigned '%s' re-assign (y/n):", sizeMapper.map(todo)));
@@ -82,7 +84,7 @@ public class SizeCli implements Runnable {
                         }
                     }
                     String clean = sizeCleaner.clean(todo);
-                    Todo newTodo = new Todo(todo.getId(), String.format("%s size:%s", clean, assignSize));
+                    Todo newTodo = new Todo(todo.getId(), String.format("            %s size:%s", clean, assignSize));
                     todoRepository.update(newTodo);
                     spec.commandLine().getOut().println(todoView.render(newTodo));
                 }

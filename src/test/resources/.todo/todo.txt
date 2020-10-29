@@ -3,12 +3,12 @@ x 2020-10-21 2020-10-21 Combine changelog with list using the group-by option st
 2019-02-07 Digital authorisation service analyst:dollie importance:8 urgency:21
 2020-03-10 Service to provide fraud confidence on transactions importance:13 urgency:13
 2019-09-19 Fix INT-HRD importance:3 urgency:21 size:21
-2020-02-05 +Funeral_Cover relationship descriptions importance:8 urgency:13 analyst:cassim
-2019-10-03 Refactor services to use LinkerD importance:13 urgency:8
-2020-02-12 Refactor Hikari for all services importance:5 urgency:13
-2019-05-26 Refactor @iBank to use card service importance:13 urgency:5 due:2020-11-05
+2020-02-05 +Funeral_Cover relationship descriptions importance:8 urgency:13 analyst:cassim size:13
+2019-10-03 Refactor services to use LinkerD importance:13 urgency:8 size:1
+2020-02-12 Refactor Hikari for all services importance:5 urgency:13 size:2
+2019-05-26 Refactor @iBank to use card service importance:13 urgency:5 due:2020-11-05 size:5
 2019-10-03 Apply the enforcer plugin for dependency management importance:13 urgency:5 due:2021-08-01
-2019-01-15 Rebuild DEV importance:3 urgency:13 due:2020-08-01
+2019-01-15 Rebuild DEV importance:3 urgency:13 due:2020-08-01 size:8
 2020-03-10 Upgrade Java to use the latest redhat openJDK LTS importance:13 urgency:3
 2020-03-13 Refactor @USSD menu to be toggled via feature toggle importance:13 urgency:2 moscow:must plan:strategic
 2020-03-10 Refactor contract / agreement / fees changes to be purely operational analyst:unnassigned importance:5 urgency:8
