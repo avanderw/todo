@@ -153,8 +153,8 @@ public class PriorityCli implements Runnable {
                     Todo priorityTodo;
                     if (new IsPriority().isSatisfiedBy(todoById)) {
                         priorityTodoText = todoById.getText().replaceFirst("\\([A-Z]\\) ", "");
-                        priorityTodo = new Todo(id, String.format("(%s) %s", todoById.getPriority().promote(), priorityTodoText));
-                    } else {
+                        priorityTodo = new Todo(id, String.format("(%s) %s", priority == null ? todoById.getPriority().promote() : priority, priorityTodoText));
+                    }else {
                         priorityTodoText = todoById.getText();
                         priorityTodo = new Todo(id, String.format("(%s) %s", nextPriority(availablePriorityList), priorityTodoText));
                     }

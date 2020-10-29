@@ -66,7 +66,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testAfterTag() {
-        cliTester.execute("ls --after-tag started:2020-03-01").success().count("\\[", 14);
+        cliTester.execute("ls --tag-after started:2020-03-01").success().count("\\[", 14);
     }
 
     @Test(timeout = 256)
@@ -130,7 +130,7 @@ public class ListCliTest {
 
     @Test(timeout = 256)
     public void testBeforeTag() {
-        cliTester.execute("ls --before-tag started:2020-01-01").success().count("\\[", 6);
+        cliTester.execute("ls --tag-before started:2020-01-01").success().count("\\[", 6);
     }
 
     @Test(timeout = 256)

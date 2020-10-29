@@ -63,7 +63,7 @@ public class ChangelogCliTest {
 
     @Test(timeout = 256)
     public void testAfterTag() {
-        cliTester.execute("changelog --after-tag started:2020-03-01").success().count("\\[", 23);
+        cliTester.execute("changelog --tag-after started:2020-03-01").success().count("\\[", 23);
     }
 
     @Test(timeout = 256)
@@ -113,7 +113,7 @@ public class ChangelogCliTest {
 
     @Test(timeout = 256)
     public void testBeforeTag() {
-        cliTester.execute("changelog --before-tag started:2020-01-01").success().count("\\[", 10);
+        cliTester.execute("changelog --tag-before started:2020-01-01").success().count("\\[", 10);
     }
 
     @Test(timeout = 256)

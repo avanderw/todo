@@ -79,7 +79,7 @@ public class StatsCliTest {
 
     @Test(timeout = 256)
     public void testBeforeTag() {
-        cliTester.execute("stats --before-tag started:2020-01-01").success();
+        cliTester.execute("stats --tag-before started:2020-01-01").success();
     }
 
     @Test(timeout = 256)
