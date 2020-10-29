@@ -4,10 +4,12 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.avdw.todo.core.mixin.CleanMixin;
 import net.avdw.todo.domain.Todo;
+import net.avdw.todo.style.painter.DatePainter;
 import net.avdw.todo.style.painter.IDefaultPainter;
 import net.avdw.todo.style.painter.IPainter;
 import net.avdw.todo.style.parser.PropertyParser;
 import org.fusesource.jansi.Ansi;
+import org.tinylog.Logger;
 
 import java.util.Comparator;
 import java.util.List;

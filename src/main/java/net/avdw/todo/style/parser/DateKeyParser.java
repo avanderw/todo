@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 @Singleton
 public class DateKeyParser {
     private final Pattern fixedRegex = Pattern.compile("^.+\\.(?<date>\\d\\d\\d\\d-\\d\\d-\\d\\d)(?<sign>[+-])?$");
-    private final Pattern relativeRegex = Pattern.compile("^.*\\.(?<relative>-30)(?<type>[dmy])(?<sign>[+-])?$");
+    private final Pattern relativeRegex = Pattern.compile("^.*\\.(?<relative>-?\\d+)(?<type>[dmy])(?<sign>[+-])?$");
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     private MatchType getMatchTypeFromSign(final String sign) {
@@ -55,6 +55,8 @@ public class DateKeyParser {
         } else {
             Logger.trace("Not fixed date: {}", key);
         }
+
+        Logger.trace("key={}, matchType={}, compareDate={}", key, matchType, compareDate);
 
         if (compareDate == null || matchType == null) {
             return new AnyDateGuard();
