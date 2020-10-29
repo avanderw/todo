@@ -1,41 +1,44 @@
-package net.avdw.todo.plugin.muscow;
+package net.avdw.todo.plugin.size;
 
 import com.google.inject.Inject;
-import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.core.mixin.BooleanFilterMixin;
 import net.avdw.todo.core.mixin.IndexSpecificationMixin;
 import net.avdw.todo.core.view.TodoView;
 import net.avdw.todo.domain.Todo;
+import net.avdw.todo.plugin.muscow.MoscowType;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
-import picocli.CommandLine;
+import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
-import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Spec;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-@Command(name = "moscow", resourceBundle = "messages", description = "${bundle:moscow.desc}", mixinStandardHelpOptions = true)
-public class MoscowCli implements Runnable {
-    @Inject private HasMoscow hasMoscow;
+@Command(name = "size", resourceBundle = "messages", description = "${bundle:size.desc}", mixinStandardHelpOptions = true)
+public class SizeCli implements Runnable {
+    @Inject private HasSize hasSize;
     @Mixin private IndexSpecificationMixin indexSpecificationMixin;
     @Mixin private BooleanFilterMixin booleanFilterMixin;
     @Spec private CommandSpec spec;
     @Inject private Repository<Integer, Todo> todoRepository;
-    @Option(names="--assign", descriptionKey = "moscow.type.desc")
-    private MoscowType moscowType;
+    @Option(names="--assign", descriptionKey = "size.type.desc")
+    private Integer size;
     @Inject private TodoView todoView;
-    @Inject private MoscowMapper moscowMapper;
-    @Inject private MoscowCleaner moscowCleaner;
+    @Inject private SizeMapper sizeMapper;
+    @Inject private SizeCleaner sizeCleaner;
+    @Inject private SizeGroup sizeGroup;
+    private final Random random = new Random();
 
     @Override
     public void run() {
@@ -49,39 +52,41 @@ public class MoscowCli implements Runnable {
         }
 
         List<Todo> todoList = todoRepository.findAll(specification);
-        if (moscowType == null) {
+        if (todoList.isEmpty()) {
+            spec.commandLine().getOut().println("No todos to size");
+        }
+        if (size == null) {
             Scanner scanner = new Scanner(System.in);
             todoList.forEach(todo-> {
-                spec.commandLine().getOut().println(String.format("%nASSIGN: %s", todoView.render(todo)));
+                spec.commandLine().getOut().println("");
+                Map<String, List<Todo>> sizeGroupMap = todoRepository.findAll(hasSize).stream().collect(Collectors.groupingBy(sizeGroup.collector()));
+                sizeGroupMap.forEach((key, list)-> spec.commandLine().getOut().println(String.format("SIZE %s: %s", key, list.get(random.nextInt(list.size())))));
+                spec.commandLine().getOut().println(String.format("ASSIGN: %s", todoView.render(todo)));
                 String answer;
-                if (hasMoscow.isSatisfiedBy(todo)) {
-                    spec.commandLine().getOut().println(String.format("Currently assigned '%s' re-assign (y/n):", moscowMapper.map(todo).toUpperCase(Locale.ENGLISH)));
+                if (hasSize.isSatisfiedBy(todo)) {
+                    spec.commandLine().getOut().println(String.format("Currently assigned '%s' re-assign (y/n):", sizeMapper.map(todo)));
                     answer = scanner.next();
                 } else {
                     answer = "y";
                 }
 
                 if (answer.toLowerCase(Locale.ENGLISH).equals("y")) {
-                    spec.commandLine().getOut().println(String.format("%s",
-                            Arrays.stream(MoscowType.values())
-                                    .sorted(Comparator.naturalOrder())
-                                    .map(type->String.format("%s. %s", type.ordinal(), type.name()))
-                                    .collect(Collectors.joining("\n"))));
-                    MoscowType moscowType = null;
+                    Integer assignSize = null;
                     boolean notAssigned = true;
                     while (notAssigned) {
-                        spec.commandLine().getOut().println("Choice: ");
+                        spec.commandLine().getOut().print("ENTER (size): ");
+                        spec.commandLine().getOut().flush();
                         try {
                             String assign = scanner.next();
-                            moscowType = MoscowType.values()[Integer.parseInt(assign)];
+                            assignSize = Integer.parseInt(assign);
                             notAssigned = false;
                         } catch (NumberFormatException e) {
-                            spec.commandLine().getOut().println("Bad option, chose again");
+                            spec.commandLine().getOut().println("Not a number, please enter a number: ");
                             notAssigned = true;
                         }
                     }
-                    String clean = moscowCleaner.clean(todo);
-                    Todo newTodo = new Todo(todo.getId(), String.format("%s moscow:%s", clean, moscowType.toString().toLowerCase(Locale.ENGLISH)));
+                    String clean = sizeCleaner.clean(todo);
+                    Todo newTodo = new Todo(todo.getId(), String.format("%s size:%s", clean, assignSize));
                     todoRepository.update(newTodo);
                     spec.commandLine().getOut().println(todoView.render(newTodo));
                 }
@@ -89,8 +94,8 @@ public class MoscowCli implements Runnable {
         } else {
             todoRepository.setAutoCommit(false);
             todoList.forEach(todo -> {
-                String clean = moscowCleaner.clean(todo);
-                Todo newTodo = new Todo(todo.getId(), String.format("%s moscow:%s", clean, moscowType.toString().toLowerCase(Locale.ENGLISH)));
+                String clean = sizeCleaner.clean(todo);
+                Todo newTodo = new Todo(todo.getId(), String.format("%s size:%s", clean, size));
                 todoRepository.update(newTodo);
                 spec.commandLine().getOut().println(todoView.render(newTodo));
             });

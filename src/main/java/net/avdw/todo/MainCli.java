@@ -9,6 +9,7 @@ import net.avdw.todo.plugin.explore.ExploreCli;
 import net.avdw.todo.plugin.link.LinkCli;
 import net.avdw.todo.plugin.muscow.MoscowCli;
 import net.avdw.todo.plugin.replace.ReplaceCli;
+import net.avdw.todo.plugin.size.SizeCli;
 import net.avdw.todo.plugin.start.StartCli;
 import net.avdw.todo.plugin.stats.StatsCli;
 import picocli.CommandLine.Command;
@@ -42,7 +43,8 @@ import java.nio.file.Path;
                 StartCli.class,
                 ReplaceCli.class,
                 LinkCli.class,
-                MoscowCli.class
+                MoscowCli.class,
+                SizeCli.class
         })
 public class MainCli implements Runnable {
     @Spec

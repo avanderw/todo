@@ -7,7 +7,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,8 +17,8 @@ import static net.avdw.todo.TodoCliTestBootstrapper.cleanup;
 import static net.avdw.todo.TodoCliTestBootstrapper.setup;
 import static net.avdw.todo.TodoCliTestBootstrapper.warmup;
 
-public class MoscowCliTest {
-    private static final Path todoPath = Paths.get("target/test-resources/moscow/.todo/todo.txt");
+public class SizeCliTest {
+    private static final Path todoPath = Paths.get("target/test-resources/size/.todo/todo.txt");
     private static CliTester cliTester;
 
     @AfterClass
@@ -42,31 +41,37 @@ public class MoscowCliTest {
 
     @Test(timeout = 256)
     public void testBasic() {
-        cliTester.execute("moscow 1,2,3,13,15 --not moscow: --assign could").success()
-                .contains("moscow:could").count("\\[", 3);
+        cliTester.execute("size 1,2,3,13,15 --not size: --assign 3").success()
+                .contains("size:3").count("\\[", 5);
     }
 
     @Test(timeout = 256)
     public void testFilter() {
-        cliTester.execute("moscow --and refactor --not moscow: --assign could").success().contains("moscow:could");
+        cliTester.execute("size --and refactor --not size: --assign 3").success().contains("size:3");
     }
 
     @Test(timeout = 256)
     public void testInteractive() {
         InputStream systemIn = System.in;
-        ByteArrayInputStream testIn = new ByteArrayInputStream("could 2 2 2 n y should 2".getBytes());
+        ByteArrayInputStream testIn = new ByteArrayInputStream("1 2 3 5 8 y 13".getBytes());
         System.setIn(testIn);
-        cliTester.execute("moscow 1,2,3,13,15").success().contains("moscow:could");
+        cliTester.execute("size 1,2,3,13,15,16").success().contains("size:13");
         System.setIn(systemIn);
     }
 
     @Test(timeout = 256)
     public void testGroupBy() {
-        cliTester.execute("ls --group-by moscow").success().contains("Must have");
+        cliTester.execute("size --and refactor --not size: --assign 3").success().contains("size:3");
+        cliTester.execute("ls --group-by size:").success().contains("3 Size");
+    }
+
+    @Test(timeout = 256)
+    public void testInteractiveEmpty() {
+        cliTester.execute("size --and nothing,selected").success();
     }
 
     @Test(timeout = 256)
     public void testHelp() {
-        cliTester.execute("moscow --help").success();
+        cliTester.execute("size --help").success();
     }
 }
