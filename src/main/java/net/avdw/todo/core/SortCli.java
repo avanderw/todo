@@ -3,6 +3,7 @@ package net.avdw.todo.core;
 import com.google.inject.Inject;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
+import net.avdw.todo.domain.IsDone;
 import net.avdw.todo.domain.IsPriority;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
@@ -43,10 +44,13 @@ public class SortCli implements Runnable {
             sortedRepository.addAll(todoRepository.findAll(new IsPriority()).stream()
                     .sorted(Comparator.comparing(Todo::getText))
                     .collect(Collectors.toList()));
-            sortedRepository.addAll(todoRepository.findAll(new Any<Integer, Todo>().not(new IsPriority())).stream()
+            sortedRepository.addAll(todoRepository.findAll(new Any<Integer, Todo>().not(new IsPriority()).not(new IsDone())).stream()
                     .sorted(Comparator.comparingInt((Todo todo) ->
                             sortKeys.stream().mapToInt(key -> Integer.parseInt(todo.getKey(key).orElse("0"))).sum())
                             .reversed())
+                    .collect(Collectors.toList()));
+            sortedRepository.addAll(todoRepository.findAll(new IsDone()).stream()
+                    .sorted(Comparator.comparing(Todo::getText))
                     .collect(Collectors.toList()));
         }
         sortedRepository.commit();
