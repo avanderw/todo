@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 @EqualsAndHashCode
 @SuppressFBWarnings(value = {"JLM_JSR166_UTILCONCURRENT_MONITORENTER", "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"},
         justification = "Lombok generation makes these mute")
-public class Todo implements IdType<Integer> {
+public class Todo implements IdType<Integer>, Comparable {
     public static final Pattern ADDITION_DATE_PATTERN = Pattern.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d)|^[xpr] [\\d-]+ (\\d\\d\\d\\d-\\d\\d-\\d\\d)|\\([A-Z]\\) (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
     private static final Pattern COMPLETION_DATE_PATTERN = Pattern.compile("^x (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
     private static final Pattern PARKED_DATE_PATTERN = Pattern.compile("^p (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
@@ -75,6 +75,15 @@ public class Todo implements IdType<Integer> {
         }
     }
 
+    @Override
+    public int compareTo(final Object o) {
+        if (o instanceof Todo) {
+            return this.getText().compareTo(((Todo) o).getText());
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+
     private List<String> contextList() {
         List<String> contextList = new ArrayList<>();
         Pattern pattern = Pattern.compile("\\s@(\\S+)");
@@ -116,18 +125,18 @@ public class Todo implements IdType<Integer> {
         return Optional.of(text.substring(valueStart, valueEnd));
     }
 
-    public List<String> getTagValueList(final String tag) {
-        if (tagValueListMap.containsKey(tag)) {
-            return tagValueListMap.get(tag);
+    public List<String> getExtValueList(final String ext) {
+        if (tagValueListMap.containsKey(ext)) {
+            return tagValueListMap.get(ext);
         }
 
         List<String> tagValueList = new ArrayList<>();
-        Pattern pattern = Pattern.compile(String.format("\\s%s:(\\S+)", tag));
+        Pattern pattern = Pattern.compile(String.format("\\s%s:(\\S+)", ext));
         Matcher matcher = pattern.matcher(text);
         while (matcher.find()) {
             tagValueList.add(matcher.group(1));
         }
-        tagValueListMap.putIfAbsent(tag, tagValueList);
+        tagValueListMap.putIfAbsent(ext, tagValueList);
         return tagValueList;
     }
 

@@ -4,9 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
-import net.avdw.todo.core.groupby.Group;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.plugin.change.ChangeKey;
 import net.avdw.todo.plugin.change.ChangeMapper;
 
 import java.text.SimpleDateFormat;
@@ -16,9 +14,9 @@ import java.util.function.Function;
 
 @Singleton
 public class MonthGroup implements Group<Todo, String> {
+    private final ChangeMapper changeMapper;
     private final SimpleDateFormat collectMonthlyFormat = new SimpleDateFormat("MMMMM yyyy");
     private final TemplatedResource templatedResource;
-    private final ChangeMapper changeMapper;
 
     @Inject
     public MonthGroup(final TemplatedResource templatedResource, final ChangeMapper changeMapper) {

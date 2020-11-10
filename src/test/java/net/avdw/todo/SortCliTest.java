@@ -55,7 +55,7 @@ public class SortCliTest {
     @Test(timeout = 256)
     @SneakyThrows
     public void testKeys() {
-        cliTester.execute("sort importance,urgency").success().startsWith("[  1]");
+        cliTester.execute("sort --func", "importance: + urgency:").success().startsWith("[  1]");
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneTodoList = todoRepository.findAll(new Any<>());
         assertTrue(doneTodoList.get(0).getText().startsWith("(J) 2020-01-23"));
@@ -65,7 +65,7 @@ public class SortCliTest {
     @Test(timeout = 256)
     public void testKeysPriority() {
         cliTester.execute("pri 5 A");
-        cliTester.execute("sort importance,urgency").success().startsWith("[  1]");
+        cliTester.execute("sort --func", "importance: + urgency:").success().startsWith("[  1]");
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneTodoList = todoRepository.findAll(new Any<>());
         assertTrue(doneTodoList.get(0).getText().startsWith("(A)"));
@@ -80,5 +80,10 @@ public class SortCliTest {
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneTodoList = todoRepository.findAll(new Any<>());
         assertTrue(doneTodoList.get(0).getText().startsWith("(A)"));
+    }
+
+    @Test(timeout = 256)
+    public void testCustom() {
+        cliTester.execute("sort --func","importance: + urgency: - size:").success();
     }
 }

@@ -119,7 +119,7 @@ public class ChangelogCli implements Runnable, IExitCodeGenerator {
                     (t) -> {
                         String grouping = templatedResource.populateKey(ResourceBundleKey.CHANGELOG_DATE_NA);
                         try {
-                            grouping = finalGroupingBy.apply(isoFormat.parse(t.getTagValueList("started").get(0)));
+                            grouping = finalGroupingBy.apply(isoFormat.parse(t.getExtValueList("started").get(0)));
                         } catch (ParseException e) {
                             Logger.debug(e);
                         }

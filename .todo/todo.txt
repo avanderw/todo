@@ -1,15 +1,27 @@
-2020-10-01 Add 'todo roadmap' [project, context, tag] which will list upcoming- due,target,cycle and past- due,target,cycle moscow:must size:5  plan:strategic
-2020-10-12 Add the ability to prioritise on search criteria moscow:should plan:tactical size:5
-2020-10-16 Add estimated completion for groups with visible velocity module https://screenful.com/tour/milestone-burnup-chart plan:strategic moscow:must link:1 +DoneEstimate size:13
-2020-10-16 Add histogram for timings https://screenful.com/tour/timing-screen#:~:text=Lead%20time%20is%20the%20total,a%20task%20until%20its%20completion. plan:strategic moscow:wont size:8
-2020-10-16 Add notes to todos https://github.com/mgarrido/todo.txt-cli/tree/note/todo.actions.d plan:strategic moscow:should size:5
-2020-10-16 Add trending feeback for timings https://screenful.com/tour/timing-screen#:~:text=Lead%20time%20is%20the%20total,a%20task%20until%20its%20completion. plan:tactical moscow:must link:1.2 +DoneEstimate size:8
+(A) 2020-10-27 @Add velocity module moscow:must link:1.1 plan:strategic +DoneEstimate size:5
+(B) 2020-10-29 @Add burndown.<daily|monthly|weekly> to show burndown chart size:8 plan:tactical moscow:should
+(C) 2020-11-04 @Change the group-by funtionality to allow for specific groups
+(D) 2020-11-10 @Add calculate average work-in-progress stat for summary and use it for an estimate on completion started:2020-11-10
+2020-11-05 @Fix size creating spaces at the front of sized todos
+2020-11-05 @Fix moscow not showing any output when no todos are found
+2020-11-05 @Change replace to update in done.txt as well
+2020-11-05 @Add the ability to list only projects so that it is easier to collapse and densify them
+2020-11-05 @Add a way for an extension to have an urgency value
+2020-11-05 @Add a typing function to categorise todos into FIX, EPIC, STORY, SPIKE
+2020-11-05 @Add a review function to find stale todos
+2020-11-05 @Add a review function to confirm due dates matched with urgency
+2020-10-29 @Change list module to show next-up for project size:8 plan:tactical moscow:should
+2020-10-29 @Add blocked/blocking extension with reasons size:5 plan:strategic moscow:could
+2020-10-27 @Add link cli to show linked todos plan:tactical moscow:could size:3
+2020-10-22 @Add NLP processing for dates https://www.ocpsoft.org/prettytime/nlp/ http://natty.joestelmach.com/doc.jsp plan:tactical moscow:should size:5
+2020-10-20 @Add due < 5 days, due < 0 days, in-progress > 10 days module https://screenful.com/tour/task-status-screen/ plan:strategic moscow:must size:5
 2020-10-16 Review what to do with these actions https://github.com/inkarkat/todo.txt-cli-ex/tree/master/actions plan:operational moscow:could size:2
-2020-10-20 Add due < 5 days, due < 0 days, in-progress > 10 days module https://screenful.com/tour/task-status-screen/ plan:strategic moscow:must size:5
-2020-10-22 Add NLP processing for dates https://www.ocpsoft.org/prettytime/nlp/ http://natty.joestelmach.com/doc.jsp plan:tactical moscow:should size:5
-2020-10-27 Add link cli to show linked todos plan:tactical moscow:could size:3
-(A) 2020-10-27 Add velocity module moscow:must link:1.1 plan:strategic +DoneEstimate size:5
+2020-10-16 @Add trending feeback for timings https://screenful.com/tour/timing-screen#:~:text=Lead%20time%20is%20the%20total,a%20task%20until%20its%20completion. plan:tactical moscow:must link:1.2 +DoneEstimate size:8
+2020-10-16 @Add notes to todos https://github.com/mgarrido/todo.txt-cli/tree/note/todo.actions.d plan:strategic moscow:should size:5
+2020-10-16 @Add histogram for timings https://screenful.com/tour/timing-screen#:~:text=Lead%20time%20is%20the%20total,a%20task%20until%20its%20completion. plan:strategic moscow:wont size:8
+2020-10-16 @Add estimated completion for groups with visible velocity module https://screenful.com/tour/milestone-burnup-chart plan:strategic moscow:must link:1 +DoneEstimate size:13
+2020-10-12 @Add the ability to prioritise on search criteria moscow:should plan:tactical size:5
+2020-10-01 @Add 'todo roadmap' [project, context, tag] which will list upcoming- due,target,cycle and past- due,target,cycle moscow:must size:5  plan:strategic
 r 2020-10-29 2020-10-27 Review todo.txt for meeting setup https://news.ycombinator.com/item?id=20745654 plan:operational moscow:could size:2
-2020-10-29 Add blocked/blocking extension with reasons size:5 plan:strategic moscow:could
-(B) 2020-10-29 Add burndown.<daily|monthly|weekly> to show burndown chart size:8 plan:tactical moscow:should
-2020-10-29 Enhance list module to show next-up for project size:8 plan:tactical moscow:should
+x 2020-11-05 2020-11-05 @Change styling so that +color has meaning e.g. red=fix green=focus orange=review dark=ignore started:2020-11-05
+x 2020-11-10 2020-11-05 @Add the ability to size by extensions with a custom sort function started:2020-11-06

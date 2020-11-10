@@ -15,15 +15,14 @@ import org.junit.Test;
 import org.tinylog.Logger;
 
 import java.nio.file.Paths;
-import java.util.Date;
 import java.util.Properties;
 
 import static org.junit.Assert.assertNotNull;
 
 public class TodoStylerTest {
-    @Test
+    @Test(timeout = 256)
     public void test() {
-        Properties properties = new PropertyFile("net.avdw/todo").read("style-test");
+        Properties properties = new PropertyFile("net.avdw/todo").read("style");
         ColorConverter colorConverter = new ColorConverter();
         CleanMixin cleanMixin = new CleanMixin(new TodoTextCleaner());
         TodoStyler todoStyler = new TodoStyler(properties, new PropertyParser(properties, colorConverter, new DateKeyParser()), cleanMixin);

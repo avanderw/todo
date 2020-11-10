@@ -41,7 +41,7 @@ public class LinkExt extends AbstractSpecification<Integer, Todo> implements Ext
     @Override
     public List<String> getValueList(final Todo todo) {
         List<String> extValueList = supportedExtList.stream()
-                .flatMap(ext -> todo.getTagValueList(ext).stream())
+                .flatMap(ext -> todo.getExtValueList(ext).stream())
                 .collect(Collectors.toList());
 
         if (extValueList.size() > 1) {
@@ -53,7 +53,7 @@ public class LinkExt extends AbstractSpecification<Integer, Todo> implements Ext
 
     @Override
     public boolean isSatisfiedBy(final Todo todo) {
-        return !supportedExtList.stream().allMatch(ext -> todo.getTagValueList(ext).isEmpty());
+        return !supportedExtList.stream().allMatch(ext -> todo.getExtValueList(ext).isEmpty());
     }
 
     @Override

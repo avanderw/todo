@@ -78,10 +78,10 @@ public class StatsCli implements Runnable {
                 .filter(t -> !t.isDone())
                 .filter(t -> !t.isRemoved())
                 .filter(t -> !t.isParked())
-                .filter(t -> !t.getTagValueList("started").isEmpty())
+                .filter(t -> !t.getExtValueList("started").isEmpty())
                 .max(Comparator.comparing(t -> {
                     try {
-                        return ChronoUnit.DAYS.between(simpleDateFormat.parse(t.getTagValueList("started").get(0)).toInstant(), now.toInstant());
+                        return ChronoUnit.DAYS.between(simpleDateFormat.parse(t.getExtValueList("started").get(0)).toInstant(), now.toInstant());
                     } catch (ParseException e) {
                         return 0L;
                     }
@@ -94,13 +94,13 @@ public class StatsCli implements Runnable {
 
         List<Todo> largeTimeTodoList = todoList.stream()
                 .filter(t -> !todoStatistic.hasCycleTime(t))
-                .filter(t -> !t.getTagValueList("started").isEmpty())
+                .filter(t -> !t.getExtValueList("started").isEmpty())
                 .filter(t -> !t.isDone())
                 .filter(t -> !t.isRemoved())
                 .filter(t -> !t.isParked())
                 .filter(t -> {
                     try {
-                        return ChronoUnit.DAYS.between(simpleDateFormat.parse(t.getTagValueList("started").get(0)).toInstant(), now.toInstant()) > stats.getMean() + stats.getStdDev();
+                        return ChronoUnit.DAYS.between(simpleDateFormat.parse(t.getExtValueList("started").get(0)).toInstant(), now.toInstant()) > stats.getMean() + stats.getStdDev();
                     } catch (ParseException e) {
                         return false;
                     }

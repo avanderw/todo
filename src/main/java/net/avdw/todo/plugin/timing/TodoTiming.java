@@ -41,7 +41,7 @@ public class TodoTiming {
             throw new UnsupportedOperationException();
         }
 
-        List<String> startedList = todo.getTagValueList("started");
+        List<String> startedList = todo.getExtValueList("started");
         if (startedList.size() > 1) {
             Logger.debug("Multiple started tags found. Is this correct?\n" +
                     "  ( consider removing one of the started tags )\n" +
@@ -64,7 +64,7 @@ public class TodoTiming {
             throw new UnsupportedOperationException();
         }
 
-        List<String> startedList = todo.getTagValueList("started");
+        List<String> startedList = todo.getExtValueList("started");
         if (startedList.size() > 1) {
             Logger.debug("Multiple started tags found. Is this correct?\n{}", todo);
         }
@@ -129,7 +129,7 @@ public class TodoTiming {
     }
 
     public boolean hasCycleTime(final Todo todo) {
-        return !todo.getTagValueList("started").isEmpty() && todo.getDoneDate() != null;
+        return !todo.getExtValueList("started").isEmpty() && todo.getDoneDate() != null;
     }
 
     public boolean hasLeadTime(final Todo todo) {
@@ -137,15 +137,15 @@ public class TodoTiming {
     }
 
     public boolean hasReactionTime(final Todo todo) {
-        return todo.getAdditionDate() != null && !todo.getTagValueList("started").isEmpty();
+        return todo.getAdditionDate() != null && !todo.getExtValueList("started").isEmpty();
     }
 
     public boolean hasRunningCycleTime(final Todo todo) {
-        return !todo.isDone() && !todo.isParked() && !todo.isRemoved() && !todo.getTagValueList("started").isEmpty();
+        return !todo.isDone() && !todo.isParked() && !todo.isRemoved() && !todo.getExtValueList("started").isEmpty();
     }
 
     public boolean hasRunningLeadTime(final Todo todo) {
-        return !todo.isDone() && !todo.isParked() && !todo.isRemoved() && todo.getAdditionDate() != null && !todo.getTagValueList("started").isEmpty();
+        return !todo.isDone() && !todo.isParked() && !todo.isRemoved() && todo.getAdditionDate() != null && !todo.getExtValueList("started").isEmpty();
     }
 
     public boolean hasRunningReactionTime(final Todo todo) {

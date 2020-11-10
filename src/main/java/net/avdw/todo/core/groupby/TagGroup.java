@@ -20,13 +20,13 @@ public class TagGroup implements Group<Todo, String> {
     @Override
     public Function<Todo, String> collector() {
         return t -> {
-            if (t.getTagValueList(tag).isEmpty()) {
+            if (t.getExtValueList(tag).isEmpty()) {
                 return "";
             }
-            if (t.getTagValueList(tag).size() > 1) {
-                return String.join(", ", t.getTagValueList(tag));
+            if (t.getExtValueList(tag).size() > 1) {
+                return String.join(", ", t.getExtValueList(tag));
             } else {
-                return t.getTagValueList(tag).get(0);
+                return t.getExtValueList(tag).get(0);
             }
         };
     }

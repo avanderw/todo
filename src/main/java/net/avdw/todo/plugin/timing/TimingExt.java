@@ -33,7 +33,7 @@ public class TimingExt implements Ext<Date> {
     @Override
     public List<Date> getValueList(final Todo todo) {
         return supportedExtList.stream()
-                .flatMap(ext -> todo.getTagValueList(ext).stream()
+                .flatMap(ext -> todo.getExtValueList(ext).stream()
                         .map(ThrowingFunction.unchecked(simpleDateFormat::parse))
                         .filter(Objects::nonNull))
                 .collect(Collectors.toList());
@@ -41,7 +41,7 @@ public class TimingExt implements Ext<Date> {
 
     @Override
     public boolean isSatisfiedBy(final Todo todo) {
-        return !supportedExtList.stream().allMatch(ext -> todo.getTagValueList(ext).isEmpty());
+        return !supportedExtList.stream().allMatch(ext -> todo.getExtValueList(ext).isEmpty());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package net.avdw.todo.plugin.muscow;
+package net.avdw.todo.plugin.moscow;
 
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.plugin.Ext;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class MoscowExt implements Ext<String> {
     private final List<String> supportedExtList = new ArrayList<>();
 
-    MoscowExt() {
+    public MoscowExt() {
         supportedExtList.add("moscow");
     }
 
@@ -35,13 +35,13 @@ public class MoscowExt implements Ext<String> {
     @Override
     public List<String> getValueList(final Todo todo) {
         return supportedExtList.stream()
-                .flatMap(ext -> todo.getTagValueList(ext).stream())
+                .flatMap(ext -> todo.getExtValueList(ext).stream())
                 .collect(Collectors.toList());
     }
 
     @Override
     public boolean isSatisfiedBy(final Todo todo) {
-        return !supportedExtList.stream().allMatch(ext -> todo.getTagValueList(ext).isEmpty());
+        return !supportedExtList.stream().allMatch(ext -> todo.getExtValueList(ext).isEmpty());
     }
 
     @Override

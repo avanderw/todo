@@ -5,7 +5,7 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.Multibinder;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.plugin.change.ChangeTypeGroup;
-import net.avdw.todo.plugin.muscow.MoscowGroup;
+import net.avdw.todo.plugin.moscow.MoscowGroup;
 import net.avdw.todo.plugin.plan.PlanGroup;
 import net.avdw.todo.plugin.state.StateGroup;
 

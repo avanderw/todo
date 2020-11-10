@@ -35,13 +35,13 @@ public class SizeExt implements Ext<String> {
     @Override
     public List<String> getValueList(final Todo todo) {
         return supportedExtList.stream()
-                .flatMap(ext -> todo.getTagValueList(ext).stream())
+                .flatMap(ext -> todo.getExtValueList(ext).stream())
                 .collect(Collectors.toList());
     }
 
     @Override
     public boolean isSatisfiedBy(final Todo todo) {
-        return !supportedExtList.stream().allMatch(ext -> todo.getTagValueList(ext).isEmpty());
+        return !supportedExtList.stream().allMatch(ext -> todo.getExtValueList(ext).isEmpty());
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import net.avdw.todo.core.groupby.GroupByModule;
+import net.avdw.todo.core.selector.SelectorModule;
 import net.avdw.todo.plugin.AddonModule;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
@@ -38,6 +39,7 @@ class MainModule extends AbstractModule {
         install(new StyleModule());
         install(new AddonModule());
         install(new GroupByModule());
+        install(new SelectorModule());
     }
 
     @Provides

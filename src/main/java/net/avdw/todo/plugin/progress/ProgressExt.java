@@ -15,10 +15,10 @@ public class ProgressExt {
     }
 
     public boolean notStarted(final Todo todo) {
-        return !todo.isDone() && todo.getTagValueList("started").isEmpty();
+        return !todo.isDone() && todo.getExtValueList("started").isEmpty();
     }
 
     public boolean started(final Todo todo) {
-        return !todo.isDone() && !todo.getTagValueList("started").isEmpty();
+        return !todo.isDone() && !todo.getExtValueList("started").isEmpty();
     }
 }

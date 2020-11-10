@@ -1,4 +1,4 @@
-package net.avdw.todo.plugin.muscow;
+package net.avdw.todo.plugin.moscow;
 
 public enum MoscowType {
     MUST("non-negotiable, mandatory"),

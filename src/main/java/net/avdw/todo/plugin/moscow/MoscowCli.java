@@ -1,4 +1,4 @@
-package net.avdw.todo.plugin.muscow;
+package net.avdw.todo.plugin.moscow;
 
 import com.google.inject.Inject;
 import net.avdw.todo.core.mixin.BooleanFilterMixin;

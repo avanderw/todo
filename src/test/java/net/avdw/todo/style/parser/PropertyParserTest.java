@@ -11,13 +11,13 @@ import java.util.Properties;
 import static org.junit.Assert.*;
 
 public class PropertyParserTest {
-    private final Properties properties = new PropertyFile("net.avdw/todo").read("style-test");
+    private final Properties properties = new PropertyFile("net.avdw/todo").read("style");
     private final ColorConverter colorConverter = new ColorConverter();
     private final PropertyParser parser = new PropertyParser(properties, colorConverter, new DateKeyParser());
 
     @Test
     public void date() {
-        assertEquals(DatePainter.class, parser.parse("date.done.-30d+").orElseThrow().getClass());
+        assertEquals(DatePainter.class, parser.parse("date.done.new.-1m+").orElseThrow().getClass());
     }
 
 
