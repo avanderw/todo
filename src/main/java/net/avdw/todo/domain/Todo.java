@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 @EqualsAndHashCode
 @SuppressFBWarnings(value = {"JLM_JSR166_UTILCONCURRENT_MONITORENTER", "RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"},
         justification = "Lombok generation makes these mute")
-public class Todo implements IdType<Integer>, Comparable {
+public class Todo implements IdType<Integer>, Comparable<Todo> {
     public static final Pattern ADDITION_DATE_PATTERN = Pattern.compile("^(\\d\\d\\d\\d-\\d\\d-\\d\\d)|^[xpr] [\\d-]+ (\\d\\d\\d\\d-\\d\\d-\\d\\d)|\\([A-Z]\\) (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
     private static final Pattern COMPLETION_DATE_PATTERN = Pattern.compile("^x (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
     private static final Pattern PARKED_DATE_PATTERN = Pattern.compile("^p (\\d\\d\\d\\d-\\d\\d-\\d\\d)");
@@ -76,12 +76,8 @@ public class Todo implements IdType<Integer>, Comparable {
     }
 
     @Override
-    public int compareTo(final Object o) {
-        if (o instanceof Todo) {
-            return this.getText().compareTo(((Todo) o).getText());
-        } else {
-            throw new UnsupportedOperationException();
-        }
+    public int compareTo(final Todo todo) {
+            return this.getText().compareTo(todo.getText());
     }
 
     private List<String> contextList() {

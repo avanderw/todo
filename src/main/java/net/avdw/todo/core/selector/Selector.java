@@ -4,10 +4,14 @@ import net.avdw.todo.Guard;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Specification;
 
-public interface Selector extends Guard<String> {
-    int intValue(final Todo todo);
+import java.util.Comparator;
 
-    String regex();
+public interface Selector extends Guard<String> {
+    Comparator<? super Todo> comparator();
+
+    int mapToInt(final Todo todo);
+
+    String replaceRegex();
 
     Specification<Integer, Todo> specification();
 

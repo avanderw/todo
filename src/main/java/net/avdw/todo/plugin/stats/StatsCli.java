@@ -13,7 +13,7 @@ import net.avdw.todo.plugin.timing.TimingStats;
 import net.avdw.todo.plugin.timing.TodoTiming;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
-import net.avdw.todo.style.TodoStyler;
+import net.avdw.todo.core.style.TodoStyler;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Mixin;

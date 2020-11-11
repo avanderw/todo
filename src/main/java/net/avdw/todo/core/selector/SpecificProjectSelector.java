@@ -4,6 +4,7 @@ import net.avdw.todo.domain.RegexSpecification;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Specification;
 
+import java.util.Comparator;
 import java.util.regex.Pattern;
 
 public class SpecificProjectSelector implements Selector {
@@ -11,12 +12,22 @@ public class SpecificProjectSelector implements Selector {
     private final Pattern pattern = Pattern.compile(regex);
 
     @Override
-    public int intValue(final Todo todo) {
+    public Comparator<? super Todo> comparator() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isSatisfiedBy(final String type) {
+        return pattern.matcher(type).find();
+    }
+
+    @Override
+    public int mapToInt(final Todo todo) {
         return 0;
     }
 
     @Override
-    public String regex() {
+    public String replaceRegex() {
         return regex;
     }
 
@@ -28,10 +39,5 @@ public class SpecificProjectSelector implements Selector {
     @Override
     public String symbol() {
         return "project";
-    }
-
-    @Override
-    public boolean isSatisfiedBy(final String type) {
-        return pattern.matcher(type).find();
     }
 }

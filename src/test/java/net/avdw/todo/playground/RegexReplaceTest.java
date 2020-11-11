@@ -1,6 +1,6 @@
 package net.avdw.todo.playground;
 
-import net.avdw.todo.style.painter.RegexPainter;
+import net.avdw.todo.core.style.painter.RegexPainter;
 
 public class RegexReplaceTest {
     public static void main(String[] args) {

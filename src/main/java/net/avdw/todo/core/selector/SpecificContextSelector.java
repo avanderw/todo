@@ -4,6 +4,7 @@ import net.avdw.todo.domain.RegexSpecification;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Specification;
 
+import java.util.Comparator;
 import java.util.regex.Pattern;
 
 public class SpecificContextSelector implements Selector {
@@ -11,8 +12,8 @@ public class SpecificContextSelector implements Selector {
     private final Pattern pattern = Pattern.compile(regex);
 
     @Override
-    public int intValue(final Todo todo) {
-        return 0;
+    public Comparator<? super Todo> comparator() {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -21,7 +22,12 @@ public class SpecificContextSelector implements Selector {
     }
 
     @Override
-    public String regex() {
+    public int mapToInt(final Todo todo) {
+        return 0;
+    }
+
+    @Override
+    public String replaceRegex() {
         return regex;
     }
 

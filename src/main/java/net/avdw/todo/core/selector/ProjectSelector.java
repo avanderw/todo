@@ -4,9 +4,20 @@ import net.avdw.todo.domain.RegexSpecification;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Specification;
 
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
 public class ProjectSelector implements Selector {
     @Override
-    public int intValue(final Todo todo) {
+    public Comparator<? super Todo> comparator() {
+        return Comparator.comparing(todo -> todo.getProjectList().stream()
+                .map(String::toLowerCase)
+                .sorted()
+                .collect(Collectors.joining()));
+    }
+
+    @Override
+    public int mapToInt(final Todo todo) {
         return 0;
     }
 
@@ -16,7 +27,7 @@ public class ProjectSelector implements Selector {
     }
 
     @Override
-    public String regex() {
+    public String replaceRegex() {
         return "project";
     }
 
@@ -27,6 +38,6 @@ public class ProjectSelector implements Selector {
 
     @Override
     public String symbol() {
-        return "project";
+        return "prj";
     }
 }

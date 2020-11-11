@@ -27,7 +27,7 @@ public class MainCliTest {
         TodoCliTestBootstrapper.cleanup(todoPath);
     }
 
-    @Test(timeout = 256)
+    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     @SneakyThrows
     public void testEmptyWithTodo() {
         Files.createDirectories(todoPath.getParent());
@@ -35,12 +35,12 @@ public class MainCliTest {
         cliTester.execute().success().contains("Usage");
     }
 
-    @Test(timeout = 256)
+    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testEmptyWithoutTodo() {
         cliTester.execute().success().contains("Usage").contains("todo init");
     }
 
-    @Test(timeout = 256)
+    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testVersion() {
         cliTester.execute("--version").success();
     }

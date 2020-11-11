@@ -4,10 +4,16 @@ import net.avdw.todo.domain.RegexSpecification;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Specification;
 
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
 public class ContextSelector implements Selector {
     @Override
-    public int intValue(final Todo todo) {
-        return 0;
+    public Comparator<? super Todo> comparator() {
+        return Comparator.comparing((Todo todo) -> todo.getContextList().stream()
+                .map(String::toLowerCase)
+                .sorted()
+                .collect(Collectors.joining()));
     }
 
     @Override
@@ -16,7 +22,12 @@ public class ContextSelector implements Selector {
     }
 
     @Override
-    public String regex() {
+    public int mapToInt(final Todo todo) {
+        return 0;
+    }
+
+    @Override
+    public String replaceRegex() {
         return "context";
     }
 
@@ -27,6 +38,6 @@ public class ContextSelector implements Selector {
 
     @Override
     public String symbol() {
-        return "context";
+        return "ctx";
     }
 }

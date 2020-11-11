@@ -6,7 +6,7 @@ import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.plugin.Addon;
-import net.avdw.todo.style.TodoStyler;
+import net.avdw.todo.core.style.TodoStyler;
 
 import java.util.Objects;
 import java.util.Set;

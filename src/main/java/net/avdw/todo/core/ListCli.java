@@ -28,6 +28,7 @@ import picocli.CommandLine.Spec;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +49,7 @@ public class ListCli implements Runnable {
     @Mixin private TimingMixin statsMixin;
     @Inject private TemplatedResource templatedResource;
     @Inject private TodoListView todoListView;
+    @Mixin private OrderByMixin orderByMixin;
 
     private void printList(final List<Todo> list, final Repository<Integer, Todo> repository) {
         spec.commandLine().getOut().println(todoListView.render(list, repository));
@@ -97,6 +99,9 @@ public class ListCli implements Runnable {
         Logger.debug(specification);
         Repository<Integer, Todo> scopedRepository = repositoryMixin.repository();
         List<Todo> todoList = scopedRepository.findAll(specification);
+
+        orderByMixin.order(todoList);
+
         if (todoList.isEmpty()) {
             spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.NO_TODO_FOUND));
             return;

@@ -10,7 +10,7 @@ import net.avdw.todo.domain.IsRemoved;
 import net.avdw.todo.domain.Priority;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
-import net.avdw.todo.style.TodoStyler;
+import net.avdw.todo.core.style.TodoStyler;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;

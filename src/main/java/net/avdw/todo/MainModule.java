@@ -11,7 +11,7 @@ import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
-import net.avdw.todo.style.StyleModule;
+import net.avdw.todo.core.style.StyleModule;
 
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
