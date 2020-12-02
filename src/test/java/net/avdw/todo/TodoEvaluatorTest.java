@@ -18,7 +18,7 @@ import static junit.framework.TestCase.assertEquals;
 public class TodoEvaluatorTest {
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testEvaluator() {
-        String input = "moscow: + urgency: - size:";
+        String input = "moscow + urgency: - size:";
         Todo todo = new Todo(-1, "Some todo with moscow:must urgency:5 size:3");
         MoscowExt moscowExt = new MoscowExt();
         Selector moscow = new MoscowSelector(new MoscowMapper(moscowExt), moscowExt);
@@ -26,7 +26,7 @@ public class TodoEvaluatorTest {
         Selector size = new ExtSelector("size:");
         Set<Selector> selectorSet = new HashSet<>(Arrays.asList(moscow, urgency, size));
         TodoEvaluator todoEvaluator = new TodoEvaluator(input, selectorSet);
-        assertEquals(15., todoEvaluator.evaluate(todo));
+        assertEquals(15, todoEvaluator.evaluate(todo));
     }
 
 }

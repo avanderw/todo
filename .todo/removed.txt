@@ -22,3 +22,4 @@ r 2020-10-21 2019-08-21 @Enhance +priority to prioritise a project or context
 r 2020-10-21 2020-10-16 Add standup action to list yesterday, today and impediments https://github.com/civrot/todo_txt_actions
 r 2020-10-22 2019-08-14 Consider adding roadmap generation based off priority, version or combined moscow:wont
 r 2020-10-29 2020-10-29 Extend link module to list blockers and blocking size:3 plan:strategic moscow:could
+r 2020-10-29 2020-10-27 Review todo.txt for meeting setup https://news.ycombinator.com/item?id=20745654 plan:operational moscow:could size:2
