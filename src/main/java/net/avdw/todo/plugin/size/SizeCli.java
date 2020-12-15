@@ -84,7 +84,7 @@ public class SizeCli implements Runnable {
                         }
                     }
                     String clean = sizeCleaner.clean(todo);
-                    Todo newTodo = new Todo(todo.getId(), String.format("            %s size:%s", clean, assignSize));
+                    Todo newTodo = new Todo(todo.getId(), String.format("%s size:%s", clean, assignSize));
                     todoRepository.update(newTodo);
                     spec.commandLine().getOut().println(todoView.render(newTodo));
                 }

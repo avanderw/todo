@@ -12,6 +12,9 @@ import java.io.StringWriter;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/**
+ * @version 2020-10-17 Encapsulate mustache factory
+ */
 public class TemplatedResource {
     private final Gson gson = new Gson();
     private final ResourceBundle resourceBundle;
@@ -27,7 +30,7 @@ public class TemplatedResource {
         return populate(key, resourceBundle.getString(key), gson.fromJson(json, Map.class));
     }
 
-    public String populate(final String key, final String template, final Object object) {
+    private String populate(final String key, final String template, final Object object) {
         try {
             StringReader stringReader = new StringReader(template);
             Mustache mustache = mustacheFactory.compile(stringReader, key);
@@ -37,10 +40,6 @@ public class TemplatedResource {
             Logger.debug(e);
             return "Could not populate template";
         }
-    }
-
-    public String populate(final String key, final String template, final String json) {
-        return populate(key, template, gson.fromJson(json, Map.class));
     }
 
     public String populateKey(final String key) {

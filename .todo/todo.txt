@@ -1,5 +1,5 @@
 (A) 2020-11-24 @Add a global view to show links to all repositories
-(B) 2020-11-05 @Fix size creating spaces at the front of sized todos
+x 2020-12-15 2020-11-05 @Fix size creating spaces at the front of sized todos
 (C) 2020-11-05 @Fix moscow not showing any output when no todos are found
 (D) 2020-11-05 @Change replace to update in done.txt as well
 2020-10-01 @Add 'todo roadmap' [project, context, tag] which will list upcoming- due,target,cycle and past- due,target,cycle moscow:must size:5  plan:strategic
