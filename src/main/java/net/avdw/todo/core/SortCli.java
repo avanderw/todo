@@ -1,6 +1,7 @@
 package net.avdw.todo.core;
 
 import com.google.inject.Inject;
+import net.avdw.todo.core.selector.ExtLoader;
 import net.avdw.todo.core.selector.Selector;
 import net.avdw.todo.core.view.TodoListView;
 import net.avdw.todo.domain.*;
@@ -15,6 +16,7 @@ import picocli.CommandLine.Spec;
 
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,6 +28,7 @@ public class SortCli implements Runnable {
     @Inject private Repository<Integer, Todo> todoRepository;
     @Inject private TodoListView todoListView;
     @Inject private Set<Selector> selectorSet;
+    @Inject private ExtLoader extLoader;
 
     @Override
     public void run() {
@@ -33,7 +36,9 @@ public class SortCli implements Runnable {
         if (sortFunc == null || sortFunc.isBlank()) {
             evalFunc = Comparator.naturalOrder();
         } else {
-            TodoEvaluator todoEvaluator = new TodoEvaluator(sortFunc, selectorSet);
+            Set<Selector> allSelectors = new HashSet<>(selectorSet);
+            allSelectors.addAll(extLoader.fromFunction(sortFunc));
+            TodoEvaluator todoEvaluator = new TodoEvaluator(sortFunc, allSelectors);
             evalFunc = Comparator.comparingInt(todoEvaluator::evaluate);
         }
 

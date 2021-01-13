@@ -22,7 +22,9 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 import static net.avdw.todo.TodoCliTestBootstrapper.*;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class SortCliTest {
     private static final Path todoPath = Paths.get("target/test-resources/sort/.todo/todo.txt");
@@ -59,22 +61,22 @@ public class SortCliTest {
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     @SneakyThrows
     public void testKeys() {
-        cliTester.execute("sort --func", "importance: + urgency:").success().startsWith("[  1]");
+        cliTester.execute("sort --func", "importance: + urgency:").success()
+                .contains("[  2] 2019-02-07 Digital");
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneTodoList = todoRepository.findAll(new Any<>());
         assertTrue(doneTodoList.get(0).getText().startsWith("(J) 2020-01-23"));
-        assertTrue(doneTodoList.get(1).getText().startsWith("2020-03-10"));
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testKeysPriority() {
         cliTester.execute("pri 5 A");
-        cliTester.execute("sort --func", "importance: + urgency:").success().startsWith("[  1]");
+        cliTester.execute("sort --func", "importance: + urgency:").success()
+                .contains("[  3] 2019-02-07 Digital");
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneTodoList = todoRepository.findAll(new Any<>());
         assertTrue(doneTodoList.get(0).getText().startsWith("(A)"));
         assertTrue(doneTodoList.get(1).getText().startsWith("(J) 2020-01-23"));
-        assertTrue(doneTodoList.get(2).getText().startsWith("2020-03-10"));
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
@@ -88,6 +90,13 @@ public class SortCliTest {
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testCustom() {
-        cliTester.execute("sort --func","importance: + urgency: - size:").success();
+        cliTester.execute("sort --func","importance: + urgency: - size:").success()
+                .contains("[  2] 2019-02-07 Digital");
+    }
+
+    @Test//(timeout = TestConstant.PERFORMANCE_TIMEOUT)
+    public void testPlugin() {
+        cliTester.execute("sort --func","moscow + urgency:").success()
+        .contains("[  2] 2019-10-29 +ROB");
     }
 }

@@ -160,7 +160,7 @@ public class ChangelogCliTest {
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testTag() {
-        cliTester.execute("changelog --and urgency:5").success().contains("July 2018").count("\\[", 10);
+        cliTester.execute("changelog --and urgency:5").success().contains("July 2018").count("\\[", 11);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)

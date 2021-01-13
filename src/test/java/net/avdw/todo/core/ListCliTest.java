@@ -227,7 +227,7 @@ public class ListCliTest {
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testGroupByTwoHierarchy() {
-        cliTester.execute("ls --group-by urgency:,importance:").success().count("\\s### ", 31);
+        cliTester.execute("ls --group-by urgency:,importance:").success().count("\\s### ", 32);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)

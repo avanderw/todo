@@ -25,3 +25,7 @@ x 2020-12-15 2020-11-05 @Fix size creating spaces at the front of sized todos
 2020-11-10 @Add calculate average work-in-progress stat for summary and use it for an estimate on completion started:2020-11-10
 2020-11-12 @Add a reported, investigating, resolving module for incident management
 2020-11-24 @Change styling to search in the repository for overide styling config
+2020-12-15 @Add limiting ls command with '--top' option
+(B) 2020-12-15 Update 'sort --func' description so that there is a reference
+(E) 2020-12-15 Add 'sort --func' scoring view
+2020-12-15 @Add urgency helper with suggestions, similar to moscow or size
