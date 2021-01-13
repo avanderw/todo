@@ -1,6 +1,8 @@
 package net.avdw.todo.plugin.moscow;
 
 import com.google.inject.Inject;
+import net.avdw.todo.ResourceBundleKey;
+import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.core.mixin.BooleanFilterMixin;
 import net.avdw.todo.core.mixin.IndexSpecificationMixin;
 import net.avdw.todo.core.view.TodoView;
@@ -33,6 +35,7 @@ public class MoscowCli implements Runnable {
     @Inject private TodoView todoView;
     @Inject private MoscowMapper moscowMapper;
     @Inject private MoscowCleaner moscowCleaner;
+    @Inject private TemplatedResource templatedResource;
 
     @Override
     public void run() {
@@ -46,6 +49,12 @@ public class MoscowCli implements Runnable {
         }
 
         List<Todo> todoList = todoRepository.findAll(specification);
+
+        if (todoList.isEmpty()) {
+            spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.NO_TODO_FOUND));
+            return;
+        }
+
         if (moscowType == null) {
             Scanner scanner = new Scanner(System.in);
             todoList.forEach(todo -> {

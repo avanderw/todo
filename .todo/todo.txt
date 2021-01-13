@@ -1,6 +1,6 @@
 (A) 2020-11-24 @Add a global view to show links to all repositories
 x 2021-01-13 2020-12-15 @Change 'sort --func' description so that there is a reference started:2021-01-13
-(C) 2020-11-05 @Fix moscow not showing any output when no todos are found started:2021-01-13
+x 2021-01-13 2020-11-05 @Fix moscow not showing any output when no todos are found started:2021-01-13
 (D) 2020-11-05 @Change replace to update in done.txt as well
 (E) 2020-12-15 @Add 'sort --func' scoring view
 (F) 2020-12-15 @Add urgency helper with suggestions, similar to moscow or size
