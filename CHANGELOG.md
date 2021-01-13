@@ -5,6 +5,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Entries are suggested using the [Changelog Generator](https://github.com/avanderw/changelog).
 
+## [v3.0.0] (Major release)
+*Released on 2021-01-13*
+
+### Added
+- Add '--order-by' mixin to 'ls' which uses new selectors
+
+### Changed
+- Refactor sort to use a mathematical function, still requiring work with selectors
+
+### Fixed
+- Fix sort function not working with extensions
+- Fix size creating spaces at the front of sized todos
+- Fix broken test case using incorrect selector
+
 ## [v2.1.0] (Major release, Update recommended)
 *Released on 2020-10-29*
 
