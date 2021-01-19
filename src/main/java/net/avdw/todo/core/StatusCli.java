@@ -5,6 +5,7 @@ import net.avdw.property.PropertyFile;
 import net.avdw.todo.PropertyKey;
 import net.avdw.todo.domain.IsDone;
 import net.avdw.todo.domain.IsParked;
+import net.avdw.todo.domain.IsPriority;
 import net.avdw.todo.domain.IsRemoved;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Any;
@@ -32,6 +33,7 @@ public class StatusCli implements Runnable {
     public void run() {
         Specification<Integer, Todo> any = new Any<>();
 
+        long priority = todoRepository.findAll(new IsPriority()).size();
         long active = todoRepository.findAll(any).size();
         long done = todoRepository.findAll(new IsDone()).size();
         long removed = todoRepository.findAll(new IsRemoved()).size();
@@ -41,6 +43,16 @@ public class StatusCli implements Runnable {
         String status = String.format("On list \"%s\"%n", todoPath.toAbsolutePath());
         if (active > 0) {
             status += String.format("There are %s active items%n", active);
+        }
+
+        if (priority > 0) {
+            if (priority == 1) {
+                status += String.format("%nThere is %s priority item%n", priority);
+            } else {
+                status += String.format("%nThere are %s priority items%n", priority);
+            }
+            status += String.format("  (use \"todo pri...\" to view)%n");
+            status += String.format("  (use \"todo pri -R...\" to remove all priority)%n");
         }
 
         if (toArchive > 0) {
@@ -72,8 +84,8 @@ public class StatusCli implements Runnable {
 
         if (otherList.size() > 0) {
             status += String.format("%nOther lists:%n");
-            status += String.format("  (use \"cd <path>...\" to switch to them)");
-            status += otherList.stream().map(Path::toString).reduce("", (a, b) -> a + String.format("%n    %s", b));
+            status += String.format("  (use \"cd <path>...\" to switch to them)%n");
+            status += otherList.stream().map(Path::toString).reduce("", (a, b) -> a + String.format("    %s%n", b));
         }
 
         spec.commandLine().getOut().println(status);

@@ -106,3 +106,4 @@ x 2020-11-10 2020-11-05 @Add the ability to size by extensions with a custom sor
 x 2021-01-13 2020-12-15 @Change 'sort --func' description so that there is a reference started:2021-01-13
 x 2021-01-13 2020-11-05 @Fix moscow not showing any output when no todos are found started:2021-01-13
 x 2020-12-15 2020-11-05 @Fix size creating spaces at the front of sized todos
+x 2021-01-19 2020-11-24 @Add a global view to show links to all repositories started:2021-01-19
