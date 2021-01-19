@@ -1,6 +1,6 @@
 package net.avdw.todo.core.style;
 
-import net.avdw.todo.PropertyFile;
+import net.avdw.property.PropertyFile;
 import net.avdw.todo.TestConstant;
 import net.avdw.todo.color.ColorConverter;
 import net.avdw.todo.core.mixin.CleanMixin;

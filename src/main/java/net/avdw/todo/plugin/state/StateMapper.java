@@ -1,6 +1,7 @@
 package net.avdw.todo.plugin.state;
 
-import net.avdw.todo.PropertyFile;
+import com.google.inject.Singleton;
+import net.avdw.property.PropertyFile;
 import net.avdw.todo.domain.Todo;
 
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+@Singleton
 public class StateMapper {
     private final int maxWidth;
     private final Map<String, String> statePatternMap = new HashMap<>();

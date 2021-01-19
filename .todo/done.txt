@@ -103,3 +103,6 @@ x 2020-10-29 2020-10-27 Add plan interactive input cli moscow:could plan:tactica
 x 2020-10-29 2020-10-27 Review the reports at https://taskwarrior.org/docs/report.html plan:operational moscow:could size:2 started:2020-10-29
 x 2020-11-05 2020-11-05 @Change styling so that +color has meaning e.g. red=fix green=focus orange=review dark=ignore started:2020-11-05
 x 2020-11-10 2020-11-05 @Add the ability to size by extensions with a custom sort function started:2020-11-06
+x 2021-01-13 2020-12-15 @Change 'sort --func' description so that there is a reference started:2021-01-13
+x 2021-01-13 2020-11-05 @Fix moscow not showing any output when no todos are found started:2021-01-13
+x 2020-12-15 2020-11-05 @Fix size creating spaces at the front of sized todos

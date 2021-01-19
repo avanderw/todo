@@ -36,6 +36,7 @@ import java.nio.file.Path;
                 SortCli.class,
                 EditCli.class,
                 ChangelogCli.class,
+                StatusCli.class,
                 StatsCli.class,
                 ArchiveCli.class,
                 BackupCli.class,

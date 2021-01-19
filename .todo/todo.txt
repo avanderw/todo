@@ -1,6 +1,4 @@
-(A) 2020-11-24 @Add a global view to show links to all repositories
-x 2021-01-13 2020-12-15 @Change 'sort --func' description so that there is a reference started:2021-01-13
-x 2021-01-13 2020-11-05 @Fix moscow not showing any output when no todos are found started:2021-01-13
+x 2021-01-19 2020-11-24 @Add a global view to show links to all repositories started:2021-01-19
 (D) 2020-11-05 @Change replace to update in done.txt as well
 (E) 2020-12-15 @Add 'sort --func' scoring view
 (F) 2020-12-15 @Add urgency helper with suggestions, similar to moscow or size
@@ -8,7 +6,6 @@ x 2021-01-13 2020-11-05 @Fix moscow not showing any output when no todos are fou
 2020-12-15 @Add limiting ls command with '--top' option
 2020-11-24 @Change styling to search in the repository for overide styling config
 2020-11-12 @Add a reported, investigating, resolving module for incident management
-p 2021-01-13 2020-11-10 @Add calculate average work-in-progress stat for summary and use it for an estimate on completion started:2020-11-10
 2020-11-05 @Add the ability to list only projects so that it is easier to collapse and densify them
 2020-11-05 @Add a way for an extension to have an urgency value
 2020-11-05 @Add a typing function to categorise todos into FIX, EPIC, STORY, SPIKE
@@ -29,4 +26,3 @@ p 2021-01-13 2020-11-10 @Add calculate average work-in-progress stat for summary
 2020-10-16 @Add estimated completion for groups with visible velocity module https://screenful.com/tour/milestone-burnup-chart plan:strategic moscow:must link:1 +DoneEstimate size:13
 2020-10-12 @Add the ability to prioritise on search criteria moscow:should plan:tactical size:5
 2020-10-01 @Add 'todo roadmap' [project, context, tag] which will list upcoming- due,target,cycle and past- due,target,cycle moscow:must size:5  plan:strategic
-x 2020-12-15 2020-11-05 @Fix size creating spaces at the front of sized todos

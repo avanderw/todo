@@ -6,3 +6,4 @@ p 2020-10-15 2019-10-11 @Add an easter egg for making 100 todo items
 p 2020-10-15 2019-10-11 @Fix not allowing multi-line todo +add
 p 2020-10-15 2019-07-30 @Fix +list to fail when targeting non-existing global with existing local
 p 2020-10-15 2019-08-12 @Fix +rename when using + on term to replace with
+p 2021-01-13 2020-11-10 @Add calculate average work-in-progress stat for summary and use it for an estimate on completion started:2020-11-10

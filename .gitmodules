@@ -1,0 +1,3 @@
+[submodule "src/main/java/net/avdw/property"]
+	path = src/main/java/net/avdw/property
+	url = https://github.com/avanderw/net.avdw.property
