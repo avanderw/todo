@@ -24,3 +24,5 @@ r 2020-10-22 2019-08-14 Consider adding roadmap generation based off priority, v
 r 2020-10-29 2020-10-29 Extend link module to list blockers and blocking size:3 plan:strategic moscow:could
 r 2020-10-29 2020-10-27 Review todo.txt for meeting setup https://news.ycombinator.com/item?id=20745654 plan:operational moscow:could size:2
 r 2021-01-19 2021-01-19 Add addon capability to status active message for started plugin
+r 2021-01-19 2020-10-16 @Add histogram for timings https://screenful.com/tour/timing-screen#:~:text=Lead%20time%20is%20the%20total,a%20task%20until%20its%20completion. plan:strategic moscow:wont size:8
+r 2021-01-19 2020-11-05 @Add a way for an extension to have an urgency value moscow:wont plan:strategic

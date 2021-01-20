@@ -1,0 +1,28 @@
+2019-08-14 @Add proxy for when todo push is used instead of git push
+2019-08-12 @Enhance +clean to move todos into a stale.txt
+2019-07-26 @Add auto +priority +properties for +start functionality
+2019-07-30 @Enhance +migrate functionality logging to be friendlier
+2019-07-24 @Add +backup option to state changing operations
+2019-08-12 @Enhance +list -w to show empty results when nothing is in progress
+2020-03-20 @Refactor TodoItemList.class
+2019-08-13 @Add +tag functionality
+2019-07-26 @Add +clean feature which will remove blank lines
+r 2020-10-02 2019-08-12 @Enhance +report to list completely done projects and their done date
+r 2020-10-02 2019-08-12 @Enhance +report to list contexts and projects with priority
+r 2020-10-01 2019-07-23 @Add default show all +properties
+r 2020-10-01 2019-07-26 @Add +consolodate functionality to view all aware todo directories
+r 2020-10-01 2019-08-12 @Add google sync support
+r 2020-10-01 2019-08-13 @Add +top command to list top x todos
+r 2020-10-01 2019-10-09 @Change set command to become config command which manages property files
+r 2020-10-01 2020-03-31 @Add todo ls --group-by meta | context | project
+r 2020-10-07 2020-10-01 @Add 'todo restore' command to restore the last backup
+r 2020-10-15 2019-07-25 @Fix bug when +add with tilde is used in command prompt
+r 2020-10-15 2019-08-12 @Fix bug when resolving parent directory in nested directories
+r 2020-10-21 2019-08-21 @Enhance +priority to prioritise a project or context
+r 2020-10-21 2020-10-16 Add standup action to list yesterday, today and impediments https://github.com/civrot/todo_txt_actions
+r 2020-10-22 2019-08-14 Consider adding roadmap generation based off priority, version or combined moscow:wont
+r 2020-10-29 2020-10-29 Extend link module to list blockers and blocking size:3 plan:strategic moscow:could
+r 2020-10-29 2020-10-27 Review todo.txt for meeting setup https://news.ycombinator.com/item?id=20745654 plan:operational moscow:could size:2
+r 2021-01-19 2021-01-19 Add addon capability to status active message for started plugin
+r 2021-01-19 2020-10-16 @Add histogram for timings https://screenful.com/tour/timing-screen#:~:text=Lead%20time%20is%20the%20total,a%20task%20until%20its%20completion. plan:strategic moscow:wont size:8
+r 2021-01-19 2020-11-05 @Add a way for an extension to have an urgency value moscow:wont plan:strategic

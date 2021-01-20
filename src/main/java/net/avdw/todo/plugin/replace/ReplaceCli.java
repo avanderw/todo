@@ -22,8 +22,21 @@ public class ReplaceCli implements Runnable {
     @SneakyThrows
     @Override
     public void run() {
-        String content = Files.readString(todoPath);
-        Files.writeString(todoPath, content.replaceAll(from, to));
+        Path donePath = todoPath.getParent().resolve("done.txt");
+        Path parkedPath = todoPath.getParent().resolve("parked.txt");
+        Path removedPath = todoPath.getParent().resolve("removed.txt");
+
+        Files.writeString(todoPath, Files.readString(todoPath).replaceAll(from, to));
+        if (donePath.toFile().exists()) {
+            Files.writeString(donePath, Files.readString(donePath).replaceAll(from, to));
+        }
+        if (parkedPath.toFile().exists()) {
+            Files.writeString(parkedPath, Files.readString(parkedPath).replaceAll(from, to));
+        }
+        if (removedPath.toFile().exists()) {
+            Files.writeString(removedPath, Files.readString(removedPath).replaceAll(from, to));
+        }
+
         spec.commandLine().getOut().println(templatedResource.populateKey(ReplaceKey.SUCCESS,
                 String.format("{from:'%s',to:'%s'}", from, to)));
     }
