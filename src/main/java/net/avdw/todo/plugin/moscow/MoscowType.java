@@ -14,6 +14,6 @@ public enum MoscowType {
 
     @Override
     public String toString() {
-        return String.format("%6s ( %s )", name(), desc);
+        return String.format("%6s (%s)", name(), desc);
     }
 }
