@@ -1,17 +1,18 @@
 package net.avdw.todo.core;
 
 import com.google.inject.Inject;
-import net.avdw.todo.core.mixin.RepositoryMixin;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.RunningStats;
 import net.avdw.todo.SuppressFBWarnings;
 import net.avdw.todo.TemplatedResource;
-import net.avdw.todo.core.view.TodoListView;
 import net.avdw.todo.core.groupby.GroupByMixin;
-import net.avdw.todo.core.mixin.CleanMixin;
-import net.avdw.todo.domain.Todo;
+import net.avdw.todo.core.groupby.ProjectGroup;
 import net.avdw.todo.core.mixin.BooleanFilterMixin;
+import net.avdw.todo.core.mixin.CleanMixin;
 import net.avdw.todo.core.mixin.DateFilterMixin;
+import net.avdw.todo.core.mixin.RepositoryMixin;
+import net.avdw.todo.core.view.TodoListView;
+import net.avdw.todo.domain.Todo;
 import net.avdw.todo.plugin.blocker.BlockerMixin;
 import net.avdw.todo.plugin.change.ChangeMixin;
 import net.avdw.todo.plugin.state.StateMixin;
@@ -23,14 +24,15 @@ import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Model.CommandSpec;
+import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
-import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Command(name = "ls", resourceBundle = "messages", description = "${bundle:list}", mixinStandardHelpOptions = true)
 public class ListCli implements Runnable {
@@ -42,17 +44,33 @@ public class ListCli implements Runnable {
     @Mixin private CleanMixin cleanMixin;
     @Mixin private DateFilterMixin dateFilterMixin;
     @Mixin private GroupByMixin groupByMixin;
+    @Mixin private OrderByMixin orderByMixin;
     @Mixin private RepositoryMixin repositoryMixin;
-    @Mixin private StateMixin stateMixin;
     @Inject private RunningStats runningStats;
     @Spec private CommandSpec spec;
+    @Mixin private StateMixin stateMixin;
     @Mixin private TimingMixin statsMixin;
     @Inject private TemplatedResource templatedResource;
     @Inject private TodoListView todoListView;
-    @Mixin private OrderByMixin orderByMixin;
+
+    @Option(names="--projects", description = "List projects for filter")
+    private boolean isProjectRender = false;
 
     private void printList(final List<Todo> list, final Repository<Integer, Todo> repository) {
-        spec.commandLine().getOut().println(todoListView.render(list, repository));
+        if (isProjectRender) {
+            Map<String, List<Todo>> projectTodoMap = list.stream().collect(Collectors.groupingBy(new ProjectGroup().collector()));
+            String projects= projectTodoMap.keySet().stream()
+                    .filter(key->!key.isEmpty())
+                    .sorted()
+                    .collect(Collectors.joining(", "));
+            if (projects.isEmpty()) {
+                spec.commandLine().getOut().println("No projects");
+            } else {
+                spec.commandLine().getOut().println(projects);
+            }
+        } else {
+            spec.commandLine().getOut().println(todoListView.render(list, repository));
+        }
     }
 
     private void printMap(final Map<String, ?> map, final Repository<Integer, Todo> repository, final GroupByMixin groupByMixin, final int depth) {
