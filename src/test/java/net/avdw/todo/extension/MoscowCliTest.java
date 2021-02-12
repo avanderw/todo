@@ -82,7 +82,7 @@ public class MoscowCliTest {
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testSort() {
-        cliTester.execute("sort --func=moscow").success();
+        cliTester.execute("sort --by=moscow").success();
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneTodoList = todoRepository.findAll(new Any<>());
         assertTrue(doneTodoList.get(1).getText().startsWith("2020-03-13 Refactor"));

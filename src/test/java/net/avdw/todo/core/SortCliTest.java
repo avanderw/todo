@@ -61,7 +61,7 @@ public class SortCliTest {
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     @SneakyThrows
     public void testKeys() {
-        cliTester.execute("sort --func", "importance: + urgency:").success()
+        cliTester.execute("sort --by", "importance: + urgency:").success()
                 .contains("[  2] 2019-02-07 Digital");
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneTodoList = todoRepository.findAll(new Any<>());
@@ -71,7 +71,7 @@ public class SortCliTest {
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testKeysPriority() {
         cliTester.execute("pri 5 A");
-        cliTester.execute("sort --func", "importance: + urgency:").success()
+        cliTester.execute("sort --by", "importance: + urgency:").success()
                 .contains("[  3] 2019-02-07 Digital");
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneTodoList = todoRepository.findAll(new Any<>());
@@ -90,13 +90,13 @@ public class SortCliTest {
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testCustom() {
-        cliTester.execute("sort --func","importance: + urgency: - size:").success()
+        cliTester.execute("sort --by","importance: + urgency: - size:").success()
                 .contains("[  2] 2019-02-07 Digital");
     }
 
     @Test//(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testPlugin() {
-        cliTester.execute("sort --func","moscow + urgency:").success()
+        cliTester.execute("sort --by","moscow + urgency:").success()
         .contains("[  2] 2019-10-29 +ROB");
     }
 }

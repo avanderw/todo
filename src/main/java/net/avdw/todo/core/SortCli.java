@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Command(name = "sort", resourceBundle = "messages", description = "${bundle:sort}")
 public class SortCli implements Runnable {
     @Spec private CommandSpec spec;
-    @Option(names = "--func", description = "e.g. plugin + ext: - ext:") private String sortFunc;
+    @Option(names = "--by", description = "e.g. plugin + ext: - ext:") private String sortFunc;
     @Inject private Path todoPath;
     @Inject private Repository<Integer, Todo> todoRepository;
     @Inject private TodoListView todoListView;
