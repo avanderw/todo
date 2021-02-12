@@ -4,10 +4,10 @@ import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.Multibinder;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.plugin.change.ChangeTypeGroup;
-import net.avdw.todo.plugin.moscow.MoscowGroup;
-import net.avdw.todo.plugin.plan.PlanGroup;
-import net.avdw.todo.plugin.state.StateGroup;
+import net.avdw.todo.extension.change.ChangeTypeGroup;
+import net.avdw.todo.extension.moscow.MoscowGroup;
+import net.avdw.todo.extension.plan.PlanGroup;
+import net.avdw.todo.extension.state.StateGroup;
 
 public class GroupByModule extends AbstractModule {
     @Override

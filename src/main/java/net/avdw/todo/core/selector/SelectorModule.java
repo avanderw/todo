@@ -2,7 +2,7 @@ package net.avdw.todo.core.selector;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
-import net.avdw.todo.plugin.PluginLoader;
+import net.avdw.todo.extension.PluginLoader;
 
 public class SelectorModule extends AbstractModule {
     @Override

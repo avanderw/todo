@@ -2,7 +2,7 @@ package net.avdw.todo.core.view;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.avdw.todo.plugin.Addon;
+import net.avdw.todo.extension.Mixin;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
 
@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 
 @Singleton
 public class TodoListView {
-    private final Set<Addon> addonList;
+    private final Set<Mixin> addonList;
     private final TodoView todoView;
 
     @Inject
-    TodoListView(final Set<Addon> addonList, final TodoView todoView) {
+    TodoListView(final Set<Mixin> addonList, final TodoView todoView) {
         this.addonList = addonList;
         this.todoView = todoView;
     }

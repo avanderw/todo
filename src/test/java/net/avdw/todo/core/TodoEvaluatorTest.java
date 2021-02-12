@@ -5,9 +5,9 @@ import net.avdw.todo.core.selector.ExtSelector;
 import net.avdw.todo.core.selector.ProjectSelector;
 import net.avdw.todo.core.selector.Selector;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.plugin.moscow.MoscowExt;
-import net.avdw.todo.plugin.moscow.MoscowMapper;
-import net.avdw.todo.plugin.moscow.MoscowSelector;
+import net.avdw.todo.extension.moscow.MoscowExt;
+import net.avdw.todo.extension.moscow.MoscowMapper;
+import net.avdw.todo.extension.moscow.MoscowSelector;
 import org.junit.Test;
 
 import java.util.HashSet;

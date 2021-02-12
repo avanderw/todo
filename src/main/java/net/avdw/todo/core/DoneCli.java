@@ -10,6 +10,7 @@ import net.avdw.todo.domain.IsDone;
 import net.avdw.todo.domain.IsParked;
 import net.avdw.todo.domain.IsRemoved;
 import net.avdw.todo.domain.Todo;
+import net.avdw.todo.extension.PostAddon;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
@@ -23,6 +24,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Command(name = "do", resourceBundle = "messages", description = "${bundle:done}")
 public class DoneCli implements Runnable {
@@ -33,6 +36,7 @@ public class DoneCli implements Runnable {
     @Inject private TemplatedResource templatedResource;
     @Inject private Repository<Integer, Todo> todoRepository;
     @Inject private TodoStyler todoStyler;
+    @Inject private Set<PostAddon> postCommandAddonSet;
 
     private List<Todo> filter() {
         Specification<Integer, Todo> invalid = new IsDone().or(new IsParked()).or(new IsRemoved());
@@ -42,22 +46,25 @@ public class DoneCli implements Runnable {
         }
 
         if (booleanFilterMixin.isActive()) {
-            specification = specification.or(booleanFilterMixin.not(invalid));
+            specification = specification.and(booleanFilterMixin);
         }
 
         return todoRepository.findAll(specification);
     }
 
-    private void operation(final List<Todo> todoList) {
+    private List<Todo> operation(final List<Todo> todoList) {
         todoRepository.setAutoCommit(false);
-        todoList.forEach(todo -> {
-            todoRepository.update(new Todo(todo.getId(), String.format("x %s %s",
+        List<Todo> changed = todoList.stream().map(todo -> {
+            Todo changedTodo = new Todo(todo.getId(), String.format("x %s %s",
                     simpleDateFormat.format(new Date()),
-                    todoRepository.findById(todo.getId()).orElseThrow().toString().replaceFirst("\\([A-Z]\\) ", ""))));
+                    todoRepository.findById(todo.getId()).orElseThrow().toString().replaceFirst("\\([A-Z]\\) ", "")));
+            todoRepository.update(changedTodo);
             spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
                     String.format("{idx:'%3s',todo:\"%s\"}", todo.getId() + 1, todoStyler.style(todoRepository.findById(todo.getId()).orElseThrow()).replaceAll("\"", "\\\\\""))));
-        });
+            return changedTodo;
+        }).collect(Collectors.toList());
         todoRepository.commit();
+        return changed;
     }
 
     @Override
@@ -75,12 +82,18 @@ public class DoneCli implements Runnable {
             if (todoList.isEmpty()) {
                 spec.commandLine().getOut().println("No items were changed");
             } else {
-                //pre(todoList);
-                operation(todoList);
-                //post(todoList);
+                //preActions(todoList);
+                List<Todo> changed = operation(todoList);
+                postActions(changed);
             }
         } else {
             spec.commandLine().usage(spec.commandLine().getOut());
         }
+    }
+
+    private void postActions(final List<Todo> todoList) {
+        postCommandAddonSet.forEach(postCommandAddon -> {
+            postCommandAddon.process(todoList, spec.commandLine().getOut());
+        });
     }
 }

@@ -94,8 +94,8 @@ Plot value vs. effort into 4 quadrants.
 ## Plugin, Addon, Mixin, Extension modules
 - Plugin is a command
 - Addon is a pre/post execution on a command
-- Mixin is available
-- Extension is available
+- Mixin is used for display modifications
+- Extension is for the feature collection of plugin, addon, mixin
 
 ## External modules
 - Binding commands to external binaries

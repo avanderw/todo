@@ -30,7 +30,7 @@
 2021-01-20 @Add an eval command to show the value of a todo given the eval function
 2021-01-20 @Add updating the global.path list when activating todo command
 (B) 2021-02-04 @Fix init not creating a local folder when the global folder exists
-(E) 2021-02-12 @Add recurring functionality to done as a post-do addon
+x 2021-02-12 2021-02-12 @Add recurring functionality to done as a post-do addon
 (F) 2021-02-12 @Add feedback command to get feedback from individuals and or teams
 x 2021-02-12 2021-02-12 @Update 'todo do' to work with boolean filters
 2021-02-12 @Add suggestion for context where there is none e.g. Sofware (@Update, @Add, @Remove), Management (@Person), Location (@Home, @Work)

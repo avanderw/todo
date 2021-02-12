@@ -5,7 +5,7 @@ import com.google.inject.Singleton;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.plugin.change.ChangeMapper;
+import net.avdw.todo.extension.change.ChangeMapper;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

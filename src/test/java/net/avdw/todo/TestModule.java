@@ -7,9 +7,10 @@ import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import net.avdw.todo.core.groupby.GroupByModule;
 import net.avdw.todo.core.selector.SelectorModule;
-import net.avdw.todo.plugin.AddonModule;
+import net.avdw.todo.extension.MixinModule;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
+import net.avdw.todo.extension.PostAddonModule;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.core.style.StyleModule;
@@ -43,9 +44,10 @@ public class TestModule extends AbstractModule {
         bind(ByteArrayOutputStream.class).annotatedWith(Names.named("err")).toInstance(new ByteArrayOutputStream());
 
         install(new StyleModule());
-        install(new AddonModule());
+        install(new MixinModule());
         install(new GroupByModule());
         install(new SelectorModule());
+        install(new PostAddonModule());
     }
 
     @Provides

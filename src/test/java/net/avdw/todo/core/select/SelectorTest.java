@@ -68,7 +68,7 @@ public class SelectorTest {
 
         Repository<Integer, Todo> repository = new FileRepository<>(Paths.get("src/test/resources/.todo/todo.txt"), new TodoFileTypeBuilder());
         List<Todo> assignedList = repository.findAll(selector.specification());
-        assertEquals(21, assignedList.size());
+        assertEquals(23, assignedList.size());
         assertNotEquals(repository.findAll(new Any<>()).size(), assignedList.size());
     }
 
@@ -116,7 +116,7 @@ public class SelectorTest {
 
         Repository<Integer, Todo> repository = new FileRepository<>(Paths.get("src/test/resources/.todo/todo.txt"), new TodoFileTypeBuilder());
         List<Todo> assignedList = repository.findAll(selector.specification());
-        assertEquals(21, assignedList.size());
+        assertEquals(23, assignedList.size());
         assertNotEquals(repository.findAll(new Any<>()).size(), assignedList.size());
     }
 

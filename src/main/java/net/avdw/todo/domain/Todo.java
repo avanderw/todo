@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import net.avdw.todo.SuppressFBWarnings;
+import net.avdw.todo.extension.TodoTxtExt;
 import net.avdw.todo.repository.IdType;
 
 import java.text.SimpleDateFormat;

@@ -55,8 +55,8 @@ public class DoneCliTest {
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
-    public void testBooleanFilter() {
-        cliTester.execute("do 2,4 --and size:1").success().contains("[  7]");
+    public void testIndexAndBooleanFilter() {
+        cliTester.execute("do 2,4,6,8,10 --and size:2").success().contains("[  8]");
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
@@ -79,7 +79,7 @@ public class DoneCliTest {
         InputStream systemIn = System.in;
         ByteArrayInputStream testIn = new ByteArrayInputStream("y".getBytes());
         System.setIn(testIn);
-        cliTester.execute("do").success().count(String.format("x %s", today), 80).notContains(String.format("x %s x 2020-10-21", today));
+        cliTester.execute("do").success().count(String.format("x %s", today), 83).notContains(String.format("x %s x 2020-10-21", today));
         System.setIn(systemIn);
     }
 
@@ -113,5 +113,17 @@ public class DoneCliTest {
         Repository<Integer, Todo> todoRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         List<Todo> doneTodoList = todoRepository.findAll(new IsDone());
         assertEquals(4, doneTodoList.size());
+    }
+
+    @Test(timeout =  TestConstant.PERFORMANCE_TIMEOUT)
+    public void testRecurDonePostAddon() {
+        cliTester.execute("do --and rec: --or recur:").success()
+                .contains("due:2019-08-22")
+                .contains("Adding recurring");
+    }
+
+    @Test(timeout =  TestConstant.PERFORMANCE_TIMEOUT)
+    public void testBooleanFilter() {
+        cliTester.execute("do --and urgency:2").success().count("\\[", 7);
     }
 }

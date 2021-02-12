@@ -5,7 +5,7 @@ import com.google.inject.Singleton;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.plugin.Addon;
+import net.avdw.todo.extension.Mixin;
 import net.avdw.todo.core.style.TodoStyler;
 
 import java.util.Objects;
@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 
 @Singleton
 public class TodoView {
-    private final Set<Addon> addonList;
+    private final Set<Mixin> addonList;
     private final TemplatedResource templatedResource;
     private final TodoStyler todoStyler;
 
     @Inject
-    public TodoView(final Set<Addon> addonList, final TodoStyler todoStyler, final TemplatedResource templatedResource) {
+    public TodoView(final Set<Mixin> addonList, final TodoStyler todoStyler, final TemplatedResource templatedResource) {
         this.addonList = addonList;
         this.todoStyler = todoStyler;
         this.templatedResource = templatedResource;
