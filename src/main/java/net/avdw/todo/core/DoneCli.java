@@ -6,6 +6,9 @@ import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.core.mixin.BooleanFilterMixin;
 import net.avdw.todo.core.mixin.IndexFilterMixin;
 import net.avdw.todo.core.style.TodoStyler;
+import net.avdw.todo.domain.IsDone;
+import net.avdw.todo.domain.IsParked;
+import net.avdw.todo.domain.IsRemoved;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Repository;
@@ -32,13 +35,14 @@ public class DoneCli implements Runnable {
     @Inject private TodoStyler todoStyler;
 
     private List<Todo> filter() {
-        Specification<Integer, Todo> specification = new Any<>();
+        Specification<Integer, Todo> invalid = new IsDone().or(new IsParked()).or(new IsRemoved());
+        Specification<Integer, Todo> specification = new Any<Integer, Todo>().not(invalid);
         if (indexFilterMixin.isActive()) {
-            specification = indexFilterMixin;
+            specification = indexFilterMixin.not(invalid);
         }
 
         if (booleanFilterMixin.isActive()) {
-            specification = specification.or(booleanFilterMixin);
+            specification = specification.or(booleanFilterMixin.not(invalid));
         }
 
         return todoRepository.findAll(specification);
@@ -68,9 +72,13 @@ public class DoneCli implements Runnable {
 
         if (proceed) {
             List<Todo> todoList = filter();
-            //pre(todoList);
-            operation(todoList);
-            //post(todoList);
+            if (todoList.isEmpty()) {
+                spec.commandLine().getOut().println("No items were changed");
+            } else {
+                //pre(todoList);
+                operation(todoList);
+                //post(todoList);
+            }
         } else {
             spec.commandLine().usage(spec.commandLine().getOut());
         }
