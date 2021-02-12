@@ -2,7 +2,7 @@ package net.avdw.todo.plugin.plan;
 
 import com.google.inject.Inject;
 import net.avdw.todo.core.mixin.BooleanFilterMixin;
-import net.avdw.todo.core.mixin.IndexSpecificationMixin;
+import net.avdw.todo.core.mixin.IndexFilterMixin;
 import net.avdw.todo.core.view.TodoView;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Any;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class PlanCli implements Runnable {
     @Mixin private BooleanFilterMixin booleanFilterMixin;
     @Inject private HasPlan hasPlan;
-    @Mixin private IndexSpecificationMixin indexSpecificationMixin;
+    @Mixin private IndexFilterMixin indexSpecificationMixin;
     @Inject private PlanCleaner planCleaner;
     @Inject private PlanExt planExt;
     @Inject private PlanMapper planMapper;

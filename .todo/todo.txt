@@ -1,5 +1,4 @@
 (A) 2021-01-19 @Add plan numeric value comparator for sorting plan:tactical moscow:must
-x 2021-01-20 2021-01-20 Change moscow to inform on what the numeric values are for the enums started:2021-01-20
 (C) 2021-01-19 @Change 'rm' to work with a filter or index moscow:should plan:tactical
 (D) 2021-01-13 @Change 'edit' to include an interactive mode, similar to 'moscow' moscow:could link:2.1 plan:strategic
 2020-12-15 @Add limiting ls command with '--top' option moscow:must plan:tactical
@@ -28,5 +27,11 @@ x 2021-01-20 2021-01-20 Change moscow to inform on what the numeric values are f
 2021-01-20 @Add view to track whether states are increasing or decreasing over a period link:3
 2021-01-20 @Add burnup for project status which details metrics 'time' and 'size' completed,remaining,added,forecast
 2021-01-20 @Investigate a way to share a list with other participants
-x 2021-01-20 2020-11-05 @Add the ability to list only projects so that it is easier to collapse and densify them moscow:must plan:tactical started:2021-01-20
-x 2021-01-20 2020-11-05 @Change replace to update in done.txt as well moscow:must plan:tactical started:2021-01-20
+2021-01-20 @Add an eval command to show the value of a todo given the eval function
+2021-01-20 @Add updating the global.path list when activating todo command
+(B) 2021-02-04 @Fix init not creating a local folder when the global folder exists
+(E) 2021-02-12 @Add recurring functionality to done as a post-do addon
+(F) 2021-02-12 @Add feedback command to get feedback from individuals and or teams
+x 2021-02-12 2021-02-12 @Update 'todo do' to work with boolean filters
+2021-02-12 @Add suggestion for context where there is none e.g. Sofware (@Update, @Add, @Remove), Management (@Person), Location (@Home, @Work)
+2021-02-12 @Update 'todo do' to work with date filters

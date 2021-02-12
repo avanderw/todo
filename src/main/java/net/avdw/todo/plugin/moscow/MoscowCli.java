@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.core.mixin.BooleanFilterMixin;
-import net.avdw.todo.core.mixin.IndexSpecificationMixin;
+import net.avdw.todo.core.mixin.IndexFilterMixin;
 import net.avdw.todo.core.view.TodoView;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Any;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Command(name = "moscow", resourceBundle = "messages", description = "${bundle:moscow.desc}", mixinStandardHelpOptions = true)
 public class MoscowCli implements Runnable {
     @Inject private HasMoscow hasMoscow;
-    @Mixin private IndexSpecificationMixin indexSpecificationMixin;
+    @Mixin private IndexFilterMixin indexSpecificationMixin;
     @Mixin private BooleanFilterMixin booleanFilterMixin;
     @Spec private CommandSpec spec;
     @Inject private Repository<Integer, Todo> todoRepository;

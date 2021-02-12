@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.core.mixin.BooleanFilterMixin;
 import net.avdw.todo.core.mixin.DateFilterMixin;
-import net.avdw.todo.core.mixin.IndexSpecificationMixin;
+import net.avdw.todo.core.mixin.IndexFilterMixin;
 import net.avdw.todo.core.mixin.RepositoryMixin;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
@@ -31,7 +31,7 @@ public class BrowseCli implements Runnable {
     @Inject private BrowseMapper browseMapper;
     @Inject private BrowseSpecification browseSpecification;
     @Mixin private DateFilterMixin dateFilterMixin;
-    @Mixin private IndexSpecificationMixin indexSpecificationMixin;
+    @Mixin private IndexFilterMixin indexSpecificationMixin;
     @Option(names = "--done")
     private boolean isDone = false;
     @Option(names = "--parked")

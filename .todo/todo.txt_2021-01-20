@@ -1,5 +1,4 @@
-(A) 2020-11-05 @Change replace to update in done.txt as well moscow:must plan:tactical started:2021-01-20
-(B) 2020-11-05 @Add the ability to list only projects so that it is easier to collapse and densify them moscow:must plan:tactical
+(A) 2021-01-19 @Add plan numeric value comparator for sorting plan:tactical moscow:must
 (C) 2021-01-19 @Change 'rm' to work with a filter or index moscow:should plan:tactical
 (D) 2021-01-13 @Change 'edit' to include an interactive mode, similar to 'moscow' moscow:could link:2.1 plan:strategic
 2020-12-15 @Add limiting ls command with '--top' option moscow:must plan:tactical
@@ -24,7 +23,6 @@
 2020-10-27 @Add link cli to show linked todos plan:tactical moscow:could size:3
 2020-10-16 Review what to do with these actions https://github.com/inkarkat/todo.txt-cli-ex/tree/master/actions plan:operational moscow:could size:2
 2020-12-15 @Add urgency helper with suggestions, similar to moscow or size moscow:could link:2 plan:strategic
-2021-01-19 @Add plan numeric value comparator for sorting plan:tactical moscow:must
 2021-01-20 @Add view to track whether the backlog is increasing or decreasing over a period link:3.1
 2021-01-20 @Add view to track whether states are increasing or decreasing over a period link:3
 2021-01-20 @Add burnup for project status which details metrics 'time' and 'size' completed,remaining,added,forecast

@@ -2,7 +2,7 @@ package net.avdw.todo.plugin.link;
 
 import com.google.inject.Inject;
 import net.avdw.todo.TemplatedResource;
-import net.avdw.todo.core.mixin.IndexSpecificationMixin;
+import net.avdw.todo.core.mixin.IndexFilterMixin;
 import net.avdw.todo.core.view.TodoView;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Command(name = "link", resourceBundle = "messages", description = "${bundle:link.desc}", mixinStandardHelpOptions = true)
 public class LinkCli implements Runnable {
-    @Mixin private IndexSpecificationMixin childrenMixin;
+    @Mixin private IndexFilterMixin childrenMixin;
     @Inject private LinkExt linkExt;
     @Parameters(arity = "1", index = "1", descriptionKey = "link.parent.desc") private Integer parentIdx;
     @Spec private CommandSpec spec;

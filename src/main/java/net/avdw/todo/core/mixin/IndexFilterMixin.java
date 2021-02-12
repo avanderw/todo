@@ -6,7 +6,7 @@ import picocli.CommandLine.Parameters;
 
 import java.util.Set;
 
-public class IndexSpecificationMixin extends AbstractSpecification<Integer, Todo> {
+public class IndexFilterMixin extends AbstractSpecification<Integer, Todo> {
     @Parameters(paramLabel = "idx", descriptionKey = "index.filter.description", split = ",", arity = "0..1", index = "0")
     private Set<Integer> idxList;
 
