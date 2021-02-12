@@ -1,5 +1,6 @@
-package net.avdw.todo.extension.moscow;
+package net.avdw.todo.extension.plan;
 
+import com.google.inject.Singleton;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.extension.TodoTxtExt;
 
@@ -8,11 +9,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class MoscowExt implements TodoTxtExt<String> {
+@Singleton
+public class PlanTodoTxtExt implements TodoTxtExt<String> {
     private final List<String> supportedExtList = new ArrayList<>();
 
-    public MoscowExt() {
-        supportedExtList.add("moscow");
+    public PlanTodoTxtExt() {
+        supportedExtList.add("plan");
     }
 
     @Override

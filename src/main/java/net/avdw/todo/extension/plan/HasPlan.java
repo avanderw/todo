@@ -7,10 +7,10 @@ import net.avdw.todo.repository.AbstractSpecification;
 
 @Singleton
 public class HasPlan extends AbstractSpecification<Integer, Todo> {
-    private final PlanExt planExt;
+    private final PlanTodoTxtExt planExt;
 
     @Inject
-    HasPlan(final PlanExt planExt) {
+    HasPlan(final PlanTodoTxtExt planExt) {
         this.planExt = planExt;
     }
 

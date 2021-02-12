@@ -6,10 +6,10 @@ import net.avdw.todo.domain.Todo;
 
 @Singleton
 public class PlanCleaner {
-    private final PlanExt planExt;
+    private final PlanTodoTxtExt planExt;
 
     @Inject
-    PlanCleaner(final PlanExt planExt) {
+    PlanCleaner(final PlanTodoTxtExt planExt) {
         this.planExt = planExt;
     }
 

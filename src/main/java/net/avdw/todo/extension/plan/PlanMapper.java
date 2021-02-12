@@ -7,14 +7,23 @@ import net.avdw.todo.domain.Todo;
 @Singleton
 public class PlanMapper {
 
-    private final PlanExt planExt;
+    private final PlanTodoTxtExt planExt;
 
     @Inject
-    PlanMapper(final PlanExt planExt) {
+    public PlanMapper(final PlanTodoTxtExt planExt) {
         this.planExt = planExt;
     }
 
     public String map(final Todo todo) {
         return planExt.getValue(todo).orElse("No");
+    }
+
+    public int mapToInt(final Todo todo) {
+        return switch (map(todo)) {
+            case "strategic" -> 13;
+            case "tactical" -> 8;
+            case "operational" -> 3;
+            default -> 0;
+        };
     }
 }

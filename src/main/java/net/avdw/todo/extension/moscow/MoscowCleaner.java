@@ -6,10 +6,10 @@ import net.avdw.todo.domain.Todo;
 
 @Singleton
 public class MoscowCleaner {
-    private final MoscowExt moscowExt;
+    private final MoscowTodoTxtExt moscowExt;
 
     @Inject
-    MoscowCleaner(final MoscowExt moscowExt) {
+    MoscowCleaner(final MoscowTodoTxtExt moscowExt) {
         this.moscowExt = moscowExt;
     }
 

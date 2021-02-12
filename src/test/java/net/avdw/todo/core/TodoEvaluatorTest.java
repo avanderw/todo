@@ -5,7 +5,7 @@ import net.avdw.todo.core.selector.ExtSelector;
 import net.avdw.todo.core.selector.ProjectSelector;
 import net.avdw.todo.core.selector.Selector;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.extension.moscow.MoscowExt;
+import net.avdw.todo.extension.moscow.MoscowTodoTxtExt;
 import net.avdw.todo.extension.moscow.MoscowMapper;
 import net.avdw.todo.extension.moscow.MoscowSelector;
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class TodoEvaluatorTest {
         selectorSet.add(new ContextSelector());
         selectorSet.add(new ExtSelector("urgency:"));
 
-        MoscowExt moscowExt = new MoscowExt();
+        MoscowTodoTxtExt moscowExt = new MoscowTodoTxtExt();
         MoscowMapper moscowMapper = new MoscowMapper(moscowExt);
         selectorSet.add(new MoscowSelector(moscowMapper, moscowExt));
         TodoEvaluator todoEvaluator = new TodoEvaluator("moscow + urgency:", selectorSet);
@@ -40,7 +40,7 @@ public class TodoEvaluatorTest {
         selectorSet.add(new ExtSelector("urgency:"));
         selectorSet.add(new ExtSelector("importance:"));
 
-        MoscowExt moscowExt = new MoscowExt();
+        MoscowTodoTxtExt moscowExt = new MoscowTodoTxtExt();
         MoscowMapper moscowMapper = new MoscowMapper(moscowExt);
         selectorSet.add(new MoscowSelector(moscowMapper, moscowExt));
         TodoEvaluator todoEvaluator = new TodoEvaluator("importance: + urgency:", selectorSet);
@@ -54,7 +54,7 @@ public class TodoEvaluatorTest {
         selectorSet.add(new ContextSelector());
         selectorSet.add(new ExtSelector("importance:"));
 
-        MoscowExt moscowExt = new MoscowExt();
+        MoscowTodoTxtExt moscowExt = new MoscowTodoTxtExt();
         MoscowMapper moscowMapper = new MoscowMapper(moscowExt);
         selectorSet.add(new MoscowSelector(moscowMapper, moscowExt));
         TodoEvaluator todoEvaluator = new TodoEvaluator("importance:", selectorSet);
@@ -67,7 +67,7 @@ public class TodoEvaluatorTest {
         selectorSet.add(new ProjectSelector());
         selectorSet.add(new ContextSelector());
 
-        MoscowExt moscowExt = new MoscowExt();
+        MoscowTodoTxtExt moscowExt = new MoscowTodoTxtExt();
         MoscowMapper moscowMapper = new MoscowMapper(moscowExt);
         selectorSet.add(new MoscowSelector(moscowMapper, moscowExt));
         TodoEvaluator todoEvaluator = new TodoEvaluator("moscow", selectorSet);

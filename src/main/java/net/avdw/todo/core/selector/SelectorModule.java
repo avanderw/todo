@@ -2,7 +2,7 @@ package net.avdw.todo.core.selector;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
-import net.avdw.todo.extension.PluginLoader;
+import net.avdw.todo.extension.SelectorLoader;
 
 public class SelectorModule extends AbstractModule {
     @Override
@@ -10,7 +10,7 @@ public class SelectorModule extends AbstractModule {
         Multibinder<Selector> selectorSet = Multibinder.newSetBinder(binder(), Selector.class);
         selectorSet.addBinding().to(ContextSelector.class);
         selectorSet.addBinding().to(ProjectSelector.class);
-        PluginLoader pluginLoader = new PluginLoader();
+        SelectorLoader pluginLoader = new SelectorLoader();
         pluginLoader.getSelectorSet().forEach(selector -> selectorSet.addBinding().to(selector.getClass()));
     }
 }

@@ -7,10 +7,10 @@ import net.avdw.todo.repository.AbstractSpecification;
 
 @Singleton
 public class HasMoscow extends AbstractSpecification<Integer, Todo> {
-    private final MoscowExt moscowExt;
+    private final MoscowTodoTxtExt moscowExt;
 
     @Inject
-    HasMoscow(final MoscowExt moscowExt) {
+    HasMoscow(final MoscowTodoTxtExt moscowExt) {
         this.moscowExt = moscowExt;
     }
 

@@ -1,4 +1,4 @@
-package net.avdw.todo.extension.plan;
+package net.avdw.todo.extension.moscow;
 
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.extension.TodoTxtExt;
@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class PlanExt implements TodoTxtExt<String> {
+public class MoscowTodoTxtExt implements TodoTxtExt<String> {
     private final List<String> supportedExtList = new ArrayList<>();
 
-    PlanExt() {
-        supportedExtList.add("plan");
+    public MoscowTodoTxtExt() {
+        supportedExtList.add("moscow");
     }
 
     @Override

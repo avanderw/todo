@@ -7,10 +7,10 @@ import net.avdw.todo.domain.Todo;
 @Singleton
 public class MoscowMapper {
 
-    private final MoscowExt moscowExt;
+    private final MoscowTodoTxtExt moscowExt;
 
     @Inject
-    public MoscowMapper(final MoscowExt moscowExt) {
+    public MoscowMapper(final MoscowTodoTxtExt moscowExt) {
         this.moscowExt = moscowExt;
     }
 

@@ -8,11 +8,11 @@ import java.util.Locale;
 import java.util.function.Function;
 
 public class MoscowGroup implements Group<Todo, String> {
-    private final MoscowExt moscowExt;
+    private final MoscowTodoTxtExt moscowExt;
     private final MoscowMapper moscowMapper;
 
     @Inject
-    public MoscowGroup(final MoscowMapper moscowMapper, final MoscowExt moscowExt) {
+    public MoscowGroup(final MoscowMapper moscowMapper, final MoscowTodoTxtExt moscowExt) {
         this.moscowMapper = moscowMapper;
         this.moscowExt = moscowExt;
     }

@@ -69,6 +69,11 @@ public class PlanCliTest {
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
+    public void testOrderBy() {
+        cliTester.execute("ls --order-by plan").success();
+    }
+
+    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testHelp() {
         cliTester.execute("plan --help").success();
     }

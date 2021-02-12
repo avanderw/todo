@@ -27,7 +27,7 @@ public class PlanCli implements Runnable {
     @Inject private HasPlan hasPlan;
     @Mixin private IndexFilterMixin indexSpecificationMixin;
     @Inject private PlanCleaner planCleaner;
-    @Inject private PlanExt planExt;
+    @Inject private PlanTodoTxtExt planExt;
     @Inject private PlanMapper planMapper;
     @Option(names = "--assign", descriptionKey = "plan.type.desc")
     private PlanType planType;

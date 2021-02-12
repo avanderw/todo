@@ -11,15 +11,13 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 public class MoscowSelector implements Selector {
-    private final MoscowExt moscowExt;
+    private final MoscowTodoTxtExt moscowTodoTxtExt;
     private final MoscowMapper moscowMapper;
-    private final Set<Pattern> patternSet = new HashSet<>();
 
     @Inject
-    public MoscowSelector(final MoscowMapper moscowMapper, final MoscowExt moscowExt) {
+    public MoscowSelector(final MoscowMapper moscowMapper, final MoscowTodoTxtExt moscowTodoTxtExt) {
         this.moscowMapper = moscowMapper;
-        this.moscowExt = moscowExt;
-        moscowExt.getSupportedExtList().forEach(ext -> patternSet.add(Pattern.compile(ext)));
+        this.moscowTodoTxtExt = moscowTodoTxtExt;
     }
 
     @Override
@@ -29,7 +27,7 @@ public class MoscowSelector implements Selector {
 
     @Override
     public boolean isSatisfiedBy(final String type) {
-        return patternSet.stream().anyMatch(pattern -> pattern.matcher(type).find());
+        return moscowTodoTxtExt.getSupportedExtList().stream().anyMatch(type::contains);
     }
 
     @Override
@@ -39,7 +37,7 @@ public class MoscowSelector implements Selector {
 
     @Override
     public String replaceRegex() {
-        return String.join("|", moscowExt.getSupportedExtList());
+        return String.join("|", moscowTodoTxtExt.getSupportedExtList());
     }
 
     @Override
