@@ -65,11 +65,16 @@ public class RecurDonePostAddon implements PostAddon {
         if (!recurItems.isEmpty()) {
             out.println("Adding recurring item(s):");
         }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        todoRepository.setAutoCommit(false);
         recurItems.forEach(item->{
+            item = item.replaceAll("x \\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d\\d\\d-\\d\\d-\\d\\d", simpleDateFormat.format(new Date()));
             Todo todo = new Todo(todoRepository.size(), item);
             todoRepository.add(todo);
             out.println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
                     String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), todoStyler.style(todo).replaceAll("\"", "\\\\\""))));
         });
+        todoRepository.commit();
+        todoRepository.setAutoCommit(true);
     }
 }

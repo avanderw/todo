@@ -91,7 +91,7 @@ Plot value vs. effort into 4 quadrants.
 - High value , high effort (Big new features)
 - Low value, low effort (Time sinks)
 
-## Plugin, Addon, Mixin, Extension modules
+## ~~Plugin, Addon, Mixin, Extension modules~~
 - Plugin is a command
 - Addon is a pre/post execution on a command
 - Mixin is used for display modifications
