@@ -122,6 +122,24 @@ public class DoneCliTest {
                 .contains("Adding recurring");
     }
 
+    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
+    public void testRecurDoneAskPostAddon() {
+        InputStream systemIn = System.in;
+        ByteArrayInputStream testIn = new ByteArrayInputStream("2021-12-12".getBytes());
+        System.setIn(testIn);
+        cliTester.execute("do --and rec:ask").success();
+        System.setIn(systemIn);
+    }
+
+    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
+    public void testRecurDoneAskPostAddonRetry() {
+        InputStream systemIn = System.in;
+        ByteArrayInputStream testIn = new ByteArrayInputStream("12-12-2021 2021-12-12".getBytes());
+        System.setIn(testIn);
+        cliTester.execute("do --and rec:ask").success().notContains("due:00");
+        System.setIn(systemIn);
+    }
+
     @Test(timeout =  TestConstant.PERFORMANCE_TIMEOUT)
     public void testBooleanFilter() {
         cliTester.execute("do --and urgency:2").success().count("\\[", 7);

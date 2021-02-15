@@ -22,6 +22,19 @@ public class RecurDuration {
         };
     }
 
+    private int getRecurValue() {
+        String value = extValue.toLowerCase(Locale.ENGLISH).replace("+", "");
+        value = value.replaceAll("y", "");
+        value = value.replaceAll("m", "");
+        value = value.replaceAll("w", "");
+        value = value.replaceAll("d", "");
+        return Integer.parseInt(value);
+    }
+
+    public boolean isAsk() {
+        return extValue.equals("ask");
+    }
+
     public boolean isStrict() {
         return extValue.startsWith("+");
     }
@@ -31,14 +44,5 @@ public class RecurDuration {
         calendar.setTime(date);
         calendar.add(getCalendarType(), getRecurValue());
         return calendar.getTime();
-    }
-
-    private int getRecurValue() {
-        String value = extValue.toLowerCase(Locale.ENGLISH).replace("+", "");
-        value = value.replaceAll("y", "");
-        value = value.replaceAll("m", "");
-        value = value.replaceAll("w", "");
-        value = value.replaceAll("d", "");
-        return Integer.parseInt(value);
     }
 }

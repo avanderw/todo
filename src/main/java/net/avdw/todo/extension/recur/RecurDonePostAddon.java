@@ -3,34 +3,39 @@ package net.avdw.todo.extension.recur;
 import com.google.inject.Inject;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
-import net.avdw.todo.core.DoneCli;
 import net.avdw.todo.core.style.TodoStyler;
 import net.avdw.todo.domain.Todo;
+import net.avdw.todo.domain.TodoTextCleaner;
 import net.avdw.todo.extension.PostAddon;
 import net.avdw.todo.extension.due.DueTodoTxtExt;
 import net.avdw.todo.repository.Repository;
 import org.tinylog.Logger;
 
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class RecurDonePostAddon implements PostAddon {
-    private final Repository<Integer, Todo> todoRepository;
-    private final RecurTodoTxtExt recurTodoTxtExt;
     private final DueTodoTxtExt dueTodoTxtExt;
+    private final RecurTodoTxtExt recurTodoTxtExt;
     private final TemplatedResource templatedResource;
+    private final Repository<Integer, Todo> todoRepository;
     private final TodoStyler todoStyler;
+    private final TodoTextCleaner todoTextCleaner;
 
     @Inject
-    public RecurDonePostAddon(final Repository<Integer, Todo> todoRepository, final RecurTodoTxtExt recurTodoTxtExt, final DueTodoTxtExt dueTodoTxtExt, final TemplatedResource templatedResource, final TodoStyler todoStyler) {
+    public RecurDonePostAddon(final Repository<Integer, Todo> todoRepository, final RecurTodoTxtExt recurTodoTxtExt, final DueTodoTxtExt dueTodoTxtExt, final TemplatedResource templatedResource, final TodoStyler todoStyler, final TodoTextCleaner todoTextCleaner) {
         this.todoRepository = todoRepository;
         this.recurTodoTxtExt = recurTodoTxtExt;
         this.dueTodoTxtExt = dueTodoTxtExt;
         this.templatedResource = templatedResource;
         this.todoStyler = todoStyler;
+        this.todoTextCleaner = todoTextCleaner;
     }
 
     @Override
@@ -41,20 +46,39 @@ public class RecurDonePostAddon implements PostAddon {
                 .map(todo -> {
                     RecurDuration recurDuration = recurTodoTxtExt.getValue(todo).orElseThrow();
 
-                    Date dueDate;
-                    if (recurDuration.isStrict()) {
-                        if (dueTodoTxtExt.isSatisfiedBy(todo)) {
-                            dueDate = dueTodoTxtExt.getValue(todo).orElseThrow();
-                        } else {
-                            Logger.warn("A strict recurring todo does not have a due date\n" +
-                                    "{}\n" +
-                                    "Using done date instead", todo);
-                            dueDate = todo.getDoneDate();
+                    Date dueDate = null;
+                    if (recurDuration.isAsk()) {
+                        boolean retry = true;
+                        out.printf("  When is '%s' due?%n  ", todoTextCleaner.clean(todo));
+                        Scanner scanner = new Scanner(System.in);
+                        while (retry) {
+                            String input = scanner.next();
+                            try {
+                                if (Pattern.matches("\\d\\d\\d\\d-\\d\\d-\\d\\d", input)) {
+                                    dueDate = dateFormat.parse(input);
+                                    retry = false;
+                                } else {
+                                    throw new UnsupportedOperationException();
+                                }
+                            } catch (ParseException | UnsupportedOperationException e) {
+                                out.printf("Incorrect date format. Try again using format '%s'%n", dateFormat.toPattern());
+                            }
                         }
                     } else {
-                        dueDate = todo.getDoneDate();
+                        if (recurDuration.isStrict()) {
+                            if (dueTodoTxtExt.isSatisfiedBy(todo)) {
+                                dueDate = dueTodoTxtExt.getValue(todo).orElseThrow();
+                            } else {
+                                Logger.warn("A strict recurring todo does not have a due date\n" +
+                                        "{}\n" +
+                                        "Using done date instead", todo);
+                                dueDate = todo.getDoneDate();
+                            }
+                        } else {
+                            dueDate = todo.getDoneDate();
+                        }
+                        dueDate = recurDuration.recurFrom(dueDate);
                     }
-                    dueDate = recurDuration.recurFrom(dueDate);
 
                     String txt = todo.getText().replaceAll("due:\\d\\d\\d\\d-\\d\\d-\\d\\d", "");
                     txt = txt.replaceAll("\\s\\s", " ");
@@ -67,7 +91,7 @@ public class RecurDonePostAddon implements PostAddon {
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         todoRepository.setAutoCommit(false);
-        recurItems.forEach(item->{
+        recurItems.forEach(item -> {
             item = item.replaceAll("x \\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d\\d\\d-\\d\\d-\\d\\d", simpleDateFormat.format(new Date()));
             Todo todo = new Todo(todoRepository.size(), item);
             todoRepository.add(todo);

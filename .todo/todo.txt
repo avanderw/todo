@@ -1,5 +1,5 @@
 x 2021-02-15 2020-12-15 @Add limiting ls command with '--top' option moscow:must plan:tactical
-(B) 2021-02-15 @Change recur to handle 'rec:ask' field which will ask for the recurring date
+x 2021-02-15 2021-02-15 @Change recur to handle 'rec:ask' field which will ask for the recurring date
 (C) 2021-02-15 @Change replace to list what items were affected
 x 2021-02-15 2021-02-15 @Change browse to handle --directory option link:4.1
 x 2021-02-15 2021-02-15 @Remove explore command link:4
