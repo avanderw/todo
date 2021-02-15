@@ -40,6 +40,8 @@ public class BrowseCli implements Runnable {
     private boolean isRemoved = false;
     @Option(names = "--todo")
     private boolean isTodo = false;
+    @Option(names = {"--dir", "--directory"})
+    private boolean isDirectory = false;
     @Mixin private RepositoryMixin repositoryMixin;
     @Spec private CommandSpec spec;
     @Inject private TemplatedResource templatedResource;
@@ -51,6 +53,8 @@ public class BrowseCli implements Runnable {
         List<URI> uriList = new ArrayList<>();
         if (isTodo) {
             uriList.add(todoPath.toUri());
+        } else if (isDirectory) {
+            uriList.add(todoPath.getParent().toUri());
         } else if (isDone) {
             uriList.add(todoPath.getParent().resolve("done.txt").toUri());
         } else if (isRemoved) {
