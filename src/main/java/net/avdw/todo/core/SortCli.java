@@ -60,6 +60,6 @@ public class SortCli implements Runnable {
                 .collect(Collectors.toList()));
         sortedRepository.commit();
 
-        spec.commandLine().getOut().println(todoListView.render(sortedRepository.findAll(any), sortedRepository));
+        spec.commandLine().getOut().println(todoListView.render(sortedRepository.findAll(any), sortedRepository, 0));
     }
 }

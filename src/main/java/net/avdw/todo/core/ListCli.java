@@ -53,8 +53,10 @@ public class ListCli implements Runnable {
     @Inject private TemplatedResource templatedResource;
     @Inject private TodoListView todoListView;
 
-    @Option(names="--projects", description = "List projects for filter")
+    @Option(names="--projects", description = "List projects for the filters.")
     private boolean isProjectRender = false;
+    @Option(names="--top", description = "Limit the list to this value, 0=all.")
+    private int top = 0;
 
     private void printList(final List<Todo> list, final Repository<Integer, Todo> repository) {
         if (isProjectRender) {
@@ -69,7 +71,7 @@ public class ListCli implements Runnable {
                 spec.commandLine().getOut().println(projects);
             }
         } else {
-            spec.commandLine().getOut().println(todoListView.render(list, repository));
+            spec.commandLine().getOut().println(todoListView.render(list, repository, top));
         }
     }
 

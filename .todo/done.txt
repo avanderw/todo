@@ -13,7 +13,7 @@ x 2019-07-23 2019-07-23 @Fix x of y tasks shown bug on +list
 x 2019-07-24 2019-07-23 @Add @Add +add
 x 2019-07-24 2019-07-23 @Add done +done
 x 2019-07-24 2019-07-24 @Enhance +list of projects and contexts to only show when requested
-x 2019-07-24 2019-07-24 Remove priority when task is +done
+x 2019-07-24 2019-07-24 @Remove priority when task is +done
 x 2019-07-25 2019-07-09 @Add admin +sort
 x 2019-07-25 2019-07-23 @Add remove +remove
 x 2019-07-25 2019-07-23 @Add versioning command support
@@ -109,4 +109,4 @@ x 2020-12-15 2020-11-05 @Fix size creating spaces at the front of sized todos
 x 2021-01-19 2020-11-24 @Add a global view to show links to all repositories started:2021-01-19
 x 2021-01-20 2020-11-05 @Add the ability to list only projects so that it is easier to collapse and densify them moscow:must plan:tactical started:2021-01-20
 x 2021-01-20 2020-11-05 @Change replace to update in done.txt as well moscow:must plan:tactical started:2021-01-20
-x 2021-01-20 2021-01-20 Change moscow to inform on what the numeric values are for the enums started:2021-01-20
+x 2021-01-20 2021-01-20 @Change moscow to inform on what the numeric values are for the enums started:2021-01-20

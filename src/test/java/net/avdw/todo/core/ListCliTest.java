@@ -254,6 +254,11 @@ public class ListCliTest {
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
+    public void testTop() {
+        cliTester.execute("ls --top 5").success().count("\\[  \\d]", 5);
+    }
+
+    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testRemoved() {
         cliTester.execute("archive").success();
         cliTester.execute("ls --incl-removed").success().count("\\[", 86);
