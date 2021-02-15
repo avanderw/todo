@@ -1,4 +1,4 @@
-package net.avdw.todo.extension.link;
+package net.avdw.todo.extension.dependency;
 
 import com.google.inject.Inject;
 import net.avdw.todo.TemplatedResource;
@@ -14,10 +14,10 @@ import picocli.CommandLine.Spec;
 
 import java.util.Optional;
 
-@Command(name = "link", resourceBundle = "messages", description = "${bundle:link.desc}", mixinStandardHelpOptions = true)
-public class LinkCli implements Runnable {
+@Command(name = "dependency", resourceBundle = "messages", description = "${bundle:link.desc}", mixinStandardHelpOptions = true)
+public class DependencyCli implements Runnable {
     @Mixin private IndexFilterMixin childrenMixin;
-    @Inject private LinkExt linkExt;
+    @Inject private DependencyExt linkExt;
     @Parameters(arity = "1", index = "1", descriptionKey = "link.parent.desc") private Integer parentIdx;
     @Spec private CommandSpec spec;
     @Inject private Repository<Integer, Todo> todoRepository;
@@ -43,11 +43,11 @@ public class LinkCli implements Runnable {
             parentLink = linkExt.getValue(parentTodo).orElseThrow();
             updatedParentTodo = parentTodo;
         }
-        spec.commandLine().getOut().println(templatedResource.populateKey(LinkKey.PARENT_HEADER));
+        spec.commandLine().getOut().println(templatedResource.populateKey(DependencyKey.PARENT_HEADER));
         todoRepository.update(updatedParentTodo);
         spec.commandLine().getOut().println(todoView.render(updatedParentTodo));
 
-        spec.commandLine().getOut().println(templatedResource.populateKey(LinkKey.CHILDREN_HEADER));
+        spec.commandLine().getOut().println(templatedResource.populateKey(DependencyKey.CHILDREN_HEADER));
         for (Todo childTodo : todoRepository.findAll(childrenMixin)) {
             int maxLink = todoRepository.findAll(linkExt).stream()
                     .map(linkExt::getValue)

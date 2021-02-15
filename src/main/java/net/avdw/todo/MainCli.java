@@ -5,7 +5,7 @@ import net.avdw.todo.core.*;
 import net.avdw.todo.extension.browse.BrowseCli;
 import net.avdw.todo.extension.changelog.ChangelogCli;
 import net.avdw.todo.extension.edit.EditCli;
-import net.avdw.todo.extension.link.LinkCli;
+import net.avdw.todo.extension.dependency.DependencyCli;
 import net.avdw.todo.extension.moscow.MoscowCli;
 import net.avdw.todo.extension.plan.PlanCli;
 import net.avdw.todo.extension.replace.ReplaceCli;
@@ -42,7 +42,7 @@ import java.nio.file.Path;
                 BrowseCli.class,
                 StartCli.class,
                 ReplaceCli.class,
-                LinkCli.class,
+                DependencyCli.class,
                 MoscowCli.class,
                 SizeCli.class,
                 PlanCli.class

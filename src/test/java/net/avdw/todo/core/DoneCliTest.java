@@ -79,7 +79,7 @@ public class DoneCliTest {
         InputStream systemIn = System.in;
         ByteArrayInputStream testIn = new ByteArrayInputStream("y".getBytes());
         System.setIn(testIn);
-        cliTester.execute("do").success().count(String.format("x %s", today), 83).notContains(String.format("x %s x 2020-10-21", today));
+        cliTester.execute("do").success().count(String.format("x %s", today), 80).notContains(String.format("x %s x 2020-10-21", today));
         System.setIn(systemIn);
     }
 

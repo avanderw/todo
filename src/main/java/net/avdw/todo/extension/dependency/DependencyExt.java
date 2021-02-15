@@ -1,4 +1,4 @@
-package net.avdw.todo.extension.link;
+package net.avdw.todo.extension.dependency;
 
 import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class LinkExt extends AbstractSpecification<Integer, Todo> implements TodoTxtExt<String> {
+public class DependencyExt extends AbstractSpecification<Integer, Todo> implements TodoTxtExt<String> {
     private final List<String> supportedExtList = new ArrayList<>();
 
     @Inject
-    LinkExt() {
+    DependencyExt() {
         supportedExtList.add("link");
     }
 

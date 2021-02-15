@@ -45,37 +45,37 @@ public class LinkCliTest {
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testAsync() {
-        cliTester.execute("link 12 15").success();
-        cliTester.execute("link 13 15").success().contains("link:1.2");
+        cliTester.execute("dependency 12 15").success();
+        cliTester.execute("dependency 13 15").success().contains("link:1.2");
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testBasic() {
-        cliTester.execute("link 12 15").success()
+        cliTester.execute("dependency 12 15").success()
                 .contains("link:1").contains("link:1.1");
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testDeep() {
-        cliTester.execute("link 12,13 15").success();
-        cliTester.execute("link 14 13").success().contains("link:1.2.1");
+        cliTester.execute("dependency 12,13 15").success();
+        cliTester.execute("dependency 14 13").success().contains("link:1.2.1");
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testHelp() {
-        cliTester.execute("link --help").success();
+        cliTester.execute("dependency --help").success();
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testMulti() {
-        cliTester.execute("link 12,13 15").success()
+        cliTester.execute("dependency 12,13 15").success()
                 .contains("link:1").contains("link:1.1").contains("link:1.2");
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testReassign() {
-        cliTester.execute("link 12,13 15").success().contains("link:1.1");
-        cliTester.execute("link 12 16").success()
+        cliTester.execute("dependency 12,13 15").success().contains("link:1.1");
+        cliTester.execute("dependency 12 16").success()
                 .contains("link:2.1")
                 .notContains("link:1.1");
     }

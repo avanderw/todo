@@ -2,8 +2,8 @@ x 2021-02-15 2020-12-15 @Add limiting ls command with '--top' option moscow:must
 (B) 2021-02-15 @Change recur to handle 'rec:ask' field which will ask for the recurring date
 (C) 2021-02-15 @Change replace to list what items were affected
 x 2021-02-15 2021-02-15 @Change browse to handle --directory option link:4.1
-(E) 2021-02-15 @Remove explore command link:4
-(F) 2021-02-15 @Change link command to dependency,dep command to reduce confusion
+x 2021-02-15 2021-02-15 @Remove explore command link:4
+x 2021-02-15 2021-02-15 @Change link command to dependency,dep command to reduce confusion
 (K) 2020-10-16 @Add notes to todos https://github.com/mgarrido/todo.txt-cli/tree/note/todo.actions.d plan:strategic moscow:should size:5
 (K) 2021-01-20 @Add an eval command to show the value of a todo given the eval function
 (K) 2021-01-20 @Add view to track whether the backlog is increasing or decreasing over a period link:3.1
