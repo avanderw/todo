@@ -79,7 +79,7 @@ public class DoneCliTest {
         InputStream systemIn = System.in;
         ByteArrayInputStream testIn = new ByteArrayInputStream("y".getBytes());
         System.setIn(testIn);
-        cliTester.execute("do").success().count(String.format("x %s", today), 80).notContains(String.format("x %s x 2020-10-21", today));
+        cliTester.execute("do").count(String.format("x %s", today), 80).notContains(String.format("x %s x 2020-10-21", today));
         System.setIn(systemIn);
     }
 
@@ -117,7 +117,7 @@ public class DoneCliTest {
 
     @Test(timeout =  TestConstant.PERFORMANCE_TIMEOUT)
     public void testRecurDonePostAddon() {
-        cliTester.execute("do --and rec: --or recur:").success()
+        cliTester.execute("do --and rec: --or recur: --not rec:ask").success()
                 .contains("due:2019-08-22")
                 .contains("Adding recurring");
     }

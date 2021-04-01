@@ -63,27 +63,17 @@ public class StatsCliTest {
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
-    public void testBeforeAfterChange() {
-        cliTester.execute("stats --changed-before 2019-12-31 --changed-after 2019-12-03").success();
-    }
-
-    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
-    public void testBeforeChange() {
-        cliTester.execute("stats --changed-before 2019-12-31").success();
-    }
-
-    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testBeforeDone() {
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
         gregorianCalendar.setTime(new Date());
         gregorianCalendar.add(Calendar.DAY_OF_MONTH, 1);
         String now = SIMPLE_DATE_FORMAT.format(gregorianCalendar.getTime());
-        cliTester.execute(String.format("stats --done-before %s", now)).success().notContains("221 days");
+        cliTester.execute(String.format("stats --before done:%s", now)).success().notContains("221 days");
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testBeforeTag() {
-        cliTester.execute("stats --tag-before started:2020-01-01").success();
+        cliTester.execute("stats --before started:2020-01-01").success();
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)

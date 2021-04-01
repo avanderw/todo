@@ -49,13 +49,9 @@ public class ListCliTest {
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testAfterAdd() {
-        cliTester.execute("ls --added-after 2020-03-10").success().count("\\[", 17);
+        cliTester.execute("ls --after added:2020-03-10").success().count("\\[", 17);
     }
 
-    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
-    public void testAfterChange() {
-        cliTester.execute("ls --changed-after 2019-12-31").success().count("\\[", 51);
-    }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testAfterDone() {
@@ -63,20 +59,20 @@ public class ListCliTest {
         gregorianCalendar.setTime(new Date());
         gregorianCalendar.add(Calendar.DAY_OF_MONTH, -1);
         String now = SIMPLE_DATE_FORMAT.format(gregorianCalendar.getTime());
-        cliTester.execute(String.format("ls --done-after %s", now)).success().count("\\[", 0);
+        cliTester.execute(String.format("ls --after done:%s", now)).success().count("\\[", 0);
         cliTester.execute("do 5").success();
-        cliTester.execute(String.format("ls --done-after %s", now)).success().count("\\[", 2);
+        cliTester.execute(String.format("ls --after done:%s", now)).success().count("\\[", 2);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testAfterTag() {
-        cliTester.execute("ls --tag-after started:2020-03-01").success().count("\\[", 14);
+        cliTester.execute("ls --after started:2020-03-01").success().count("\\[", 14);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testAfterTagFailure() {
-        cliTester.execute("ls --after-tag start:20200310").failure();
-        cliTester.execute("ls --after-tag start:").failure();
+        cliTester.execute("ls --after start:20200310").failure();
+        cliTester.execute("ls --after start:").failure();
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
@@ -103,12 +99,7 @@ public class ListCliTest {
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testBeforeAdd() {
-        cliTester.execute("ls --added-before 2019-03-01").success().count("\\[", 7);
-    }
-
-    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
-    public void testBeforeAfterChange() {
-        cliTester.execute("ls --changed-before 2019-12-31 --changed-after 2019-12-03").success().count("\\[", 4);
+        cliTester.execute("ls --before added:2019-03-01").success().count("\\[", 7);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
@@ -117,30 +108,25 @@ public class ListCliTest {
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
-    public void testBeforeChange() {
-        cliTester.execute("ls --changed-before 2019-12-31").success().count("\\[", 40);
-    }
-
-    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testBeforeDone() {
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
         gregorianCalendar.setTime(new Date());
         gregorianCalendar.add(Calendar.DAY_OF_MONTH, 1);
         String now = SIMPLE_DATE_FORMAT.format(gregorianCalendar.getTime());
-        cliTester.execute(String.format("ls --done-before %s", now)).success().count("\\[", 6);
+        cliTester.execute(String.format("ls --before done:%s", now)).success().count("\\[", 6);
         cliTester.execute("do 3").success();
-        cliTester.execute(String.format("ls --done-before %s", now)).success().count("\\[", 7);
+        cliTester.execute(String.format("ls --before done:%s", now)).success().count("\\[", 7);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testBeforeTag() {
-        cliTester.execute("ls --tag-before started:2020-01-01").success().count("\\[", 6);
+        cliTester.execute("ls --before started:2020-01-01").success().count("\\[", 6);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testBeforeTagFailure() {
-        cliTester.execute("ls --before-tag start:20200310").failure();
-        cliTester.execute("ls --before-tag start:").failure();
+        cliTester.execute("ls --before start:20200310").failure();
+        cliTester.execute("ls --before start:").failure();
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)

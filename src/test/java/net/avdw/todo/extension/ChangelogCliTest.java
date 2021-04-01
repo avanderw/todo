@@ -46,12 +46,7 @@ public class ChangelogCliTest {
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testAfterAdd() {
-        cliTester.execute("changelog --added-after 2020-03-10").success().count("\\[", 17);
-    }
-
-    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
-    public void testAfterChange() {
-        cliTester.execute("changelog --changed-after 2019-12-31").success().count("\\[", 70);
+        cliTester.execute("changelog --after added:2020-03-10").success().count("\\[", 17);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
@@ -60,14 +55,14 @@ public class ChangelogCliTest {
         gregorianCalendar.setTime(new Date());
         gregorianCalendar.add(Calendar.DAY_OF_MONTH, -1);
         String now = SIMPLE_DATE_FORMAT.format(gregorianCalendar.getTime());
-        cliTester.execute(String.format("changelog --done-after %s", now)).success().count("\\[", 0);
+        cliTester.execute(String.format("changelog --after done:%s", now)).success().count("\\[", 0);
         cliTester.execute("do 5").success();
-        cliTester.execute(String.format("changelog --done-after %s", now)).success().count("\\[", 2);
+        cliTester.execute(String.format("changelog --after done:%s", now)).success().count("\\[", 2);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testAfterTag() {
-        cliTester.execute("changelog --tag-after started:2020-03-01").success().count("\\[", 23);
+        cliTester.execute("changelog --after started:2020-03-01").success().count("\\[", 23);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
@@ -85,23 +80,12 @@ public class ChangelogCliTest {
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testBeforeAdd() {
-        cliTester.execute("changelog --added-before 2019-03-01").success().count("\\[", 8);
+        cliTester.execute("changelog --before added:2019-03-01").success().count("\\[", 8);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testBeforeAfterAdd() {
-        cliTester.execute("changelog --added-before 2019-03-01 --added-after 2018-12-31").success().count("\\[", 2);
-    }
-
-    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
-    public void testBeforeAfterChange() {
-        cliTester.execute("changelog --changed-before 2019-12-31 --changed-after 2019-12-03").success().count("\\[", 4);
-    }
-
-
-    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
-    public void testBeforeChange() {
-        cliTester.execute("changelog --changed-before 2019-12-31").success().count("\\[", 48);
+        cliTester.execute("changelog --before added:2019-03-01 --after added:2018-12-31").success().count("\\[", 2);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
@@ -110,14 +94,14 @@ public class ChangelogCliTest {
         gregorianCalendar.setTime(new Date());
         gregorianCalendar.add(Calendar.DAY_OF_MONTH, 1);
         String now = SIMPLE_DATE_FORMAT.format(gregorianCalendar.getTime());
-        cliTester.execute(String.format("changelog --done-before %s", now)).success().count("\\[", 6);
+        cliTester.execute(String.format("changelog --before done:%s", now)).success().count("\\[", 6);
         cliTester.execute("do 3").success();
-        cliTester.execute(String.format("changelog --done-before %s", now)).success().count("\\[", 8);
+        cliTester.execute(String.format("changelog --before done:%s", now)).success().count("\\[", 8);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testBeforeTag() {
-        cliTester.execute("changelog --tag-before started:2020-01-01").success().count("\\[", 10);
+        cliTester.execute("changelog --before started:2020-01-01").success().count("\\[", 10);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
