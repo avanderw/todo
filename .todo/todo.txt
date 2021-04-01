@@ -1,15 +1,11 @@
-x 2021-02-15 2020-12-15 @Add limiting ls command with '--top' option moscow:must plan:tactical
-x 2021-02-15 2021-02-15 @Change recur to handle 'rec:ask' field which will ask for the recurring date
 (C) 2021-02-15 @Change replace to list what items were affected
-x 2021-02-15 2021-02-15 @Change browse to handle --directory option link:4.1
-x 2021-02-15 2021-02-15 @Remove explore command link:4
-x 2021-02-15 2021-02-15 @Change link command to dependency,dep command to reduce confusion
-(K) 2020-10-16 @Add notes to todos https://github.com/mgarrido/todo.txt-cli/tree/note/todo.actions.d plan:strategic moscow:should size:5
-(K) 2021-01-20 @Add an eval command to show the value of a todo given the eval function
-(K) 2021-01-20 @Add view to track whether the backlog is increasing or decreasing over a period link:3.1
-(K) 2021-01-20 @Investigate a way to share a list with other participants
-(K) 2021-02-04 @Fix init not creating a local folder when the global folder exists
-(K) 2021-02-12 @Add feedback command to get feedback from individuals and or teams
+(I) 2020-10-16 @Add notes to todos https://github.com/mgarrido/todo.txt-cli/tree/note/todo.actions.d plan:strategic moscow:should size:5
+(I) 2021-01-20 @Add an eval command to show the value of a todo given the eval function
+(I) 2021-01-20 @Add view to track whether the backlog is increasing or decreasing over a period link:3.1
+(I) 2021-01-20 @Investigate a way to share a list with other participants
+(I) 2021-02-04 @Fix init not creating a local folder when the global folder exists
+(I) 2021-02-12 @Add feedback command to get feedback from individuals and or teams
+2021-02-15 Fix ls not displaying summary correctly when using '--top'
 2021-02-12 @Update 'todo do' to work with date filters
 2021-02-12 @Add suggestion for context where there is none e.g. Sofware (@Update, @Add, @Remove), Management (@Person, @Standup, @Planning), Location (@Home, @Work)
 2021-01-20 @Add view to track whether states are increasing or decreasing over a period link:3
@@ -40,4 +36,19 @@ x 2021-02-15 2021-02-15 @Change link command to dependency,dep command to reduce
 x 2021-02-12 2021-01-19 @Add plan numeric value comparator for sorting plan:tactical moscow:must
 x 2021-02-12 2021-02-12 @Add recurring functionality to done as a post-do addon
 x 2021-02-12 2021-02-12 @Update 'todo do' to work with boolean filters
-2021-02-15 Fix ls not displaying summary correctly when using '--top'
+x 2021-02-15 2020-12-15 @Add limiting ls command with '--top' option moscow:must plan:tactical
+x 2021-02-15 2021-02-15 @Change browse to handle --directory option link:4.1
+x 2021-02-15 2021-02-15 @Change link command to dependency,dep command to reduce confusion
+x 2021-02-15 2021-02-15 @Change recur to handle 'rec:ask' field which will ask for the recurring date
+x 2021-02-15 2021-02-15 @Remove explore command link:4
+(A) 2021-02-22 @Change 'edit' to include boolean operations
+2021-02-23 @Change date after to be inclusive of the from date
+2021-02-23 @Change date before to be inclusive of the to date
+2021-02-23 @Change date filter to collapse the options tag/done/added
+(B) 2021-02-23 @Fix the urgency color scheme in relation to moscow and due dates
+2021-02-23 @Fix priority collapse on the following scenario, A,B,C,I,I,I,I
+2021-02-23 @Add automatic plan calculation based off context words e.g. @Fix = operational
+2021-04-01 @Add natural date language, e.g. todo ls --before now
+2021-04-01 @Add --group-by functionality for date ranges, e.g. month:due
+2021-04-01 @Add relative date manipulation e.g. --before due:+1w
+2021-04-01 @Add automatic urgency calculation when there is a due date
