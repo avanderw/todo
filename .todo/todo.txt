@@ -1,12 +1,12 @@
 (I) 2021-01-20 @Add an eval command to show the value of a todo given the eval function
-2021-04-01 @Add relative date manipulation e.g. --before due:+1w
-2021-04-01 @Add natural date language, e.g. todo ls --before now
+(A) 2021-04-01 @Add relative date manipulation e.g. --before due:+1w
+(B) 2021-04-01 @Add natural date language, e.g. todo ls --before now
 2021-04-01 @Add automatic urgency calculation when there is a due date
 2021-04-01 @Add --group-by functionality for date ranges, e.g. month:due
 2021-02-23 @Fix priority collapse on the following scenario, A,B,C,I,I,I,I
 x 2021-04-01 2021-02-23 @Change date filter to collapse the options tag/done/added started:2021-04-01 started:2021-04-01
-2021-02-23 @Change date before to be inclusive of the to date
-2021-02-23 @Change date after to be inclusive of the from date
+x 2021-04-14 2021-02-23 @Change date before to be inclusive of the to date
+x 2021-04-14 2021-02-23 @Change date after to be inclusive of the from date
 2021-02-23 @Add automatic plan calculation based off context words e.g. @Fix = operational
 2021-02-22 @Change 'edit' to include boolean operations
 2021-02-15 Fix ls not displaying summary correctly when using '--top'

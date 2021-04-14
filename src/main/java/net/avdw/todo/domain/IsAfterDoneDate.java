@@ -2,6 +2,7 @@ package net.avdw.todo.domain;
 
 import net.avdw.todo.repository.AbstractSpecification;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class IsAfterDoneDate extends AbstractSpecification<Integer, Todo> {
@@ -14,7 +15,7 @@ public class IsAfterDoneDate extends AbstractSpecification<Integer, Todo> {
     @Override
     public boolean isSatisfiedBy(final Todo todo) {
         if (todo.isDone()) {
-            return todo.getDoneDate().after(date);
+            return todo.getDoneDate().toInstant().isAfter(date.toInstant().minus(1, ChronoUnit.DAYS));
         } else {
             return false;
         }

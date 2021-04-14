@@ -2,6 +2,7 @@ package net.avdw.todo.domain;
 
 import net.avdw.todo.repository.AbstractSpecification;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class IsAfterAddedDate extends AbstractSpecification<Integer, Todo> {
@@ -16,7 +17,7 @@ public class IsAfterAddedDate extends AbstractSpecification<Integer, Todo> {
         if (todo.getAdditionDate() == null) {
             return false;
         }
-        return todo.getAdditionDate().after(date);
+        return todo.getAdditionDate().toInstant().isAfter(date.toInstant().minus(1, ChronoUnit.DAYS));
     }
 
     @Override
