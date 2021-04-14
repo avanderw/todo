@@ -49,7 +49,7 @@ public class ListCliTest {
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testAfterAdd() {
-        cliTester.execute("ls --after added:2020-03-10").success().count("\\[", 17);
+        cliTester.execute("ls --after added:2020-03-10").success().count("\\[", 24);
     }
 
 
@@ -66,7 +66,7 @@ public class ListCliTest {
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testAfterTag() {
-        cliTester.execute("ls --after started:2020-03-01").success().count("\\[", 14);
+        cliTester.execute("ls --after started:2020-03-01").success().count("\\[", 15);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)

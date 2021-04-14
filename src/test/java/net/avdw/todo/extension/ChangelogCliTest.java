@@ -46,7 +46,7 @@ public class ChangelogCliTest {
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testAfterAdd() {
-        cliTester.execute("changelog --after added:2020-03-10").success().count("\\[", 17);
+        cliTester.execute("changelog --after added:2020-03-10").success().count("\\[", 25);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
@@ -62,7 +62,7 @@ public class ChangelogCliTest {
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testAfterTag() {
-        cliTester.execute("changelog --after started:2020-03-01").success().count("\\[", 23);
+        cliTester.execute("changelog --after started:2020-03-01").success().count("\\[", 25);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
