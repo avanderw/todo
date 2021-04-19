@@ -14,16 +14,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.text.SimpleDateFormat;
 
-import static net.avdw.todo.TodoCliTestBootstrapper.cleanup;
-import static net.avdw.todo.TodoCliTestBootstrapper.setup;
-import static net.avdw.todo.TodoCliTestBootstrapper.warmup;
+import static net.avdw.todo.TodoCliTestBootstrapper.*;
 
 public class FilterByDateTest {
     private static final Path todoPath = Paths.get("target/test-resources/date/.todo/todo.txt");
     private static CliTester cliTester;
-    private final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     @AfterClass
     public static void afterClass() {
@@ -55,6 +51,13 @@ public class FilterByDateTest {
         cliTester.execute("ls --after added:2019-10-07").success().contains("[ 41]");
         cliTester.execute("ls --after done:2020-10-21").success().contains("[  2]");
         cliTester.execute("ls --after started:2019-09-09").success().contains("[ 71]");
+    }
+
+    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
+    public void testSinceAfterAlias() {
+        cliTester.execute("ls --since added:2019-10-07").success().contains("[ 41]");
+        cliTester.execute("ls --since done:2020-10-21").success().contains("[  2]");
+        cliTester.execute("ls --since started:2019-09-09").success().contains("[ 71]");
     }
 
 }

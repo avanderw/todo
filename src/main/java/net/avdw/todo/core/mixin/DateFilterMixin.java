@@ -1,13 +1,7 @@
 package net.avdw.todo.core.mixin;
 
 import net.avdw.todo.core.RelativeDate;
-import net.avdw.todo.domain.IsAfterAddedDate;
-import net.avdw.todo.domain.IsAfterDoneDate;
-import net.avdw.todo.domain.IsAfterTagDate;
-import net.avdw.todo.domain.IsBeforeAddedDate;
-import net.avdw.todo.domain.IsBeforeDoneDate;
-import net.avdw.todo.domain.IsBeforeTagDate;
-import net.avdw.todo.domain.Todo;
+import net.avdw.todo.domain.*;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Specification;
 import picocli.CommandLine.Model.CommandSpec;
@@ -21,12 +15,13 @@ import java.util.Date;
 public class DateFilterMixin implements Filter<Integer, Todo> {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    @Option(names = "--after", description = "Inclusive (added)|(done)|(tag):<param>", paramLabel = "yyyy-mm-dd | +1w")
+    @Option(names = {"--after", "--since"}, description = "Inclusive (added)|(done)|(tag):<param>", paramLabel = "yyyy-mm-dd | +1w")
     private String after;
     @Option(names = "--before", description = "Exclusive (added)|(done)|(tag):<param>", paramLabel = "yyyy-mm-dd | +1w")
     private String before;
 
-    @Spec private CommandSpec spec;
+    @Spec
+    private CommandSpec spec;
 
     public Specification<Integer, Todo> specification() {
         Specification<Integer, Todo> specification = new Any<>();
@@ -40,7 +35,7 @@ public class DateFilterMixin implements Filter<Integer, Todo> {
                     date = simpleDateFormat.parse(before.substring(type.length() + 1));
                 } else if (before.matches("\\S+:[+-]\\d+[ymwd]")) {
                     type = before.substring(0, before.indexOf(":"));
-                    date = new RelativeDate(before.substring(type.length()+1));
+                    date = new RelativeDate(before.substring(type.length() + 1));
                 } else {
                     throw new UnsupportedOperationException();
                 }
@@ -64,7 +59,7 @@ public class DateFilterMixin implements Filter<Integer, Todo> {
                     date = simpleDateFormat.parse(after.substring(type.length() + 1));
                 } else if (after.matches("\\S+:[+-]\\d+[ymwd]")) {
                     type = after.substring(0, after.indexOf(":"));
-                    date = new RelativeDate(after.substring(type.length()+1));
+                    date = new RelativeDate(after.substring(type.length() + 1));
                 } else {
                     throw new UnsupportedOperationException();
                 }
