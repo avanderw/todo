@@ -11,11 +11,10 @@ import picocli.CommandLine.Spec;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Command(name = "init", resourceBundle = "messages", description = "${bundle:init}")
 public class InitCli implements Runnable {
-    @Inject
-    private Path todoPath;
     @Spec
     private CommandSpec spec;
     @Inject
@@ -26,6 +25,7 @@ public class InitCli implements Runnable {
     @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE",
             justification = "Google Guice does not allow for null injection (todoPath)")
     public void run() {
+        Path todoPath = Paths.get(".todo/todo.txt");
         if (Files.exists(todoPath)) {
             spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.INIT_FILE_EXISTS,
                     String.format("{path:'%s'}", todoPath.toUri())));

@@ -1,19 +1,15 @@
 (I) 2021-01-20 @Add an eval command to show the value of a todo given the eval function
-x 2021-04-14 2021-04-01 @Add relative date manipulation e.g. --before due:+1w
 (B) 2021-04-01 @Add natural date language, e.g. todo ls --before now
 2021-04-01 @Add automatic urgency calculation when there is a due date
 2021-04-01 @Add --group-by functionality for date ranges, e.g. month:due
 2021-02-23 @Fix priority collapse on the following scenario, A,B,C,I,I,I,I
-x 2021-04-01 2021-02-23 @Change date filter to collapse the options tag/done/added started:2021-04-01 started:2021-04-01
-x 2021-04-14 2021-02-23 @Change date before to be inclusive of the to date
-x 2021-04-14 2021-02-23 @Change date after to be inclusive of the from date
 2021-02-23 @Add automatic plan calculation based off context words e.g. @Fix = operational
 2021-02-22 @Change 'edit' to include boolean operations
-2021-02-15 Fix ls not displaying summary correctly when using '--top'
+2021-02-15 @Fix ls not displaying summary correctly when using '--top'
 2021-02-12 @Update 'todo do' to work with date filters
 2021-02-12 @Add suggestion for context where there is none e.g. Sofware (@Update, @Add, @Remove), Management (@Person, @Standup, @Planning), Location (@Home, @Work)
 2021-02-12 @Add feedback command to get feedback from individuals and or teams
-2021-02-04 @Fix init not creating a local folder when the global folder exists
+x 2021-04-19 2021-02-04 @Fix init not creating a local folder when the global folder exists
 2021-01-20 @Investigate a way to share a list with other participants
 2021-01-20 @Add view to track whether the backlog is increasing or decreasing over a period link:3.1
 2021-01-20 @Add view to track whether states are increasing or decreasing over a period link:3
