@@ -54,10 +54,28 @@ public class FilterByDateTest {
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
-    public void testSinceAfterAlias() {
+    public void testSinceAlias() {
         cliTester.execute("ls --since added:2019-10-07").success().contains("[ 41]");
         cliTester.execute("ls --since done:2020-10-21").success().contains("[  2]");
         cliTester.execute("ls --since started:2019-09-09").success().contains("[ 71]");
+    }
+
+    @Test(timeout=TestConstant.PERFORMANCE_TIMEOUT)
+    public void testNow() {
+        cliTester.execute("ls --before added:now").success();
+    }
+
+
+    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
+    public void testBefore() {
+        cliTester.execute("ls --before due:+60m").success().count("\\[", 4);
+        cliTester.execute("ls --before added:+1d").success();
+    }
+
+    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
+    public void testAfter() {
+        cliTester.execute("ls --after due:-50y").success().count("\\[", 4);
+        cliTester.execute("ls --after added:-5w").success();
     }
 
 }

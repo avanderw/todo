@@ -1,5 +1,5 @@
 (I) 2021-01-20 @Add an eval command to show the value of a todo given the eval function
-(B) 2021-04-01 @Add natural date language, e.g. todo ls --before now
+x 2021-04-19 2021-04-01 @Add natural date language, e.g. todo ls --before now
 2021-04-01 @Add automatic urgency calculation when there is a due date
 2021-04-01 @Add --group-by functionality for date ranges, e.g. month:due
 2021-02-23 @Fix priority collapse on the following scenario, A,B,C,I,I,I,I

@@ -36,6 +36,9 @@ public class DateFilterMixin implements Filter<Integer, Todo> {
                 } else if (before.matches("\\S+:[+-]\\d+[ymwd]")) {
                     type = before.substring(0, before.indexOf(":"));
                     date = new RelativeDate(before.substring(type.length() + 1));
+                } else if (before.matches("\\S+:now")) {
+                    type = before.substring(0, before.indexOf(":"));
+                    date = new Date();
                 } else {
                     throw new UnsupportedOperationException();
                 }
@@ -60,6 +63,9 @@ public class DateFilterMixin implements Filter<Integer, Todo> {
                 } else if (after.matches("\\S+:[+-]\\d+[ymwd]")) {
                     type = after.substring(0, after.indexOf(":"));
                     date = new RelativeDate(after.substring(type.length() + 1));
+                } else if (after.matches("\\S+:now")) {
+                    type = after.substring(0, after.indexOf(":"));
+                    date = new Date();
                 } else {
                     throw new UnsupportedOperationException();
                 }
