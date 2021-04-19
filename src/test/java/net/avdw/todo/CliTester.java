@@ -22,7 +22,8 @@ import static org.junit.Assert.*;
  * The reason is that I hate dependency management on my own classes.
  * I have no problem with duplication, it makes code more modular.
  *
- * @version 2020-10-07: Added javadoc
+ * @version 2021-04-19 Fixed command output in success & failure to always show
+ * 2020-10-07: Added javadoc
  */
 public class CliTester {
     private final Class<?> cliClass;
@@ -81,17 +82,18 @@ public class CliTester {
     }
 
     public CliTester failure() {
+        Logger.debug("COMMAND: {}", Arrays.toString(lastArgs));
+        if (!out.toString().isEmpty()) {
+            Logger.debug("OUTPUT: \n{}", out.toString());
+        }
+        if (!err.toString().isEmpty()) {
+            Logger.error("ERROR: \n{}", err.toString());
+        }
         assertFailure(exitCode);
         return this;
     }
 
     private void assertFailure(final int exitCode) {
-        if (!out.toString().isEmpty()) {
-            Logger.debug("Standard output: {}\n{}", Arrays.toString(lastArgs), out.toString());
-        }
-        if (!err.toString().isEmpty()) {
-            Logger.debug("Error output: {}\n{}", Arrays.toString(lastArgs), err.toString());
-        }
         assertNotEquals("MUST HAVE error output", "", err.toString().trim());
         assertEquals("MUST NOT HAVE standard output", "", out.toString().trim());
         assertNotEquals(0, exitCode);
@@ -109,17 +111,18 @@ public class CliTester {
     }
 
     public CliTester success() {
+        Logger.debug("COMMAND: {}", Arrays.toString(lastArgs));
+        if (!out.toString().isEmpty()) {
+            Logger.debug("OUTPUT: \n{}", out.toString());
+        }
+        if (!err.toString().isEmpty()) {
+            Logger.error("ERROR: \n{}", err.toString());
+        }
         assertSuccess(exitCode);
         return this;
     }
 
     private void assertSuccess(final int exitCode) {
-        if (!out.toString().isEmpty()) {
-            Logger.debug("Standard output: {}\n{}", Arrays.toString(lastArgs), out.toString());
-        }
-        if (!err.toString().isEmpty()) {
-            Logger.error("Error output: {}\n{}", Arrays.toString(lastArgs), err.toString());
-        }
         assertEquals("MUST NOT HAVE error output", "", err.toString().trim());
         assertNotEquals("MUST HAVE standard output", "", out.toString().trim());
         assertEquals(0, exitCode);

@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import net.avdw.todo.core.*;
 import net.avdw.todo.extension.browse.BrowseCli;
 import net.avdw.todo.extension.changelog.ChangelogCli;
+import net.avdw.todo.extension.comment.CommentCli;
 import net.avdw.todo.extension.edit.EditCli;
 import net.avdw.todo.extension.dependency.DependencyCli;
 import net.avdw.todo.extension.moscow.MoscowCli;
@@ -45,7 +46,8 @@ import java.nio.file.Path;
                 DependencyCli.class,
                 MoscowCli.class,
                 SizeCli.class,
-                PlanCli.class
+                PlanCli.class,
+                CommentCli.class
         })
 public class MainCli implements Runnable {
     @Spec

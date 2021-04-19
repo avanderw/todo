@@ -1,20 +1,19 @@
-(I) 2021-01-20 @Add an eval command to show the value of a todo given the eval function
-x 2021-04-19 2021-04-01 @Add natural date language, e.g. todo ls --before now
+(A) 2021-04-01 @Add --group-by functionality for date ranges, e.g. month:due
+(B) 2021-02-12 @Add suggestion for context where there is none e.g. Sofware (@Update, @Add, @Remove), Management (@Person, @Standup, @Planning), Location (@Home, @Work)
+(E) 2020-11-05 @Add a review function to find stale todos moscow:should plan:strategic
+(F) 2020-11-05 @Add a review function to confirm due dates matched with urgency moscow:must plan:strategic
+x 2021-04-19 2020-10-16 @Add notes to todos https://github.com/mgarrido/todo.txt-cli/tree/note/todo.actions.d plan:strategic moscow:should size:5
 2021-04-01 @Add automatic urgency calculation when there is a due date
-2021-04-01 @Add --group-by functionality for date ranges, e.g. month:due
 2021-02-23 @Fix priority collapse on the following scenario, A,B,C,I,I,I,I
 2021-02-23 @Add automatic plan calculation based off context words e.g. @Fix = operational
 2021-02-22 @Change 'edit' to include boolean operations
 2021-02-15 @Fix ls not displaying summary correctly when using '--top'
 2021-02-12 @Update 'todo do' to work with date filters
-2021-02-12 @Add suggestion for context where there is none e.g. Sofware (@Update, @Add, @Remove), Management (@Person, @Standup, @Planning), Location (@Home, @Work)
-2021-02-12 @Add feedback command to get feedback from individuals and or teams
-x 2021-04-19 2021-02-04 @Fix init not creating a local folder when the global folder exists
-2021-01-20 @Investigate a way to share a list with other participants
 2021-01-20 @Add view to track whether the backlog is increasing or decreasing over a period link:3.1
 2021-01-20 @Add view to track whether states are increasing or decreasing over a period link:3
 2021-01-20 @Add updating the global.path list when activating todo command
 2021-01-20 @Add burnup for project status which details metrics 'time' and 'size' completed,remaining,added,forecast
+2021-01-20 @Add an eval command to show the value of a todo given the eval function
 2021-01-19 @Change 'rm' to work with a filter or index moscow:should plan:tactical
 2021-01-13 @Change 'edit' to include an interactive mode, similar to 'moscow' moscow:could link:2.1 plan:strategic
 2020-12-15 @Add urgency helper with suggestions, similar to moscow or size moscow:could link:2 plan:strategic
@@ -22,19 +21,20 @@ x 2021-04-19 2021-02-04 @Fix init not creating a local folder when the global fo
 2020-11-24 @Change styling to search in the repository for overide styling config moscow:should plan:strategic
 2020-11-12 @Add a reported, investigating, resolving module for incident management moscow:could plan:strategic
 2020-11-05 @Add a typing function to categorise todos into FIX, EPIC, STORY, SPIKE moscow:should plan:strategic
-2020-11-05 @Add a review function to find stale todos moscow:should plan:strategic
-2020-11-05 @Add a review function to confirm due dates matched with urgency moscow:must plan:strategic
 2020-11-04 @Change the group-by funtionality to allow for specific groups moscow:must plan:strategic
 2020-10-29 @Change list module to show next-up for project size:8 plan:tactical moscow:should
 2020-10-29 @Add burndown.<daily|monthly|weekly> to show burndown chart size:8 plan:tactical moscow:should
 2020-10-29 @Add blocked/blocking extension with reasons size:5 plan:strategic moscow:could
 2020-10-27 @Add velocity module moscow:must link:1.1 plan:strategic +DoneEstimate size:5
 2020-10-27 @Add link cli to show linked todos plan:tactical moscow:could size:3
-2020-10-22 @Add NLP processing for dates https://www.ocpsoft.org/prettytime/nlp/ http://natty.joestelmach.com/doc.jsp plan:tactical moscow:should size:5
 2020-10-20 @Add due < 5 days, due < 0 days, in-progress > 10 days module https://screenful.com/tour/task-status-screen/ plan:strategic moscow:must size:5
 2020-10-16 Review what to do with these actions https://github.com/inkarkat/todo.txt-cli-ex/tree/master/actions plan:operational moscow:could size:2
 2020-10-16 @Add trending feeback for timings https://screenful.com/tour/timing-screen#:~:text=Lead%20time%20is%20the%20total,a%20task%20until%20its%20completion. plan:tactical moscow:must link:1.2 +DoneEstimate size:8
-2020-10-16 @Add notes to todos https://github.com/mgarrido/todo.txt-cli/tree/note/todo.actions.d plan:strategic moscow:should size:5
 2020-10-16 @Add estimated completion for groups with visible velocity module https://screenful.com/tour/milestone-burnup-chart plan:strategic moscow:must link:1 +DoneEstimate size:13
 2020-10-12 @Add the ability to prioritise on search criteria moscow:should plan:tactical size:5
 2020-10-01 @Add 'todo roadmap' [project, context, tag] which will list upcoming- due,target,cycle and past- due,target,cycle moscow:must size:5  plan:strategic
+r 2021-04-19 2020-10-22 @Add NLP processing for dates https://www.ocpsoft.org/prettytime/nlp/ http://natty.joestelmach.com/doc.jsp plan:tactical moscow:should size:5
+r 2021-04-19 2021-01-20 @Investigate a way to share a list with other participants
+r 2021-04-19 2021-02-12 @Add feedback command to get feedback from individuals and or teams
+x 2021-04-19 2021-02-04 @Fix init not creating a local folder when the global folder exists
+x 2021-04-19 2021-04-01 @Add natural date language, e.g. todo ls --before now

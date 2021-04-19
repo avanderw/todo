@@ -2,10 +2,9 @@ package net.avdw.todo;
 
 import lombok.SneakyThrows;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -18,17 +17,25 @@ public final class TodoCliTestBootstrapper {
 
     @SneakyThrows
     public static void cleanup(final Path todoPath) {
-        Files.deleteIfExists(todoPath);
-        Files.deleteIfExists(todoPath.getParent().resolve("todo.txt_" + todayDate));
-        Files.deleteIfExists(todoPath.getParent().resolve("done.txt"));
-        Files.deleteIfExists(todoPath.getParent().resolve("done.txt_" + todayDate));
-        Files.deleteIfExists(todoPath.getParent().resolve("parked.txt"));
-        Files.deleteIfExists(todoPath.getParent().resolve("parked.txt_" + todayDate));
-        Files.deleteIfExists(todoPath.getParent().resolve("removed.txt"));
-        Files.deleteIfExists(todoPath.getParent().resolve("removed.txt_" + todayDate));
-        Files.deleteIfExists(todoPath.getParent());
-        Files.deleteIfExists(todoPath.getParent().getParent());
+        Files.walkFileTree(todoPath.getParent().getParent(),
+                new SimpleFileVisitor<Path>() {
+                    @Override
+                    public FileVisitResult postVisitDirectory(
+                            Path dir, IOException exc) throws IOException {
+                        Files.delete(dir);
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult visitFile(
+                            Path file, BasicFileAttributes attrs)
+                            throws IOException {
+                        Files.delete(file);
+                        return FileVisitResult.CONTINUE;
+                    }
+                });
     }
+
 
     @SneakyThrows
     public static void setup(final Path todoPath) {
