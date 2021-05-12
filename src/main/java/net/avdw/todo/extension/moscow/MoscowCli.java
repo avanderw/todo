@@ -1,6 +1,5 @@
 package net.avdw.todo.extension.moscow;
 
-import com.google.inject.Inject;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.core.mixin.BooleanFilterMixin;
@@ -16,6 +15,8 @@ import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
 
+import javax.inject.Inject;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -25,17 +26,27 @@ import java.util.stream.Collectors;
 
 @Command(name = "moscow", resourceBundle = "messages", description = "${bundle:moscow.desc}", mixinStandardHelpOptions = true)
 public class MoscowCli implements Runnable {
-    @Inject private HasMoscow hasMoscow;
+    private final HasMoscow hasMoscow;
+    private final Repository<Integer, Todo> todoRepository;
+    private final TodoView todoView;
+    private final MoscowMapper moscowMapper;
+    private final MoscowCleaner moscowCleaner;
+    private final TemplatedResource templatedResource;
     @Mixin private IndexFilterMixin indexSpecificationMixin;
     @Mixin private BooleanFilterMixin booleanFilterMixin;
     @Spec private CommandSpec spec;
-    @Inject private Repository<Integer, Todo> todoRepository;
     @Option(names = "--assign", descriptionKey = "moscow.type.desc")
     private MoscowType moscowType;
-    @Inject private TodoView todoView;
-    @Inject private MoscowMapper moscowMapper;
-    @Inject private MoscowCleaner moscowCleaner;
-    @Inject private TemplatedResource templatedResource;
+
+    @Inject
+    MoscowCli(final HasMoscow hasMoscow, final Repository<Integer, Todo> todoRepository, final TodoView todoView, final MoscowMapper moscowMapper, final MoscowCleaner moscowCleaner, final TemplatedResource templatedResource) {
+        this.hasMoscow = hasMoscow;
+        this.todoRepository = todoRepository;
+        this.todoView = todoView;
+        this.moscowMapper = moscowMapper;
+        this.moscowCleaner = moscowCleaner;
+        this.templatedResource = templatedResource;
+    }
 
     @Override
     public void run() {
@@ -48,7 +59,7 @@ public class MoscowCli implements Runnable {
             specification = specification.and(booleanFilterMixin);
         }
 
-        List<Todo> todoList = todoRepository.findAll(specification);
+        final List<Todo> todoList = todoRepository.findAll(specification);
 
         if (todoList.isEmpty()) {
             spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.NO_TODO_FOUND));
@@ -56,10 +67,10 @@ public class MoscowCli implements Runnable {
         }
 
         if (moscowType == null) {
-            Scanner scanner = new Scanner(System.in);
+            final Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
             todoList.forEach(todo -> {
                 spec.commandLine().getOut().println(String.format("%nASSIGN: %s", todoView.render(todo)));
-                String answer;
+                final String answer;
                 if (hasMoscow.isSatisfiedBy(todo)) {
                     spec.commandLine().getOut().println(String.format("Currently assigned '%s' re-assign (y/n):", moscowMapper.map(todo).toUpperCase(Locale.ENGLISH)));
                     answer = scanner.next();
@@ -79,16 +90,16 @@ public class MoscowCli implements Runnable {
                         spec.commandLine().getOut().print("Choice: ");
                         spec.commandLine().getOut().flush();
                         try {
-                            String assign = scanner.next();
+                            final String assign = scanner.next();
                             moscowType = MoscowType.values()[Integer.parseInt(assign)];
                             notAssigned = false;
-                        } catch (NumberFormatException e) {
+                        } catch (final NumberFormatException e) {
                             spec.commandLine().getOut().println("Bad option, chose again");
                             notAssigned = true;
                         }
                     }
-                    String clean = moscowCleaner.clean(todo);
-                    Todo newTodo = new Todo(todo.getId(), String.format("%s moscow:%s", clean, moscowType.name().toLowerCase(Locale.ENGLISH)));
+                    final String clean = moscowCleaner.clean(todo);
+                    final Todo newTodo = new Todo(todo.getId(), String.format("%s moscow:%s", clean, moscowType.name().toLowerCase(Locale.ENGLISH)));
                     todoRepository.update(newTodo);
                     spec.commandLine().getOut().println(todoView.render(newTodo));
                 }
@@ -96,8 +107,8 @@ public class MoscowCli implements Runnable {
         } else {
             todoRepository.setAutoCommit(false);
             todoList.forEach(todo -> {
-                String clean = moscowCleaner.clean(todo);
-                Todo newTodo = new Todo(todo.getId(), String.format("%s moscow:%s", clean, moscowType.name().toLowerCase(Locale.ENGLISH)));
+                final String clean = moscowCleaner.clean(todo);
+                final Todo newTodo = new Todo(todo.getId(), String.format("%s moscow:%s", clean, moscowType.name().toLowerCase(Locale.ENGLISH)));
                 todoRepository.update(newTodo);
                 spec.commandLine().getOut().println(todoView.render(newTodo));
             });

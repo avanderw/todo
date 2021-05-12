@@ -11,10 +11,13 @@
     <suppress checks="JavadocMethod"/>
     <suppress checks="OperatorWrap"/>
     <suppress checks="LineLength"/>
-    <suppress checks="AvoidStarImport"/>
     <suppress checks="HiddenField"/>
     <suppress checks="NewlineAtEndOfFile"/>
     <suppress checks="MagicNumber"/>
     <suppress checks="EmptyBlock" files="Interpolation"/>
     <suppress checks="DesignForExtension"/>
+    <suppress checks="InnerAssignment" files="RelativeDate"/>
+    <suppress checks="WhitespaceAround" files="DateFilterMixin"/>
+    <suppress checks="VisibilityModifier" files=".*Mixin"/>
+    <suppress checks=".*" files="[/\\]target[/\\]"/>
 </suppressions>

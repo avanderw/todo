@@ -1,11 +1,11 @@
 package net.avdw.todo.extension.dependency;
 
-import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.extension.TodoTxtExt;
 import net.avdw.todo.repository.AbstractSpecification;
 import org.tinylog.Logger;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +26,7 @@ public class DependencyExt extends AbstractSpecification<Integer, Todo> implemen
 
     @Override
     public Optional<String> getValue(final Todo todo) {
-        List<String> valueList = getValueList(todo);
+        final List<String> valueList = getValueList(todo);
         if (valueList.isEmpty()) {
             return Optional.empty();
         } else {
@@ -40,7 +40,7 @@ public class DependencyExt extends AbstractSpecification<Integer, Todo> implemen
 
     @Override
     public List<String> getValueList(final Todo todo) {
-        List<String> extValueList = supportedExtList.stream()
+        final List<String> extValueList = supportedExtList.stream()
                 .flatMap(ext -> todo.getExtValueList(ext).stream())
                 .collect(Collectors.toList());
 

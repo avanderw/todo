@@ -1,11 +1,11 @@
 package net.avdw.todo.extension.plan;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import net.avdw.todo.core.selector.Selector;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Specification;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Comparator;
 
 @Singleton

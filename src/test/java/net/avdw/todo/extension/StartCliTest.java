@@ -2,9 +2,7 @@ package net.avdw.todo.extension;
 
 import lombok.SneakyThrows;
 import net.avdw.todo.CliTester;
-import net.avdw.todo.MainCli;
 import net.avdw.todo.TestConstant;
-import net.avdw.todo.TestModule;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -31,7 +29,7 @@ public class StartCliTest {
     @BeforeClass
     public static void beforeClass() {
         setup(todoPath);
-        cliTester = new CliTester(MainCli.class, new TestModule(todoPath));
+        cliTester = new CliTester(todoPath);
         warmup(cliTester);
     }
 

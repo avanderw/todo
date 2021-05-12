@@ -41,7 +41,7 @@ public class JansiTest {
         System.out.println(ansi().eraseScreen().render("@|red Hello|@ @|green World|@"));
         System.out.println(ansi().eraseScreen().render("@|red Hello|@ @|green World|@", 3));
         System.out.println(ansi().eraseScreen().fg(Ansi.Color.RED).a("Hello ").fg(Ansi.Color.GREEN).a("World").reset());
-        ColorConverter converter = new ColorConverter();
+        ColorConverter converter = null;//new ColorConverter();
         System.out.println(Ansi.ansi().a(converter.hexToAnsiFg(0xFF0000)).a("Hello ").a(converter.hexToAnsiFg(0x00FF00)).a("World").reset().a(" Default"));
         AnsiConsole.systemUninstall();
     }

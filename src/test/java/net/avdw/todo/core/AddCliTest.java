@@ -2,10 +2,7 @@ package net.avdw.todo.core;
 
 import lombok.SneakyThrows;
 import net.avdw.todo.CliTester;
-import net.avdw.todo.MainCli;
 import net.avdw.todo.TestConstant;
-import net.avdw.todo.TestModule;
-import org.fusesource.jansi.Ansi;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -17,7 +14,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 
-import static net.avdw.todo.TodoCliTestBootstrapper.*;
+import static net.avdw.todo.TodoCliTestBootstrapper.cleanup;
+import static net.avdw.todo.TodoCliTestBootstrapper.setup;
+import static net.avdw.todo.TodoCliTestBootstrapper.warmup;
 
 public class AddCliTest {
     private static final Path todoPath = Paths.get("target/test-resources/add/.todo/todo.txt");
@@ -32,7 +31,7 @@ public class AddCliTest {
     @BeforeClass
     public static void beforeClass() {
         setup(todoPath);
-        cliTester = new CliTester(MainCli.class, new TestModule(todoPath));
+        cliTester = new CliTester(todoPath);
         warmup(cliTester);
     }
 
@@ -49,7 +48,7 @@ public class AddCliTest {
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testPriority() {
-        cliTester.execute("add -p", "A new addition").success().count("\\[", 1).contains ("(A)");
+        cliTester.execute("add -p", "A new addition").success().count("\\[", 1).contains("(A)");
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)

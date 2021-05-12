@@ -1,19 +1,21 @@
 package net.avdw.todo;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.Module;
-import com.google.inject.name.Names;
+import org.fusesource.jansi.AnsiConsole;
 import org.tinylog.Logger;
 import picocli.CommandLine;
 
 import java.io.ByteArrayOutputStream;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Utility class to assist with testing picocli applications.
@@ -26,16 +28,14 @@ import static org.junit.Assert.*;
  * 2020-10-07: Added javadoc
  */
 public class CliTester {
-    private final Class<?> cliClass;
-    private final Module module;
+    private final Path todoPath;
     private ByteArrayOutputStream err;
     private int exitCode;
     private ByteArrayOutputStream out;
     private String[] lastArgs;
 
-    public CliTester(final Class<?> cliClass, final Module module) {
-        this.cliClass = cliClass;
-        this.module = module;
+    public CliTester(Path todoPath) {
+        this.todoPath = todoPath;
     }
 
     public CliTester contains(final String text) {
@@ -46,7 +46,7 @@ public class CliTester {
     public CliTester count(final String regex, final int count) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(out.toString());
-        assertEquals(regex, count, matcher.results().count());
+        assertEquals(String.format("Counting regex '%s' mismatch", regex), count, matcher.results().count());
         return this;
     }
 
@@ -59,10 +59,16 @@ public class CliTester {
     }
 
     public CliTester execute(final String command, final String... arguments) {
-        Injector injector = Guice.createInjector(module);
-        out = injector.getInstance(Key.get(ByteArrayOutputStream.class, Names.named("out")));
-        err = injector.getInstance(Key.get(ByteArrayOutputStream.class, Names.named("err")));
-        CommandLine commandLine = injector.getInstance(CommandLineBuilder.class).build(cliClass, injector);
+        TestMainModule module = new TestMainModule(todoPath);
+        TestMainComponent component = DaggerTestMainComponent.builder()
+                .testMainModule(module)
+                .build();
+        CommandLine commandLine = new CommandLine(MainCli.class, new DaggerFactory(component));
+
+        commandLine.setCaseInsensitiveEnumValuesAllowed(true);
+        commandLine.setOut(new PrintWriter(AnsiConsole.wrapOutputStream(out = new ByteArrayOutputStream()), true));
+        commandLine.setErr(new PrintWriter(AnsiConsole.wrapOutputStream(err = new ByteArrayOutputStream()), true, StandardCharsets.UTF_8));
+
         if (command == null) {
             exitCode = commandLine.execute();
         } else {

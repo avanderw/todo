@@ -24,9 +24,9 @@ public class RGBColorGenerator implements ColorGenerator {
      */
     @Override
     public RGB generateRGB() {
-        double red = Math.max(0, Math.min(1, redGenerator.nextValue()));
-        double green = Math.max(0, Math.min(1, greenGenerator.nextValue()));
-        double blue = Math.max(0, Math.min(1, blueGenerator.nextValue()));
+        final double red = Math.max(0, Math.min(1, redGenerator.nextValue()));
+        final double green = Math.max(0, Math.min(1, greenGenerator.nextValue()));
+        final double blue = Math.max(0, Math.min(1, blueGenerator.nextValue()));
         return new RGB(red, green, blue);
     }
 }

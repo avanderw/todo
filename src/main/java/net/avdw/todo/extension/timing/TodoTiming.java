@@ -1,10 +1,10 @@
 package net.avdw.todo.extension.timing;
 
-import com.google.inject.Inject;
 import lombok.SneakyThrows;
 import net.avdw.todo.domain.Todo;
 import org.tinylog.Logger;
 
+import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -25,8 +25,8 @@ public class TodoTiming {
             throw new UnsupportedOperationException();
         }
 
-        Date startedDate = timingExt.getValueList(todo).stream().max(Date::compareTo).orElseThrow();
-        long time = ChronoUnit.DAYS.between(startedDate.toInstant(), todo.getDoneDate().toInstant());
+        final Date startedDate = timingExt.getValueList(todo).stream().max(Date::compareTo).orElseThrow();
+        final long time = ChronoUnit.DAYS.between(startedDate.toInstant(), todo.getDoneDate().toInstant());
         if (time < 0) {
             Logger.debug("Cycle time is negative ({}), is this correct?\n" +
                     "  ( started = {} )\n" +
@@ -41,14 +41,14 @@ public class TodoTiming {
             throw new UnsupportedOperationException();
         }
 
-        List<String> startedList = todo.getExtValueList("started");
+        final List<String> startedList = todo.getExtValueList("started");
         if (startedList.size() > 1) {
             Logger.debug("Multiple started tags found. Is this correct?\n" +
                     "  ( consider removing one of the started tags )\n" +
                     "{}", todo);
         }
 
-        long time = ChronoUnit.DAYS.between(todo.getAdditionDate().toInstant(), todo.getDoneDate().toInstant());
+        final long time = ChronoUnit.DAYS.between(todo.getAdditionDate().toInstant(), todo.getDoneDate().toInstant());
         if (time < 0) {
             Logger.debug("Lead time is negative ({}), is this correct?\n" +
                     "  ( added = {} )\n" +
@@ -64,12 +64,12 @@ public class TodoTiming {
             throw new UnsupportedOperationException();
         }
 
-        List<String> startedList = todo.getExtValueList("started");
+        final List<String> startedList = todo.getExtValueList("started");
         if (startedList.size() > 1) {
             Logger.debug("Multiple started tags found. Is this correct?\n{}", todo);
         }
 
-        long time = ChronoUnit.DAYS.between(todo.getAdditionDate().toInstant(), simpleDateFormat.parse(startedList.get(0)).toInstant());
+        final long time = ChronoUnit.DAYS.between(todo.getAdditionDate().toInstant(), simpleDateFormat.parse(startedList.get(0)).toInstant());
         if (time < 0) {
             Logger.debug("Reaction time is negative ({}), is this correct?\n" +
                     "  ( added   = {} )\n" +
@@ -84,9 +84,9 @@ public class TodoTiming {
             throw new UnsupportedOperationException();
         }
 
-        Date started = timingExt.getValueList(todo).stream().max(Date::compareTo).orElseThrow();
-        Date today = new Date();
-        long time = ChronoUnit.DAYS.between(started.toInstant(), today.toInstant());
+        final Date started = timingExt.getValueList(todo).stream().max(Date::compareTo).orElseThrow();
+        final Date today = new Date();
+        final long time = ChronoUnit.DAYS.between(started.toInstant(), today.toInstant());
         if (time < 0) {
             Logger.debug("Cycle time is negative ({}), is this correct?\n" +
                     "  ( started      = {} )\n" +
@@ -101,7 +101,7 @@ public class TodoTiming {
             throw new UnsupportedOperationException();
         }
 
-        long time = ChronoUnit.DAYS.between(todo.getAdditionDate().toInstant(), new Date().toInstant());
+        final long time = ChronoUnit.DAYS.between(todo.getAdditionDate().toInstant(), new Date().toInstant());
         if (time < 0) {
             Logger.debug("Lead time is negative ({}), is this correct?\n" +
                     "  ( added         = {} )\n" +
@@ -117,8 +117,8 @@ public class TodoTiming {
             throw new UnsupportedOperationException();
         }
 
-        Date today = new Date();
-        long time = ChronoUnit.DAYS.between(todo.getAdditionDate().toInstant(), today.toInstant());
+        final Date today = new Date();
+        final long time = ChronoUnit.DAYS.between(todo.getAdditionDate().toInstant(), today.toInstant());
         if (time < 0) {
             Logger.debug("Reaction time is negative ({}), is this correct?\n" +
                     "  ( added           = {} )\n" +

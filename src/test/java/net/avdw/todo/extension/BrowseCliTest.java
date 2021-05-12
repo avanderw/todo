@@ -1,7 +1,8 @@
 package net.avdw.todo.extension;
 
 import lombok.SneakyThrows;
-import net.avdw.todo.*;
+import net.avdw.todo.CliTester;
+import net.avdw.todo.TestConstant;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -9,7 +10,9 @@ import org.junit.Test;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static net.avdw.todo.TodoCliTestBootstrapper.*;
+import static net.avdw.todo.TodoCliTestBootstrapper.cleanup;
+import static net.avdw.todo.TodoCliTestBootstrapper.setup;
+import static net.avdw.todo.TodoCliTestBootstrapper.warmup;
 
 public class BrowseCliTest {
     private static final Path todoPath = Paths.get("target/test-resources/browse/.todo/todo.txt");
@@ -23,7 +26,7 @@ public class BrowseCliTest {
     @BeforeClass
     public static void beforeClass() {
         setup(todoPath);
-        cliTester = new CliTester(MainCli.class, new TestModule(todoPath));
+        cliTester = new CliTester(todoPath);
         warmup(cliTester);
     }
 

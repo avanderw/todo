@@ -1,12 +1,12 @@
 package net.avdw.todo.extension.timing;
 
-import com.google.inject.Inject;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.core.DayFormatter;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.extension.Mixin;
 import net.avdw.todo.repository.Repository;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public class LeadTimeAddon implements Mixin {
@@ -28,7 +28,7 @@ public class LeadTimeAddon implements Mixin {
     @Override
     public String postList(final List<Todo> list, final Repository<Integer, Todo> repository) {
         String render = null;
-        TimingStats statistic = statsCalculator.calculateLeadTime(list);
+        final TimingStats statistic = statsCalculator.calculateLeadTime(list);
         if (statistic.getN() != 0) {
             render = templatedResource.populateKey(TimingKey.LEAD_SUMMARY,
                     String.format("{fifty:'%s',eighty:'%s'}", DayFormatter.days2period(statistic.getMean()), DayFormatter.days2period(statsConfidence.estimate(statistic))));
@@ -53,7 +53,7 @@ public class LeadTimeAddon implements Mixin {
     @Override
     public String preTodo(final Todo todo) {
         if (timingMixin.showDetail) {
-            String lead;
+            final String lead;
             if (todoTiming.hasLeadTime(todo)) {
                 lead = String.format("%s", todoTiming.getLeadTime(todo));
             } else if (todoTiming.hasRunningLeadTime(todo)) {

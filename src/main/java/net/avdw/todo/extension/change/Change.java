@@ -1,16 +1,27 @@
 package net.avdw.todo.extension.change;
 
-import lombok.Data;
-
 import java.util.Date;
 
-@Data
 public class Change {
-    private Date date;
-    private String type;
+    private final Date date;
+    private final String type;
 
     public Change(final String type, final Date date) {
-        this.date = date;
+        this.date = new Date(date.getTime());
         this.type = type;
     }
+
+    public Change(final String type) {
+        this.type = type;
+        this.date = null;
+    }
+
+    public Date getDate() {
+        return date == null ? null : new Date(date.getTime());
+    }
+
+    public String getType() {
+        return type;
+    }
+
 }

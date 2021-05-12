@@ -4,14 +4,14 @@ import net.avdw.property.PropertyFile;
 import net.avdw.todo.TestConstant;
 import net.avdw.todo.color.ColorConverter;
 import net.avdw.todo.core.mixin.CleanMixin;
+import net.avdw.todo.core.style.parser.DateKeyParser;
+import net.avdw.todo.core.style.parser.PropertyParser;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
 import net.avdw.todo.domain.TodoTextCleaner;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
-import net.avdw.todo.core.style.parser.DateKeyParser;
-import net.avdw.todo.core.style.parser.PropertyParser;
 import org.junit.Test;
 import org.tinylog.Logger;
 

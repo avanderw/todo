@@ -19,9 +19,9 @@ public class FileRepository<T extends IdType<Integer>> implements Repository<Int
     public FileRepository(final Path path, final FileTypeBuilder<T> builder) {
         this.path = path;
         if (Files.exists(path)) {
-            List<String> readAllLines = Files.readAllLines(path);
+            final List<String> readAllLines = Files.readAllLines(path);
             for (int i = 0; i < readAllLines.size(); i++) {
-                String line = readAllLines.get(i);
+                final String line = readAllLines.get(i);
                 itemList.add(builder.build(i, line));
             }
         } else {

@@ -1,25 +1,25 @@
 package net.avdw.todo.extension.stats;
 
-import com.google.inject.Inject;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.core.mixin.BooleanFilterMixin;
 import net.avdw.todo.core.mixin.CleanMixin;
 import net.avdw.todo.core.mixin.DateFilterMixin;
 import net.avdw.todo.core.mixin.RepositoryMixin;
+import net.avdw.todo.core.style.TodoStyler;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.extension.timing.TimingCalculator;
 import net.avdw.todo.extension.timing.TimingStats;
 import net.avdw.todo.extension.timing.TodoTiming;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
-import net.avdw.todo.core.style.TodoStyler;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;
 
+import javax.inject.Inject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
@@ -33,26 +33,34 @@ import java.util.stream.Collectors;
 public class StatsCli implements Runnable {
     private final Date now = new Date();
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private final TemplatedResource templatedResource;
+    private final TimingCalculator timingStatsCalculator;
+    private final TodoTiming todoStatistic;
+    private final TodoStyler todoStyler;
     @Mixin private BooleanFilterMixin booleanFilter;
     @Mixin private DateFilterMixin dateFilter;
     @Mixin private RepositoryMixin repositoryMixin;
     @Mixin private CleanMixin cleanMixin;
     @Spec private CommandSpec spec;
-    @Inject private TemplatedResource templatedResource;
-    @Inject private TimingCalculator timingStatsCalculator;
-    @Inject private TodoTiming todoStatistic;
-    @Inject private TodoStyler todoStyler;
+
+    @Inject
+    public StatsCli(final TemplatedResource templatedResource, final TimingCalculator timingStatsCalculator, final TodoTiming todoStatistic, final TodoStyler todoStyler) {
+        this.templatedResource = templatedResource;
+        this.timingStatsCalculator = timingStatsCalculator;
+        this.todoStatistic = todoStatistic;
+        this.todoStyler = todoStyler;
+    }
 
     private String days2period(final long totalDays) {
         long days = Math.abs(totalDays);
-        long years = Math.floorDiv(days, 365);
+        final long years = Math.floorDiv(days, 365);
         days %= 365;
-        long months = Math.floorDiv(days, 30);
+        final long months = Math.floorDiv(days, 30);
         days %= 30;
-        long weeks = Math.floorDiv(days, 7);
+        final long weeks = Math.floorDiv(days, 7);
         days %= 7;
 
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append(String.format("%3s days (", totalDays));
         if (years != 0) {
             builder.append(String.format(" %sy", years));
@@ -70,10 +78,10 @@ public class StatsCli implements Runnable {
     private void printCycleTimeStatistics(final List<Todo> todoList) {
         spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_CYCLE_TITLE));
 
-        TimingStats stats = timingStatsCalculator.calculateCycleTime(todoList);
+        final TimingStats stats = timingStatsCalculator.calculateCycleTime(todoList);
         printStats(stats);
 
-        Optional<Todo> max = todoList.stream()
+        final Optional<Todo> max = todoList.stream()
                 .filter(t -> !todoStatistic.hasCycleTime(t))
                 .filter(t -> !t.isDone())
                 .filter(t -> !t.isRemoved())
@@ -82,7 +90,7 @@ public class StatsCli implements Runnable {
                 .max(Comparator.comparing(t -> {
                     try {
                         return ChronoUnit.DAYS.between(simpleDateFormat.parse(t.getExtValueList("started").get(0)).toInstant(), now.toInstant());
-                    } catch (ParseException e) {
+                    } catch (final ParseException e) {
                         return 0L;
                     }
                 }));
@@ -92,7 +100,7 @@ public class StatsCli implements Runnable {
             printTodo(max.get());
         }
 
-        List<Todo> largeTimeTodoList = todoList.stream()
+        final List<Todo> largeTimeTodoList = todoList.stream()
                 .filter(t -> !todoStatistic.hasCycleTime(t))
                 .filter(t -> !t.getExtValueList("started").isEmpty())
                 .filter(t -> !t.isDone())
@@ -101,7 +109,7 @@ public class StatsCli implements Runnable {
                 .filter(t -> {
                     try {
                         return ChronoUnit.DAYS.between(simpleDateFormat.parse(t.getExtValueList("started").get(0)).toInstant(), now.toInstant()) > stats.getMean() + stats.getStdDev();
-                    } catch (ParseException e) {
+                    } catch (final ParseException e) {
                         return false;
                     }
                 })
@@ -116,10 +124,10 @@ public class StatsCli implements Runnable {
     private void printLeadTimeStatistics(final List<Todo> todoList) {
         spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_LEAD_TITLE));
 
-        TimingStats stats = timingStatsCalculator.calculateLeadTime(todoList);
+        final TimingStats stats = timingStatsCalculator.calculateLeadTime(todoList);
         printStats(stats);
 
-        Optional<Todo> max = todoList.stream()
+        final Optional<Todo> max = todoList.stream()
                 .filter(t -> !todoStatistic.hasLeadTime(t))
                 .filter(t -> !t.isDone())
                 .filter(t -> !t.isRemoved())
@@ -132,7 +140,7 @@ public class StatsCli implements Runnable {
             printTodo(max.get());
         }
 
-        List<Todo> largeTimeTodoList = todoList.stream()
+        final List<Todo> largeTimeTodoList = todoList.stream()
                 .filter(t -> !todoStatistic.hasLeadTime(t))
                 .filter(t -> t.getAdditionDate() != null)
                 .filter(t -> !t.isDone())
@@ -149,10 +157,10 @@ public class StatsCli implements Runnable {
     private void printReactionTimeStatistics(final List<Todo> todoList) {
         spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.STATS_REACTION_TITLE));
 
-        TimingStats stats = timingStatsCalculator.calculateReactionTime(todoList);
+        final TimingStats stats = timingStatsCalculator.calculateReactionTime(todoList);
         printStats(stats);
 
-        Optional<Todo> max = todoList.stream()
+        final Optional<Todo> max = todoList.stream()
                 .filter(t -> !todoStatistic.hasReactionTime(t))
                 .filter(t -> t.getAdditionDate() != null)
                 .filter(t -> !t.isDone())
@@ -165,7 +173,7 @@ public class StatsCli implements Runnable {
             printTodo(max.get());
         }
 
-        List<Todo> largeTimeTodoList = todoList.stream()
+        final List<Todo> largeTimeTodoList = todoList.stream()
                 .filter(t -> !todoStatistic.hasReactionTime(t))
                 .filter(t -> t.getAdditionDate() != null)
                 .filter(t -> !t.isDone())
@@ -222,8 +230,8 @@ public class StatsCli implements Runnable {
         specification = specification.and(booleanFilter.specification());
 
         Logger.trace(specification);
-        Repository<Integer, Todo> scopedRepository = repositoryMixin.repository();
-        List<Todo> todoList = scopedRepository.findAll(specification);
+        final Repository<Integer, Todo> scopedRepository = repositoryMixin.repository();
+        final List<Todo> todoList = scopedRepository.findAll(specification);
 
         if (todoList.isEmpty()) {
             spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.NO_TODO_FOUND));

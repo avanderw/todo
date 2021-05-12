@@ -1,7 +1,13 @@
 package net.avdw.todo.core.mixin;
 
 import net.avdw.todo.core.RelativeDate;
-import net.avdw.todo.domain.*;
+import net.avdw.todo.domain.IsAfterAddedDate;
+import net.avdw.todo.domain.IsAfterDoneDate;
+import net.avdw.todo.domain.IsAfterTagDate;
+import net.avdw.todo.domain.IsBeforeAddedDate;
+import net.avdw.todo.domain.IsBeforeDoneDate;
+import net.avdw.todo.domain.IsBeforeTagDate;
+import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Specification;
 import picocli.CommandLine.Model.CommandSpec;
@@ -28,8 +34,8 @@ public class DateFilterMixin implements Filter<Integer, Todo> {
         int exitCode = 0;
         try {
             if (before != null) {
-                String type;
-                Date date;
+                final String type;
+                final Date date;
                 if (before.matches("\\S+:\\d\\d\\d\\d-\\d\\d-\\d\\d")) {
                     type = before.substring(0, before.indexOf(":"));
                     date = simpleDateFormat.parse(before.substring(type.length() + 1));
@@ -48,15 +54,15 @@ public class DateFilterMixin implements Filter<Integer, Todo> {
                     default -> new IsBeforeTagDate(type, date);
                 });
             }
-        } catch (UnsupportedOperationException | ParseException e) {
+        } catch (final UnsupportedOperationException | ParseException e) {
             exitCode = 1;
             spec.commandLine().getErr().printf("--before cannot parse '%s' should be in [type]:(yyyy-mm-dd)|(+1w) format%n", before);
         }
 
         try {
             if (after != null) {
-                String type;
-                Date date;
+                final String type;
+                final Date date;
                 if (after.matches("\\S+:\\d\\d\\d\\d-\\d\\d-\\d\\d")) {
                     type = after.substring(0, after.indexOf(":"));
                     date = simpleDateFormat.parse(after.substring(type.length() + 1));
@@ -75,7 +81,7 @@ public class DateFilterMixin implements Filter<Integer, Todo> {
                     default -> new IsAfterTagDate(type, date);
                 });
             }
-        } catch (UnsupportedOperationException | ParseException e) {
+        } catch (final UnsupportedOperationException | ParseException e) {
             exitCode = 1;
             spec.commandLine().getErr().printf("--after cannot parse '%s' should be in [type]:(yyyy-mm-dd)|(+1w) format%n", after);
         }

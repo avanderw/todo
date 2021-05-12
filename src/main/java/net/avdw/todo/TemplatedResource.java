@@ -4,9 +4,9 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import com.google.gson.Gson;
-import com.google.inject.Inject;
 import org.tinylog.Logger;
 
+import javax.inject.Inject;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Map;
@@ -32,11 +32,11 @@ public class TemplatedResource {
 
     private String populate(final String key, final String template, final Object object) {
         try {
-            StringReader stringReader = new StringReader(template);
-            Mustache mustache = mustacheFactory.compile(stringReader, key);
-            StringWriter stringWriter = new StringWriter();
+            final StringReader stringReader = new StringReader(template);
+            final Mustache mustache = mustacheFactory.compile(stringReader, key);
+            final StringWriter stringWriter = new StringWriter();
             return mustache.execute(stringWriter, object).toString();
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
             Logger.debug(e);
             return "Could not populate template";
         }

@@ -1,10 +1,13 @@
 # Contributing
+
 See [README.md](README.md) for more information about pre-requirements and getting started.
 
 ## How to report a problem
+
 Please search before creating a new issue.
 
 ## Submitting сhanges
+
 - Open a new issue in the issue tracker.
 - Fork and clone the repo with git clone https://github.com/your-username/todo.git.
 - Create a new branch based off the develop branch.
@@ -15,7 +18,10 @@ Please search before creating a new issue.
 We will review your Pull Request as soon as possible. Thank you for contributing!
 
 ## Commit messages
+
 ${todo}
 
 ## Code of conduct
-Please read the code of conduct [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) examples of what is perceived as acceptable behaviour.
+
+Please read the code of conduct [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) examples of what is perceived as acceptable
+behaviour.

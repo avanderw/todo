@@ -1,6 +1,5 @@
 package net.avdw.todo.extension.size;
 
-import com.google.inject.Inject;
 import net.avdw.todo.core.mixin.BooleanFilterMixin;
 import net.avdw.todo.core.mixin.IndexFilterMixin;
 import net.avdw.todo.core.view.TodoView;
@@ -15,6 +14,8 @@ import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
 
+import javax.inject.Inject;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -24,19 +25,30 @@ import java.util.stream.Collectors;
 
 @Command(name = "size", resourceBundle = "messages", description = "${bundle:size.desc}", mixinStandardHelpOptions = true)
 public class SizeCli implements Runnable {
-    @Inject private HasSize hasSize;
+    private final HasSize hasSize;
+    private final Repository<Integer, Todo> todoRepository;
+    private final TodoView todoView;
+    private final TodoTextCleaner todoTextCleaner;
+    private final SizeMapper sizeMapper;
+    private final SizeCleaner sizeCleaner;
+    private final SizeGroup sizeGroup;
+    private final Random random = new Random();
     @Mixin private IndexFilterMixin indexSpecificationMixin;
     @Mixin private BooleanFilterMixin booleanFilterMixin;
     @Spec private CommandSpec spec;
-    @Inject private Repository<Integer, Todo> todoRepository;
     @Option(names = "--assign", descriptionKey = "size.type.desc")
     private Integer size;
-    @Inject private TodoView todoView;
-    @Inject private TodoTextCleaner todoTextCleaner;
-    @Inject private SizeMapper sizeMapper;
-    @Inject private SizeCleaner sizeCleaner;
-    @Inject private SizeGroup sizeGroup;
-    private final Random random = new Random();
+
+    @Inject
+    SizeCli(final HasSize hasSize, final Repository<Integer, Todo> todoRepository, final TodoView todoView, final TodoTextCleaner todoTextCleaner, final SizeMapper sizeMapper, final SizeCleaner sizeCleaner, final SizeGroup sizeGroup) {
+        this.hasSize = hasSize;
+        this.todoRepository = todoRepository;
+        this.todoView = todoView;
+        this.todoTextCleaner = todoTextCleaner;
+        this.sizeMapper = sizeMapper;
+        this.sizeCleaner = sizeCleaner;
+        this.sizeGroup = sizeGroup;
+    }
 
     @Override
     public void run() {
@@ -49,18 +61,18 @@ public class SizeCli implements Runnable {
             specification = specification.and(booleanFilterMixin);
         }
 
-        List<Todo> todoList = todoRepository.findAll(specification);
+        final List<Todo> todoList = todoRepository.findAll(specification);
         if (todoList.isEmpty()) {
             spec.commandLine().getOut().println("No todos to size");
         }
         if (size == null) {
-            Scanner scanner = new Scanner(System.in);
+            final Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
             todoList.forEach(todo -> {
                 spec.commandLine().getOut().println("");
-                Map<String, List<Todo>> sizeGroupMap = todoRepository.findAll(hasSize).stream().collect(Collectors.groupingBy(sizeGroup.collector()));
+                final Map<String, List<Todo>> sizeGroupMap = todoRepository.findAll(hasSize).stream().collect(Collectors.groupingBy(sizeGroup.collector()));
                 sizeGroupMap.forEach((key, list) -> spec.commandLine().getOut().println(String.format("     SIZE %2s: %s", key, todoTextCleaner.clean(list.get(random.nextInt(list.size()))))));
                 spec.commandLine().getOut().println(String.format("      ASSIGN: %s", todoView.render(todo)));
-                String answer;
+                final String answer;
                 if (hasSize.isSatisfiedBy(todo)) {
                     spec.commandLine().getOut().println(String.format("Currently assigned '%s' re-assign (y/n):", sizeMapper.map(todo)));
                     answer = scanner.next();
@@ -75,16 +87,16 @@ public class SizeCli implements Runnable {
                         spec.commandLine().getOut().print("ENTER (size): ");
                         spec.commandLine().getOut().flush();
                         try {
-                            String assign = scanner.next();
+                            final String assign = scanner.next();
                             assignSize = Integer.parseInt(assign);
                             notAssigned = false;
-                        } catch (NumberFormatException e) {
+                        } catch (final NumberFormatException e) {
                             spec.commandLine().getOut().println("Not a number, please enter a number: ");
                             notAssigned = true;
                         }
                     }
-                    String clean = sizeCleaner.clean(todo);
-                    Todo newTodo = new Todo(todo.getId(), String.format("%s size:%s", clean, assignSize));
+                    final String clean = sizeCleaner.clean(todo);
+                    final Todo newTodo = new Todo(todo.getId(), String.format("%s size:%s", clean, assignSize));
                     todoRepository.update(newTodo);
                     spec.commandLine().getOut().println(todoView.render(newTodo));
                 }
@@ -92,8 +104,8 @@ public class SizeCli implements Runnable {
         } else {
             todoRepository.setAutoCommit(false);
             todoList.forEach(todo -> {
-                String clean = sizeCleaner.clean(todo);
-                Todo newTodo = new Todo(todo.getId(), String.format("%s size:%s", clean, size));
+                final String clean = sizeCleaner.clean(todo);
+                final Todo newTodo = new Todo(todo.getId(), String.format("%s size:%s", clean, size));
                 todoRepository.update(newTodo);
                 spec.commandLine().getOut().println(todoView.render(newTodo));
             });

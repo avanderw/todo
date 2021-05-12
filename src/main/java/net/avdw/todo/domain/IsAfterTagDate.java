@@ -5,10 +5,7 @@ import org.tinylog.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.MonthDay;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Date;
 import java.util.List;
 
@@ -24,17 +21,17 @@ public class IsAfterTagDate extends AbstractSpecification<Integer, Todo> {
 
     @Override
     public boolean isSatisfiedBy(final Todo todo) {
-        List<String> tagValueList = todo.getExtValueList(tag);
+        final List<String> tagValueList = todo.getExtValueList(tag);
         if (tagValueList.isEmpty()) {
             Logger.trace("No tag {} found in todo ({})", tag, todo);
             return false;
         }
 
         boolean satisfied = true;
-        for (String tagValue : tagValueList) {
+        for (final String tagValue : tagValueList) {
             try {
                 satisfied = satisfied && simpleDateFormat.parse(tagValue).toInstant().isAfter(date.toInstant().minus(1, ChronoUnit.DAYS));
-            } catch (ParseException e) {
+            } catch (final ParseException e) {
                 Logger.debug(e);
                 satisfied = false;
             }

@@ -1,7 +1,6 @@
 package net.avdw.todo.number;
 
-import com.google.inject.Inject;
-
+import javax.inject.Inject;
 import java.util.function.Function;
 
 public class NumberInterpolater {
@@ -31,7 +30,7 @@ public class NumberInterpolater {
      * @return the interpolated value
      */
     public double interpolate(final double from, final double to, final double weight) {
-        double distance = Math.abs(from - to);
+        final double distance = Math.abs(from - to);
 
         return from < to
                 ? Math.min(from, to) + distance * interpolationFunction.apply(weight)

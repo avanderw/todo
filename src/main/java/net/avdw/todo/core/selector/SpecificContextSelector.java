@@ -8,8 +8,8 @@ import java.util.Comparator;
 import java.util.regex.Pattern;
 
 public class SpecificContextSelector implements Selector {
-    private final String regex = "@\\S+";
-    private final Pattern pattern = Pattern.compile(regex);
+    private static final String REGEX = "@\\S+";
+    private final Pattern pattern = Pattern.compile(REGEX);
 
     @Override
     public Comparator<? super Todo> comparator() {
@@ -28,12 +28,12 @@ public class SpecificContextSelector implements Selector {
 
     @Override
     public String replaceRegex() {
-        return regex;
+        return REGEX;
     }
 
     @Override
     public Specification<Integer, Todo> specification() {
-        return new RegexSpecification(regex);
+        return new RegexSpecification(REGEX);
     }
 
     @Override

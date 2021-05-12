@@ -4,6 +4,7 @@ import net.avdw.todo.domain.Todo;
 import net.avdw.todo.extension.TodoTxtExt;
 import org.tinylog.Logger;
 
+import javax.inject.Inject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
@@ -13,16 +14,20 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class DueTodoTxtExt implements TodoTxtExt<Date> {
-    private static final List<String> supportedExtList = Collections.singletonList("due");
+    private static final List<String> SUPPORTED_EXT_LIST = Collections.singletonList("due");
+
+    @Inject
+    DueTodoTxtExt() {
+    }
 
     @Override
     public List<String> getSupportedExtList() {
-        return supportedExtList;
+        return SUPPORTED_EXT_LIST;
     }
 
     @Override
     public Optional<Date> getValue(final Todo todo) {
-        List<Date> valueList = getValueList(todo);
+        final List<Date> valueList = getValueList(todo);
         if (valueList.isEmpty()) {
             return Optional.empty();
         } else if (valueList.size() > 1) {
@@ -34,11 +39,11 @@ public class DueTodoTxtExt implements TodoTxtExt<Date> {
 
     @Override
     public List<Date> getValueList(final Todo todo) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return supportedExtList.stream().flatMap(ext -> todo.getExtValueList(ext).stream()).map(date -> {
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return SUPPORTED_EXT_LIST.stream().flatMap(ext -> todo.getExtValueList(ext).stream()).map(date -> {
             try {
                 return simpleDateFormat.parse(date);
-            } catch (ParseException e) {
+            } catch (final ParseException e) {
                 Logger.error(e.getMessage());
                 Logger.debug(e.getStackTrace());
                 throw new UnsupportedOperationException();

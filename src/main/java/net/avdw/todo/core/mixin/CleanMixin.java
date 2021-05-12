@@ -1,17 +1,18 @@
 package net.avdw.todo.core.mixin;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import net.avdw.todo.domain.TodoTextCleaner;
 import net.avdw.todo.domain.Todo;
+import net.avdw.todo.domain.TodoTextCleaner;
 import picocli.CommandLine.Option;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 @Singleton
 public class CleanMixin {
     @Option(names = "--clean", descriptionKey = "list.clean.desc")
     private boolean isClean = false;
 
-    private TodoTextCleaner todoTextCleaner;
+    private final TodoTextCleaner todoTextCleaner;
 
     @Inject
     public CleanMixin(final TodoTextCleaner todoTextCleaner) {

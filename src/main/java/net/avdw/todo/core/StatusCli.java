@@ -1,6 +1,5 @@
 package net.avdw.todo.core;
 
-import com.google.inject.Inject;
 import net.avdw.property.PropertyFile;
 import net.avdw.todo.PropertyKey;
 import net.avdw.todo.domain.IsDone;
@@ -15,6 +14,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;
 
+import javax.inject.Inject;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -25,20 +25,26 @@ import java.util.Properties;
         mixinStandardHelpOptions = true)
 public class StatusCli implements Runnable {
 
+    private final Path todoPath;
+    private final Repository<Integer, Todo> todoRepository;
     @Spec private CommandSpec spec;
-    @Inject private Path todoPath;
-    @Inject private Repository<Integer, Todo> todoRepository;
+
+    @Inject
+    StatusCli(final Path todoPath, final Repository<Integer, Todo> todoRepository) {
+        this.todoPath = todoPath;
+        this.todoRepository = todoRepository;
+    }
 
     @Override
     public void run() {
-        Specification<Integer, Todo> any = new Any<>();
+        final Specification<Integer, Todo> any = new Any<>();
 
-        long priority = todoRepository.findAll(new IsPriority()).size();
-        long active = todoRepository.findAll(any).size();
-        long done = todoRepository.findAll(new IsDone()).size();
-        long removed = todoRepository.findAll(new IsRemoved()).size();
-        long parked = todoRepository.findAll(new IsParked()).size();
-        long toArchive = done + removed + parked;
+        final long priority = todoRepository.findAll(new IsPriority()).size();
+        final long active = todoRepository.findAll(any).size();
+        final long done = todoRepository.findAll(new IsDone()).size();
+        final long removed = todoRepository.findAll(new IsRemoved()).size();
+        final long parked = todoRepository.findAll(new IsParked()).size();
+        final long toArchive = done + removed + parked;
 
         String status = String.format("On list \"%s\"%n", todoPath.toAbsolutePath());
         if (active > 0) {
@@ -69,13 +75,13 @@ public class StatusCli implements Runnable {
             }
         }
 
-        List<Path> otherList = new ArrayList<>();
-        PropertyFile propertyFile = new PropertyFile("net.avdw");
-        Properties properties = propertyFile.read("todo");
+        final List<Path> otherList = new ArrayList<>();
+        final PropertyFile propertyFile = new PropertyFile("net.avdw");
+        final Properties properties = propertyFile.read("todo");
         if (properties.containsKey(PropertyKey.KNOWN_LISTS)) {
-            String lists = properties.getProperty(PropertyKey.KNOWN_LISTS);
+            final String lists = properties.getProperty(PropertyKey.KNOWN_LISTS);
             if (!lists.isEmpty()) {
-                for (String path : lists.split(";")) {
+                for (final String path : lists.split(";")) {
                     otherList.add(Paths.get(path));
                 }
             }

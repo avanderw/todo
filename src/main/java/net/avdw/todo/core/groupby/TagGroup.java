@@ -1,9 +1,9 @@
 package net.avdw.todo.core.groupby;
 
-import com.google.inject.Singleton;
 import net.avdw.todo.domain.Todo;
 import org.codehaus.plexus.util.StringUtils;
 
+import javax.inject.Singleton;
 import java.util.function.Function;
 
 @Singleton

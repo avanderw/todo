@@ -1,8 +1,9 @@
 package net.avdw.todo.extension.size;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import net.avdw.todo.domain.Todo;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 @Singleton
 public class SizeCleaner {
@@ -15,7 +16,7 @@ public class SizeCleaner {
 
     public String clean(final Todo todo) {
         String text = todo.getText();
-        for (String ext : sizeExt.getSupportedExtList()) {
+        for (final String ext : sizeExt.getSupportedExtList()) {
             text = text.replaceAll(String.format("\\s%s:\\S+", ext), "");
         }
         return text;

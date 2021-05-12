@@ -2,9 +2,7 @@ package net.avdw.todo.core;
 
 import lombok.SneakyThrows;
 import net.avdw.todo.CliTester;
-import net.avdw.todo.MainCli;
 import net.avdw.todo.TestConstant;
-import net.avdw.todo.TestModule;
 import net.avdw.todo.domain.IsPriority;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
@@ -39,7 +37,7 @@ public class PriorityCliTest {
     @BeforeClass
     public static void beforeClass() {
         setup(todoPath);
-        cliTester = new CliTester(MainCli.class, new TestModule(todoPath));
+        cliTester = new CliTester(todoPath);
         warmup(cliTester);
     }
 

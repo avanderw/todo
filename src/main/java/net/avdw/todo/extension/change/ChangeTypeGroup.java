@@ -1,9 +1,9 @@
 package net.avdw.todo.extension.change;
 
-import com.google.inject.Inject;
 import net.avdw.todo.core.groupby.Group;
 import net.avdw.todo.domain.Todo;
 
+import javax.inject.Inject;
 import java.util.Locale;
 import java.util.function.Function;
 
@@ -17,7 +17,7 @@ public class ChangeTypeGroup implements Group<Todo, String> {
 
     @Override
     public Function<Todo, String> collector() {
-        return (todo -> changeMapper.mapToChange(todo).getType());
+        return todo -> changeMapper.mapToChange(todo).getType();
     }
 
     @Override

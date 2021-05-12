@@ -1,8 +1,8 @@
 package net.avdw.todo.extension.progress;
 
-import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 

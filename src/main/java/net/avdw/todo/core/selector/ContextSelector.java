@@ -4,10 +4,15 @@ import net.avdw.todo.domain.RegexSpecification;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Specification;
 
+import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class ContextSelector implements Selector {
+    @Inject
+    public ContextSelector() {
+    }
+
     @Override
     public Comparator<? super Todo> comparator() {
         return Comparator.comparing((Todo todo) -> todo.getContextList().stream()

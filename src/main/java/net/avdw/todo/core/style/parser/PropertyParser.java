@@ -1,7 +1,5 @@
 package net.avdw.todo.core.style.parser;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import net.avdw.todo.Guard;
 import net.avdw.todo.color.ColorConverter;
 import net.avdw.todo.core.style.painter.DatePainter;
@@ -11,6 +9,8 @@ import net.avdw.todo.core.style.painter.RegexPainter;
 import org.fusesource.jansi.Ansi;
 import org.tinylog.Logger;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Properties;
@@ -42,22 +42,22 @@ public class PropertyParser implements IParser<IPainter> {
             return Optional.empty();
         }
 
-        String regex = properties.getProperty(key);
-        String colorKey = String.format("%s.color", key);
+        final String regex = properties.getProperty(key);
+        final String colorKey = String.format("%s.color", key);
 
         if (properties.getProperty(colorKey) == null) {
             Logger.warn("No color defined for key '{}', not creating painter", key);
             return Optional.empty();
         }
 
-        int colorHex = Integer.parseInt(properties.getProperty(colorKey).substring(1), 16);
-        String color = colorConverter.hexToAnsiFg(colorHex);
+        final int colorHex = Integer.parseInt(properties.getProperty(colorKey).substring(1), 16);
+        final String color = colorConverter.hexToAnsiFg(colorHex);
         if (key.matches("^regex.*(?<!color)$")) {
             Logger.debug("{}Creating {} ({}='{}'){}", color, RegexPainter.class.getSimpleName(), key, regex, Ansi.ansi().reset());
             return Optional.of(new RegexPainter(regex, color));
         } else if (key.matches("^date.*")) {
             Logger.debug("{}Creating {} ({}='{}'){}", color, DatePainter.class.getSimpleName(), key, regex, Ansi.ansi().reset());
-            Guard<Date> dateGuard = dateKeyParser.parse(key);
+            final Guard<Date> dateGuard = dateKeyParser.parse(key);
             return Optional.of(new DatePainter(dateGuard, regex, color));
         } else if (key.matches("^default.*")) {
             Logger.debug("{}Creating {} ({}='{}'){}", color, DefaultPainter.class.getSimpleName(), key, regex, Ansi.ansi().reset());

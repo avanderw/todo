@@ -2,9 +2,11 @@ package net.avdw.todo.core;
 
 import lombok.SneakyThrows;
 import net.avdw.todo.CliTester;
-import net.avdw.todo.MainCli;
-import net.avdw.todo.TestModule;
-import net.avdw.todo.domain.*;
+import net.avdw.todo.domain.IsDone;
+import net.avdw.todo.domain.IsParked;
+import net.avdw.todo.domain.IsRemoved;
+import net.avdw.todo.domain.Todo;
+import net.avdw.todo.domain.TodoFileTypeBuilder;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import org.junit.AfterClass;
@@ -18,7 +20,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
-import static net.avdw.todo.TodoCliTestBootstrapper.*;
+import static net.avdw.todo.TodoCliTestBootstrapper.cleanup;
+import static net.avdw.todo.TodoCliTestBootstrapper.setup;
+import static net.avdw.todo.TodoCliTestBootstrapper.warmup;
 import static org.junit.Assert.assertEquals;
 
 public class ArchiveCliTest {
@@ -33,7 +37,7 @@ public class ArchiveCliTest {
     @BeforeClass
     public static void beforeClass() {
         setup(todoPath);
-        cliTester = new CliTester(MainCli.class, new TestModule(todoPath));
+        cliTester = new CliTester(todoPath);
         warmup(cliTester);
     }
 

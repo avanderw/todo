@@ -2,9 +2,7 @@ package net.avdw.todo.core;
 
 import lombok.SneakyThrows;
 import net.avdw.todo.CliTester;
-import net.avdw.todo.MainCli;
 import net.avdw.todo.TestConstant;
-import net.avdw.todo.TestModule;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -36,7 +34,7 @@ public class ListCliTest {
     @BeforeClass
     public static void beforeClass() {
         setup(todoPath);
-        cliTester = new CliTester(MainCli.class, new TestModule(todoPath));
+        cliTester = new CliTester(todoPath);
         warmup(cliTester);
     }
 
@@ -177,10 +175,12 @@ public class ListCliTest {
     public void testGroupByChangeType() {
         cliTester.execute("ls --group-by change").success();
     }
+
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testGroupByMonth() {
         cliTester.execute("ls --group-by month").success();
     }
+
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testGroupByMonthChangelog() {
         cliTester.execute("ls --group-by month,change").success();

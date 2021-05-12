@@ -35,28 +35,28 @@ public class MainVersion implements CommandLine.IVersionProvider {
     @Override
     public String[] getVersion() {
         if (getClass().getPackage().getImplementationVersion() == null) {
-            String location = "target/maven-archiver/pom.properties";
-            Path pomProperties = Paths.get(location);
+            final String location = "target/maven-archiver/pom.properties";
+            final Path pomProperties = Paths.get(location);
             if (Files.exists(pomProperties)) {
                 Logger.debug("Getting version from {}", pomProperties);
                 try (FileReader fileReader = new FileReader(pomProperties.toFile(), StandardCharsets.UTF_8)) {
-                    Properties properties = new Properties();
+                    final Properties properties = new Properties();
                     properties.load(fileReader);
                     Logger.debug("Getting version from pom.properties");
                     return new String[]{properties.getProperty("version")};
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     Logger.debug(e);
                 }
             }
 
-            Path pomPath = Paths.get("pom.xml");
+            final Path pomPath = Paths.get("pom.xml");
             if (Files.exists(pomPath)) {
-                MavenXpp3Reader mavenXpp3Reader = new MavenXpp3Reader();
+                final MavenXpp3Reader mavenXpp3Reader = new MavenXpp3Reader();
                 try (FileReader fileReader = new FileReader("pom.xml", StandardCharsets.UTF_8)) {
-                    Model model = mavenXpp3Reader.read(fileReader);
+                    final Model model = mavenXpp3Reader.read(fileReader);
                     Logger.debug("Getting version from pom.xml");
                     return new String[]{model.getVersion()};
-                } catch (XmlPullParserException | IOException e) {
+                } catch (final XmlPullParserException | IOException e) {
                     Logger.debug(e);
                 }
             }

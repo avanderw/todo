@@ -1,9 +1,10 @@
 package net.avdw.todo.extension.moscow;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.AbstractSpecification;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 @Singleton
 public class HasMoscow extends AbstractSpecification<Integer, Todo> {

@@ -1,11 +1,11 @@
 package net.avdw.todo.extension.state;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.extension.Mixin;
 import net.avdw.todo.repository.Repository;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
 @Singleton

@@ -7,9 +7,6 @@ import java.util.function.Function;
  * The values for p are in the range [0..1]
  */
 public final class Interpolation {
-    private Interpolation() {
-    }
-
     /**
      * BACK.
      */
@@ -84,6 +81,8 @@ public final class Interpolation {
     public static final Function<Double, Double> SINE_EASE_OUT = (p) -> easeOut(SINE_EASE_IN, p);
     public static final Function<Double, Double> SINE_EASE_IN_OUT = (p) -> easeInOut(SINE_EASE_IN, p);
 
+    private Interpolation() {
+    }
 
     private static double easeOut(final Function<Double, Double> interpolationFunction, final double p) {
         return 1 - interpolationFunction.apply(1 - p);

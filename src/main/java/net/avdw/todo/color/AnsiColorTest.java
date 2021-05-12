@@ -24,16 +24,16 @@ public final class AnsiColorTest {
     }
 
     public static void main(final String[] args) {
-        int sampleCount = 60;
-        int sampleCountDiv4 = sampleCount / 4;
-        NumberInterpolater interpolater = new NumberInterpolater();
-        NumberSampler sampler = new NumberSampler(interpolater);
-        IteratingNumberGenerator numberGenerator = new IteratingNumberGenerator(sampler.sample(0, 120, sampleCount), true);
-        ColorConverter colorConverter = new ColorConverter();
-        HSLColorGenerator colorGenerator = new HSLColorGenerator(numberGenerator, new ConstantNumberGenerator(.75), new ConstantNumberGenerator(.5), colorConverter);
+        final int sampleCount = 60;
+        final int sampleCountDiv4 = sampleCount / 4;
+        final NumberInterpolater interpolater = new NumberInterpolater();
+        final NumberSampler sampler = new NumberSampler(interpolater);
+        final IteratingNumberGenerator numberGenerator = new IteratingNumberGenerator(sampler.sample(0, 120, sampleCount), true);
+        final ColorConverter colorConverter = new ColorConverter();
+        final HSLColorGenerator colorGenerator = new HSLColorGenerator(numberGenerator, new ConstantNumberGenerator(.75), new ConstantNumberGenerator(.5), colorConverter);
         for (int i = 0; i < sampleCount; i++) {
-            RGB rgb = colorGenerator.generateRGB();
-            int color = colorConverter.rgbToHex(rgb.r(), rgb.g(), rgb.b());
+            final RGB rgb = colorGenerator.generateRGB();
+            final int color = colorConverter.rgbToHex(rgb.r(), rgb.g(), rgb.b());
             System.out.printf("%s \u001b[0m", colorConverter.hexToAnsiBg(color));
         }
         System.out.println();
@@ -41,8 +41,8 @@ public final class AnsiColorTest {
             if (i % sampleCountDiv4 == 0) {
                 System.out.println();
             }
-            RGB rgb = colorGenerator.generateRGB();
-            int color = colorConverter.rgbToHex(rgb.r(), rgb.g(), rgb.b());
+            final RGB rgb = colorGenerator.generateRGB();
+            final int color = colorConverter.rgbToHex(rgb.r(), rgb.g(), rgb.b());
             System.out.printf("%s %3s\u001b[0m", colorConverter.hexToAnsiFg(color, true), colorConverter.rgbToHue(rgb.r(), rgb.g(), rgb.b()));
         }
     }

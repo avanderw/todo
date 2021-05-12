@@ -3,6 +3,7 @@ package net.avdw.todo.extension.size;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.extension.TodoTxtExt;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 public class SizeExt implements TodoTxtExt<String> {
     private final List<String> supportedExtList = new ArrayList<>();
 
+    @Inject
     SizeExt() {
         supportedExtList.add("size");
     }
@@ -22,7 +24,7 @@ public class SizeExt implements TodoTxtExt<String> {
 
     @Override
     public Optional<String> getValue(final Todo todo) {
-        List<String> valueList = getValueList(todo);
+        final List<String> valueList = getValueList(todo);
         if (valueList.isEmpty()) {
             return Optional.empty();
         } else if (valueList.size() > 1) {

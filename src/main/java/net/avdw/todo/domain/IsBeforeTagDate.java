@@ -20,17 +20,17 @@ public class IsBeforeTagDate extends AbstractSpecification<Integer, Todo> {
 
     @Override
     public boolean isSatisfiedBy(final Todo todo) {
-        List<String> tagValueList = todo.getExtValueList(tag);
+        final List<String> tagValueList = todo.getExtValueList(tag);
         if (tagValueList.isEmpty()) {
             Logger.trace("No tag {} found in todo ({})", tag, todo);
             return false;
         }
 
         boolean satisfied = true;
-        for (String tagValue : tagValueList) {
+        for (final String tagValue : tagValueList) {
             try {
                 satisfied = satisfied && simpleDateFormat.parse(tagValue).before(date);
-            } catch (ParseException e) {
+            } catch (final ParseException e) {
                 Logger.debug(e);
                 satisfied = false;
             }

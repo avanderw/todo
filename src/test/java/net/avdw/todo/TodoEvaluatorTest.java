@@ -4,9 +4,9 @@ import net.avdw.todo.core.TodoEvaluator;
 import net.avdw.todo.core.selector.ExtSelector;
 import net.avdw.todo.core.selector.Selector;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.extension.moscow.MoscowTodoTxtExt;
-import net.avdw.todo.extension.moscow.MoscowSelector;
 import net.avdw.todo.extension.moscow.MoscowMapper;
+import net.avdw.todo.extension.moscow.MoscowSelector;
+import net.avdw.todo.extension.moscow.MoscowTodoTxtExt;
 import org.junit.Test;
 
 import java.util.Arrays;

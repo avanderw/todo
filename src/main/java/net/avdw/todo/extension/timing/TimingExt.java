@@ -4,6 +4,7 @@ import net.avdw.todo.ThrowingFunction;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.extension.TodoTxtExt;
 
+import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +17,7 @@ public class TimingExt implements TodoTxtExt<Date> {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private final List<String> supportedExtList = new ArrayList<>();
 
+    @Inject
     TimingExt() {
         supportedExtList.add("started");
     }

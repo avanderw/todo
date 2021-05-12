@@ -2,9 +2,7 @@ package net.avdw.todo.core;
 
 import lombok.SneakyThrows;
 import net.avdw.todo.CliTester;
-import net.avdw.todo.MainCli;
 import net.avdw.todo.TestConstant;
-import net.avdw.todo.TestModule;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
 import net.avdw.todo.repository.Any;
@@ -21,10 +19,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
-import static net.avdw.todo.TodoCliTestBootstrapper.*;
-import static org.junit.Assert.assertFalse;
+import static net.avdw.todo.TodoCliTestBootstrapper.cleanup;
+import static net.avdw.todo.TodoCliTestBootstrapper.setup;
+import static net.avdw.todo.TodoCliTestBootstrapper.warmup;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 public class SortCliTest {
     private static final Path todoPath = Paths.get("target/test-resources/sort/.todo/todo.txt");
@@ -38,7 +36,7 @@ public class SortCliTest {
     @BeforeClass
     public static void beforeClass() {
         setup(todoPath);
-        cliTester = new CliTester(MainCli.class, new TestModule(todoPath));
+        cliTester = new CliTester(todoPath);
         warmup(cliTester);
     }
 
@@ -90,13 +88,13 @@ public class SortCliTest {
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testCustom() {
-        cliTester.execute("sort --by","importance: + urgency: - size:").success()
+        cliTester.execute("sort --by", "importance: + urgency: - size:").success()
                 .contains("[  2] 2019-02-07 Digital");
     }
 
     @Test//(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testPlugin() {
-        cliTester.execute("sort --by","moscow + urgency:").success()
-        .contains("[  2] 2019-10-29 +ROB");
+        cliTester.execute("sort --by", "moscow + urgency:").success()
+                .contains("[  2] 2019-10-29 +ROB");
     }
 }

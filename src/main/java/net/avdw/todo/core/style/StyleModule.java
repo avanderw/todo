@@ -1,17 +1,18 @@
 package net.avdw.todo.core.style;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
+import dagger.Module;
+import dagger.Provides;
 import net.avdw.property.PropertyFile;
 
+import javax.inject.Singleton;
 import java.util.Properties;
 
-public class StyleModule extends AbstractModule {
+@Module
+public class StyleModule {
     @Provides
     @Singleton
     Properties properties() {
-        PropertyFile propertyFile = new PropertyFile("net.avdw/todo");
+        final PropertyFile propertyFile = new PropertyFile("net.avdw/todo");
         return propertyFile.read("style");
     }
 }

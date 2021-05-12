@@ -4,7 +4,7 @@ import java.lang.reflect.ParameterizedType;
 
 public abstract class AbstractSpecification<I, T extends IdType<I>> implements Specification<I, T> {
     @Override
-    public abstract boolean isSatisfiedBy(final T t);
+    public abstract boolean isSatisfiedBy(T t);
 
     @Override
     public Specification<I, T> and(final Specification<I, T> other) {
@@ -23,7 +23,7 @@ public abstract class AbstractSpecification<I, T extends IdType<I>> implements S
 
     @Override
     public Class<T> getType() {
-        ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
+        final ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
         return (Class<T>) type.getActualTypeArguments()[0];
     }
 }

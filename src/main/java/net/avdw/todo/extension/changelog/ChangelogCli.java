@@ -1,11 +1,11 @@
 package net.avdw.todo.extension.changelog;
 
-import com.google.inject.Inject;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.core.mixin.BooleanFilterMixin;
 import net.avdw.todo.core.mixin.CleanMixin;
 import net.avdw.todo.core.mixin.DateFilterMixin;
+import net.avdw.todo.core.style.TodoStyler;
 import net.avdw.todo.domain.IsAdded;
 import net.avdw.todo.domain.IsContaining;
 import net.avdw.todo.domain.IsDone;
@@ -14,7 +14,6 @@ import net.avdw.todo.domain.IsRemoved;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
-import net.avdw.todo.core.style.TodoStyler;
 import org.tinylog.Logger;
 import picocli.CommandLine.ArgGroup;
 import picocli.CommandLine.Command;
@@ -24,6 +23,7 @@ import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
 
+import javax.inject.Inject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,14 +41,15 @@ public class ChangelogCli implements Runnable, IExitCodeGenerator {
     private final SimpleDateFormat collectMonthlyFormat = new SimpleDateFormat("MMMMM yyyy");
     private final SimpleDateFormat collectYearlyFormat = new SimpleDateFormat("yyyy");
     private final SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private final Repository<Integer, Todo> repository;
+    @ArgGroup private final Exclusive exclusive = new Exclusive();
+    private final TodoStyler todoStyler;
     @Mixin private BooleanFilterMixin booleanFilter;
     @Mixin private DateFilterMixin dateFilter;
     @Mixin private CleanMixin cleanMixin;
-    @ArgGroup private Exclusive exclusive = new Exclusive();
     private int exitCode = 0;
-    @Inject private Repository<Integer, Todo> repository;
     @Spec private CommandSpec spec;
-    @Inject private TemplatedResource templatedResource;
+    private TemplatedResource templatedResource;
     private final Function<Date, String> collectWeekly = date -> {
         String title;
         if (date == null) {
@@ -76,7 +77,13 @@ public class ChangelogCli implements Runnable, IExitCodeGenerator {
         return templatedResource.populateKey(ResourceBundleKey.CHANGELOG_DATE_HEADER,
                 String.format("{date:'%s'}", title));
     };
-    @Inject private TodoStyler todoStyler;
+
+    @Inject
+    ChangelogCli(final Repository<Integer, Todo> repository, final TodoStyler todoStyler, final TemplatedResource templatedResource) {
+        this.repository = repository;
+        this.todoStyler = todoStyler;
+        this.templatedResource = templatedResource;
+    }
 
     @Override
     public int getExitCode() {
@@ -96,9 +103,9 @@ public class ChangelogCli implements Runnable, IExitCodeGenerator {
             } else if (exclusive.byYear) {
                 groupingBy = collectYearly;
             }
-            Function<Date, String> finalGroupingBy = groupingBy;
+            final Function<Date, String> finalGroupingBy = groupingBy;
 
-            Map<String, Map<String, List<Todo>>> byPeriodByTypeTodoListMap = new HashMap<>();
+            final Map<String, Map<String, List<Todo>>> byPeriodByTypeTodoListMap = new HashMap<>();
             updateChangelog(specification.and(new IsAdded()),
                     (t) -> finalGroupingBy.apply(t.getAdditionDate()),
                     templatedResource.populateKey(ResourceBundleKey.CHANGELOG_ADDED_HEADER),
@@ -120,7 +127,7 @@ public class ChangelogCli implements Runnable, IExitCodeGenerator {
                         String grouping = templatedResource.populateKey(ResourceBundleKey.CHANGELOG_DATE_NA);
                         try {
                             grouping = finalGroupingBy.apply(isoFormat.parse(t.getExtValueList("started").get(0)));
-                        } catch (ParseException e) {
+                        } catch (final ParseException e) {
                             Logger.debug(e);
                         }
                         return grouping;
@@ -146,20 +153,20 @@ public class ChangelogCli implements Runnable, IExitCodeGenerator {
                     });
                 });
             });
-        } catch (UnsupportedOperationException e) {
+        } catch (final UnsupportedOperationException e) {
             Logger.debug(e);
             exitCode = 1;
         }
     }
 
     private void updateChangelog(final Specification<Integer, Todo> specification, final Function<Todo, String> groupingBy, final String type, final Map<String, Map<String, List<Todo>>> byPeriodByTypeTodoListMap) {
-        List<Todo> todoList = repository.findAll(specification);
-        Map<String, List<Todo>> byPeriodTodoListMap = todoList.stream().collect(Collectors.groupingBy(groupingBy));
+        final List<Todo> todoList = repository.findAll(specification);
+        final Map<String, List<Todo>> byPeriodTodoListMap = todoList.stream().collect(Collectors.groupingBy(groupingBy));
         byPeriodTodoListMap.forEach((key, value) -> {
             byPeriodByTypeTodoListMap.putIfAbsent(key, new HashMap<>());
-            Map<String, List<Todo>> periodByTypeTodoListMap = byPeriodByTypeTodoListMap.get(key);
+            final Map<String, List<Todo>> periodByTypeTodoListMap = byPeriodByTypeTodoListMap.get(key);
             periodByTypeTodoListMap.putIfAbsent(type, new ArrayList<>());
-            List<Todo> periodTypeTodoList = periodByTypeTodoListMap.get(type);
+            final List<Todo> periodTypeTodoList = periodByTypeTodoListMap.get(type);
             periodTypeTodoList.addAll(value);
         });
     }

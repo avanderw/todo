@@ -1,6 +1,5 @@
 package net.avdw.todo.extension.plan;
 
-import com.google.inject.Inject;
 import net.avdw.todo.core.mixin.BooleanFilterMixin;
 import net.avdw.todo.core.mixin.IndexFilterMixin;
 import net.avdw.todo.core.view.TodoView;
@@ -14,6 +13,8 @@ import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
 
+import javax.inject.Inject;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -23,17 +24,27 @@ import java.util.stream.Collectors;
 
 @Command(name = "plan", resourceBundle = "messages", description = "${bundle:plan.desc}", mixinStandardHelpOptions = true)
 public class PlanCli implements Runnable {
+    private final HasPlan hasPlan;
+    private final PlanCleaner planCleaner;
+    private final PlanTodoTxtExt planExt;
+    private final PlanMapper planMapper;
+    private final Repository<Integer, Todo> todoRepository;
+    private final TodoView todoView;
     @Mixin private BooleanFilterMixin booleanFilterMixin;
-    @Inject private HasPlan hasPlan;
     @Mixin private IndexFilterMixin indexSpecificationMixin;
-    @Inject private PlanCleaner planCleaner;
-    @Inject private PlanTodoTxtExt planExt;
-    @Inject private PlanMapper planMapper;
     @Option(names = "--assign", descriptionKey = "plan.type.desc")
     private PlanType planType;
     @Spec private CommandSpec spec;
-    @Inject private Repository<Integer, Todo> todoRepository;
-    @Inject private TodoView todoView;
+
+    @Inject
+    PlanCli(final HasPlan hasPlan, final PlanCleaner planCleaner, final PlanTodoTxtExt planExt, final PlanMapper planMapper, final Repository<Integer, Todo> todoRepository, final TodoView todoView) {
+        this.hasPlan = hasPlan;
+        this.planCleaner = planCleaner;
+        this.planExt = planExt;
+        this.planMapper = planMapper;
+        this.todoRepository = todoRepository;
+        this.todoView = todoView;
+    }
 
     @Override
     public void run() {
@@ -46,16 +57,16 @@ public class PlanCli implements Runnable {
             specification = specification.and(booleanFilterMixin);
         }
 
-        List<Todo> todoList = todoRepository.findAll(specification);
+        final List<Todo> todoList = todoRepository.findAll(specification);
 
         if (todoList.isEmpty()) {
             spec.commandLine().getOut().println("No todos to plan");
         }
         if (planType == null) {
-            Scanner scanner = new Scanner(System.in);
+            final Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
             todoList.forEach(todo -> {
                 spec.commandLine().getOut().println(String.format("%nASSIGN: %s", todoView.render(todo)));
-                String answer;
+                final String answer;
                 if (hasPlan.isSatisfiedBy(todo)) {
                     spec.commandLine().getOut().println(String.format("Currently assigned '%s' re-assign (y/n):", planMapper.map(todo).toUpperCase(Locale.ENGLISH)));
                     answer = scanner.next();
@@ -75,16 +86,16 @@ public class PlanCli implements Runnable {
                         spec.commandLine().getOut().print("Choice: ");
                         spec.commandLine().getOut().flush();
                         try {
-                            String assign = scanner.next();
+                            final String assign = scanner.next();
                             planType = PlanType.values()[Integer.parseInt(assign)];
                             notAssigned = false;
-                        } catch (NumberFormatException e) {
+                        } catch (final NumberFormatException e) {
                             spec.commandLine().getOut().println("Bad option, chose again");
                             notAssigned = true;
                         }
                     }
-                    String clean = planCleaner.clean(todo);
-                    Todo newTodo = new Todo(todo.getId(), String.format("%s %s:%s", clean, planExt.preferredExt(), planType.name().toLowerCase(Locale.ENGLISH)));
+                    final String clean = planCleaner.clean(todo);
+                    final Todo newTodo = new Todo(todo.getId(), String.format("%s %s:%s", clean, planExt.preferredExt(), planType.name().toLowerCase(Locale.ENGLISH)));
                     todoRepository.update(newTodo);
                     spec.commandLine().getOut().println(todoView.render(newTodo));
                 }
@@ -92,8 +103,8 @@ public class PlanCli implements Runnable {
         } else {
             todoRepository.setAutoCommit(false);
             todoList.forEach(todo -> {
-                String clean = planCleaner.clean(todo);
-                Todo newTodo = new Todo(todo.getId(), String.format("%s %s:%s", clean, planExt.preferredExt(), planType.name().toLowerCase(Locale.ENGLISH)));
+                final String clean = planCleaner.clean(todo);
+                final Todo newTodo = new Todo(todo.getId(), String.format("%s %s:%s", clean, planExt.preferredExt(), planType.name().toLowerCase(Locale.ENGLISH)));
                 todoRepository.update(newTodo);
                 spec.commandLine().getOut().println(todoView.render(newTodo));
             });

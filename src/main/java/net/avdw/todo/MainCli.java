@@ -1,12 +1,21 @@
 package net.avdw.todo;
 
-import com.google.inject.Inject;
-import net.avdw.todo.core.*;
+import net.avdw.todo.core.AddCli;
+import net.avdw.todo.core.ArchiveCli;
+import net.avdw.todo.core.BackupCli;
+import net.avdw.todo.core.DoneCli;
+import net.avdw.todo.core.InitCli;
+import net.avdw.todo.core.ListCli;
+import net.avdw.todo.core.ParkCli;
+import net.avdw.todo.core.PriorityCli;
+import net.avdw.todo.core.RemoveCli;
+import net.avdw.todo.core.SortCli;
+import net.avdw.todo.core.StatusCli;
 import net.avdw.todo.extension.browse.BrowseCli;
 import net.avdw.todo.extension.changelog.ChangelogCli;
 import net.avdw.todo.extension.comment.CommentCli;
-import net.avdw.todo.extension.edit.EditCli;
 import net.avdw.todo.extension.dependency.DependencyCli;
+import net.avdw.todo.extension.edit.EditCli;
 import net.avdw.todo.extension.moscow.MoscowCli;
 import net.avdw.todo.extension.plan.PlanCli;
 import net.avdw.todo.extension.replace.ReplaceCli;
@@ -17,6 +26,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;
 
+import javax.inject.Inject;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -50,10 +60,14 @@ import java.nio.file.Path;
                 CommentCli.class
         })
 public class MainCli implements Runnable {
+    private final Path todoPath;
     @Spec
     private CommandSpec spec;
+
     @Inject
-    private Path todoPath;
+    MainCli(final Path todoPath) {
+        this.todoPath = todoPath;
+    }
 
     @Override
     public void run() {

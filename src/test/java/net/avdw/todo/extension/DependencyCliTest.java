@@ -2,9 +2,7 @@ package net.avdw.todo.extension;
 
 import lombok.SneakyThrows;
 import net.avdw.todo.CliTester;
-import net.avdw.todo.MainCli;
 import net.avdw.todo.TestConstant;
-import net.avdw.todo.TestModule;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -20,7 +18,7 @@ import static net.avdw.todo.TodoCliTestBootstrapper.cleanup;
 import static net.avdw.todo.TodoCliTestBootstrapper.setup;
 import static net.avdw.todo.TodoCliTestBootstrapper.warmup;
 
-public class LinkCliTest {
+public class DependencyCliTest {
     private static final Path todoPath = Paths.get("target/test-resources/link/.todo/todo.txt");
     private static CliTester cliTester;
     private final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -33,7 +31,7 @@ public class LinkCliTest {
     @BeforeClass
     public static void beforeClass() {
         setup(todoPath);
-        cliTester = new CliTester(MainCli.class, new TestModule(todoPath));
+        cliTester = new CliTester(todoPath);
         warmup(cliTester);
     }
 

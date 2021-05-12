@@ -1,9 +1,10 @@
 package net.avdw.todo.extension.plan;
 
-import com.google.inject.Singleton;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.extension.TodoTxtExt;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 public class PlanTodoTxtExt implements TodoTxtExt<String> {
     private final List<String> supportedExtList = new ArrayList<>();
 
+    @Inject
     public PlanTodoTxtExt() {
         supportedExtList.add("plan");
     }
@@ -24,7 +26,7 @@ public class PlanTodoTxtExt implements TodoTxtExt<String> {
 
     @Override
     public Optional<String> getValue(final Todo todo) {
-        List<String> valueList = getValueList(todo);
+        final List<String> valueList = getValueList(todo);
         if (valueList.isEmpty()) {
             return Optional.empty();
         } else if (valueList.size() > 1) {

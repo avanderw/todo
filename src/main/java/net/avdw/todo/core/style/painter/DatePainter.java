@@ -23,12 +23,12 @@ public class DatePainter implements IPainter {
     @SneakyThrows
     @Override
     public String paint(final String string, final String reset) {
-        Matcher m = Pattern.compile(regex).matcher(string);
+        final Matcher m = Pattern.compile(regex).matcher(string);
         int idx = 0;
-        StringBuilder painted = new StringBuilder();
+        final StringBuilder painted = new StringBuilder();
         while (m.find()) {
-            String dateString = m.group("date");
-            Date date = simpleDateFormat.parse(dateString);
+            final String dateString = m.group("date");
+            final Date date = simpleDateFormat.parse(dateString);
             if (guard.isSatisfiedBy(date)) {
                 painted.append(string, idx, m.start("date"));
                 painted.append(color);

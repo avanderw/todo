@@ -1,12 +1,12 @@
 package net.avdw.todo.extension.change;
 
-import com.google.inject.Inject;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.extension.Mixin;
 import net.avdw.todo.repository.Repository;
 import org.ocpsoft.prettytime.PrettyTime;
 
+import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -49,7 +49,7 @@ public class ChangeAddon implements Mixin {
     @Override
     public String preTodo(final Todo todo) {
         if (changeMixin.showDetail) {
-            Change change = changeMapper.mapToChange(todo);
+            final Change change = changeMapper.mapToChange(todo);
             return change.getDate() == null ? String.format("%17s", "n/a") : String.format("%17s", prettyTime.format(change.getDate()));
         } else {
             return null;

@@ -1,18 +1,22 @@
 package net.avdw.todo.extension.timing;
 
-import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public class TimingCalculator {
 
+    private final TodoTiming todoTiming;
+
     @Inject
-    private TodoTiming todoTiming;
+    TimingCalculator(final TodoTiming todoTiming) {
+        this.todoTiming = todoTiming;
+    }
 
     public TimingStats calculateCycleTime(final List<Todo> todoList) {
-        DescriptiveStatistics stats = new DescriptiveStatistics();
+        final DescriptiveStatistics stats = new DescriptiveStatistics();
         todoList.stream()
                 .filter(todoTiming::hasCycleTime)
                 .mapToLong(todoTiming::getCycleTime)
@@ -22,7 +26,7 @@ public class TimingCalculator {
     }
 
     public TimingStats calculateLeadTime(final List<Todo> todoList) {
-        DescriptiveStatistics stats = new DescriptiveStatistics();
+        final DescriptiveStatistics stats = new DescriptiveStatistics();
         todoList.stream()
                 .filter(todoTiming::hasLeadTime)
                 .mapToLong(todoTiming::getLeadTime)
@@ -32,7 +36,7 @@ public class TimingCalculator {
     }
 
     public TimingStats calculateReactionTime(final List<Todo> todoList) {
-        DescriptiveStatistics stats = new DescriptiveStatistics();
+        final DescriptiveStatistics stats = new DescriptiveStatistics();
         todoList.stream()
                 .filter(todoTiming::hasReactionTime)
                 .mapToLong(todoTiming::getReactionTime)
@@ -42,7 +46,7 @@ public class TimingCalculator {
     }
 
     private TimingStats map(final DescriptiveStatistics stats) {
-        TimingStats statistic = new TimingStats();
+        final TimingStats statistic = new TimingStats();
         statistic.setIqr(stats.getPercentile(75) - stats.getPercentile(25));
         statistic.setMin(stats.getMin());
         statistic.setTrimmedMin(stats.getPercentile(25) - 1.5 * statistic.getIqr());

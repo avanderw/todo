@@ -40,7 +40,7 @@ public class RecurDuration {
     }
 
     public Date recurFrom(final Date date) {
-        Calendar calendar = new GregorianCalendar();
+        final Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         calendar.add(getCalendarType(), getRecurValue());
         return calendar.getTime();

@@ -1,14 +1,13 @@
 package net.avdw.todo.number.generator;
 
-import com.google.inject.Inject;
-
+import javax.inject.Inject;
 import java.util.List;
 
 public class IteratingNumberGenerator implements NumberGenerator {
-    private int currentIdx = -1;
-    private int direction = 1;
     private final boolean wrap;
     private final List<Double> numbers;
+    private int currentIdx = -1;
+    private int direction = 1;
 
     @Inject
     public IteratingNumberGenerator(final List<Double> numbers, final boolean wrap) {

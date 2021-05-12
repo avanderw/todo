@@ -1,14 +1,11 @@
 package net.avdw.todo.extension.moscow;
 
-import com.google.inject.Inject;
 import net.avdw.todo.core.selector.Selector;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Specification;
 
+import javax.inject.Inject;
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 public class MoscowSelector implements Selector {
     private final MoscowTodoTxtExt moscowTodoTxtExt;

@@ -1,6 +1,5 @@
 package net.avdw.todo.core.mixin;
 
-import lombok.Getter;
 import net.avdw.todo.domain.IsContaining;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.AbstractSpecification;
@@ -8,9 +7,11 @@ import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Specification;
 import picocli.CommandLine.Option;
 
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
+@Singleton
 public class BooleanFilterMixin extends AbstractSpecification<Integer, Todo> implements Filter<Integer, Todo> {
     @Option(names = "--and", descriptionKey = "list.and.desc", split = ",", paramLabel = "text")
     private List<String> andFilterList = new ArrayList<>();
@@ -37,13 +38,13 @@ public class BooleanFilterMixin extends AbstractSpecification<Integer, Todo> imp
         }
 
         Specification<Integer, Todo> specification = new Any<>();
-        for (String filter : andFilterList) {
+        for (final String filter : andFilterList) {
             specification = specification.and(new IsContaining(filter));
         }
-        for (String filter : orFilterList) {
+        for (final String filter : orFilterList) {
             specification = specification.or(new IsContaining(filter));
         }
-        for (String filter : notFilterList) {
+        for (final String filter : notFilterList) {
             specification = specification.not(new IsContaining(filter));
         }
         cache = specification;

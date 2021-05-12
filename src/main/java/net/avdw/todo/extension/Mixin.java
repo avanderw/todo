@@ -6,11 +6,11 @@ import net.avdw.todo.repository.Repository;
 import java.util.List;
 
 public interface Mixin {
-    String postList(final List<Todo> list, final Repository<Integer, Todo> repository);
+    String postList(List<Todo> list, Repository<Integer, Todo> repository);
 
-    String postTodo(final Todo todo);
+    String postTodo(Todo todo);
 
-    String preList(final List<Todo> list, final Repository<Integer, Todo> repository);
+    String preList(List<Todo> list, Repository<Integer, Todo> repository);
 
-    String preTodo(final Todo todo);
+    String preTodo(Todo todo);
 }

@@ -1,10 +1,14 @@
 package net.avdw.todo.core;
 
-import com.google.inject.Inject;
 import net.avdw.todo.core.selector.ExtLoader;
 import net.avdw.todo.core.selector.Selector;
 import net.avdw.todo.core.view.TodoListView;
-import net.avdw.todo.domain.*;
+import net.avdw.todo.domain.IsDone;
+import net.avdw.todo.domain.IsParked;
+import net.avdw.todo.domain.IsPriority;
+import net.avdw.todo.domain.IsRemoved;
+import net.avdw.todo.domain.Todo;
+import net.avdw.todo.domain.TodoFileTypeBuilder;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
@@ -14,6 +18,7 @@ import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
 
+import javax.inject.Inject;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -22,31 +27,40 @@ import java.util.stream.Collectors;
 
 @Command(name = "sort", resourceBundle = "messages", description = "${bundle:sort}")
 public class SortCli implements Runnable {
+    private final Path todoPath;
+    private final Repository<Integer, Todo> todoRepository;
+    private final TodoListView todoListView;
+    private final Set<Selector> selectorSet;
+    private final ExtLoader extLoader;
     @Spec private CommandSpec spec;
     @Option(names = "--by", description = "e.g. plugin + ext: - ext:") private String sortFunc;
-    @Inject private Path todoPath;
-    @Inject private Repository<Integer, Todo> todoRepository;
-    @Inject private TodoListView todoListView;
-    @Inject private Set<Selector> selectorSet;
-    @Inject private ExtLoader extLoader;
+
+    @Inject
+    SortCli(final Path todoPath, final Repository<Integer, Todo> todoRepository, final TodoListView todoListView, final Set<Selector> selectorSet, final ExtLoader extLoader) {
+        this.todoPath = todoPath;
+        this.todoRepository = todoRepository;
+        this.todoListView = todoListView;
+        this.selectorSet = selectorSet;
+        this.extLoader = extLoader;
+    }
 
     @Override
     public void run() {
-        Comparator<Todo> evalFunc;
+        final Comparator<Todo> evalFunc;
         if (sortFunc == null || sortFunc.isBlank()) {
             evalFunc = Comparator.naturalOrder();
         } else {
-            Set<Selector> allSelectors = new HashSet<>(selectorSet);
+            final Set<Selector> allSelectors = new HashSet<>(selectorSet);
             allSelectors.addAll(extLoader.fromFunction(sortFunc));
-            TodoEvaluator todoEvaluator = new TodoEvaluator(sortFunc, allSelectors);
+            final TodoEvaluator todoEvaluator = new TodoEvaluator(sortFunc, allSelectors);
             evalFunc = Comparator.comparingInt(todoEvaluator::evaluate);
         }
 
-        Specification<Integer, Todo> any = new Any<>();
-        Specification<Integer, Todo> priority = new IsPriority();
-        Specification<Integer, Todo> done = new IsDone().or(new IsParked()).or(new IsRemoved());
+        final Specification<Integer, Todo> any = new Any<>();
+        final Specification<Integer, Todo> priority = new IsPriority();
+        final Specification<Integer, Todo> done = new IsDone().or(new IsParked()).or(new IsRemoved());
 
-        Repository<Integer, Todo> sortedRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
+        final Repository<Integer, Todo> sortedRepository = new FileRepository<>(todoPath, new TodoFileTypeBuilder());
         sortedRepository.setAutoCommit(false);
         sortedRepository.removeAll(any);
         sortedRepository.addAll(todoRepository.findAll(priority).stream()

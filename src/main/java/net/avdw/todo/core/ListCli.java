@@ -1,6 +1,5 @@
 package net.avdw.todo.core;
 
-import com.google.inject.Inject;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.RunningStats;
 import net.avdw.todo.SuppressFBWarnings;
@@ -27,6 +26,7 @@ import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
 
+import javax.inject.Inject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
@@ -38,6 +38,13 @@ import java.util.stream.Collectors;
 public class ListCli implements Runnable {
     private final SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM yyyy");
     private final SimpleDateFormat monthSortFormat = new SimpleDateFormat("yyyy-MM");
+    private final RunningStats runningStats;
+    private final TemplatedResource templatedResource;
+    private final TodoListView todoListView;
+    @Option(names = "--projects", description = "List projects for the filters.")
+    private boolean isProjectRender = false;
+    @Option(names = "--top", description = "Limit the list to this value, 0=all.")
+    private int top = 0;
     @Mixin private BlockerMixin blockerMixin;
     @Mixin private BooleanFilterMixin booleanFilterMixin;
     @Mixin private ChangeMixin changeMixin;
@@ -46,23 +53,22 @@ public class ListCli implements Runnable {
     @Mixin private GroupByMixin groupByMixin;
     @Mixin private OrderByMixin orderByMixin;
     @Mixin private RepositoryMixin repositoryMixin;
-    @Inject private RunningStats runningStats;
     @Spec private CommandSpec spec;
     @Mixin private StateMixin stateMixin;
-    @Mixin private TimingMixin statsMixin;
-    @Inject private TemplatedResource templatedResource;
-    @Inject private TodoListView todoListView;
+    @Mixin private TimingMixin timingMixin;
 
-    @Option(names="--projects", description = "List projects for the filters.")
-    private boolean isProjectRender = false;
-    @Option(names="--top", description = "Limit the list to this value, 0=all.")
-    private int top = 0;
+    @Inject
+    ListCli(final RunningStats runningStats, final TemplatedResource templatedResource, final TodoListView todoListView) {
+        this.runningStats = runningStats;
+        this.templatedResource = templatedResource;
+        this.todoListView = todoListView;
+    }
 
     private void printList(final List<Todo> list, final Repository<Integer, Todo> repository) {
         if (isProjectRender) {
-            Map<String, List<Todo>> projectTodoMap = list.stream().collect(Collectors.groupingBy(new ProjectGroup().collector()));
-            String projects= projectTodoMap.keySet().stream()
-                    .filter(key->!key.isEmpty())
+            final Map<String, List<Todo>> projectTodoMap = list.stream().collect(Collectors.groupingBy(new ProjectGroup().collector()));
+            final String projects = projectTodoMap.keySet().stream()
+                    .filter(key -> !key.isEmpty())
                     .sorted()
                     .collect(Collectors.joining(", "));
             if (projects.isEmpty()) {
@@ -78,18 +84,18 @@ public class ListCli implements Runnable {
     private void printMap(final Map<String, ?> map, final Repository<Integer, Todo> repository, final GroupByMixin groupByMixin, final int depth) {
         map.entrySet().stream()
                 .sorted(Comparator.comparing(entry -> {
-                    String key = entry.getKey();
+                    final String key = entry.getKey();
                     try {
                         return monthSortFormat.format(monthFormat.parse(key));
-                    } catch (ParseException e) {
+                    } catch (final ParseException e) {
                         return key;
                     }
                 }))
                 .forEach((entry) -> {
-                    String key = entry.getKey();
-                    Object value = entry.getValue();
-                    String json = String.format("{type:'%s',title:'%s'}", groupByMixin.getGroupByAtDepth(depth).name(), StringUtils.capitalise(key.isBlank() ? "No" : key));
-                    String header = switch (depth) {
+                    final String key = entry.getKey();
+                    final Object value = entry.getValue();
+                    final String json = String.format("{type:'%s',title:'%s'}", groupByMixin.getGroupByAtDepth(depth).name(), StringUtils.capitalise(key.isBlank() ? "No" : key));
+                    final String header = switch (depth) {
                         case 0 -> templatedResource.populateKey(ResourceBundleKey.GROUP_BY_HEADING, json);
                         case 1 -> templatedResource.populateKey(ResourceBundleKey.GROUP_BY_HEADING_2, json);
                         case 2 -> templatedResource.populateKey(ResourceBundleKey.GROUP_BY_HEADING_3, json);
@@ -117,8 +123,8 @@ public class ListCli implements Runnable {
         specification = specification.and(blockerMixin.specification());
 
         Logger.debug(specification);
-        Repository<Integer, Todo> scopedRepository = repositoryMixin.repository();
-        List<Todo> todoList = scopedRepository.findAll(specification);
+        final Repository<Integer, Todo> scopedRepository = repositoryMixin.repository();
+        final List<Todo> todoList = scopedRepository.findAll(specification);
 
         orderByMixin.order(todoList);
 
@@ -136,7 +142,7 @@ public class ListCli implements Runnable {
         if (groupByMixin.isEmpty()) {
             printList(todoList, scopedRepository);
         } else {
-            Map<String, ?> groupTodoListMap = todoList.stream().collect(groupByMixin.collector());
+            final Map<String, ?> groupTodoListMap = todoList.stream().collect(groupByMixin.collector());
             printMap(groupTodoListMap, scopedRepository, groupByMixin, 0);
         }
         spec.commandLine().getOut().println(runningStats.getDuration());

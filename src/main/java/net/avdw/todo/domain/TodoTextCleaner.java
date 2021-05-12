@@ -1,8 +1,11 @@
 package net.avdw.todo.domain;
 
-import net.avdw.todo.domain.Todo;
+import javax.inject.Inject;
 
 public class TodoTextCleaner {
+    @Inject
+    public TodoTextCleaner() {
+    }
 
     public String clean(final Todo todo) {
         String cleanText = todo.getText();

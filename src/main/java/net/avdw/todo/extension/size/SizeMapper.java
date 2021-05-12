@@ -1,8 +1,9 @@
 package net.avdw.todo.extension.size;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import net.avdw.todo.domain.Todo;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 @Singleton
 public class SizeMapper {

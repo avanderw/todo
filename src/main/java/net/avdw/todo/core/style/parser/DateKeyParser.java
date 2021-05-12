@@ -1,10 +1,11 @@
 package net.avdw.todo.core.style.parser;
 
-import com.google.inject.Singleton;
 import lombok.SneakyThrows;
 import net.avdw.todo.Guard;
 import org.tinylog.Logger;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,6 +18,10 @@ public class DateKeyParser {
     private final Pattern fixedRegex = Pattern.compile("^.+\\.(?<date>\\d\\d\\d\\d-\\d\\d-\\d\\d)(?<sign>[+-])?$");
     private final Pattern relativeRegex = Pattern.compile("^.*\\.(?<relative>-?\\d+)(?<type>[dmy])(?<sign>[+-])?$");
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    @Inject
+    public DateKeyParser() {
+    }
 
     private MatchType getMatchTypeFromSign(final String sign) {
         return switch (sign) {
@@ -32,11 +37,11 @@ public class DateKeyParser {
         MatchType matchType = null;
         Date compareDate = null;
 
-        Matcher relativeMatcher = relativeRegex.matcher(key);
+        final Matcher relativeMatcher = relativeRegex.matcher(key);
         if (relativeMatcher.find()) {
             matchType = getMatchTypeFromSign(String.valueOf(relativeMatcher.group("sign")));
-            int arg = Integer.parseInt(relativeMatcher.group("relative"));
-            Calendar calendar = new GregorianCalendar();
+            final int arg = Integer.parseInt(relativeMatcher.group("relative"));
+            final Calendar calendar = new GregorianCalendar();
             switch (relativeMatcher.group("type")) {
                 case "d" -> calendar.add(Calendar.DAY_OF_MONTH, arg);
                 case "m" -> calendar.add(Calendar.MONTH, arg);
@@ -48,7 +53,7 @@ public class DateKeyParser {
             Logger.trace("Not relative date: {}", key);
         }
 
-        Matcher fixedMatcher = fixedRegex.matcher(key);
+        final Matcher fixedMatcher = fixedRegex.matcher(key);
         if (fixedMatcher.find()) {
             matchType = getMatchTypeFromSign(String.valueOf(fixedMatcher.group("sign")));
             compareDate = simpleDateFormat.parse(fixedMatcher.group("date"));

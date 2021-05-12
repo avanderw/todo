@@ -9,7 +9,7 @@ import java.util.Comparator;
 public interface Selector extends Guard<String> {
     Comparator<? super Todo> comparator();
 
-    int mapToInt(final Todo todo);
+    int mapToInt(Todo todo);
 
     String replaceRegex();
 

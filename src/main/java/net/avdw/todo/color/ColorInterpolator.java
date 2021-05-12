@@ -1,7 +1,6 @@
 package net.avdw.todo.color;
 
-import com.google.inject.Inject;
-
+import javax.inject.Inject;
 import java.util.function.Function;
 
 public class ColorInterpolator {
@@ -24,16 +23,16 @@ public class ColorInterpolator {
      * @return the new color interpolated between the two colors
      */
     public int interpolate(final int fromColor, final int toColor, final double percentage, final Function<Double, Double> interpolationFunction) {
-        RGB fromRgb = colorConverter.hexToRGB(fromColor);
-        RGB toRgb = colorConverter.hexToRGB(toColor);
-        double interpolation = interpolationFunction.apply(percentage);
-        double deltaR = toRgb.r() - fromRgb.r();
-        double deltaG = toRgb.g() - fromRgb.g();
-        double deltaB = toRgb.b() - fromRgb.b();
+        final RGB fromRgb = colorConverter.hexToRGB(fromColor);
+        final RGB toRgb = colorConverter.hexToRGB(toColor);
+        final double interpolation = interpolationFunction.apply(percentage);
+        final double deltaR = toRgb.r() - fromRgb.r();
+        final double deltaG = toRgb.g() - fromRgb.g();
+        final double deltaB = toRgb.b() - fromRgb.b();
 
-        double newR = fromRgb.r() + deltaR * interpolation;
-        double newG = fromRgb.g() + deltaG * interpolation;
-        double newB = fromRgb.b() + deltaB * interpolation;
+        final double newR = fromRgb.r() + deltaR * interpolation;
+        final double newG = fromRgb.g() + deltaG * interpolation;
+        final double newB = fromRgb.b() + deltaB * interpolation;
 
         return colorConverter.rgbToHex(newR, newG, newB);
     }

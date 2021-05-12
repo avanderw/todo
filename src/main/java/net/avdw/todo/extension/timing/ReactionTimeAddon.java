@@ -1,12 +1,12 @@
 package net.avdw.todo.extension.timing;
 
-import com.google.inject.Inject;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.core.DayFormatter;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.extension.Mixin;
 import net.avdw.todo.repository.Repository;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public class ReactionTimeAddon implements Mixin {
@@ -28,7 +28,7 @@ public class ReactionTimeAddon implements Mixin {
     @Override
     public String postList(final List<Todo> list, final Repository<Integer, Todo> repository) {
         String render = null;
-        TimingStats statistic = statsCalculator.calculateReactionTime(list);
+        final TimingStats statistic = statsCalculator.calculateReactionTime(list);
         if (statistic.getN() != 0) {
             render = templatedResource.populateKey(TimingKey.REACTION_SUMMARY,
                     String.format("{fifty:'%s',eighty:'%s'}", DayFormatter.days2period(statistic.getMean()), DayFormatter.days2period(statsConfidence.estimate(statistic))));
@@ -53,7 +53,7 @@ public class ReactionTimeAddon implements Mixin {
     @Override
     public String preTodo(final Todo todo) {
         if (timingMixin.showDetail) {
-            String reaction;
+            final String reaction;
             if (todoTiming.hasReactionTime(todo)) {
                 reaction = String.format("%s->", todoTiming.getReactionTime(todo));
             } else if (todoTiming.hasRunningReactionTime(todo)) {

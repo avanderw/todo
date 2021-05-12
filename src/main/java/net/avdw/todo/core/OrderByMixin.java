@@ -1,11 +1,11 @@
 package net.avdw.todo.core;
 
-import com.google.inject.Inject;
 import net.avdw.todo.core.selector.ExtSelector;
 import net.avdw.todo.core.selector.Selector;
 import net.avdw.todo.domain.Todo;
 import picocli.CommandLine.Option;
 
+import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -15,14 +15,19 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class OrderByMixin {
-    @Inject private Set<Selector> baseSelectorSet;
+    private final Set<Selector> baseSelectorSet;
     private Set<Selector> extendedSelectorSet;
     @Option(names = "--order-by")
     private String orderBy;
     private TodoEvaluator todoEvaluator;
 
+    @Inject
+    OrderByMixin(final Set<Selector> baseSelectorSet) {
+        this.baseSelectorSet = baseSelectorSet;
+    }
+
     private Comparator<? super Todo> comparator() {
-        Set<Selector> satisfiedSelectorSet = extendedSelectorSet.stream()
+        final Set<Selector> satisfiedSelectorSet = extendedSelectorSet.stream()
                 .filter(selector -> selector.isSatisfiedBy(orderBy))
                 .collect(Collectors.toSet());
         return switch (satisfiedSelectorSet.size()) {
@@ -35,9 +40,9 @@ public class OrderByMixin {
     private void init() {
         if (todoEvaluator == null) {
             extendedSelectorSet = new HashSet<>(baseSelectorSet);
-            String regex = "\\S+:";
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(orderBy);
+            final String regex = "\\S+:";
+            final Pattern pattern = Pattern.compile(regex);
+            final Matcher matcher = pattern.matcher(orderBy);
             while (matcher.find()) {
                 extendedSelectorSet.add(new ExtSelector(matcher.group()));
             }

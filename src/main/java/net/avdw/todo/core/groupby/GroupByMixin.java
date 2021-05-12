@@ -1,10 +1,11 @@
 package net.avdw.todo.core.groupby;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import net.avdw.todo.domain.Todo;
+import org.tinylog.Logger;
 import picocli.CommandLine.Option;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +17,17 @@ import java.util.stream.Collectors;
 @Singleton
 public class GroupByMixin {
     private final List<Group<Todo, String>> groupByList = new ArrayList<>();
+    private final Set<Group<Todo, String>> groupBySet;
     @Option(names = "--group-by", descriptionKey = "list.group.by.desc", split = ",", paramLabel = "@|+|tag:|change")
     private List<String> groupBySelectorList = new ArrayList<>();
-    @Inject private Set<Group<Todo, String>> groupBySet;
+
+    @Inject
+    GroupByMixin(final Set<Group<Todo, String>> groupBySet) {
+        this.groupBySet = groupBySet;
+    }
 
     private Collector<Todo, ?, Map<String, ?>> buildCollector(final List<Function<Todo, String>> groupByCollectorList) {
-        Function f = groupByCollectorList.get(0);
+        final Function f = groupByCollectorList.get(0);
         if (groupByCollectorList.size() > 1) {
             return Collectors.groupingBy(f, buildCollector(groupByCollectorList.subList(1, groupByCollectorList.size())));
         } else {
@@ -47,12 +53,14 @@ public class GroupByMixin {
 
     public void parse() {
         groupByList.addAll(groupBySelectorList.stream().map(selector -> {
-            TagGroup tagGroup = new TagGroup(selector);
+            final TagGroup tagGroup = new TagGroup(selector);
             if (tagGroup.isSatisfiedBy(selector)) {
+                Logger.debug("Adding group-by mixin: {}", tagGroup);
                 return tagGroup;
             } else {
-                for (Group<Todo, String> group : groupBySet) {
+                for (final Group<Todo, String> group : groupBySet) {
                     if (group.isSatisfiedBy(selector)) {
+                        Logger.debug("Adding group-by mixin: {}", group);
                         return group;
                     }
                 }

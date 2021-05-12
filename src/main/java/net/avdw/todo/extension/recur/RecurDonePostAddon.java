@@ -1,6 +1,5 @@
 package net.avdw.todo.extension.recur;
 
-import com.google.inject.Inject;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.core.style.TodoStyler;
@@ -11,7 +10,9 @@ import net.avdw.todo.extension.due.DueTodoTxtExt;
 import net.avdw.todo.repository.Repository;
 import org.tinylog.Logger;
 
+import javax.inject.Inject;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,19 +41,19 @@ public class RecurDonePostAddon implements PostAddon {
 
     @Override
     public void process(final List<Todo> todoList, final PrintWriter out) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        List<String> recurItems = todoList.stream()
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        final List<String> recurItems = todoList.stream()
                 .filter(recurTodoTxtExt::isSatisfiedBy)
                 .map(todo -> {
-                    RecurDuration recurDuration = recurTodoTxtExt.getValue(todo).orElseThrow();
+                    final RecurDuration recurDuration = recurTodoTxtExt.getValue(todo).orElseThrow();
 
                     Date dueDate = null;
                     if (recurDuration.isAsk()) {
                         boolean retry = true;
                         out.printf("  When is '%s' due?%n  ", todoTextCleaner.clean(todo));
-                        Scanner scanner = new Scanner(System.in);
+                        final Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8);
                         while (retry) {
-                            String input = scanner.next();
+                            final String input = scanner.next();
                             try {
                                 if (Pattern.matches("\\d\\d\\d\\d-\\d\\d-\\d\\d", input)) {
                                     dueDate = dateFormat.parse(input);
@@ -60,7 +61,7 @@ public class RecurDonePostAddon implements PostAddon {
                                 } else {
                                     throw new UnsupportedOperationException();
                                 }
-                            } catch (ParseException | UnsupportedOperationException e) {
+                            } catch (final ParseException | UnsupportedOperationException e) {
                                 out.printf("Incorrect date format. Try again using format '%s'%n", dateFormat.toPattern());
                             }
                         }
@@ -89,11 +90,11 @@ public class RecurDonePostAddon implements PostAddon {
         if (!recurItems.isEmpty()) {
             out.println("Adding recurring item(s):");
         }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         todoRepository.setAutoCommit(false);
         recurItems.forEach(item -> {
             item = item.replaceAll("x \\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d\\d\\d-\\d\\d-\\d\\d", simpleDateFormat.format(new Date()));
-            Todo todo = new Todo(todoRepository.size(), item);
+            final Todo todo = new Todo(todoRepository.size(), item);
             todoRepository.add(todo);
             out.println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
                     String.format("{idx:'%3s',todo:\"%s\"}", todo.getIdx(), todoStyler.style(todo).replaceAll("\"", "\\\\\""))));

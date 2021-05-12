@@ -22,8 +22,8 @@ public class TodoEvaluator {
         Logger.trace("evalFunction = '{}'", evalFunc);
         Logger.trace("selectorSet = {}", selectorSet);
 
-        List<Argument> argumentList = new ArrayList<>();
-        AtomicReference<String> func = new AtomicReference<>(evalFunc);
+        final List<Argument> argumentList = new ArrayList<>();
+        final AtomicReference<String> func = new AtomicReference<>(evalFunc);
         selectorSet.stream()
                 .filter(s -> s.isSatisfiedBy(evalFunc))
                 .forEach(s -> {

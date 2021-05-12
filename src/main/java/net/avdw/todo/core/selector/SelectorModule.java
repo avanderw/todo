@@ -1,16 +1,29 @@
 package net.avdw.todo.core.selector;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.multibindings.Multibinder;
-import net.avdw.todo.extension.SelectorLoader;
+import dagger.Binds;
+import dagger.Module;
+import dagger.multibindings.IntoSet;
+import net.avdw.todo.extension.moscow.MoscowSelector;
+import net.avdw.todo.extension.plan.PlanSelector;
 
-public class SelectorModule extends AbstractModule {
-    @Override
-    protected void configure() {
-        Multibinder<Selector> selectorSet = Multibinder.newSetBinder(binder(), Selector.class);
-        selectorSet.addBinding().to(ContextSelector.class);
-        selectorSet.addBinding().to(ProjectSelector.class);
-        SelectorLoader pluginLoader = new SelectorLoader();
-        pluginLoader.getSelectorSet().forEach(selector -> selectorSet.addBinding().to(selector.getClass()));
-    }
+@Module
+public abstract class SelectorModule {
+
+    @Binds
+    @IntoSet
+    abstract Selector contextSelector(ContextSelector contextSelector);
+
+    @Binds
+    @IntoSet
+    abstract Selector projectSelector(ProjectSelector projectSelector);
+
+    @Binds
+    @IntoSet
+    abstract Selector moscowSelector(MoscowSelector moscowSelector);
+
+    @Binds
+    @IntoSet
+    abstract Selector planSelector(PlanSelector planSelector);
+
+
 }

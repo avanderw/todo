@@ -1,6 +1,11 @@
 package net.avdw.todo.color;
 
+import javax.inject.Inject;
+
 public class ColorConverter {
+    @Inject
+    public ColorConverter() {
+    }
 
     /**
      * Convert RGB values to a hue using a linear transformation.
@@ -12,17 +17,17 @@ public class ColorConverter {
      */
     public int rgbToHue(final double r, final double g, final double b) {
         double f;
-        double max = Math.max(r, Math.max(g, b));
-        double min = Math.min(r, Math.min(g, b));
+        final double max = Math.max(r, Math.max(g, b));
+        final double min = Math.min(r, Math.min(g, b));
 
         // achromatic case
         if (max - min == 0) {
             return 0;
         }
 
-        double mid = middleValue(r, g, b);
+        final double mid = middleValue(r, g, b);
 
-        double n;
+        final double n;
         if (r == max) {
             n = (b == min) ? 0 : 5;
         } else if (g == max) {
@@ -46,7 +51,7 @@ public class ColorConverter {
      * @return rgb with values in range [0..1]
      */
     public RGB hsvToRgb(final int hue, final double saturation, final double value) {
-        double min = (1 - saturation) * value;
+        final double min = (1 - saturation) * value;
         return hueToRgb(min, value, hue);
     }
 
@@ -81,17 +86,17 @@ public class ColorConverter {
         final int maxHue = 360;
         int n;
         int h = hue;
-        double mu;
+        final double mu;
         while (h < 0) {
             h += maxHue;
         }
 
         n = (int) Math.floor(h / 60.);
-        double f = (h - n * 60.) / 60.;
+        final double f = (h - n * 60.) / 60.;
         n %= 6;
 
         mu = min + ((max - min) * f);
-        double md = max - ((max - min) * f);
+        final double md = max - ((max - min) * f);
 
         return switch (n) {
             case 0 -> new RGB(max, mu, min);
@@ -123,9 +128,9 @@ public class ColorConverter {
      * @return rgb with values in range [0..1]
      */
     public RGB hexToRGB(final int hex) {
-        int r = (hex >> 16) & 0xFF;
-        int g = (hex >> 8) & 0xFF;
-        int b = hex & 0xFF;
+        final int r = (hex >> 16) & 0xFF;
+        final int g = (hex >> 8) & 0xFF;
+        final int b = hex & 0xFF;
 
         return new RGB(r / 255., g / 255., b / 255.);
     }
@@ -139,9 +144,9 @@ public class ColorConverter {
      * @return hex value representing the color
      */
     public int rgbToHex(final double r, final double g, final double b) {
-        int hexR = (int) (r * 0xFF) << 16;
-        int hexG = (int) (g * 0xFF) << 8;
-        int hexB = (int) (b * 0xFF);
+        final int hexR = (int) (r * 0xFF) << 16;
+        final int hexG = (int) (g * 0xFF) << 8;
+        final int hexB = (int) (b * 0xFF);
 
         return hexR | hexG | hexB;
     }
@@ -164,9 +169,9 @@ public class ColorConverter {
      * @return the ansi string
      */
     public String hexToAnsiFg(final int hex, final boolean bold) {
-        int r = (hex >> 16) & 0xFF;
-        int g = (hex >> 8) & 0xFF;
-        int b = hex & 0xFF;
+        final int r = (hex >> 16) & 0xFF;
+        final int g = (hex >> 8) & 0xFF;
+        final int b = hex & 0xFF;
 
         return bold
                 ? String.format("\u001b[1;38;2;%s;%s;%sm", r, g, b)
@@ -180,9 +185,9 @@ public class ColorConverter {
      * @return the ansi string
      */
     public String hexToAnsiBg(final int hex) {
-        int r = (hex >> 16) & 0xFF;
-        int g = (hex >> 8) & 0xFF;
-        int b = hex & 0xFF;
+        final int r = (hex >> 16) & 0xFF;
+        final int g = (hex >> 8) & 0xFF;
+        final int b = hex & 0xFF;
 
         return String.format("\u001b[48;2;%s;%s;%sm", r, g, b);
     }

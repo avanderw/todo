@@ -1,28 +1,35 @@
 # Changelog for project todo
+
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
-and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-Entries are suggested using the [Changelog Generator](https://github.com/avanderw/changelog).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
+and adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Entries are suggested using
+the [Changelog Generator](https://github.com/avanderw/changelog).
 
 ## [v3.0.0] (Major release)
+
 *Released on 2021-01-13*
 
 ### Added
+
 - Add '--order-by' mixin to 'ls' which uses new selectors
 
 ### Changed
+
 - Refactor sort to use a mathematical function, still requiring work with selectors
 
 ### Fixed
+
 - Fix sort function not working with extensions
 - Fix size creating spaces at the front of sized todos
 - Fix broken test case using incorrect selector
 
 ## [v2.1.0] (Major release, Update recommended)
+
 *Released on 2020-10-29*
 
 ### Added
+
 - Add plan module to assist in planning multiple todos
 - Add sizing module to assist in sizing multiple todos
 - Add MoSCoW cli shortcut for 'edit --add moscow:lvl'
@@ -45,6 +52,7 @@ Entries are suggested using the [Changelog Generator](https://github.com/avander
 - Add analytics to ListCli
 
 ### Changed
+
 - Update formatting for newly added features
 - Update MoSCoW styling for must and should haves
 - Refactor styling module to use new styling module
@@ -67,9 +75,11 @@ Entries are suggested using the [Changelog Generator](https://github.com/avander
 - Change priority --clean option to -R
 
 ### Removed
+
 - Remove reflections library as it slowed things down too much
 
 ### Fixed
+
 - Fix styling regex for sizing module
 - Fix styling bug with relative dates
 - Fix sort to always have completed items at the bottom
@@ -81,15 +91,19 @@ Entries are suggested using the [Changelog Generator](https://github.com/avander
 - Fix priority --help null pointer
 
 ## [v2.0.1] (Maintenance release)
+
 *Released on 2020-10-08*
 
 ### Fixed
+
 - Fix resolving global directory when the local directory does not exist
 
 ## [v2.0.0] (Major release)
+
 *Released on 2020-10-07*
 
 ### Added
+
 - Add inclusion of done items for stats tracking
 - Add 'todo stats' to display lead, cycle and reaction time
 - Add 'todo changelog' command
@@ -113,6 +127,7 @@ Entries are suggested using the [Changelog Generator](https://github.com/avander
 - Add basic commandline usage
 
 ### Changed
+
 - Update todo styling to a production setting
 - Refactor code to pass quality rules
 - Refactor common testing tasks
@@ -146,6 +161,7 @@ Entries are suggested using the [Changelog Generator](https://github.com/avander
 - Enhance sort to list todo's after sorting
 
 ### Deprecated
+
 - Deprecate TodoList in favour of ListCli
 - Deprecate TodoEdit in favour of EditCli
 - Deprecate TodoSort in favour of SortCli
@@ -162,10 +178,12 @@ Entries are suggested using the [Changelog Generator](https://github.com/avander
 - Deprecate old theme classes to hint at using new style classes
 
 ### Removed
+
 - Remove checkstyle plugin until a fix is found to add it again
 - Remove cli options
 
 ### Fixed
+
 - Fix styling of priority addition date bug
 - Fix string escaping bug when displaying todos
 - Fix bundle reference
@@ -180,9 +198,11 @@ Entries are suggested using the [Changelog Generator](https://github.com/avander
 - Fix remove functionality not working with LF vs CRLF
 
 ## [1.0.1] (Maintenance release)
+
 *Released on 2020-03-11*
 
 ### Changed
+
 - Refactor templates
 - Refactor backup
 - Refactor styling for various commands
@@ -205,6 +225,7 @@ Entries are suggested using the [Changelog Generator](https://github.com/avander
 - Enhance sort to list todo's after sorting
 
 ### Bug fixes
+
 - Fix 'todo repeat' functionality
 - Fix inconsistency between 'ls' and 'add'
 - Fix inconsistency between 'ls' and 'pri'
@@ -213,9 +234,11 @@ Entries are suggested using the [Changelog Generator](https://github.com/avander
 - Fix remove functionality not working with LF vs CRLF
 
 ## [1.0.0] (Major release)
+
 *Released on 2019-09-30*
 
 ### Added
+
 - Add 'todo pri --shift-[up|down]' feature
 - Add 'todo pri --optmize' feature
 - Add editor property config
@@ -223,6 +246,7 @@ Entries are suggested using the [Changelog Generator](https://github.com/avander
 - Add 'todo repeat' command
 
 ### Changed
+
 - Enhance todo highlighting to make due dates more informative
 - Refactor todo with priority
 - Enhance list to contain counts for context and project
@@ -231,5 +255,6 @@ Entries are suggested using the [Changelog Generator](https://github.com/avander
 - Update README.md
 
 ### Bug fixes
+
 - Fix auto-date property not being located correctly
 - Fix a bug when viewing the status of an invalid known path

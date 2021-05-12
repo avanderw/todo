@@ -5,7 +5,6 @@ import net.avdw.todo.Guard;
 import java.util.function.Function;
 
 /**
- *
  * @param <T> value to group into a list
  * @param <R> key / bucket to the list
  */

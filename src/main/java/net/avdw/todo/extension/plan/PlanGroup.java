@@ -1,10 +1,10 @@
 package net.avdw.todo.extension.plan;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import net.avdw.todo.core.groupby.Group;
 import net.avdw.todo.domain.Todo;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Locale;
 import java.util.function.Function;
 
@@ -21,7 +21,7 @@ public class PlanGroup implements Group<Todo, String> {
 
     @Override
     public Function<Todo, String> collector() {
-        return (planMapper::map);
+        return planMapper::map;
     }
 
     @Override

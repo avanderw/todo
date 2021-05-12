@@ -1,6 +1,5 @@
 package net.avdw.todo.core.mixin;
 
-import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
 import net.avdw.todo.repository.Any;
@@ -8,6 +7,7 @@ import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import picocli.CommandLine.Option;
 
+import javax.inject.Inject;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -28,11 +28,11 @@ public class RepositoryMixin {
     }
 
     public Repository<Integer, Todo> repository() {
-        Repository<Integer, Todo> allRepositories = new FileRepository<>(Paths.get("scoped-repository.txt"), new TodoFileTypeBuilder());
+        final Repository<Integer, Todo> allRepositories = new FileRepository<>(Paths.get("scoped-repository.txt"), new TodoFileTypeBuilder());
         allRepositories.setAutoCommit(false);
         allRepositories.addAll(todoRepository.findAll(new Any<>()));
 
-        Path parent = todoPath.getParent();
+        final Path parent = todoPath.getParent();
         if (parent == null) {
             return todoRepository;
         }

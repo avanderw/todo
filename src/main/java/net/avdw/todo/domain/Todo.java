@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import net.avdw.todo.SuppressFBWarnings;
-import net.avdw.todo.extension.TodoTxtExt;
 import net.avdw.todo.repository.IdType;
 
 import java.text.SimpleDateFormat;
@@ -53,10 +52,10 @@ public class Todo implements IdType<Integer>, Comparable<Todo> {
     private final Date lastChangeDate = lastChangeDate();
     @Getter(lazy = true)
     private final Priority priority = priority();
+    private final Map<String, List<String>> tagValueListMap = new HashMap<>();
     @Getter
     @Setter
     private Integer id;
-    private Map<String, List<String>> tagValueListMap = new HashMap<>();
 
     public Todo(final Integer id, final String text) {
         this.id = Objects.requireNonNull(id);
@@ -65,7 +64,7 @@ public class Todo implements IdType<Integer>, Comparable<Todo> {
 
     @SneakyThrows
     private Date additionDate() {
-        Matcher matcher = ADDITION_DATE_PATTERN.matcher(text);
+        final Matcher matcher = ADDITION_DATE_PATTERN.matcher(text);
         if (matcher.find()) {
             String group = matcher.group(1);
             group = matcher.group(2) != null ? matcher.group(2) : group;
@@ -78,13 +77,13 @@ public class Todo implements IdType<Integer>, Comparable<Todo> {
 
     @Override
     public int compareTo(final Todo todo) {
-            return this.getText().compareTo(todo.getText());
+        return this.getText().compareTo(todo.getText());
     }
 
     private List<String> contextList() {
-        List<String> contextList = new ArrayList<>();
-        Pattern pattern = Pattern.compile("\\s@(\\S+)");
-        Matcher matcher = pattern.matcher(text);
+        final List<String> contextList = new ArrayList<>();
+        final Pattern pattern = Pattern.compile("\\s@(\\S+)");
+        final Matcher matcher = pattern.matcher(text);
         while (matcher.find()) {
             contextList.add(matcher.group(1));
         }
@@ -98,7 +97,7 @@ public class Todo implements IdType<Integer>, Comparable<Todo> {
 
     @SneakyThrows
     private Date doneDate() {
-        Matcher matcher = COMPLETION_DATE_PATTERN.matcher(text);
+        final Matcher matcher = COMPLETION_DATE_PATTERN.matcher(text);
         if (matcher.find()) {
             return simpleDateFormat.parse(matcher.group(1));
         } else {
@@ -111,14 +110,14 @@ public class Todo implements IdType<Integer>, Comparable<Todo> {
     }
 
     public Optional<String> getKey(final String key) {
-        int keyIdx = text.indexOf(String.format("%s:", key));
+        final int keyIdx = text.indexOf(String.format("%s:", key));
         if (keyIdx == -1) {
             return Optional.empty();
         }
 
-        int valueStart = keyIdx + key.length() + 1;
-        int valueBoundIdx = text.indexOf(" ", valueStart);
-        int valueEnd = valueBoundIdx == -1 ? text.length() : valueBoundIdx;
+        final int valueStart = keyIdx + key.length() + 1;
+        final int valueBoundIdx = text.indexOf(" ", valueStart);
+        final int valueEnd = valueBoundIdx == -1 ? text.length() : valueBoundIdx;
         return Optional.of(text.substring(valueStart, valueEnd));
     }
 
@@ -127,9 +126,9 @@ public class Todo implements IdType<Integer>, Comparable<Todo> {
             return tagValueListMap.get(ext);
         }
 
-        List<String> tagValueList = new ArrayList<>();
-        Pattern pattern = Pattern.compile(String.format("\\s%s:(\\S+)", ext));
-        Matcher matcher = pattern.matcher(text);
+        final List<String> tagValueList = new ArrayList<>();
+        final Pattern pattern = Pattern.compile(String.format("\\s%s:(\\S+)", ext));
+        final Matcher matcher = pattern.matcher(text);
         while (matcher.find()) {
             tagValueList.add(matcher.group(1));
         }
@@ -176,7 +175,7 @@ public class Todo implements IdType<Integer>, Comparable<Todo> {
 
     @SneakyThrows
     private Date parkedDate() {
-        Matcher matcher = PARKED_DATE_PATTERN.matcher(text);
+        final Matcher matcher = PARKED_DATE_PATTERN.matcher(text);
         if (matcher.find()) {
             return simpleDateFormat.parse(matcher.group(1));
         } else {
@@ -193,9 +192,9 @@ public class Todo implements IdType<Integer>, Comparable<Todo> {
     }
 
     private List<String> projectList() {
-        List<String> projectList = new ArrayList<>();
-        Pattern pattern = Pattern.compile("\\s\\+(\\S+)");
-        Matcher matcher = pattern.matcher(text);
+        final List<String> projectList = new ArrayList<>();
+        final Pattern pattern = Pattern.compile("\\s\\+(\\S+)");
+        final Matcher matcher = pattern.matcher(text);
         while (matcher.find()) {
             projectList.add(matcher.group(1));
         }
@@ -209,7 +208,7 @@ public class Todo implements IdType<Integer>, Comparable<Todo> {
 
     @SneakyThrows
     private Date removedDate() {
-        Matcher matcher = REMOVED_DATE_PATTERN.matcher(text);
+        final Matcher matcher = REMOVED_DATE_PATTERN.matcher(text);
         if (matcher.find()) {
             return simpleDateFormat.parse(matcher.group(1));
         } else {

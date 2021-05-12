@@ -1,11 +1,11 @@
 package net.avdw.todo.extension.progress;
 
-import com.google.inject.Inject;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.extension.Mixin;
 import net.avdw.todo.repository.Repository;
 
+import javax.inject.Inject;
 import java.util.List;
 
 public class ProgressAddon implements Mixin {
@@ -20,10 +20,10 @@ public class ProgressAddon implements Mixin {
 
     @Override
     public String postList(final List<Todo> list, final Repository<Integer, Todo> repository) {
-        long done = list.stream().filter(Todo::isDone).count();
-        long parked = list.stream().filter(Todo::isParked).count();
-        long removed = list.stream().filter(Todo::isRemoved).count();
-        long progress = (done + parked + removed) * 100 / list.size();
+        final long done = list.stream().filter(Todo::isDone).count();
+        final long parked = list.stream().filter(Todo::isParked).count();
+        final long removed = list.stream().filter(Todo::isRemoved).count();
+        final long progress = (done + parked + removed) * 100 / list.size();
         return templatedResource.populateKey(ProgressKey.POST_LIST,
                 String.format("{subTotal:'%d',total:'%d',todo:'%d',started:'%d',done:'%d',progress:'%d',parked:'%s',removed:'%s'}", list.size(), repository.size(),
                         list.stream().filter(progressExtension::notStarted).count(),

@@ -1,9 +1,9 @@
 package net.avdw.todo.core;
 
-import com.google.inject.Inject;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.SuppressFBWarnings;
 import net.avdw.todo.TemplatedResource;
+import net.avdw.todo.core.style.TodoStyler;
 import net.avdw.todo.domain.IsDone;
 import net.avdw.todo.domain.IsParked;
 import net.avdw.todo.domain.IsRemoved;
@@ -13,25 +13,33 @@ import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.FileRepository;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
-import net.avdw.todo.core.style.TodoStyler;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;
 
+import javax.inject.Inject;
 import java.nio.file.Path;
 import java.util.List;
 
 @Command(name = "archive", resourceBundle = "messages", description = "${bundle:archive}")
 public class ArchiveCli implements Runnable {
 
+    private final TodoStyler todoStyler;
+    private final TemplatedResource templatedResource;
+    private final Path todoPath;
+    private final Repository<Integer, Todo> todoRepository;
     @Spec private CommandSpec spec;
-    @Inject private TodoStyler todoStyler;
-    @Inject private TemplatedResource templatedResource;
-    @Inject private Path todoPath;
-    @Inject private Repository<Integer, Todo> todoRepository;
+
+    @Inject
+    ArchiveCli(final TodoStyler todoStyler, final TemplatedResource templatedResource, final Path todoPath, final Repository<Integer, Todo> todoRepository) {
+        this.todoStyler = todoStyler;
+        this.templatedResource = templatedResource;
+        this.todoPath = todoPath;
+        this.todoRepository = todoRepository;
+    }
 
     private void archive(final Repository<Integer, Todo> archiveRepository, final Specification<Integer, Todo> specification) {
-        List<Todo> archiveTodoList = todoRepository.findAll(specification);
+        final List<Todo> archiveTodoList = todoRepository.findAll(specification);
         archiveRepository.addAll(archiveTodoList);
         todoRepository.removeAll(specification);
     }
@@ -41,11 +49,11 @@ public class ArchiveCli implements Runnable {
             justification = "Google Guice does not allow for null injection (todoPath)")
     public void run() {
 
-        Specification<Integer, Todo> isDone = new IsDone();
-        Specification<Integer, Todo> isParked = new IsParked();
-        Specification<Integer, Todo> isRemoved = new IsRemoved();
-        Specification<Integer, Todo> isArchive = isDone.or(isParked).or(isRemoved);
-        List<Todo> allTodoList = todoRepository.findAll(new Any<>());
+        final Specification<Integer, Todo> isDone = new IsDone();
+        final Specification<Integer, Todo> isParked = new IsParked();
+        final Specification<Integer, Todo> isRemoved = new IsRemoved();
+        final Specification<Integer, Todo> isArchive = isDone.or(isParked).or(isRemoved);
+        final List<Todo> allTodoList = todoRepository.findAll(new Any<>());
         for (int i = 0; i < allTodoList.size(); i++) {
             if (isArchive.isSatisfiedBy(allTodoList.get(i))) {
                 spec.commandLine().getOut().println(templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,

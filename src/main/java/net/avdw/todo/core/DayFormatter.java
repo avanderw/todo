@@ -1,6 +1,6 @@
 package net.avdw.todo.core;
 
-public class DayFormatter {
+public final class DayFormatter {
     private DayFormatter() {
     }
 
@@ -13,11 +13,11 @@ public class DayFormatter {
             return "          0d";
         }
         long days = Math.abs(totalDays);
-        long years = Math.floorDiv(days, 365);
+        final long years = Math.floorDiv(days, 365);
         days %= 365;
-        long months = Math.floorDiv(days, 30);
+        final long months = Math.floorDiv(days, 30);
         days %= 30;
-        long weeks = Math.floorDiv(days, 7);
+        final long weeks = Math.floorDiv(days, 7);
         days %= 7;
 
         return ((years != 0) ? String.format("%sy", years) : "  ") +

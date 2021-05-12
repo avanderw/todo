@@ -4,10 +4,15 @@ import net.avdw.todo.domain.RegexSpecification;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.repository.Specification;
 
+import javax.inject.Inject;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class ProjectSelector implements Selector {
+    @Inject
+    public ProjectSelector() {
+    }
+
     @Override
     public Comparator<? super Todo> comparator() {
         return Comparator.comparing(todo -> todo.getProjectList().stream()

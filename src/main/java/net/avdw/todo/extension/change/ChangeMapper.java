@@ -1,8 +1,8 @@
 package net.avdw.todo.extension.change;
 
-import com.google.inject.Inject;
 import net.avdw.todo.domain.Todo;
 
+import javax.inject.Inject;
 import java.util.Comparator;
 
 public class ChangeMapper {
@@ -26,7 +26,7 @@ public class ChangeMapper {
         } else if (todo.getAdditionDate() != null) {
             change = new Change("Added", todo.getAdditionDate());
         } else {
-            change = new Change("No group", null);
+            change = new Change("No group");
         }
 
         return change;

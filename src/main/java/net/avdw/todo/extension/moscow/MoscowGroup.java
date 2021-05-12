@@ -1,9 +1,9 @@
 package net.avdw.todo.extension.moscow;
 
-import com.google.inject.Inject;
 import net.avdw.todo.core.groupby.Group;
 import net.avdw.todo.domain.Todo;
 
+import javax.inject.Inject;
 import java.util.Locale;
 import java.util.function.Function;
 
@@ -19,7 +19,7 @@ public class MoscowGroup implements Group<Todo, String> {
 
     @Override
     public Function<Todo, String> collector() {
-        return (moscowMapper::map);
+        return moscowMapper::map;
     }
 
     @Override

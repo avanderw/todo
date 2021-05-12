@@ -2,9 +2,7 @@ package net.avdw.todo.core;
 
 import lombok.SneakyThrows;
 import net.avdw.todo.CliTester;
-import net.avdw.todo.MainCli;
 import net.avdw.todo.TestConstant;
-import net.avdw.todo.TestModule;
 import net.avdw.todo.domain.IsDone;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.domain.TodoFileTypeBuilder;
@@ -44,7 +42,7 @@ public class DoneCliTest {
     @BeforeClass
     public static void beforeClass() {
         setup(todoPath);
-        cliTester = new CliTester(MainCli.class, new TestModule(todoPath));
+        cliTester = new CliTester(todoPath);
         warmup(cliTester);
     }
 
@@ -115,7 +113,7 @@ public class DoneCliTest {
         assertEquals(4, doneTodoList.size());
     }
 
-    @Test(timeout =  TestConstant.PERFORMANCE_TIMEOUT)
+    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testRecurDonePostAddon() {
         cliTester.execute("do --and rec: --or recur: --not rec:ask").success()
                 .contains("due:2019-08-22")
@@ -140,7 +138,7 @@ public class DoneCliTest {
         System.setIn(systemIn);
     }
 
-    @Test(timeout =  TestConstant.PERFORMANCE_TIMEOUT)
+    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testBooleanFilter() {
         cliTester.execute("do --and urgency:2").success().count("\\[", 7);
     }

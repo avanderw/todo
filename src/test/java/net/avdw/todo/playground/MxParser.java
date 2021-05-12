@@ -1,6 +1,10 @@
 package net.avdw.todo.playground;
 
-import org.mariuszgromada.math.mxparser.*;
+import org.mariuszgromada.math.mxparser.Argument;
+import org.mariuszgromada.math.mxparser.Constant;
+import org.mariuszgromada.math.mxparser.Expression;
+import org.mariuszgromada.math.mxparser.Function;
+import org.mariuszgromada.math.mxparser.mXparser;
 
 public class MxParser {
     public static void main(String[] args) {
@@ -12,7 +16,7 @@ public class MxParser {
 
         Constant mos = new Constant("moscow = 2");
         Constant siz = new Constant("size = 2");
-        Expression  exp = new Expression("moscow + size", mos, siz);
+        Expression exp = new Expression("moscow + size", mos, siz);
         mXparser.consolePrintln(exp.getExpressionString() + " = " + exp.calculate());
     }
 }

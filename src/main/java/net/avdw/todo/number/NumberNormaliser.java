@@ -21,7 +21,7 @@ public class NumberNormaliser {
      * @return a number in the range [0..1]
      */
     public double normalise(final double number, final double firstBound, final double lastBound) {
-        double distance = Math.abs(lastBound - firstBound);
+        final double distance = Math.abs(lastBound - firstBound);
         return (number - Math.min(firstBound, lastBound)) / distance;
     }
 }

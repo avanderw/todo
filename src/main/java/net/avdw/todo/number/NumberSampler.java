@@ -1,7 +1,6 @@
 package net.avdw.todo.number;
 
-import com.google.inject.Inject;
-
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,9 +35,9 @@ public class NumberSampler {
      * @return a list of numbers samples from the range
      */
     public List<Double> sample(final double start, final double end, final int sampleCount) {
-        List<Double> sampleList = new ArrayList<>();
+        final List<Double> sampleList = new ArrayList<>();
         for (int i = 0; i < sampleCount; i++) {
-            double weight = numberNormaliser.normalise(i, sampleCount - 1);
+            final double weight = numberNormaliser.normalise(i, sampleCount - 1);
             sampleList.add(numberInterpolater.interpolate(start, end, weight));
         }
 

@@ -1,7 +1,6 @@
 package net.avdw.todo;
 
 import lombok.SneakyThrows;
-import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -17,14 +16,8 @@ public class MainCliTest {
 
     @BeforeClass
     public static void beforeClass() {
-        cliTester = new CliTester(MainCli.class, new TestModule(todoPath));
+        cliTester = new CliTester(todoPath);
         warmup(cliTester);
-    }
-
-    @After
-    @SneakyThrows
-    public void afterTest() {
-        TodoCliTestBootstrapper.cleanup(todoPath);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
@@ -33,6 +26,7 @@ public class MainCliTest {
         Files.createDirectories(todoPath.getParent());
         Files.createFile(todoPath);
         cliTester.execute().success().contains("Usage");
+        TodoCliTestBootstrapper.cleanup(todoPath);
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)

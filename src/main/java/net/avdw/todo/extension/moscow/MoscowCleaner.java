@@ -1,8 +1,9 @@
 package net.avdw.todo.extension.moscow;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import net.avdw.todo.domain.Todo;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 @Singleton
 public class MoscowCleaner {
@@ -15,7 +16,7 @@ public class MoscowCleaner {
 
     public String clean(final Todo todo) {
         String text = todo.getText();
-        for (String ext : moscowExt.getSupportedExtList()) {
+        for (final String ext : moscowExt.getSupportedExtList()) {
             text = text.replaceAll(String.format("\\s%s:\\S+", ext), "");
         }
         return text;

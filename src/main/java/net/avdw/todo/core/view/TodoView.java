@@ -1,13 +1,13 @@
 package net.avdw.todo.core.view;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import net.avdw.todo.ResourceBundleKey;
 import net.avdw.todo.TemplatedResource;
+import net.avdw.todo.core.style.TodoStyler;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.extension.Mixin;
-import net.avdw.todo.core.style.TodoStyler;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,8 +26,8 @@ public class TodoView {
     }
 
     public String render(final Todo todo) {
-        String styledText = todoStyler.style(todo);
-        String escapedText = styledText.replaceAll("\"", "\\\\\"");
+        final String styledText = todoStyler.style(todo);
+        final String escapedText = styledText.replaceAll("\"", "\\\\\"");
         return templatedResource.populateKey(ResourceBundleKey.TODO_LINE_ITEM,
                 String.format("{idx:'%3s',pre:'%s',todo:\"%s\",post:'%s'}",
                         todo.getIdx(),

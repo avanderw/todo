@@ -1,7 +1,7 @@
 package net.avdw.todo;
 
-import com.google.inject.Singleton;
-
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -10,6 +10,7 @@ public class RunningStats {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
     private final long startedMs;
 
+    @Inject
     RunningStats() {
         startedMs = System.currentTimeMillis();
     }

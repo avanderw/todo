@@ -27,9 +27,9 @@ public class HSVColorGenerator implements ColorGenerator {
      */
     @Override
     public RGB generateRGB() {
-        int hue = (int) Math.max(0, Math.min(360, hueGenerator.nextValue()));
-        double saturation = Math.max(0, Math.min(1, saturationGenerator.nextValue()));
-        double value = Math.max(0, Math.min(1, valueGenerator.nextValue()));
+        final int hue = (int) Math.max(0, Math.min(360, hueGenerator.nextValue()));
+        final double saturation = Math.max(0, Math.min(1, saturationGenerator.nextValue()));
+        final double value = Math.max(0, Math.min(1, valueGenerator.nextValue()));
         return colorConverter.hsvToRgb(hue, saturation, value);
     }
 }

@@ -9,9 +9,9 @@ import java.util.Optional;
 public interface TodoTxtExt<T> extends Guard<Todo> {
     List<String> getSupportedExtList();
 
-    Optional<T> getValue(final Todo todo);
+    Optional<T> getValue(Todo todo);
 
-    List<T> getValueList(final Todo todo);
+    List<T> getValueList(Todo todo);
 
     String preferredExt();
 }

@@ -1,6 +1,5 @@
 package net.avdw.todo.extension.dependency;
 
-import com.google.inject.Inject;
 import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.core.mixin.IndexFilterMixin;
 import net.avdw.todo.core.view.TodoView;
@@ -12,25 +11,34 @@ import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Spec;
 
+import javax.inject.Inject;
 import java.util.Optional;
 
 @Command(name = "dependency", resourceBundle = "messages", description = "${bundle:link.desc}", mixinStandardHelpOptions = true)
 public class DependencyCli implements Runnable {
+    private final Repository<Integer, Todo> todoRepository;
+    private final TodoView todoView;
+    private final TemplatedResource templatedResource;
+    private final DependencyExt linkExt;
     @Mixin private IndexFilterMixin childrenMixin;
-    @Inject private DependencyExt linkExt;
     @Parameters(arity = "1", index = "1", descriptionKey = "link.parent.desc") private Integer parentIdx;
     @Spec private CommandSpec spec;
-    @Inject private Repository<Integer, Todo> todoRepository;
-    @Inject private TodoView todoView;
-    @Inject private TemplatedResource templatedResource;
+
+    @Inject
+    DependencyCli(final Repository<Integer, Todo> todoRepository, final TodoView todoView, final TemplatedResource templatedResource, final DependencyExt linkExt) {
+        this.todoRepository = todoRepository;
+        this.todoView = todoView;
+        this.templatedResource = templatedResource;
+        this.linkExt = linkExt;
+    }
 
     @Override
     public void run() {
-        Todo parentTodo = todoRepository.findById(parentIdx - 1).orElseThrow();
-        String parentLink;
-        Todo updatedParentTodo;
+        final Todo parentTodo = todoRepository.findById(parentIdx - 1).orElseThrow();
+        final String parentLink;
+        final Todo updatedParentTodo;
         if (linkExt.getValueList(parentTodo).isEmpty()) {
-            int maxLink = todoRepository.findAll(linkExt).stream()
+            final int maxLink = todoRepository.findAll(linkExt).stream()
                     .map(linkExt::getValue)
                     .filter(Optional::isPresent)
                     .map(Optional::orElseThrow)
@@ -48,8 +56,8 @@ public class DependencyCli implements Runnable {
         spec.commandLine().getOut().println(todoView.render(updatedParentTodo));
 
         spec.commandLine().getOut().println(templatedResource.populateKey(DependencyKey.CHILDREN_HEADER));
-        for (Todo childTodo : todoRepository.findAll(childrenMixin)) {
-            int maxLink = todoRepository.findAll(linkExt).stream()
+        for (final Todo childTodo : todoRepository.findAll(childrenMixin)) {
+            final int maxLink = todoRepository.findAll(linkExt).stream()
                     .map(linkExt::getValue)
                     .filter(Optional::isPresent)
                     .map(Optional::orElseThrow)
@@ -59,7 +67,7 @@ public class DependencyCli implements Runnable {
                     .mapToInt(Integer::parseInt)
                     .max().orElse(0);
 
-            Todo updatedChildTodo = new Todo(childTodo.getId(),
+            final Todo updatedChildTodo = new Todo(childTodo.getId(),
                     String.format("%s link:%s.%d",
                             childTodo.getText().replaceAll(String.format("\\s(%s):\\S+", String.join("|", linkExt.getSupportedExtList())), ""),
                             parentLink,

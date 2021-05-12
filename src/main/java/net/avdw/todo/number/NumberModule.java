@@ -1,12 +1,13 @@
 package net.avdw.todo.number;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
+import dagger.Module;
+import dagger.Provides;
 
+import javax.inject.Singleton;
 import java.util.function.Function;
 
-public class NumberModule extends AbstractModule {
+@Module
+public class NumberModule {
     @Provides
     @Singleton
     Function<Double, Double> defaultInterpolation() {
