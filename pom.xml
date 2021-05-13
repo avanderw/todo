@@ -163,12 +163,12 @@
                     <dependency>
                         <groupId>net.sourceforge.pmd</groupId>
                         <artifactId>pmd-java</artifactId>
-                        <version>6.26.0</version>
+                        <version>6.34.0</version>
                     </dependency>
                     <dependency>
                         <groupId>net.sourceforge.pmd</groupId>
                         <artifactId>pmd-core</artifactId>
-                        <version>6.26.0</version>
+                        <version>6.34.0</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -240,7 +240,7 @@
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>8.36</version>
+                        <version>8.42</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -253,7 +253,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.12</version>
+                            <version>1.18.20</version>
                         </path>
                         <path>
                             <groupId>com.google.dagger</groupId>
@@ -393,12 +393,12 @@
         <dependency>
             <groupId>org.ocpsoft.prettytime</groupId>
             <artifactId>prettytime</artifactId>
-            <version>4.0.5.Final</version>
+            <version>5.0.1.Final</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-math3</artifactId>
-            <version>3.2</version>
+            <version>3.6.1</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -408,56 +408,51 @@
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
-            <version>4.5.1</version>
+            <version>4.6.1</version>
         </dependency>
         <dependency>
             <groupId>org.tinylog</groupId>
             <artifactId>tinylog-api</artifactId>
-            <version>2.2.0-M3</version>
+            <version>2.4.0-M1</version>
         </dependency>
         <dependency>
             <groupId>org.tinylog</groupId>
             <artifactId>tinylog-impl</artifactId>
-            <version>2.2.0-M3</version>
+            <version>2.4.0-M1</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.github.spullara.mustache.java</groupId>
             <artifactId>compiler</artifactId>
-            <version>0.9.6</version>
-        </dependency>
-        <dependency>
-            <groupId>org.knowm.xchart</groupId>
-            <artifactId>xchart</artifactId>
-            <version>3.6.5</version>
-            <scope>test</scope>
+            <version>0.9.7</version>
         </dependency>
         <dependency>
             <groupId>com.github.freva</groupId>
             <artifactId>ascii-table</artifactId>
             <version>1.1.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.fusesource.jansi</groupId>
             <artifactId>jansi</artifactId>
-            <version>1.18</version>
+            <version>2.3.2</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.13.1</version>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
+            <version>1.18.20</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-model</artifactId>
-            <version>3.6.3</version>
+            <version>3.8.1</version>
         </dependency>
         <!-- org.apache.maven:maven-model leaks exception from org.codehause.plexus:plexus-utils -->
         <dependency>

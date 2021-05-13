@@ -1,6 +1,11 @@
 package net.avdw.todo;
 
-import org.fusesource.jansi.AnsiConsole;
+import lombok.SneakyThrows;
+import org.fusesource.jansi.AnsiColors;
+import org.fusesource.jansi.AnsiMode;
+import org.fusesource.jansi.AnsiType;
+import org.fusesource.jansi.io.AnsiOutputStream;
+import org.fusesource.jansi.io.AnsiProcessor;
 import org.tinylog.Logger;
 import picocli.CommandLine;
 
@@ -12,10 +17,7 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Utility class to assist with testing picocli applications.
@@ -58,6 +60,7 @@ public class CliTester {
         return execute(command, null);
     }
 
+    @SneakyThrows
     public CliTester execute(final String command, final String... arguments) {
         TestMainModule module = new TestMainModule(todoPath);
         TestMainComponent component = DaggerTestMainComponent.builder()
@@ -65,9 +68,20 @@ public class CliTester {
                 .build();
         CommandLine commandLine = new CommandLine(MainCli.class, new DaggerFactory(component));
 
+        out = new ByteArrayOutputStream();
+        err = new ByteArrayOutputStream();
+        AnsiOutputStream ansiOutputStream = new AnsiOutputStream(out, new AnsiOutputStream.ZeroWidthSupplier(), AnsiMode.Strip, new AnsiProcessor(out),
+                AnsiType.Unsupported, AnsiColors.Colors16, StandardCharsets.UTF_8, () -> {
+        }, () -> {
+        }, true);
+        AnsiOutputStream ansiErrorStream = new AnsiOutputStream(err, new AnsiOutputStream.ZeroWidthSupplier(), AnsiMode.Strip, new AnsiProcessor(err),
+                AnsiType.Unsupported, AnsiColors.Colors16, StandardCharsets.UTF_8, () -> {
+        }, () -> {
+        }, true);
+
         commandLine.setCaseInsensitiveEnumValuesAllowed(true);
-        commandLine.setOut(new PrintWriter(AnsiConsole.wrapOutputStream(out = new ByteArrayOutputStream()), true));
-        commandLine.setErr(new PrintWriter(AnsiConsole.wrapOutputStream(err = new ByteArrayOutputStream()), true, StandardCharsets.UTF_8));
+        commandLine.setOut(new PrintWriter(ansiOutputStream, true, StandardCharsets.UTF_8));
+        commandLine.setErr(new PrintWriter(ansiErrorStream, true, StandardCharsets.UTF_8));
 
         if (command == null) {
             exitCode = commandLine.execute();
