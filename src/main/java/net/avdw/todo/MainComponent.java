@@ -33,11 +33,13 @@ import net.avdw.todo.extension.start.StartCli;
 import net.avdw.todo.extension.state.StateMixin;
 import net.avdw.todo.extension.stats.StatsCli;
 import net.avdw.todo.extension.timing.TimingMixin;
+import net.avdw.update.UpdateModule;
+import net.avdw.update.adapter.in.UpdateCliAdapter;
 
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {MainModule.class, CoreModule.class, ExtensionModule.class})
+@Component(modules = {MainModule.class, CoreModule.class, ExtensionModule.class, UpdateModule.class})
 interface MainComponent {
     MainCli mainCli();
     AddCli addCli();
@@ -71,4 +73,6 @@ interface MainComponent {
     StatusCli statusCli();
     StatsCli statsCli();
     BrowseCli browseCli();
+
+    UpdateCliAdapter updateCliAdapter();
 }

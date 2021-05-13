@@ -35,6 +35,11 @@ public class MainCliTest {
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
+    public void testUpdateFeature() {
+        cliTester.execute("update --help").success();
+    }
+
+    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testVersion() {
         cliTester.execute("--version").success();
     }

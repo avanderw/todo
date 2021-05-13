@@ -1,0 +1,9 @@
+2019-08-12 @Enhance +report to list done items by day dating back x days with omit option
+(D) 2020-03-31 @Add todo stats --group-by meta | context | project
+p 2020-10-15 2019-08-13 @Enhance +explore to be OS independant
+p 2020-10-15 2019-08-14 @Add +report in the style of github contribution graph
+p 2020-10-15 2019-10-11 @Add an easter egg for making 100 todo items
+p 2020-10-15 2019-10-11 @Fix not allowing multi-line todo +add
+p 2020-10-15 2019-07-30 @Fix +list to fail when targeting non-existing global with existing local
+p 2020-10-15 2019-08-12 @Fix +rename when using + on term to replace with
+p 2021-01-13 2020-11-10 @Add calculate average work-in-progress stat for summary and use it for an estimate on completion started:2020-11-10

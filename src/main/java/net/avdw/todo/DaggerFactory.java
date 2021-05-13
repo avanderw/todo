@@ -30,6 +30,7 @@ import net.avdw.todo.extension.start.StartCli;
 import net.avdw.todo.extension.state.StateMixin;
 import net.avdw.todo.extension.stats.StatsCli;
 import net.avdw.todo.extension.timing.TimingMixin;
+import net.avdw.update.adapter.in.UpdateCliAdapter;
 import org.tinylog.Logger;
 import picocli.CommandLine;
 
@@ -82,6 +83,7 @@ public class DaggerFactory implements CommandLine.IFactory {
         cache.put(StartCli.class.getCanonicalName(), mainComponent.startCli());
         cache.put(StatusCli.class.getCanonicalName(), mainComponent.statusCli());
         cache.put(StatsCli.class.getCanonicalName(), mainComponent.statsCli());
+        cache.put(UpdateCliAdapter.class.getCanonicalName(), mainComponent.updateCliAdapter());
 
         cache.put(CleanMixin.class.getCanonicalName(), mainComponent.cleanMixin());
         cache.put(RepositoryMixin.class.getCanonicalName(), mainComponent.repositoryMixin());

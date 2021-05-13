@@ -4,7 +4,8 @@ Simplistic todo.txt cli editor
 
 ## Performant
 
-- No command may take more than 500ms to execute
+- Avoid reflection
+- Avoid large dependencies
 
 ## Extensible
 

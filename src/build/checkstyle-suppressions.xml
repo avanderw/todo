@@ -18,6 +18,7 @@
     <suppress checks="DesignForExtension"/>
     <suppress checks="InnerAssignment" files="RelativeDate"/>
     <suppress checks="WhitespaceAround" files="DateFilterMixin"/>
-    <suppress checks="VisibilityModifier" files=".*Mixin"/>
+    <suppress checks="VisibilityModifier" files=".*Mixin|.*Github.*"/>
+    <suppress checks="MemberName" files=".*Github.*"/>
     <suppress checks=".*" files="[/\\]target[/\\]"/>
 </suppressions>

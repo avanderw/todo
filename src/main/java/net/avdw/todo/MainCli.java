@@ -22,6 +22,7 @@ import net.avdw.todo.extension.replace.ReplaceCli;
 import net.avdw.todo.extension.size.SizeCli;
 import net.avdw.todo.extension.start.StartCli;
 import net.avdw.todo.extension.stats.StatsCli;
+import net.avdw.update.adapter.in.UpdateCliAdapter;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Spec;
@@ -57,7 +58,8 @@ import java.nio.file.Path;
                 MoscowCli.class,
                 SizeCli.class,
                 PlanCli.class,
-                CommentCli.class
+                CommentCli.class,
+                UpdateCliAdapter.class
         })
 public class MainCli implements Runnable {
     private final Path todoPath;
