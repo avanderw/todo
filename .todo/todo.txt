@@ -32,4 +32,4 @@
 2020-10-16 @Add estimated completion for groups with visible velocity module https://screenful.com/tour/milestone-burnup-chart plan:strategic moscow:must link:1 +DoneEstimate size:13
 2020-10-12 @Add the ability to prioritise on search criteria moscow:should plan:tactical size:5
 2020-10-01 @Add 'todo roadmap' [project, context, tag] which will list upcoming- due,target,cycle and past- due,target,cycle moscow:must size:5  plan:strategic
-2021-05-13 @Remove commons.math3 dependency because it is too big
+x 2021-05-14 2021-05-13 @Remove commons.math3 dependency because it is too big

@@ -1,7 +1,6 @@
 package net.avdw.todo.extension.timing;
 
 import net.avdw.todo.domain.Todo;
-import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import javax.inject.Inject;
 import java.util.List;
