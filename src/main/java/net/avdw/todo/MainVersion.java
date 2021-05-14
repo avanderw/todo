@@ -1,8 +1,5 @@
 package net.avdw.todo;
 
-import org.apache.maven.model.Model;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.tinylog.Logger;
 import picocli.CommandLine;
 
@@ -45,18 +42,6 @@ public class MainVersion implements CommandLine.IVersionProvider {
                     Logger.debug("Getting version from pom.properties");
                     return new String[]{properties.getProperty("version")};
                 } catch (final IOException e) {
-                    Logger.debug(e);
-                }
-            }
-
-            final Path pomPath = Paths.get("pom.xml");
-            if (Files.exists(pomPath)) {
-                final MavenXpp3Reader mavenXpp3Reader = new MavenXpp3Reader();
-                try (FileReader fileReader = new FileReader("pom.xml", StandardCharsets.UTF_8)) {
-                    final Model model = mavenXpp3Reader.read(fileReader);
-                    Logger.debug("Getting version from pom.xml");
-                    return new String[]{model.getVersion()};
-                } catch (final XmlPullParserException | IOException e) {
                     Logger.debug(e);
                 }
             }

@@ -390,11 +390,11 @@
             <artifactId>MathParser.org-mXparser</artifactId>
             <version>4.4.2</version>
         </dependency>
-        <dependency>
-            <groupId>org.ocpsoft.prettytime</groupId>
-            <artifactId>prettytime</artifactId>
-            <version>5.0.1.Final</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.ocpsoft.prettytime</groupId>-->
+<!--            <artifactId>prettytime</artifactId>-->
+<!--            <version>5.0.1.Final</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -422,12 +422,6 @@
             <version>0.9.7</version>
         </dependency>
         <dependency>
-            <groupId>com.github.freva</groupId>
-            <artifactId>ascii-table</artifactId>
-            <version>1.1.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.fusesource.jansi</groupId>
             <artifactId>jansi</artifactId>
             <version>2.3.2</version>
@@ -443,17 +437,6 @@
             <artifactId>lombok</artifactId>
             <version>1.18.20</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-model</artifactId>
-            <version>3.8.1</version>
-        </dependency>
-        <!-- org.apache.maven:maven-model leaks exception from org.codehause.plexus:plexus-utils -->
-        <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-utils</artifactId>
-            <version>3.2.1</version>
         </dependency>
 
         <!-- Dependency injection -->

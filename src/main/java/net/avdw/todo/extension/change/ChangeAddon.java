@@ -4,7 +4,6 @@ import net.avdw.todo.TemplatedResource;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.extension.Mixin;
 import net.avdw.todo.repository.Repository;
-import org.ocpsoft.prettytime.PrettyTime;
 
 import javax.inject.Inject;
 import java.util.Comparator;
@@ -14,7 +13,6 @@ import java.util.Objects;
 public class ChangeAddon implements Mixin {
     private final ChangeMapper changeMapper;
     private final ChangeMixin changeMixin;
-    private final PrettyTime prettyTime = new PrettyTime();
     private final TemplatedResource templatedResource;
 
     @Inject
@@ -32,7 +30,7 @@ public class ChangeAddon implements Mixin {
                 .filter(Objects::nonNull)
                 .max(Comparator.naturalOrder())
                 .map(value -> templatedResource.populateKey(ChangeKey.POST_RENDER,
-                        String.format("{last:'%s'}", prettyTime.format(value))))
+                        String.format("{last:'%s'}", value)))
                 .orElse(null);
     }
 
@@ -50,7 +48,7 @@ public class ChangeAddon implements Mixin {
     public String preTodo(final Todo todo) {
         if (changeMixin.showDetail) {
             final Change change = changeMapper.mapToChange(todo);
-            return change.getDate() == null ? String.format("%17s", "n/a") : String.format("%17s", prettyTime.format(change.getDate()));
+            return change.getDate() == null ? String.format("%17s", "n/a") : String.format("%17s", change.getDate());
         } else {
             return null;
         }

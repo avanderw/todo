@@ -18,7 +18,6 @@ import net.avdw.todo.extension.state.StateMixin;
 import net.avdw.todo.extension.timing.TimingMixin;
 import net.avdw.todo.repository.Repository;
 import net.avdw.todo.repository.Specification;
-import org.codehaus.plexus.util.StringUtils;
 import org.tinylog.Logger;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Mixin;
@@ -94,7 +93,9 @@ public class ListCli implements Runnable {
                 .forEach((entry) -> {
                     final String key = entry.getKey();
                     final Object value = entry.getValue();
-                    final String json = String.format("{type:'%s',title:'%s'}", groupByMixin.getGroupByAtDepth(depth).name(), StringUtils.capitalise(key.isBlank() ? "No" : key));
+
+                    final String capitalise = key.isBlank() ? "No" : Character.toUpperCase(key.charAt(0)) + key.substring(1);
+                    final String json = String.format("{type:'%s',title:'%s'}", groupByMixin.getGroupByAtDepth(depth).name(), capitalise);
                     final String header = switch (depth) {
                         case 0 -> templatedResource.populateKey(ResourceBundleKey.GROUP_BY_HEADING, json);
                         case 1 -> templatedResource.populateKey(ResourceBundleKey.GROUP_BY_HEADING_2, json);

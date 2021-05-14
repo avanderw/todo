@@ -1,7 +1,6 @@
 package net.avdw.todo.core.groupby;
 
 import net.avdw.todo.domain.Todo;
-import org.codehaus.plexus.util.StringUtils;
 
 import javax.inject.Singleton;
 import java.util.function.Function;
@@ -38,6 +37,6 @@ public class TagGroup implements Group<Todo, String> {
 
     @Override
     public String name() {
-        return StringUtils.capitalise(tag);
+        return Character.toUpperCase(tag.charAt(0)) + tag.substring(1);
     }
 }
