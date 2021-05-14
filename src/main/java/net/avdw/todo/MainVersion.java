@@ -25,7 +25,6 @@ public class MainVersion implements CommandLine.IVersionProvider {
      * Return as soon as a version is found. The order of the lookup is:
      * - manifest       : When built as a jar
      * - pom.properties : When target directory exists
-     * - pom.xml        : When the target directory does not exist
      *
      * @return The version specified in the pom
      */
@@ -53,7 +52,7 @@ public class MainVersion implements CommandLine.IVersionProvider {
                     "        <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>\n" +
                     "    </manifest>\n" +
                     "</archive>");
-            throw new UnsupportedOperationException();
+            return new String[]{"no-version"};
         } else {
             Logger.debug("Getting version from manifest");
             return new String[]{getClass().getPackage().getImplementationVersion()};

@@ -3,7 +3,6 @@ package net.avdw.todo.extension;
 import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoSet;
-import net.avdw.todo.extension.change.ChangeAddon;
 import net.avdw.todo.extension.progress.ProgressAddon;
 import net.avdw.todo.extension.recur.RecurDonePostAddon;
 import net.avdw.todo.extension.state.StateAddon;
@@ -17,9 +16,6 @@ public abstract class ExtensionModule {
     @IntoSet
     abstract Mixin progressAddon(ProgressAddon progressAddon);
 
-    @Binds
-    @IntoSet
-    abstract Mixin changeAddon(ChangeAddon changeAddon);
 
     @Binds
     @IntoSet

@@ -87,7 +87,7 @@ public class ListCliTest {
     public void testBasic() {
         cliTester.execute("pri 1");
         cliTester.execute("ls").success().contains("[  1] (A)")
-                .contains("@iBank").contains("Last change");
+                .contains("@iBank");
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
@@ -128,11 +128,6 @@ public class ListCliTest {
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
-    public void testChangeDetail() {
-        cliTester.execute("ls --change-detail").success().contains("months ago").contains("n/a");
-    }
-
-    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testClean() {
         cliTester.execute("pri 1").success();
         cliTester.execute("ls --clean").success()
@@ -169,21 +164,6 @@ public class ListCliTest {
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
     public void testGroupByContextSpecific() {
         cliTester.execute("ls --and @iBank --or @Track1 --group-by @").success().count("\\s## ", 6);
-    }
-
-    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
-    public void testGroupByChangeType() {
-        cliTester.execute("ls --group-by change").success();
-    }
-
-    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
-    public void testGroupByMonth() {
-        cliTester.execute("ls --group-by month").success();
-    }
-
-    @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)
-    public void testGroupByMonthChangelog() {
-        cliTester.execute("ls --group-by month,change").success();
     }
 
     @Test(timeout = TestConstant.PERFORMANCE_TIMEOUT)

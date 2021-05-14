@@ -4,7 +4,6 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.multibindings.IntoSet;
 import net.avdw.todo.domain.Todo;
-import net.avdw.todo.extension.change.ChangeTypeGroup;
 import net.avdw.todo.extension.moscow.MoscowGroup;
 import net.avdw.todo.extension.plan.PlanGroup;
 import net.avdw.todo.extension.state.StateGroup;
@@ -12,17 +11,10 @@ import net.avdw.todo.extension.state.StateGroup;
 @Module
 public abstract class GroupByModule {
 
-    @Binds
-    @IntoSet
-    abstract Group<Todo, String> changeTypeGroup(ChangeTypeGroup changeTypeGroup);
 
     @Binds
     @IntoSet
     abstract Group<Todo, String> contextGroup(ContextGroup contextGroup);
-
-    @Binds
-    @IntoSet
-    abstract Group<Todo, String> monthGroup(MonthGroup monthGroup);
 
     @Binds
     @IntoSet

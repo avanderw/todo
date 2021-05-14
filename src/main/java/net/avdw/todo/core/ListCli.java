@@ -13,7 +13,6 @@ import net.avdw.todo.core.mixin.RepositoryMixin;
 import net.avdw.todo.core.view.TodoListView;
 import net.avdw.todo.domain.Todo;
 import net.avdw.todo.extension.blocker.BlockerMixin;
-import net.avdw.todo.extension.change.ChangeMixin;
 import net.avdw.todo.extension.state.StateMixin;
 import net.avdw.todo.extension.timing.TimingMixin;
 import net.avdw.todo.repository.Repository;
@@ -46,7 +45,6 @@ public class ListCli implements Runnable {
     private int top = 0;
     @Mixin private BlockerMixin blockerMixin;
     @Mixin private BooleanFilterMixin booleanFilterMixin;
-    @Mixin private ChangeMixin changeMixin;
     @Mixin private CleanMixin cleanMixin;
     @Mixin private DateFilterMixin dateFilterMixin;
     @Mixin private GroupByMixin groupByMixin;

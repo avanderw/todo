@@ -20,7 +20,6 @@ import net.avdw.todo.core.mixin.RepositoryMixin;
 import net.avdw.todo.core.view.TodoListView;
 import net.avdw.todo.extension.ExtensionModule;
 import net.avdw.todo.extension.browse.BrowseCli;
-import net.avdw.todo.extension.change.ChangeMixin;
 import net.avdw.todo.extension.changelog.ChangelogCli;
 import net.avdw.todo.extension.comment.CommentCli;
 import net.avdw.todo.extension.dependency.DependencyCli;
@@ -60,7 +59,6 @@ interface MainComponent {
     RepositoryMixin repositoryMixin();
     GroupByMixin groupByMixin();
     TimingMixin timingMixin();
-    ChangeMixin changeMixin();
     OrderByMixin orderByMixin();
     StateMixin stateMixin();
     TemplatedResource templatedResource();

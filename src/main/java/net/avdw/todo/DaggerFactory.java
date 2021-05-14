@@ -17,7 +17,6 @@ import net.avdw.todo.core.mixin.CleanMixin;
 import net.avdw.todo.core.mixin.RepositoryMixin;
 import net.avdw.todo.core.view.TodoListView;
 import net.avdw.todo.extension.browse.BrowseCli;
-import net.avdw.todo.extension.change.ChangeMixin;
 import net.avdw.todo.extension.changelog.ChangelogCli;
 import net.avdw.todo.extension.comment.CommentCli;
 import net.avdw.todo.extension.dependency.DependencyCli;
@@ -89,7 +88,6 @@ public class DaggerFactory implements CommandLine.IFactory {
         cache.put(RepositoryMixin.class.getCanonicalName(), mainComponent.repositoryMixin());
         cache.put(GroupByMixin.class.getCanonicalName(), mainComponent.groupByMixin());
         cache.put(TimingMixin.class.getCanonicalName(), mainComponent.timingMixin());
-        cache.put(ChangeMixin.class.getCanonicalName(), mainComponent.changeMixin());
         cache.put(OrderByMixin.class.getCanonicalName(), mainComponent.orderByMixin());
         cache.put(StateMixin.class.getCanonicalName(), mainComponent.stateMixin());
 

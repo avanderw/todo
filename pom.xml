@@ -390,11 +390,6 @@
             <artifactId>MathParser.org-mXparser</artifactId>
             <version>4.4.2</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.ocpsoft.prettytime</groupId>-->
-<!--            <artifactId>prettytime</artifactId>-->
-<!--            <version>5.0.1.Final</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
