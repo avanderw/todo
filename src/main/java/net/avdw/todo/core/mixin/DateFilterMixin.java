@@ -1,13 +1,7 @@
 package net.avdw.todo.core.mixin;
 
 import net.avdw.todo.core.RelativeDate;
-import net.avdw.todo.domain.IsAfterAddedDate;
-import net.avdw.todo.domain.IsAfterDoneDate;
-import net.avdw.todo.domain.IsAfterTagDate;
-import net.avdw.todo.domain.IsBeforeAddedDate;
-import net.avdw.todo.domain.IsBeforeDoneDate;
-import net.avdw.todo.domain.IsBeforeTagDate;
-import net.avdw.todo.domain.Todo;
+import net.avdw.todo.domain.*;
 import net.avdw.todo.repository.Any;
 import net.avdw.todo.repository.Specification;
 import picocli.CommandLine.Model.CommandSpec;
@@ -50,6 +44,8 @@ public class DateFilterMixin implements Filter<Integer, Todo> {
                 }
                 specification = specification.and(switch (type) {
                     case "added" -> new IsBeforeAddedDate(date);
+                    case "removed" -> new IsBeforeRemovedDate(date);
+                    case "parked" -> new IsBeforeParkedDate(date);
                     case "done" -> new IsBeforeDoneDate(date);
                     default -> new IsBeforeTagDate(type, date);
                 });
@@ -77,6 +73,8 @@ public class DateFilterMixin implements Filter<Integer, Todo> {
                 }
                 specification = specification.and(switch (type) {
                     case "added" -> new IsAfterAddedDate(date);
+                    case "removed" -> new IsAfterRemovedDate(date);
+                    case "parked" -> new IsAfterParkedDate(date);
                     case "done" -> new IsAfterDoneDate(date);
                     default -> new IsAfterTagDate(type, date);
                 });
